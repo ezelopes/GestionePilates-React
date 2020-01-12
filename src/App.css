@@ -120,3 +120,8 @@
   margin-left: 5%;
   margin-right: 5%;
 }
+
+.ag-pivot-off .ag-header-cell-label {
+  color: #8a6d3b;
+  font-size: 1.3em;
+}
