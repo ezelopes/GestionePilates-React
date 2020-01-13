@@ -55,6 +55,13 @@ function App() {
             >
               Insegnanti
             </Link>
+            <Link
+              className="nav-link"
+              style={{ fontFamily: 'Roboto, monospace', fontSize: '1.2em' }}
+              to="/paginacorsi"
+            >
+              Corsi
+            </Link>
           </Navigation>
         </Header>
         {/* <Drawer

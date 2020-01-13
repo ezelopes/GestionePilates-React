@@ -6,6 +6,7 @@ import PaginaAllieve from './paginaallieve';
 import IscrizioneAllieve from './iscrizioneallieve';
 import ModificaEliminaAllieva from './modificaeliminaallieva';
 import PaginaInsegnanti from './paginainsegnanti';
+import PaginaCorsi from './paginacorsi';
 
 const Main = () => (
   <Switch>
@@ -14,6 +15,7 @@ const Main = () => (
     <Route exact path="/iscrizioneallieve" component={IscrizioneAllieve} />
     <Route exact path="/modificaeliminaallieva" component={ModificaEliminaAllieva} />
     <Route exact path="/paginainsegnanti" component={PaginaInsegnanti} />
+    <Route exact path="/paginacorsi" component={PaginaCorsi} />
   </Switch>
 );
 
