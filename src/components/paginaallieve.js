@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
+import { Button } from 'react-mdl';
 import ListaAllieve from './helper-components/lista_allieve';
 import ListaRicevute from './helper-components/lista_ricevute';
 
-class PaginaAllieve extends Component {
-  render() {
-    return (
-      <div className="paginaallieve-body">
-        <ListaAllieve />
-        <ListaRicevute style={{ marginTop: '30px' }} />
+function PaginaAllieve(props) {
+  return (
+    <div className="paginaallieve-body">
+      <ListaAllieve />
+      <div style={{ display: 'flex', flexDirection: 'row', marginTop: '30px' }}>
+        <ListaRicevute />
+        <Button raised ripple style={{ marginLeft: '2em', marginTop: '2em' }}>
+          Button
+        </Button>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default PaginaAllieve;

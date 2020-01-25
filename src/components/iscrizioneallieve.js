@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class About extends Component {
-  render() {
-    return (
-      <div>
-        <h1> Pagina Allieve </h1>
-      </div>
-    );
-  }
+function IscrizioneAllieve(props) {
+  return <h1> Iscrizione Allieve </h1>;
 }
 
-export default About;
+export default IscrizioneAllieve;
