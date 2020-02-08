@@ -37,23 +37,32 @@ const rowData = [
   { codicefiscale: 'RCO1234RCO1234RC', nome: 'Rocio', cognome: 'Lopes', citta: 'Portsmouth' }
 ];
 
+const gridOptions = {
+  masterDetail: true,
+  defaultColDef: {
+    resizable: true,
+    sortable: true,
+    filter: true,
+    cellStyle: { fontSize: '1.5em' }
+  },
+  rowSelection: 'single',
+  onSelectionChanged: onSelectionChanged
+};
+
 // create new component for the Ricevute ag-grid
+
+function onSelectionChanged() {
+  var selectedRows = gridOptions.api.getSelectedRows();
+  console.log(selectedRows[0].codicefiscale);
+}
 
 class ListaAllieve extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gridOptions: {
-        masterDetail: true,
-        defaultColDef: {
-          resizable: true,
-          sortable: true,
-          filter: true,
-          cellStyle: { fontSize: '1.5em' }
-        },
-        columnDefs: columnDefs,
-        rowData: rowData
-      }
+      gridOptions: gridOptions,
+      columnDefs: columnDefs,
+      rowData: rowData
     };
   }
 
@@ -65,8 +74,8 @@ class ListaAllieve extends Component {
           scrollbarWidth
           rowHeight="45"
           gridOptions={this.state.gridOptions}
-          columnDefs={this.state.gridOptions.columnDefs}
-          rowData={this.state.gridOptions.rowData}
+          columnDefs={this.state.columnDefs}
+          rowData={this.state.rowData}
         ></AgGridReact>
       </div>
     );

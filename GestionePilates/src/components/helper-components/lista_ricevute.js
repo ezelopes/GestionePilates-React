@@ -50,8 +50,8 @@ class ListaRicevute extends Component {
           filter: true,
           cellStyle: { fontSize: '1.5em' }
         },
-        columnDefs: columnDefs,
-        rowData: rowData
+        columnDefs: columnDefs
+        // rowData: rowData
       }
     };
   }
