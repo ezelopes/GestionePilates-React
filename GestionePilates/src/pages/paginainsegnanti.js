@@ -1,7 +1,7 @@
 import React from 'react';
 
 function InsegnantiPage(props) {
-  return <h1> Corsi Page </h1>;
+  return <h1> Insegnanti Page </h1>;
 }
 
 export default InsegnantiPage;
