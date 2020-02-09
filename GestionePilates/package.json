@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Management tool to create/update/delete students of a Pilates organization",
   "main": "index.js",
+  "proxy": "http://localhost:8000/",
   "dependencies": {
     "ag-grid": "^18.1.2",
     "ag-grid-community": "^22.1.1",

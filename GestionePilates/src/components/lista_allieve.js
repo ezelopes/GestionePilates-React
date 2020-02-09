@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 // import Allieva from '../pages/allieva';
@@ -9,25 +9,26 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 const columnsDefinition = [
   {
     headerName: 'Codice Fiscale',
-    field: 'codicefiscale',
+    field: 'CodiceFiscale',
     // checkboxSelection: true,
     cellRendererFramework: params => {
-      return <Link to={`/paginaallieve/${params.data.codicefiscale}`}>{params.value}</Link>;
+      return <Link to={`/paginaallieve/${params.data.CodiceFiscale}`}>{params.value}</Link>;
     }
   },
-  { headerName: 'Nome', field: 'nome' },
-  { headerName: 'Cognome', field: 'cognome' },
-  { headerName: 'Indirizzo', field: 'indirizzo' },
-  { headerName: 'Cellulare', field: 'cellulare' },
-  { headerName: 'Email', field: 'email' },
-  { headerName: 'Data Iscrizione', field: 'dataiscrizione' },
-  { headerName: 'Data Certificato', field: 'datacertificato' },
-  { headerName: 'Data Nascita', field: 'datanascita' },
-  { headerName: 'Luogo Nascita', field: 'luogonascita' },
-  { headerName: 'Disciplina', field: 'disciplina' },
-  { headerName: 'Codice Fiscale Genitore', field: 'codicefiscalegenitore' },
-  { headerName: 'Nome Genitore', field: 'nomegenitore' },
-  { headerName: 'Cognome Genitore', field: 'cognomegenitore' }
+  { headerName: 'Nome', field: 'Nome' },
+  { headerName: 'Cognome', field: 'Cognome' },
+  { headerName: 'Citta', field: 'Citta' },
+  { headerName: 'Indirizzo', field: 'Indirizzo' },
+  { headerName: 'Cellulare', field: 'Cellulare' },
+  { headerName: 'Email', field: 'Email' },
+  { headerName: 'Data Iscrizione', field: 'DataIscrizione' },
+  { headerName: 'Data Certificato', field: 'DataCertificato' },
+  { headerName: 'Data Nascita', field: 'DataNascita' },
+  { headerName: 'Luogo Nascita', field: 'LuogoNascita' },
+  { headerName: 'Disciplina', field: 'Disciplina' },
+  { headerName: 'Codice Fiscale Genitore', field: 'CodiceFiscaleGenitore' },
+  { headerName: 'Nome Genitore', field: 'NomeGenitore' },
+  { headerName: 'Cognome Genitore', field: 'CognomeGenitore' }
 ];
 
 const rowDataFromDB = [
@@ -51,21 +52,21 @@ const gridOptionsDefault = {
     cellStyle: { fontSize: '1.5em' }
   },
   rowSelection: 'single'
-  // onSelectionChanged: onSelectionChanged
 };
-
-// create new component for the Ricevute ag-grid
-
-// function onSelectionChanged() {
-//   var selectedRows = gridOptionsDefault.api.getSelectedRows();
-//   console.log(selectedRows.length);
-//   if (selectedRows.length > 0) console.log(selectedRows[0].codicefiscale);
-// }
 
 const ListaAllieve = () => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
-  const [rowData /*setRowData*/] = useState(rowDataFromDB);
+  const [rowData, setRowData] = useState(rowDataFromDB);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('/api/getAllieve');
+      const body = await result.json();
+      setRowData(body);
+    };
+    fetchData();
+  }, ['']);
 
   return (
     <div className="ag-theme-balham" style={{ height: '30em', width: '100%' }}>
@@ -81,31 +82,5 @@ const ListaAllieve = () => {
     </div>
   );
 };
-
-// class ListaAllieve extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       gridOptions: gridOptions,
-//       columnDefs: columnDefs,
-//       rowData: rowData
-//     };
-//   }
-
-//   render() {
-//     return (
-//       <div className="ag-theme-balham" style={{ height: '30em', width: '100%' }}>
-//         <AgGridReact
-//           // rowSelection="multiple"
-//           scrollbarWidth
-//           rowHeight="45"
-//           gridOptions={this.state.gridOptions}
-//           columnDefs={this.state.columnDefs}
-//           rowData={this.state.rowData}
-//         ></AgGridReact>
-//       </div>
-//     );
-//   }
-// }
 
 export default ListaAllieve;
