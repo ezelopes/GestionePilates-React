@@ -5,15 +5,21 @@
   "main": "index.js",
   "proxy": "http://localhost:8000/",
   "dependencies": {
+    "@progress/kendo-react-dropdowns": "^3.11.0",
+    "@progress/kendo-react-intl": "^3.0.0",
     "ag-grid": "^18.1.2",
     "ag-grid-community": "^22.1.1",
     "ag-grid-react": "^22.1.1",
     "express": "^4.17.1",
+    "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-mdl": "^1.11.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "react-widgets": "^4.4.11",
+    "react-widgets-moment": "^4.0.27",
+    "react-widgets-simple-number": "^4.1.23"
   },
   "scripts": {
     "start": "react-scripts start",

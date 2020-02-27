@@ -1,21 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-mdl';
+import NotFoundPage from './notfoundpage';
+import ListaRicevute from '../components/lista_ricevute';
+import FormCreaRicevuta from '../components/form_crea_ricevuta';
 
 function Allieva({ match }) {
-  const codicefiscale = match.params.codicefiscale;
+  const CodiceFiscale = match.params.codicefiscale;
+  const [allievaInfo, setAllievaInfo] = useState({});
+  const [allievaRicevute, setAllievaRicevute] = useState([]);
 
-  const [allievaInfo, setAllievaInfo] = useState({ codicefiscale, nome: '', cognome: '' });
+  useEffect(() => {
+    const fetchData = async () => {
+      const getSingleAllievaResult = await fetch(`/api/getSingleAllieva/${CodiceFiscale}`);
+      const info = await getSingleAllievaResult.json();
+      setAllievaInfo(info[0]);
+
+      const getRicevuteOfAllievaResult = await fetch(`/api/getRicevuteOfAllieva/${CodiceFiscale}`);
+      const ricevute = await getRicevuteOfAllievaResult.json();
+      setAllievaRicevute(ricevute);
+    };
+    fetchData();
+  }, ['']);
+
+  if (!allievaInfo) return <NotFoundPage />;
 
   return (
-    <div className="paginaallieve-body">
-      <h1> Hey {allievaInfo.codicefiscale} </h1>
+    <>
+      <div className="allieva-body">
+        <h2>
+          {allievaInfo.Nome} {allievaInfo.Cognome}
+        </h2>
+        <ListaRicevute ricevute={allievaRicevute} />
+        <FormCreaRicevuta />
+      </div>
       <Link to="/paginaallieve">
-        <Button raised ripple style={{ marginLeft: '2em', marginTop: '2em' }}>
-          Go Back
+        <Button raised ripple style={{ marginLeft: '5em', marginTop: '2em' }}>
+          Indietro
         </Button>
       </Link>
-    </div>
+      <Link to="/modificaeliminaallieva">
+        <Button raised ripple style={{ marginLeft: '5em', marginTop: '2em' }}>
+          Modifica / Elimina
+        </Button>
+      </Link>
+    </>
   );
 }
 

@@ -15,11 +15,12 @@ const gridOptionsDefault = {
 };
 
 const columnsDefinition = [
-  { headerName: 'Numero Ricevuta', field: 'numeroricevuta', checkboxSelection: true },
-  { headerName: 'Data Inizio', field: 'datainizio' },
-  { headerName: 'Data Scadenza', field: 'datascadenza' },
-  { headerName: 'Somma Euro', field: 'sommaeuro' },
-  { headerName: 'Codice Fiscale', field: 'codicefiscale' }
+  { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true },
+  { headerName: 'Data Inizio', field: 'DataInizio' },
+  { headerName: 'Data Scadenza', field: 'DataScadenza' },
+  { headerName: 'Somma Euro', field: 'SommaEuro' },
+  { headerName: 'Tipo Pagamento', field: 'TipoPagamento' },
+  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
 ];
 
 const rowDataFromDB = [
@@ -48,13 +49,15 @@ const rowDataFromDB = [
 
 // create new component for the Ricevute ag-grid
 
-const ListaRicevute = () => {
+const ListaRicevute = ({ ricevute }) => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
-  const [rowData /*setRowData*/] = useState(rowDataFromDB);
+  // const [rowData /*setRowData*/] = useState(rowDataFromDB);
+  const rowData = ricevute;
+  console.log(rowData);
 
   return (
-    <div className="ag-theme-balham" style={{ marginTop: '2em', height: '15em', width: '70%' }}>
+    <div className="ag-theme-balham" style={{ marginTop: '2em', height: '20em', width: '90%' }}>
       <AgGridReact
         rowSelection="multiple"
         scrollbarWidth

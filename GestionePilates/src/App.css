@@ -1,5 +1,12 @@
 /* NUOVO CSS */
 
+.allieva-body {
+  position: relative;
+  margin-top: 2em;
+  margin-left: 5em;
+  margin-right: 5em;
+}
+
 .paginaallieve-body {
   position: relative;
   margin-top: 2em;
@@ -43,4 +50,59 @@ nav a {
 nav a:hover {
   background: black;
   color: white;
+}
+
+.formCreaRicevuta {
+  padding: 1.5em 1.5em 1.5em 1.5em;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-gap: 1em;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 2em;
+  border-color: gray;
+  border-style: solid;
+  border-radius: 0.5em;
+  border-width: 0.1em;
+}
+
+.formCreaRicevuta label {
+  margin-left: 1em;
+  font-weight: bold;
+}
+
+.formCreaRicevuta #buttonCreaRicevuta {
+  width: 50%;
+  margin-left: 1em;
+  float: right;
+}
+
+.formCreaRicevuta #textNumeroRicevuta {
+  /* border-radius: 3px; */
+  width: 16em;
+  padding-left: 0.5em;
+  height: 2em;
+}
+
+.formCreaRicevuta #textNumeroRicevuta:focus {
+  outline: none;
+  border-color: #6eb3ea;
+}
+
+.formCreaRicevuta #comboboxTipoPagamento {
+  width: 16em;
+}
+
+.formCreaRicevuta #comboboxSommaEuro {
+  width: 16em;
+}
+
+.formCreaRicevuta #dtpDataInizio {
+  width: 16em;
+}
+
+.formCreaRicevuta #dtpDataScadenza {
+  width: 16em;
 }
