@@ -21,7 +21,7 @@ function Allieva({ match }) {
       setAllievaRicevute(ricevute);
     };
     fetchData();
-  }, ['']);
+  }, []);
 
   if (!allievaInfo) return <NotFoundPage />;
 
@@ -32,7 +32,7 @@ function Allieva({ match }) {
           {allievaInfo.Nome} {allievaInfo.Cognome}
         </h2>
         <ListaRicevute ricevute={allievaRicevute} />
-        <FormCreaRicevuta />
+        <FormCreaRicevuta CodiceFiscale={CodiceFiscale} />
       </div>
       <Link to="/paginaallieve">
         <Button raised ripple style={{ marginLeft: '5em', marginTop: '2em' }}>

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import * as ReactDOM from 'react-dom';
-import { Button, Textfield } from 'react-mdl';
+import React from 'react';
+import { Button } from 'react-mdl';
 // import { ComboBox } from '@progress/kendo-react-dropdowns';
 import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
@@ -10,11 +9,10 @@ import momentLocalizer from 'react-widgets-moment';
 
 moment.locale('es');
 momentLocalizer();
-// combobox ?
 
 simpleNumberLocalizer();
 
-const FormCreaRicevuta = () => {
+const FormCreaRicevuta = ({ CodiceFiscale }) => {
   let tipoPagamento = [
     { id: 0, tipo: 'Contanti' },
     { id: 1, tipo: 'Carta di Credito' },
@@ -26,10 +24,34 @@ const FormCreaRicevuta = () => {
     { id: 2, somma: '150' }
   ];
 
+  const creaRicevuta = async () => {
+    if (document.getElementById('textNumeroRicevuta').value === '') {
+      alert('Numero Ricevuta non puo essere vuoto!');
+      return;
+    }
+    const response = await fetch('/api/creaRicevuta', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+        // Authorization: 'Bearer ' + idToken
+      },
+      body: JSON.stringify({
+        NumeroRicevuta: document.getElementById('textNumeroRicevuta').value,
+        DataInizio: moment(document.getElementById('dtpDataInizio_input').value).format(),
+        DataScadenza: moment(document.getElementById('dtpDataScadenza_input').value).format(),
+        SommaEuro: document.getElementById('comboboxSommaEuro_input').value,
+        TipoPagamento: document.getElementById('comboboxTipoPagamento_input').value,
+        CodiceFiscale: CodiceFiscale
+      })
+    });
+    const responseParsed = await response.json();
+    alert(responseParsed.message);
+  };
+
   return (
     <div className="formCreaRicevuta">
       <label id="labelNumRicevuta"> Numero Ricevuta </label>
-      {/* <Textfield></Textfield> */}
       <input type="text" id="textNumeroRicevuta" placeholder="Inserisci Numero Ricevuta..." />
       <label id="labelPagamento"> Tipo Pagamento </label>
       <Combobox
@@ -52,26 +74,14 @@ const FormCreaRicevuta = () => {
         filter="contains"
       />
       <label id="labelDataInizio"> Data Inizio </label>
-      <DateTimePicker
-        id="dtpDataInizio"
-        defaultValue={new Date()}
-        format="dddd - DD / MM / YYYY"
-        time={false}
-      />
+      <DateTimePicker id="dtpDataInizio" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
       <label id="labelDataScadenza"> Data Scadenza </label>
-      <DateTimePicker
-        id="dtpDataScadenza"
-        defaultValue={new Date()}
-        format="dddd - DD / MM / YYYY"
-        time={false}
-      />
-      <Button raised ripple id="buttonCreaRicevuta">
+      <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+      <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
         Crea Ricevuta
       </Button>
     </div>
   );
 };
-
-// NumberPicker format="-$#,###.00"
 
 export default FormCreaRicevuta;

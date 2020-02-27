@@ -65,10 +65,34 @@ async function getSingleAllieva(CodiceFiscale) {
   return allieva;
 }
 
+async function creaRicevuta(
+  NumeroRicevuta,
+  DataInizio,
+  DataScadenza,
+  SommaEuro,
+  TipoPagamento,
+  CodiceFiscale
+) {
+  try {
+    const DataInizioFormatted = moment(DataInizio).format('YYYY-MM-DD HH:mm:ss');
+    const DataScadenzaFormatted = moment(DataScadenza).format('YYYY-MM-DD HH:mm:ss');
+    const [rows, fields] = await pool.execute(
+      `INSERT INTO Ricevuta (DataInizio, DataScadenza, NumeroRicevuta, SommaEuro, FK_CodiceFiscale, TipoPagamento, Archiviata) VALUES ('${DataInizioFormatted}','${DataScadenzaFormatted}','${NumeroRicevuta}','${SommaEuro}','${CodiceFiscale}','${TipoPagamento}',${false});`
+    );
+    return 'Ricevuta Inserita Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return 'Errore nel creare la Ricevuta!';
+  }
+
+  // [DataInizio, DataScadenza, NumeroRicevuta, SommaEuro, CodiceFiscale, TipoPagamento, false]
+}
+
 module.exports = {
   getAllieve,
   getSingleAllieva,
-  getRicevuteOfAllieva
+  getRicevuteOfAllieva,
+  creaRicevuta
 };
 
 /**
