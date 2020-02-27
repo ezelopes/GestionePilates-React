@@ -23,32 +23,6 @@ const columnsDefinition = [
   { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
 ];
 
-const rowDataFromDB = [
-  {
-    datainizio: '1/1/20',
-    datascadenza: '1/3/20',
-    numeroricevuta: '100',
-    sommaeuro: '85',
-    codicefiscale: 'LPS1234LSP1234LP'
-  },
-  {
-    datainizio: '1/1/20',
-    datascadenza: '1/3/20',
-    numeroricevuta: '101',
-    sommaeuro: '90',
-    codicefiscale: 'RXN1234RXN1234RX'
-  },
-  {
-    datainizio: '1/1/20',
-    datascadenza: '1/3/20',
-    numeroricevuta: '102',
-    sommaeuro: '95',
-    codicefiscale: 'SRG1234SRG1234SR'
-  }
-];
-
-// create new component for the Ricevute ag-grid
-
 const ListaRicevute = ({ ricevute }) => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);

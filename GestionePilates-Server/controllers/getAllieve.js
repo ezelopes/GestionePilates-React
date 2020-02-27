@@ -11,7 +11,7 @@ async function getAllieve(req, res, next) {
     console.log(allieve);
     res.status(200).send(allieve);
   } catch (e) {
-    console.log('my bad');
+    console.log(e);
     next(e);
   }
 }

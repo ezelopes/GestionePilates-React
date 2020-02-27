@@ -66,7 +66,7 @@ const ListaAllieve = () => {
       setRowData(body);
     };
     fetchData();
-  }, ['']);
+  }, []);
 
   return (
     <div className="ag-theme-balham" style={{ height: '30em', width: '100%' }}>
