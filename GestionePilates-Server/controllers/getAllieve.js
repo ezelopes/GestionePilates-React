@@ -1,9 +1,9 @@
 const { Router } = require('express');
 const database = require('../helpers/database');
 
-const remindersRouter = new Router();
+const getAllieveRouter = new Router();
 
-remindersRouter.get('/', getAllieve);
+getAllieveRouter.get('/', getAllieve);
 
 async function getAllieve(req, res, next) {
   try {
