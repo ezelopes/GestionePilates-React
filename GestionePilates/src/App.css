@@ -76,7 +76,6 @@ nav a:hover {
 .formCreaRicevuta #buttonCreaRicevuta {
   width: 50%;
   margin-left: 1em;
-  float: right;
 }
 
 .formCreaRicevuta #textNumeroRicevuta {
