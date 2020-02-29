@@ -78,14 +78,16 @@ nav a:hover {
   margin-left: 1em;
 }
 
-.formCreaRicevuta #textNumeroRicevuta {
+.formCreaRicevuta input[type='text'] {
+  /*  #textNumeroRicevuta */
   /* border-radius: 3px; */
   width: 16em;
   padding-left: 0.5em;
   height: 2em;
 }
 
-.formCreaRicevuta #textNumeroRicevuta:focus {
+.formCreaRicevuta input[type='text']:focus {
+  /*  #textNumeroRicevuta */
   outline: none;
   border-color: #6eb3ea;
 }
@@ -104,4 +106,25 @@ nav a:hover {
 
 .formCreaRicevuta #dtpDataScadenza {
   width: 16em;
+}
+
+.formCreaRicevuta #comboboxEta {
+  width: 16em;
+}
+
+.formCreaRicevuta #dtpDataIscrizione {
+  width: 16em;
+}
+
+.formCreaRicevuta #dtpDataCertificato {
+  width: 16em;
+}
+
+.formCreaRicevuta #dtpDataNascita {
+  width: 16em;
+}
+
+.formCreaRicevuta #buttonCreaAllieva {
+  width: 50%;
+  margin-left: 1em;
 }
