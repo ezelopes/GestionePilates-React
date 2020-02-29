@@ -5,7 +5,6 @@
   "main": "index.js",
   "proxy": "http://localhost:8000/",
   "dependencies": {
-    "@progress/kendo-react-dropdowns": "^3.11.0",
     "@progress/kendo-react-intl": "^3.0.0",
     "ag-grid": "^18.1.2",
     "ag-grid-community": "^22.1.1",
