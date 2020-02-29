@@ -28,7 +28,6 @@ const ListaRicevute = ({ ricevute }) => {
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
   // const [rowData /*setRowData*/] = useState(rowDataFromDB);
   const rowData = ricevute;
-  console.log(rowData);
 
   return (
     <div className="ag-theme-balham" style={{ marginTop: '2em', height: '20em', width: '90%' }}>

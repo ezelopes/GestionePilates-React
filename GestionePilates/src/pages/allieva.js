@@ -21,6 +21,7 @@ function Allieva({ match }) {
       setAllievaRicevute(ricevute);
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!allievaInfo) return <NotFoundPage />;

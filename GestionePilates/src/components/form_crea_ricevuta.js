@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from 'react-mdl';
-// import { ComboBox } from '@progress/kendo-react-dropdowns';
 import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
 import { Combobox, DateTimePicker } from 'react-widgets';
@@ -25,8 +24,9 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
   ];
 
   const creaRicevuta = async () => {
+    // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
     if (document.getElementById('textNumeroRicevuta').value === '') {
-      alert('Numero Ricevuta non puo essere vuoto!');
+      document.getElementById('textNumeroRicevuta').style.borderColor = 'red';
       return;
     }
     const response = await fetch('/api/creaRicevuta', {
