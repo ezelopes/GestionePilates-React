@@ -11,20 +11,53 @@ momentLocalizer();
 
 simpleNumberLocalizer();
 
-const FormCreaAllieva = () => {
+const FormModificaEliminaAllieva = ({ allievaInfo }) => {
+  console.log(allievaInfo);
+  let CodiceFiscale;
+  let Nome;
+  let Cognome;
+  let Citta;
+  let Indirizzo;
+  let Cellulare;
+  let Email;
+  let DataIscrizione;
+  let DataCertificato;
+  let DataNascita;
+  let LuogoNascita;
+  let Disciplina;
+  let NomeGenitore;
+  let CognomeGenitore;
+  let CodiceFiscaleGenitore;
+  if (allievaInfo) {
+    CodiceFiscale = allievaInfo.CodiceFiscale;
+    Nome = allievaInfo.Nome;
+    Cognome = allievaInfo.Cognome;
+    Citta = allievaInfo.Citta;
+    Indirizzo = allievaInfo.CodiceFiscale;
+    Cellulare = allievaInfo.Cellulare;
+    Email = allievaInfo.Email;
+    DataIscrizione = allievaInfo.DataIscrizione;
+    DataCertificato = allievaInfo.DataCertificato;
+    DataNascita = allievaInfo.DataNascita;
+    LuogoNascita = allievaInfo.LuogoNascita;
+    Disciplina = allievaInfo.Disciplina;
+    NomeGenitore = allievaInfo.NomeGenitore;
+    CognomeGenitore = allievaInfo.CognomeGenitore;
+    CodiceFiscaleGenitore = allievaInfo.CodiceFiscaleGenitore;
+  }
   let eta = [
     { id: 0, eta: 'Maggiorenne' },
     { id: 1, eta: 'Minorenne' }
   ];
 
-  const creaAllieva = async () => {
+  const modificaAllieva = async () => {
     // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
     if (document.getElementById('textCodiceFiscale').value === '') {
       document.getElementById('textCodiceFiscale').style.borderColor = 'red';
       return;
     }
 
-    const response = await fetch('/api/creaAllieva', {
+    const response = await fetch('/api/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -71,56 +104,97 @@ const FormCreaAllieva = () => {
         />
 
         <label id="labelCodiceFiscale"> Codice Fiscale </label>
-        <input type="text" id="textCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
+        <input
+          type="text"
+          id="textCodiceFiscale"
+          placeholder="Inserisci Codice Fiscale..."
+          value={CodiceFiscale}
+        />
 
         <label id="labelNomeAllieva"> Nome Allieva </label>
-        <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." />
+        <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." value={Nome} />
 
         <label id="labelCognomeAllieva"> Cognome Allieva </label>
-        <input type="text" id="textCognomeAllieva" placeholder="Inserisci Cognome Allieva..." />
+        <input
+          type="text"
+          id="textCognomeAllieva"
+          placeholder="Inserisci Cognome Allieva..."
+          value={Cognome}
+        />
 
         <label id="labelCitta"> Citta </label>
-        <input type="text" id="textCitta" placeholder="Inserisci Citta..." />
+        <input type="text" id="textCitta" placeholder="Inserisci Citta..." value={Citta} />
 
         <label id="labelIndirizzo"> Indirizzo </label>
-        <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." />
+        <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." value={Indirizzo} />
 
         <label id="labelCellulare"> Cellulare </label>
-        <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." />
+        <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." value={Cellulare} />
 
         <label id="labelEmail"> Email </label>
-        <input type="text" id="textEmail" placeholder="Inserisci Email..." />
+        <input type="text" id="textEmail" placeholder="Inserisci Email..." value={Email} />
 
         <label id="labelLuogoNascita"> Luogo Nascita </label>
-        <input type="text" id="textLuogoNascita" placeholder="Inserisci LuogoNascita..." />
+        <input
+          type="text"
+          id="textLuogoNascita"
+          placeholder="Inserisci LuogoNascita..."
+          value={LuogoNascita}
+        />
 
         <label id="labelDisciplina"> Disciplina </label>
-        <input type="text" id="textDisciplina" placeholder="Inserisci Disciplina..." />
+        <input type="text" id="textDisciplina" placeholder="Inserisci Disciplina..." value={Disciplina} />
 
         <label id="labelDataIscrizione"> Data Iscrizione </label>
-        <DateTimePicker id="dtpDataIscrizione" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+        <DateTimePicker
+          id="dtpDataIscrizione"
+          defaultValue={new Date({ DataIscrizione })}
+          format="MM/DD/YYYY"
+          time={false}
+        />
 
         <label id="labelDataCertificato"> Data Certificato </label>
-        <DateTimePicker id="dtpDataCertificato" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+        <DateTimePicker
+          id="dtpDataCertificato"
+          defaultValue={new Date({ DataCertificato })}
+          format="MM/DD/YYYY"
+          time={false}
+        />
 
         <label id="labelDataNascita"> Data Nascita </label>
-        <DateTimePicker id="dtpDataNascita" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+        <DateTimePicker
+          id="dtpDataNascita"
+          defaultValue={new Date({ DataNascita })}
+          format="MM/DD/YYYY"
+          time={false}
+        />
 
         <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
         <input
           type="text"
           id="textCodiceFiscaleGenitore"
           placeholder="Inserisci Codice Fiscale Genitore..."
+          value={CodiceFiscaleGenitore}
         />
 
         <label id="labelNomeGenitore"> Nome Genitore </label>
-        <input type="text" id="textNomeGenitore" placeholder="Inserisci Nome Genitore..." />
+        <input
+          type="text"
+          id="textNomeGenitore"
+          placeholder="Inserisci Nome Genitore..."
+          value={NomeGenitore}
+        />
 
         <label id="labelCognomeGenitore"> Cognome Genitore </label>
-        <input type="text" id="textCognomeGenitore" placeholder="Inserisci Cognome Genitore..." />
+        <input
+          type="text"
+          id="textCognomeGenitore"
+          placeholder="Inserisci Cognome Genitore..."
+          value={CognomeGenitore}
+        />
 
-        <Button raised ripple id="buttonCreaAllieva" onClick={creaAllieva}>
-          Crea Allieva
+        <Button raised ripple id="buttonModificaAllieva" onClick={modificaAllieva}>
+          Modifica Allieva
         </Button>
       </div>
       <Button raised ripple id="buttonCreaAllieva" onClick={resetForm} style={{ marginTop: '2em' }}>
@@ -130,4 +204,4 @@ const FormCreaAllieva = () => {
   );
 };
 
-export default FormCreaAllieva;
+export default FormModificaEliminaAllieva;

@@ -40,7 +40,12 @@ function Allieva({ match }) {
           Indietro
         </Button>
       </Link>
-      <Link to="/modificaeliminaallieva">
+      <Link
+        to={{
+          pathname: '/modificaeliminaallieva',
+          state: allievaInfo
+        }}
+      >
         <Button raised ripple style={{ marginLeft: '5em', marginTop: '2em' }}>
           Modifica / Elimina
         </Button>

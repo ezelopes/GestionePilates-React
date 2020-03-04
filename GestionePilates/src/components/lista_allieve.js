@@ -15,6 +15,7 @@ const columnsDefinition = [
       return <Link to={`/paginaallieve/${params.data.CodiceFiscale}`}>{params.value}</Link>;
     }
   },
+  { headerName: 'Maggiorenne', field: 'Maggiorenne' },
   { headerName: 'Nome', field: 'Nome' },
   { headerName: 'Cognome', field: 'Cognome' },
   { headerName: 'Citta', field: 'Citta' },
@@ -31,18 +32,6 @@ const columnsDefinition = [
   { headerName: 'Cognome Genitore', field: 'CognomeGenitore' }
 ];
 
-const rowDataFromDB = [
-  {
-    codicefiscale: 'LPS1234LSP1234LP',
-    nome: 'Ezequiel',
-    cognome: 'Lopes',
-    citta: 'Basingstoke'
-  },
-  { codicefiscale: 'RXN1234RXN1234RX', nome: 'Roxana', cognome: 'Carro', citta: 'Stezzano' },
-  { codicefiscale: 'SRG1234SRG1234SR', nome: 'Sergio', cognome: 'Lopes', citta: 'Stezzano' },
-  { codicefiscale: 'RCO1234RCO1234RC', nome: 'Rocio', cognome: 'Lopes', citta: 'Portsmouth' }
-];
-
 const gridOptionsDefault = {
   masterDetail: true,
   defaultColDef: {
@@ -57,7 +46,7 @@ const gridOptionsDefault = {
 const ListaAllieve = () => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
-  const [rowData, setRowData] = useState(rowDataFromDB);
+  const [rowData, setRowData] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
