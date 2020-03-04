@@ -84,15 +84,47 @@ async function creaRicevuta(
     console.log(error);
     return 'Errore nel creare la Ricevuta!';
   }
-
   // [DataInizio, DataScadenza, NumeroRicevuta, SommaEuro, CodiceFiscale, TipoPagamento, false]
+}
+
+async function creaAllieva(
+  CodiceFiscale,
+  Maggiorenne,
+  Nome,
+  Cognome,
+  Citta,
+  Indirizzo,
+  Cellulare,
+  Email,
+  DataIscrizione,
+  DataCertificato,
+  DataNascita,
+  LuogoNascita,
+  Disciplina,
+  CodiceFiscaleGenitore,
+  NomeGenitore,
+  CognomeGenitore
+) {
+  try {
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
+    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
+    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
+    const [rows, fields] = await pool.execute(
+      `INSERT INTO Allieva VALUES ('${CodiceFiscale}','${Maggiorenne}','${Nome}','${Cognome}','${Citta}','${Indirizzo}','${Cellulare}','${Email}','${DataIscrizioneFormatted}','${DataCertificatoFormatted}','${DataNascitaFormatted}','${LuogoNascita}','${Disciplina}','${CodiceFiscaleGenitore}','${NomeGenitore}','${CognomeGenitore}');`
+    );
+    return 'Allieva Inserita Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return 'Errore nel creare Allieva!';
+  }
 }
 
 module.exports = {
   getAllieve,
   getSingleAllieva,
   getRicevuteOfAllieva,
-  creaRicevuta
+  creaRicevuta,
+  creaAllieva
 };
 
 /**

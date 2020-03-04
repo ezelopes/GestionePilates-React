@@ -3,6 +3,7 @@ const getAllieve = require('./getAllieve');
 const getSingleAllieva = require('./getSingleAllieva');
 const getRicevuteOfAllieva = require('./getRicevuteOfAllieva');
 const creaRicevuta = require('./creaRicevuta');
+const creaAllieva = require('./creaAllieva');
 
 const router = new Router();
 
@@ -11,6 +12,7 @@ router.use('/getSingleAllieva/:CodiceFiscale', getSingleAllieva);
 router.use('/getRicevuteOfAllieva/:CodiceFiscale', getRicevuteOfAllieva);
 
 router.use('/creaRicevuta', creaRicevuta);
+router.use('/creaAllieva', creaAllieva);
 
 // if path corresponds to none of the above
 router.use('/', (req, res, next) => {
