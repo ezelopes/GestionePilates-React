@@ -2,9 +2,10 @@ import React from 'react';
 import { Button } from 'react-mdl';
 import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
-import { Combobox, DateTimePicker } from 'react-widgets';
+import { Combobox } from 'react-widgets';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
+import reverseDate from '../helpers/reverse-date-for-input-date';
 
 moment.locale('es');
 momentLocalizer();
@@ -36,9 +37,9 @@ const FormModificaEliminaAllieva = ({ allievaInfo }) => {
     Indirizzo = allievaInfo.CodiceFiscale;
     Cellulare = allievaInfo.Cellulare;
     Email = allievaInfo.Email;
-    DataIscrizione = allievaInfo.DataIscrizione;
-    DataCertificato = allievaInfo.DataCertificato;
-    DataNascita = allievaInfo.DataNascita;
+    DataIscrizione = reverseDate(allievaInfo.DataIscrizione);
+    DataCertificato = reverseDate(allievaInfo.DataCertificato);
+    DataNascita = reverseDate(allievaInfo.DataNascita);
     LuogoNascita = allievaInfo.LuogoNascita;
     Disciplina = allievaInfo.Disciplina;
     NomeGenitore = allievaInfo.NomeGenitore;
@@ -146,28 +147,13 @@ const FormModificaEliminaAllieva = ({ allievaInfo }) => {
         <input type="text" id="textDisciplina" placeholder="Inserisci Disciplina..." value={Disciplina} />
 
         <label id="labelDataIscrizione"> Data Iscrizione </label>
-        <DateTimePicker
-          id="dtpDataIscrizione"
-          defaultValue={new Date({ DataIscrizione })}
-          format="MM/DD/YYYY"
-          time={false}
-        />
+        <input id="dtpDataIscrizione" type="date" defaultValue={DataIscrizione} />
 
         <label id="labelDataCertificato"> Data Certificato </label>
-        <DateTimePicker
-          id="dtpDataCertificato"
-          defaultValue={new Date({ DataCertificato })}
-          format="MM/DD/YYYY"
-          time={false}
-        />
+        <input id="dtpDataCertificato" type="date" defaultValue={DataCertificato} />
 
         <label id="labelDataNascita"> Data Nascita </label>
-        <DateTimePicker
-          id="dtpDataNascita"
-          defaultValue={new Date({ DataNascita })}
-          format="MM/DD/YYYY"
-          time={false}
-        />
+        <input id="dtpDataNascita" type="date" defaultValue={DataNascita} />
 
         <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
         <input

@@ -5,8 +5,8 @@ const moment = require('moment');
 function mappingRicevuta(rows) {
   const ricevute = rows.map(row => {
     return {
-      DataInizio: moment(row.DataInizio).format('DD/MM/YYYY'),
-      DataScadenza: moment(row.DataScadenza).format('DD/MM/YYYY'),
+      DataInizio: moment(row.DataInizio).format('DD-MM-YYYY'),
+      DataScadenza: moment(row.DataScadenza).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
       SommaEuro: row.SommaEuro,
       FK_CodiceFiscale: row.FK_CodiceFiscale,
@@ -28,9 +28,9 @@ function mappingAllieve(rows) {
       Indirizzo: row.Indirizzo,
       Cellulare: row.Cellulare,
       Email: row.Email,
-      DataIscrizione: moment(row.DataIscrizione).format('DD/MM/YYYY'),
-      DataCertificato: moment(row.DataCertificato).format('DD/MM/YYYY'),
-      DataNascita: moment(row.DataNascita).format('DD/MM/YYYY'),
+      DataIscrizione: moment(row.DataIscrizione).format('DD-MM-YYYY'),
+      DataCertificato: moment(row.DataCertificato).format('DD-MM-YYYY'),
+      DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
       LuogoNascita: row.LuogoNascita,
       Disciplina: row.Disciplina,
       NomeGenitore: row.NomeGenitore,

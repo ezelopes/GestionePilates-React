@@ -1,5 +1,10 @@
 /* NUOVO CSS */
 
+input[type='date'] {
+  font-size: 1em;
+  border-radius: 2px;
+}
+
 .allieva-body {
   position: relative;
   margin-top: 2em;
