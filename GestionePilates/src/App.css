@@ -57,6 +57,35 @@ nav a:hover {
   color: white;
 }
 
+.formWrapper {
+  margin-top: 2em;
+  border-color: gray;
+  border-style: solid;
+  border-radius: 0.5em;
+  border-width: 0.1em;
+  padding-bottom: 1.5em;
+}
+
+.formWrapper #buttonCreaRicevuta {
+  margin-left: 1em;
+}
+
+.formWrapper #buttonCreaAllieva {
+  margin-left: 1em;
+}
+
+.formWrapper #buttonResetForm {
+  margin-left: 3em;
+}
+
+.formWrapper #buttonModificaAllieva {
+  margin-left: 1em;
+}
+
+.formWrapper #buttonEliminaAllieva {
+  margin-left: 3em;
+}
+
 .formCreaRicevuta {
   padding: 1.5em 1.5em 1.5em 1.5em;
   display: grid;
@@ -65,12 +94,6 @@ nav a:hover {
 
   align-items: center;
   justify-content: center;
-
-  margin-top: 2em;
-  border-color: gray;
-  border-style: solid;
-  border-radius: 0.5em;
-  border-width: 0.1em;
 }
 
 .formCreaRicevuta label {

@@ -151,13 +151,24 @@ async function modificaAllieva(
   }
 }
 
+async function eliminaAllieva(CodiceFiscale) {
+  try {
+    const [rows, fields] = await pool.execute(`DELETE FROM allieva WHERE CodiceFiscale='${CodiceFiscale}';`);
+    return 'Allieva Eliminata Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'eliminare Allieva!`;
+  }
+}
+
 module.exports = {
   getAllieve,
   getSingleAllieva,
   getRicevuteOfAllieva,
   creaRicevuta,
   creaAllieva,
-  modificaAllieva
+  modificaAllieva,
+  eliminaAllieva
 };
 
 /**

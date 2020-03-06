@@ -89,111 +89,153 @@ const FormModificaEliminaAllieva = ({ allievaInfo }) => {
     alert(responseParsed.message);
   };
 
-  const resetForm = () => {};
+  const eliminaAllieva = async () => {
+    // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
+    if (document.getElementById('textCodiceFiscale').value === '') {
+      document.getElementById('textCodiceFiscale').style.borderColor = 'red';
+      return;
+    }
+
+    const response = await fetch('/api/eliminaAllieva', {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+        // Authorization: 'Bearer ' + idToken
+      },
+      body: JSON.stringify({
+        CodiceFiscale: document.getElementById('textCodiceFiscale').value
+      })
+    });
+    const responseParsed = await response.json();
+    alert(responseParsed.message);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
+    document.getElementById('formCreaRicevuta').reset();
+  };
 
   return (
     <>
-      <div className="formCreaRicevuta">
-        <label id="labelEta"> Età </label>
-        <Combobox
-          id="comboboxEta"
-          data={eta}
-          defaultValue={eta.find(currentEta => {
-            return currentEta.eta === Maggiorenne;
-          })}
-          valueField="id"
-          textField="eta"
-          caseSensitive={false}
-          filter="contains"
-        />
+      <div className="formWrapper">
+        <div className="formCreaRicevuta">
+          <label id="labelEta"> Età </label>
+          <Combobox
+            id="comboboxEta"
+            data={eta}
+            defaultValue={eta.find(currentEta => {
+              return currentEta.eta === Maggiorenne;
+            })}
+            valueField="id"
+            textField="eta"
+            caseSensitive={false}
+            filter="contains"
+          />
 
-        <label id="labelCodiceFiscale"> Codice Fiscale </label>
-        <input
-          type="text"
-          id="textCodiceFiscale"
-          placeholder="Inserisci Codice Fiscale..."
-          defaultValue={CodiceFiscale}
-        />
+          <label id="labelCodiceFiscale"> Codice Fiscale </label>
+          <input
+            type="text"
+            id="textCodiceFiscale"
+            placeholder="Inserisci Codice Fiscale..."
+            defaultValue={CodiceFiscale}
+          />
 
-        <label id="labelNomeAllieva"> Nome Allieva </label>
-        <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." defaultValue={Nome} />
+          <label id="labelNomeAllieva"> Nome Allieva </label>
+          <input
+            type="text"
+            id="textNomeAllieva"
+            placeholder="Inserisci Nome Allieva..."
+            defaultValue={Nome}
+          />
 
-        <label id="labelCognomeAllieva"> Cognome Allieva </label>
-        <input
-          type="text"
-          id="textCognomeAllieva"
-          placeholder="Inserisci Cognome Allieva..."
-          defaultValue={Cognome}
-        />
+          <label id="labelCognomeAllieva"> Cognome Allieva </label>
+          <input
+            type="text"
+            id="textCognomeAllieva"
+            placeholder="Inserisci Cognome Allieva..."
+            defaultValue={Cognome}
+          />
 
-        <label id="labelCitta"> Citta </label>
-        <input type="text" id="textCitta" placeholder="Inserisci Citta..." defaultValue={Citta} />
+          <label id="labelCitta"> Citta </label>
+          <input type="text" id="textCitta" placeholder="Inserisci Citta..." defaultValue={Citta} />
 
-        <label id="labelIndirizzo"> Indirizzo </label>
-        <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." defaultValue={Indirizzo} />
+          <label id="labelIndirizzo"> Indirizzo </label>
+          <input
+            type="text"
+            id="textIndirizzo"
+            placeholder="Inserisci Indirizzo..."
+            defaultValue={Indirizzo}
+          />
 
-        <label id="labelCellulare"> Cellulare </label>
-        <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." defaultValue={Cellulare} />
+          <label id="labelCellulare"> Cellulare </label>
+          <input
+            type="text"
+            id="textCellulare"
+            placeholder="Inserisci Cellulare..."
+            defaultValue={Cellulare}
+          />
 
-        <label id="labelEmail"> Email </label>
-        <input type="text" id="textEmail" placeholder="Inserisci Email..." defaultValue={Email} />
+          <label id="labelEmail"> Email </label>
+          <input type="text" id="textEmail" placeholder="Inserisci Email..." defaultValue={Email} />
 
-        <label id="labelLuogoNascita"> Luogo Nascita </label>
-        <input
-          type="text"
-          id="textLuogoNascita"
-          placeholder="Inserisci LuogoNascita..."
-          defaultValue={LuogoNascita}
-        />
+          <label id="labelLuogoNascita"> Luogo Nascita </label>
+          <input
+            type="text"
+            id="textLuogoNascita"
+            placeholder="Inserisci LuogoNascita..."
+            defaultValue={LuogoNascita}
+          />
 
-        <label id="labelDisciplina"> Disciplina </label>
-        <input
-          type="text"
-          id="textDisciplina"
-          placeholder="Inserisci Disciplina..."
-          defaultValue={Disciplina}
-        />
+          <label id="labelDisciplina"> Disciplina </label>
+          <input
+            type="text"
+            id="textDisciplina"
+            placeholder="Inserisci Disciplina..."
+            defaultValue={Disciplina}
+          />
 
-        <label id="labelDataIscrizione"> Data Iscrizione </label>
-        <input id="dtpDataIscrizione" type="date" defaultValue={DataIscrizione} />
+          <label id="labelDataIscrizione"> Data Iscrizione </label>
+          <input id="dtpDataIscrizione" type="date" defaultValue={DataIscrizione} />
 
-        <label id="labelDataCertificato"> Data Certificato </label>
-        <input id="dtpDataCertificato" type="date" defaultValue={DataCertificato} />
+          <label id="labelDataCertificato"> Data Certificato </label>
+          <input id="dtpDataCertificato" type="date" defaultValue={DataCertificato} />
 
-        <label id="labelDataNascita"> Data Nascita </label>
-        <input id="dtpDataNascita" type="date" defaultValue={DataNascita} />
+          <label id="labelDataNascita"> Data Nascita </label>
+          <input id="dtpDataNascita" type="date" defaultValue={DataNascita} />
 
-        <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
-        <input
-          type="text"
-          id="textCodiceFiscaleGenitore"
-          placeholder="Inserisci Codice Fiscale Genitore..."
-          defaultValue={CodiceFiscaleGenitore}
-        />
+          <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
+          <input
+            type="text"
+            id="textCodiceFiscaleGenitore"
+            placeholder="Inserisci Codice Fiscale Genitore..."
+            defaultValue={CodiceFiscaleGenitore}
+          />
 
-        <label id="labelNomeGenitore"> Nome Genitore </label>
-        <input
-          type="text"
-          id="textNomeGenitore"
-          placeholder="Inserisci Nome Genitore..."
-          defaultValue={NomeGenitore}
-        />
+          <label id="labelNomeGenitore"> Nome Genitore </label>
+          <input
+            type="text"
+            id="textNomeGenitore"
+            placeholder="Inserisci Nome Genitore..."
+            defaultValue={NomeGenitore}
+          />
 
-        <label id="labelCognomeGenitore"> Cognome Genitore </label>
-        <input
-          type="text"
-          id="textCognomeGenitore"
-          placeholder="Inserisci Cognome Genitore..."
-          defaultValue={CognomeGenitore}
-        />
-
+          <label id="labelCognomeGenitore"> Cognome Genitore </label>
+          <input
+            type="text"
+            id="textCognomeGenitore"
+            placeholder="Inserisci Cognome Genitore..."
+            defaultValue={CognomeGenitore}
+          />
+        </div>
         <Button raised ripple id="buttonModificaAllieva" onClick={modificaAllieva}>
           Modifica Allieva
         </Button>
+        <Button raised ripple id="buttonEliminaAllieva" onClick={eliminaAllieva}>
+          Elimina Allieva
+        </Button>
       </div>
-      <Button raised ripple id="buttonCreaAllieva" onClick={resetForm} style={{ marginTop: '2em' }}>
-        Reset Form
-      </Button>
     </>
   );
 };

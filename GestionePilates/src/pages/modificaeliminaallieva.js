@@ -4,12 +4,14 @@ import FormModificaEliminaAllieva from '../components/form_modifica_elimina_alli
 function ModificaEliminaAllieve(props) {
   const allievaInfo = props.location.state;
   console.log(allievaInfo);
-
+  if (!allievaInfo) return <h1> ERROR </h1>;
   return (
     <>
-      <h1> Modifica Elimina Page - {allievaInfo.CodiceFiscale} </h1>
-      <label id="labelCodiceFiscale"> Cerca Codice Fiscale</label>
-      <FormModificaEliminaAllieva allievaInfo={allievaInfo} />
+      <div className="allieva-body">
+        <h1> Modifica Elimina Page - {allievaInfo.CodiceFiscale} </h1>
+        <label id="labelCodiceFiscale"> Cerca Codice Fiscale</label>
+        <FormModificaEliminaAllieva allievaInfo={allievaInfo} />
+      </div>
     </>
   );
 }

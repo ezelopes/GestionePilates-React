@@ -50,33 +50,35 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
   };
 
   return (
-    <div className="formCreaRicevuta">
-      <label id="labelNumRicevuta"> Numero Ricevuta </label>
-      <input type="text" id="textNumeroRicevuta" placeholder="Inserisci Numero Ricevuta..." />
-      <label id="labelPagamento"> Tipo Pagamento </label>
-      <Combobox
-        id="comboboxTipoPagamento"
-        data={tipoPagamento}
-        defaultValue={tipoPagamento[0]}
-        valueField="id"
-        textField="tipo"
-        caseSensitive={false}
-        filter="contains"
-      />
-      <label id="labelSomma"> Somma Euro </label>
-      <Combobox
-        id="comboboxSommaEuro"
-        data={sommaEuro}
-        defaultValue={sommaEuro[0]}
-        valueField="id"
-        textField="somma"
-        caseSensitive={false}
-        filter="contains"
-      />
-      <label id="labelDataInizio"> Data Inizio </label>
-      <DateTimePicker id="dtpDataInizio" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
-      <label id="labelDataScadenza"> Data Scadenza </label>
-      <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+    <div className="formWrapper">
+      <div className="formCreaRicevuta">
+        <label id="labelNumRicevuta"> Numero Ricevuta </label>
+        <input type="text" id="textNumeroRicevuta" placeholder="Inserisci Numero Ricevuta..." />
+        <label id="labelPagamento"> Tipo Pagamento </label>
+        <Combobox
+          id="comboboxTipoPagamento"
+          data={tipoPagamento}
+          defaultValue={tipoPagamento[0]}
+          valueField="id"
+          textField="tipo"
+          caseSensitive={false}
+          filter="contains"
+        />
+        <label id="labelSomma"> Somma Euro </label>
+        <Combobox
+          id="comboboxSommaEuro"
+          data={sommaEuro}
+          defaultValue={sommaEuro[0]}
+          valueField="id"
+          textField="somma"
+          caseSensitive={false}
+          filter="contains"
+        />
+        <label id="labelDataInizio"> Data Inizio </label>
+        <DateTimePicker id="dtpDataInizio" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+        <label id="labelDataScadenza"> Data Scadenza </label>
+        <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+      </div>
       <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
         Crea Ricevuta
       </Button>

@@ -55,80 +55,85 @@ const FormCreaAllieva = () => {
     });
     const responseParsed = await response.json();
     alert(responseParsed.message);
+    resetForm();
   };
 
-  const resetForm = () => {};
+  const resetForm = () => {
+    document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
+    document.getElementById('formCreaRicevuta').reset();
+  };
 
   return (
     <>
-      <div className="formCreaRicevuta">
-        <label id="labelEta"> Età </label>
-        <Combobox
-          id="comboboxEta"
-          data={eta}
-          defaultValue={eta[0]}
-          valueField="id"
-          textField="eta"
-          caseSensitive={false}
-          filter="contains"
-        />
+      <div className="formWrapper">
+        <form className="formCreaRicevuta" id="formCreaRicevuta">
+          <label id="labelEta"> Età </label>
+          <Combobox
+            id="comboboxEta"
+            data={eta}
+            defaultValue={eta[0]}
+            valueField="id"
+            textField="eta"
+            caseSensitive={false}
+            filter="contains"
+          />
 
-        <label id="labelCodiceFiscale"> Codice Fiscale </label>
-        <input type="text" id="textCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
+          <label id="labelCodiceFiscale"> Codice Fiscale </label>
+          <input type="text" id="textCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
 
-        <label id="labelNomeAllieva"> Nome Allieva </label>
-        <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." />
+          <label id="labelNomeAllieva"> Nome Allieva </label>
+          <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." />
 
-        <label id="labelCognomeAllieva"> Cognome Allieva </label>
-        <input type="text" id="textCognomeAllieva" placeholder="Inserisci Cognome Allieva..." />
+          <label id="labelCognomeAllieva"> Cognome Allieva </label>
+          <input type="text" id="textCognomeAllieva" placeholder="Inserisci Cognome Allieva..." />
 
-        <label id="labelCitta"> Citta </label>
-        <input type="text" id="textCitta" placeholder="Inserisci Citta..." />
+          <label id="labelCitta"> Citta </label>
+          <input type="text" id="textCitta" placeholder="Inserisci Citta..." />
 
-        <label id="labelIndirizzo"> Indirizzo </label>
-        <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." />
+          <label id="labelIndirizzo"> Indirizzo </label>
+          <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." />
 
-        <label id="labelCellulare"> Cellulare </label>
-        <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." />
+          <label id="labelCellulare"> Cellulare </label>
+          <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." />
 
-        <label id="labelEmail"> Email </label>
-        <input type="text" id="textEmail" placeholder="Inserisci Email..." />
+          <label id="labelEmail"> Email </label>
+          <input type="text" id="textEmail" placeholder="Inserisci Email..." />
 
-        <label id="labelLuogoNascita"> Luogo Nascita </label>
-        <input type="text" id="textLuogoNascita" placeholder="Inserisci LuogoNascita..." />
+          <label id="labelLuogoNascita"> Luogo Nascita </label>
+          <input type="text" id="textLuogoNascita" placeholder="Inserisci LuogoNascita..." />
 
-        <label id="labelDisciplina"> Disciplina </label>
-        <input type="text" id="textDisciplina" placeholder="Inserisci Disciplina..." />
+          <label id="labelDisciplina"> Disciplina </label>
+          <input type="text" id="textDisciplina" placeholder="Inserisci Disciplina..." />
 
-        <label id="labelDataIscrizione"> Data Iscrizione </label>
-        <input id="dtpDataIscrizione" type="date" defaultValue={today} />
+          <label id="labelDataIscrizione"> Data Iscrizione </label>
+          <input id="dtpDataIscrizione" type="date" defaultValue={today} />
 
-        <label id="labelDataCertificato"> Data Certificato </label>
-        <input id="dtpDataCertificato" type="date" defaultValue={today} />
+          <label id="labelDataCertificato"> Data Certificato </label>
+          <input id="dtpDataCertificato" type="date" defaultValue={today} />
 
-        <label id="labelDataNascita"> Data Nascita </label>
-        <input id="dtpDataNascita" type="date" defaultValue={today} />
+          <label id="labelDataNascita"> Data Nascita </label>
+          <input id="dtpDataNascita" type="date" defaultValue={today} />
 
-        <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
-        <input
-          type="text"
-          id="textCodiceFiscaleGenitore"
-          placeholder="Inserisci Codice Fiscale Genitore..."
-        />
+          <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
+          <input
+            type="text"
+            id="textCodiceFiscaleGenitore"
+            placeholder="Inserisci Codice Fiscale Genitore..."
+          />
 
-        <label id="labelNomeGenitore"> Nome Genitore </label>
-        <input type="text" id="textNomeGenitore" placeholder="Inserisci Nome Genitore..." />
+          <label id="labelNomeGenitore"> Nome Genitore </label>
+          <input type="text" id="textNomeGenitore" placeholder="Inserisci Nome Genitore..." />
 
-        <label id="labelCognomeGenitore"> Cognome Genitore </label>
-        <input type="text" id="textCognomeGenitore" placeholder="Inserisci Cognome Genitore..." />
-
+          <label id="labelCognomeGenitore"> Cognome Genitore </label>
+          <input type="text" id="textCognomeGenitore" placeholder="Inserisci Cognome Genitore..." />
+        </form>
         <Button raised ripple id="buttonCreaAllieva" onClick={creaAllieva}>
           Crea Allieva
         </Button>
+        <Button raised ripple id="buttonResetForm" onClick={resetForm}>
+          Reset Form
+        </Button>
       </div>
-      <Button raised ripple id="buttonCreaAllieva" onClick={resetForm} style={{ marginTop: '2em' }}>
-        Reset Form
-      </Button>
     </>
   );
 };
