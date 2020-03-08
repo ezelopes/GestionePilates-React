@@ -19,8 +19,10 @@ input[type='date'] {
   margin-right: 5em;
 }
 
-#modificaAllieva-page-body {
-  /* visibility: hidden; */
+.paginaallieve-body {
+  margin-top: 2em;
+  margin-left: 3%;
+  width: 94%;
 }
 
 .ag-pivot-off .ag-header-cell-label {
@@ -158,5 +160,25 @@ nav a:hover {
 
 .formCreaRicevuta #buttonCreaAllieva {
   width: 50%;
+  margin-left: 1em;
+}
+
+#cercaAllievaForm {
+  margin-top: 2em;
+  margin-left: 5em;
+}
+
+#cercaAllievaForm label {
+  font-weight: bold;
+}
+
+#cercaAllievaForm input[type='text'] {
+  width: 16em;
+  padding-left: 0.5em;
+  height: 2em;
+  margin-left: 1em;
+}
+
+#cercaAllievaForm button {
   margin-left: 1em;
 }

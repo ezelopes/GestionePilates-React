@@ -15,23 +15,18 @@ function ModificaEliminaAllieve(props) {
     const info = await getSingleAllievaResult.json();
     if (info !== 0) {
       setAllievaInfo(info[0]);
-      document.getElementById('modificaAllieva-page-body').style.visibility = 'visible';
     }
   };
 
-  useEffect(() => {
-    if (allievaInfo) {
-      // document.getElementById('modificaAllieva-page-body').style.visibility = 'visible';
-    }
-  });
-
   return (
     <>
-      <label id="labelNumRicevuta"> Cerca Allieva per Codice Fiscale </label>
-      <input type="text" id="cercaCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
-      <Button raised ripple id="buttonCercaAllieva" onClick={cercaAllieva}>
-        Cerca Allieva
-      </Button>
+      <div id="cercaAllievaForm">
+        <label id="labelNumRicevuta"> Cerca Allieva per Codice Fiscale </label>
+        <input type="text" id="cercaCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
+        <Button raised ripple id="buttonCercaAllieva" onClick={cercaAllieva}>
+          Cerca Allieva
+        </Button>
+      </div>
       <div className="page-body" id="modificaAllieva-page-body">
         <FormModificaEliminaAllieva allievaInfoParam={allievaInfo} />
       </div>
