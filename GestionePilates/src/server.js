@@ -20,7 +20,7 @@ function App() {
     <Router>
       <div className="App">
         <NavBar />
-        <div id="page-body">
+        <div>
           {/* Switch makes sure only one route at a time is displayed */}
           <Switch>
             <Route path="/" component={homepage} exact />
