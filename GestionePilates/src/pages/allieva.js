@@ -28,7 +28,7 @@ function Allieva({ match }) {
 
   return (
     <>
-      <div className="allieva-body">
+      <div className="page-body">
         <h2>
           {allievaInfo.Nome} {allievaInfo.Cognome}
         </h2>

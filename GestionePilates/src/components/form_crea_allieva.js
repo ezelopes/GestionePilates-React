@@ -60,13 +60,13 @@ const FormCreaAllieva = () => {
 
   const resetForm = () => {
     document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
-    document.getElementById('formCreaRicevuta').reset();
+    document.getElementById('formCreaAllieva').reset();
   };
 
   return (
     <>
       <div className="formWrapper">
-        <form className="formCreaRicevuta" id="formCreaRicevuta">
+        <form className="formCreaRicevuta" id="formCreaAllieva">
           <label id="labelEta"> Età </label>
           <Combobox
             id="comboboxEta"

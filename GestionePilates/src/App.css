@@ -5,18 +5,22 @@ input[type='date'] {
   border-radius: 2px;
 }
 
-.allieva-body {
+.page-body {
   position: relative;
   margin-top: 2em;
   margin-left: 5em;
   margin-right: 5em;
 }
 
-.paginaallieve-body {
+.page-body {
   position: relative;
   margin-top: 2em;
   margin-left: 5em;
   margin-right: 5em;
+}
+
+#modificaAllieva-page-body {
+  /* visibility: hidden; */
 }
 
 .ag-pivot-off .ag-header-cell-label {
