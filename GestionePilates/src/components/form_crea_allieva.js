@@ -13,7 +13,7 @@ momentLocalizer();
 simpleNumberLocalizer();
 
 const FormCreaAllieva = () => {
-  const today = formatDate(new Date());
+  const today = formatDate(new Date(), true);
 
   let eta = [
     { id: 0, eta: 'Maggiorenne' },

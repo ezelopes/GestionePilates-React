@@ -1,15 +1,13 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('./get-base64-image');
+const formatDate = require('./format-date-for-input-date');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const today = new Date();
-  const day = ('0' + today.getDate()).slice(-2);
-  const month = ('0' + (today.getMonth() + 1)).slice(-2);
-  const todayFormatted = `${day}-${month}-${today.getFullYear()}`;
+  const today = formatDate(new Date(), false);
 
   const docDefinition = {
     pageMargins: [40, 10, 40, 0],
@@ -64,7 +62,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${todayFormatted}`,
+        text: `Stezzano, ${today}`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]

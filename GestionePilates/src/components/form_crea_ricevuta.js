@@ -5,6 +5,7 @@ import simpleNumberLocalizer from 'react-widgets-simple-number';
 import { Combobox, DateTimePicker } from 'react-widgets';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
+import formatDate from '../helpers/format-date-for-input-date';
 
 moment.locale('es');
 momentLocalizer();
@@ -12,6 +13,7 @@ momentLocalizer();
 simpleNumberLocalizer();
 
 const FormCreaRicevuta = ({ CodiceFiscale }) => {
+  const today = formatDate(new Date(), true);
   let tipoPagamento = [
     { id: 0, tipo: 'Contanti' },
     { id: 1, tipo: 'Carta di Credito' },
@@ -38,8 +40,8 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
       },
       body: JSON.stringify({
         NumeroRicevuta: document.getElementById('textNumeroRicevuta').value,
-        DataInizio: moment(document.getElementById('dtpDataInizio_input').value).format(),
-        DataScadenza: moment(document.getElementById('dtpDataScadenza_input').value).format(),
+        DataInizio: document.getElementById('dtpDataInizio').value,
+        DataScadenza: document.getElementById('dtpDataScadenza').value,
         SommaEuro: document.getElementById('comboboxSommaEuro_input').value,
         TipoPagamento: document.getElementById('comboboxTipoPagamento_input').value,
         CodiceFiscale: CodiceFiscale
@@ -75,9 +77,11 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
           filter="contains"
         />
         <label id="labelDataInizio"> Data Inizio </label>
-        <DateTimePicker id="dtpDataInizio" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+        <input id="dtpDataInizio" type="date" defaultValue={today} />
+        {/* <DateTimePicker id="dtpDataInizio" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
         <label id="labelDataScadenza"> Data Scadenza </label>
-        <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} />
+        <input id="dtpDataScadenza" type="date" defaultValue={today} />
+        {/* <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
       </div>
       <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
         Crea Ricevuta
