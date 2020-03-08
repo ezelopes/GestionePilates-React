@@ -2,11 +2,13 @@ const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('./get-base64-image');
 const formatDate = require('./format-date-for-input-date');
+const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const SommaEuroInLettere = convertNumberIntoWord(ricevutaInfo.SommaEuro);
   const today = formatDate(new Date(), false);
 
   const docDefinition = {
@@ -44,7 +46,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.CodiceFiscaleGenitore
         }, il pagamento effetuato tramite ${ricevutaInfo.TipoPagamento.toUpperCase()} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
-        }€ (... Euro),
+        }€ (${SommaEuroInLettere} Euro),
         per l'iscrizione di ${allievaInfo.Nome} ${allievaInfo.Cognome}, C.F. ${
           allievaInfo.CodiceFiscale
         } nato/a a ${allievaInfo.LuogoNascita},

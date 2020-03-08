@@ -2,16 +2,14 @@ const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('./get-base64-image');
 const formatDate = require('./format-date-for-input-date');
+const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const SommaEuroInLettere = convertNumberIntoWord(ricevutaInfo.SommaEuro);
   const today = formatDate(new Date(), false);
-
-  //   const day = ('0' + today.getDate()).slice(-2);
-  //   const month = ('0' + (today.getMonth() + 1)).slice(-2);
-  //   const todayFormatted = `${day}-${month}-${today.getFullYear()}`;
 
   const docDefinition = {
     pageMargins: [40, 10, 40, 0],
@@ -43,7 +41,7 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         // ${sommaEuroInLettere.ToUpper()}
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale},
           nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita}
-          residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (... Euro) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio}
+          residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${SommaEuroInLettere} Euro) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio}
           al ${ricevutaInfo.DataScadenza}`,
         alignment: 'center',
         fontSize: 10,
