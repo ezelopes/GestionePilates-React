@@ -4,7 +4,8 @@ const { Button } = require('react-mdl');
 const { AgGridReact } = require('ag-grid-react');
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('../helpers/get-base64-image');
+const pdfTemplateMaggiorenni = require('../helpers/pdf-template-maggiorenni');
+const pdfTemplateMinorenni = require('../helpers/pdf-template-minorenni');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -39,21 +40,13 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
   const stampaRicevute = async () => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
     if (ricevuteSelezionate.length === 0 || ricevuteSelezionate.length > 1) return;
-    // console.log(allievaInfo);
-    // console.log(ricevuteSelezionate[0]);
-    const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-    const documentDefinition = {
-      content: [
-        {
-          image: label_logo, // 'data:images/png;base64,' +
-          fit: [100, 100]
-          // pageBreak: 'after'
-        },
-        'Hello, this will be the title',
-        'And this will be the paragraph :D',
-        'What about this sub paragraph? :P'
-      ]
-    };
+
+    let documentDefinition;
+    if (allievaInfo.Maggiorenne === 'Maggiorenne') {
+      documentDefinition = await pdfTemplateMaggiorenni(allievaInfo, ricevuteSelezionate[0].data);
+    } else {
+      documentDefinition = await pdfTemplateMinorenni(allievaInfo, ricevuteSelezionate[0].data);
+    }
     pdfMake.createPdf(documentDefinition).open({}, window);
   };
 
