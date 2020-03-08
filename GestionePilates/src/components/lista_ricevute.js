@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { Button } from 'react-mdl';
-import { AgGridReact } from 'ag-grid-react';
+const React = require('react');
+const { useState } = require('react');
+const { Button } = require('react-mdl');
+const { AgGridReact } = require('ag-grid-react');
+const pdfMake = require('pdfmake/build/pdfmake.js');
+const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const getBase64ImageFromURL = require('../helpers/get-base64-image');
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+require('ag-grid-community/dist/styles/ag-grid.css');
+require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const gridOptionsDefault = {
   masterDetail: true,
@@ -24,13 +30,33 @@ const columnsDefinition = [
   { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
 ];
 
-const ListaRicevute = ({ ricevute }) => {
+const ListaRicevute = ({ ricevute, allievaInfo }) => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
   // const [rowData /*setRowData*/] = useState(rowDataFromDB);
   const rowData = ricevute;
 
-  const stampaRicevute = () => {};
+  const stampaRicevute = async () => {
+    const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
+    if (ricevuteSelezionate.length === 0 || ricevuteSelezionate.length > 1) return;
+    // console.log(allievaInfo);
+    // console.log(ricevuteSelezionate[0]);
+    const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+    const documentDefinition = {
+      content: [
+        {
+          image: label_logo, // 'data:images/png;base64,' +
+          fit: [100, 100]
+          // pageBreak: 'after'
+        },
+        'Hello, this will be the title',
+        'And this will be the paragraph :D',
+        'What about this sub paragraph? :P'
+      ]
+    };
+    pdfMake.createPdf(documentDefinition).open({}, window);
+  };
+
   const eliminaRicevute = async () => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
     if (ricevuteSelezionate.length === 0) return; // alert('Nessuna Ricevuta Selezionata')
@@ -52,6 +78,10 @@ const ListaRicevute = ({ ricevute }) => {
     });
     const responseParsed = await response.json();
     alert(responseParsed.message);
+    // const CodiceFiscale = ricevuteSelezionate[0].data.FK_CodiceFiscale;
+    // const getRicevuteOfAllievaResult = await fetch(`/api/getRicevuteOfAllieva/${CodiceFiscale}`);
+    // const ricevute = await getRicevuteOfAllievaResult.json();
+    // setRowData(ricevute);
   };
 
   return (

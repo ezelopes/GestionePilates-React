@@ -47,7 +47,7 @@ function Allieva({ match }) {
             Indietro
           </Button>
         </Link>
-        <ListaRicevute ricevute={allievaRicevute} />
+        <ListaRicevute ricevute={allievaRicevute} allievaInfo={allievaInfo} />
         <FormCreaRicevuta CodiceFiscale={CodiceFiscale} />
       </div>
     </>
