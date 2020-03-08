@@ -5,6 +5,7 @@ const moment = require('moment');
 function mappingRicevuta(rows) {
   const ricevute = rows.map(row => {
     return {
+      RicevutaID: row.RicevutaID,
       DataInizio: moment(row.DataInizio).format('DD-MM-YYYY'),
       DataScadenza: moment(row.DataScadenza).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
@@ -161,6 +162,21 @@ async function eliminaAllieva(CodiceFiscale) {
   }
 }
 
+async function eliminaRicevute(RicevuteId) {
+  try {
+    const deletePromises = [];
+    RicevuteId.map(RicevutaID => {
+      deletePromises.push(pool.execute(`DELETE FROM Ricevuta WHERE RicevutaID=${RicevutaID};`));
+    });
+    await Promise.all(deletePromises);
+    // const [rows, fields] = await pool.execute(`DELETE FROM allieva WHERE CodiceFiscale='${CodiceFiscale}';`);
+    return 'Ricevute Eliminate Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'eliminare Ricevute!`;
+  }
+}
+
 module.exports = {
   getAllieve,
   getSingleAllieva,
@@ -168,7 +184,8 @@ module.exports = {
   creaRicevuta,
   creaAllieva,
   modificaAllieva,
-  eliminaAllieva
+  eliminaAllieva,
+  eliminaRicevute
 };
 
 /**

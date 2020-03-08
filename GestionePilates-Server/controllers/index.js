@@ -6,6 +6,7 @@ const creaRicevuta = require('./creaRicevuta');
 const creaAllieva = require('./creaAllieva');
 const modificaAllieva = require('./modificaAllieva');
 const eliminaAllieva = require('./eliminaAllieva');
+const eliminaRicevute = require('./eliminaRicevute');
 
 const router = new Router();
 
@@ -17,6 +18,7 @@ router.use('/creaRicevuta', creaRicevuta);
 router.use('/creaAllieva', creaAllieva);
 router.use('/modificaAllieva', modificaAllieva);
 router.use('/eliminaAllieva', eliminaAllieva);
+router.use('/eliminaRicevute', eliminaRicevute);
 
 // if path corresponds to none of the above
 router.use('/', (req, res, next) => {

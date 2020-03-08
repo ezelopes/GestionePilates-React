@@ -32,24 +32,24 @@ function Allieva({ match }) {
         <h2>
           {allievaInfo.Nome} {allievaInfo.Cognome}
         </h2>
+        <Link
+          to={{
+            pathname: '/modificaeliminaallieva',
+            state: allievaInfo
+          }}
+        >
+          <Button raised ripple>
+            Modifica / Elimina
+          </Button>
+        </Link>
+        <Link to="/paginaallieve">
+          <Button raised ripple style={{ marginLeft: '2em' }}>
+            Indietro
+          </Button>
+        </Link>
         <ListaRicevute ricevute={allievaRicevute} />
         <FormCreaRicevuta CodiceFiscale={CodiceFiscale} />
       </div>
-      <Link to="/paginaallieve">
-        <Button raised ripple style={{ marginLeft: '5em', marginTop: '2em' }}>
-          Indietro
-        </Button>
-      </Link>
-      <Link
-        to={{
-          pathname: '/modificaeliminaallieva',
-          state: allievaInfo
-        }}
-      >
-        <Button raised ripple style={{ marginLeft: '5em', marginTop: '2em' }}>
-          Modifica / Elimina
-        </Button>
-      </Link>
     </>
   );
 }
