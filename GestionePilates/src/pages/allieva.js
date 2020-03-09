@@ -4,6 +4,11 @@ import { Button } from 'react-mdl';
 import NotFoundPage from './notfoundpage';
 import ListaRicevute from '../components/lista_ricevute';
 import FormCreaRicevuta from '../components/form_crea_ricevuta';
+const pdfMake = require('pdfmake/build/pdfmake.js');
+const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const pdfTemplateModuloIscrizione = require('../helpers/pdf-template-modulo-iscrizione');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function Allieva({ match }) {
   const CodiceFiscale = match.params.codicefiscale;
@@ -26,19 +31,27 @@ function Allieva({ match }) {
 
   if (!allievaInfo) return <NotFoundPage />;
 
+  const creaModuloIscrizione = async () => {
+    const documentDefinition = await pdfTemplateModuloIscrizione(allievaInfo);
+    pdfMake.createPdf(documentDefinition).open({}, window);
+  };
+
   return (
     <>
       <div className="page-body">
         <h2>
           {allievaInfo.Nome} {allievaInfo.Cognome}
         </h2>
+        <Button raised ripple onClick={creaModuloIscrizione}>
+          Crea Modulo Iscrizione
+        </Button>
         <Link
           to={{
             pathname: '/modificaeliminaallieva',
             state: allievaInfo
           }}
         >
-          <Button raised ripple>
+          <Button raised ripple style={{ marginLeft: '2em' }}>
             Modifica / Elimina
           </Button>
         </Link>
