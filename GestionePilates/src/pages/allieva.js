@@ -33,7 +33,8 @@ function Allieva({ match }) {
 
   const creaModuloIscrizione = async () => {
     const documentDefinition = await pdfTemplateModuloIscrizione(allievaInfo);
-    pdfMake.createPdf(documentDefinition).open({}, window);
+    // pdfMake.createPdf(documentDefinition).open({}, window);
+    pdfMake.createPdf(documentDefinition).open({}, window); //.download(); // name?
   };
 
   return (
