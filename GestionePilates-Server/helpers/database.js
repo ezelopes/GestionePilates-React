@@ -34,6 +34,7 @@ function mappingAllieve(rows) {
       DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
       LuogoNascita: row.LuogoNascita,
       Disciplina: row.Disciplina,
+      Corso: row.Corso,
       NomeGenitore: row.NomeGenitore,
       CognomeGenitore: row.CognomeGenitore,
       CodiceFiscaleGenitore: row.CodiceFiscaleGenitore
@@ -102,6 +103,7 @@ async function creaAllieva(
   DataNascita,
   LuogoNascita,
   Disciplina,
+  Corso,
   CodiceFiscaleGenitore,
   NomeGenitore,
   CognomeGenitore
@@ -111,7 +113,7 @@ async function creaAllieva(
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
     const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
     const [rows, fields] = await pool.execute(
-      `INSERT INTO Allieva VALUES ('${CodiceFiscale}','${Maggiorenne}','${Nome}','${Cognome}','${Citta}','${Indirizzo}','${Cellulare}','${Email}','${DataIscrizioneFormatted}','${DataCertificatoFormatted}','${DataNascitaFormatted}','${LuogoNascita}','${Disciplina}','${NomeGenitore}','${CognomeGenitore}','${CodiceFiscaleGenitore}');`
+      `INSERT INTO Allieva VALUES ('${CodiceFiscale}','${Maggiorenne}','${Nome}','${Cognome}','${Citta}','${Indirizzo}','${Cellulare}','${Email}','${DataIscrizioneFormatted}','${DataCertificatoFormatted}','${DataNascitaFormatted}','${LuogoNascita}','${Disciplina}','${NomeGenitore}','${CognomeGenitore}','${CodiceFiscaleGenitore}','${Corso}');`
     );
     return 'Allieva Inserita Correttamente!';
   } catch (error) {
@@ -134,6 +136,7 @@ async function modificaAllieva(
   DataNascita,
   LuogoNascita,
   Disciplina,
+  Corso,
   CodiceFiscaleGenitore,
   NomeGenitore,
   CognomeGenitore
@@ -143,7 +146,7 @@ async function modificaAllieva(
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
     const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
     const [rows, fields] = await pool.execute(
-      `UPDATE Allieva SET Maggiorenne='${Maggiorenne}', Nome='${Nome}', Cognome='${Cognome}', Citta='${Citta}', Indirizzo='${Indirizzo}', Cellulare='${Cellulare}', Email='${Email}', DataIscrizione='${DataIscrizioneFormatted}', DataCertificato='${DataCertificatoFormatted}', DataNascita='${DataNascitaFormatted}', LuogoNascita='${LuogoNascita}', Disciplina='${Disciplina}', CodiceFiscaleGenitore='${CodiceFiscaleGenitore}', NomeGenitore='${NomeGenitore}', CognomeGenitore='${CognomeGenitore}' WHERE CodiceFiscale='${CodiceFiscale}';`
+      `UPDATE Allieva SET Maggiorenne='${Maggiorenne}', Nome='${Nome}', Cognome='${Cognome}', Citta='${Citta}', Indirizzo='${Indirizzo}', Cellulare='${Cellulare}', Email='${Email}', DataIscrizione='${DataIscrizioneFormatted}', DataCertificato='${DataCertificatoFormatted}', DataNascita='${DataNascitaFormatted}', LuogoNascita='${LuogoNascita}', Disciplina='${Disciplina}', CodiceFiscaleGenitore='${CodiceFiscaleGenitore}', NomeGenitore='${NomeGenitore}', CognomeGenitore='${CognomeGenitore}', Corso='${Corso}' WHERE CodiceFiscale='${CodiceFiscale}';`
     );
     return 'Allieva Aggiornata Correttamente!';
   } catch (error) {

@@ -139,6 +139,13 @@ nav a:hover {
   width: 16em;
 }
 
+.formCreaRicevuta #comboboxDisciplina {
+  width: 16em;
+}
+.formCreaRicevuta #comboboxCorso {
+  width: 16em;
+}
+
 .formCreaRicevuta #dtpDataIscrizione {
   width: 16em;
 }

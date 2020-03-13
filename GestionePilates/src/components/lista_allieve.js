@@ -27,6 +27,7 @@ const columnsDefinition = [
   { headerName: 'Data Nascita', field: 'DataNascita' },
   { headerName: 'Luogo Nascita', field: 'LuogoNascita' },
   { headerName: 'Disciplina', field: 'Disciplina' },
+  { headerName: 'Corso', field: 'Corso' },
   { headerName: 'Codice Fiscale Genitore', field: 'CodiceFiscaleGenitore' },
   { headerName: 'Nome Genitore', field: 'NomeGenitore' },
   { headerName: 'Cognome Genitore', field: 'CognomeGenitore' }

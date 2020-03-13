@@ -21,6 +21,7 @@ async function creaAllieva(req, res, next) {
       DataNascita,
       LuogoNascita,
       Disciplina,
+      Corso,
       CodiceFiscaleGenitore,
       NomeGenitore,
       CognomeGenitore
@@ -40,6 +41,7 @@ async function creaAllieva(req, res, next) {
       DataNascita,
       LuogoNascita,
       Disciplina,
+      Corso,
       CodiceFiscaleGenitore,
       NomeGenitore,
       CognomeGenitore

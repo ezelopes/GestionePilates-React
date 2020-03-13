@@ -14,9 +14,40 @@ simpleNumberLocalizer();
 
 const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
   let [allievaInfo, setallievaInfo] = useState(allievaInfoParam);
+
   let eta = [
     { id: 0, eta: 'Maggiorenne' },
     { id: 1, eta: 'Minorenne' }
+  ];
+
+  let discipline = [
+    { id: 0, disciplina: 'Fitness' },
+    { id: 1, disciplina: 'Danza Sportiva' }
+  ];
+
+  let corsi = [
+    { id: 0, corso: '' },
+    { id: 1, corso: 'Giocodanza I' },
+    { id: 2, corso: 'Giocodanza II' },
+    { id: 3, corso: 'Tecnica Propedeutica I' },
+    { id: 4, corso: 'Tecnica Propedeutica II' },
+    { id: 5, corso: 'I Corso Danza Classica' },
+    { id: 6, corso: 'Corso Pre-Accademico' },
+    { id: 7, corso: 'I Corso Accademico' },
+    { id: 8, corso: 'Propedeutica Danza Moderna' },
+    { id: 9, corso: 'Danza Moderna Principianti' },
+    { id: 10, corso: 'Danza Moderna Intermedio' },
+    { id: 11, corso: 'Danza Moderna Avanzato' },
+    { id: 12, corso: 'Hip Hop Break Baby' },
+    { id: 13, corso: 'Hip Hop Break Children' },
+    { id: 14, corso: 'Hip Hop Principianti' },
+    { id: 15, corso: 'Hip Hop Intermedio' },
+    { id: 16, corso: 'Hip Hop Avanzato' },
+    { id: 17, corso: 'Cheerleader Senior' },
+    { id: 18, corso: 'Cheerleader Peewe' },
+    { id: 19, corso: 'Cheerleader Mini' },
+    { id: 20, corso: 'Musical Children' },
+    { id: 21, corso: 'Musiscal Teens' }
   ];
 
   allievaInfo = allievaInfoParam;
@@ -39,7 +70,8 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       document.getElementById('dtpDataCertificato').value = reverseDate(allievaInfo.DataCertificato);
       document.getElementById('dtpDataNascita').value = reverseDate(allievaInfo.DataNascita);
       document.getElementById('textLuogoNascita').value = allievaInfo.LuogoNascita;
-      document.getElementById('textDisciplina').value = allievaInfo.Disciplina;
+      document.getElementById('comboboxDisciplina_input').value = allievaInfo.Disciplina;
+      document.getElementById('comboboxCorso_input').value = allievaInfo.Corso;
       document.getElementById('textNomeGenitore').value = allievaInfo.NomeGenitore;
       document.getElementById('textCognomeGenitore').value = allievaInfo.CognomeGenitore;
       document.getElementById('textCodiceFiscaleGenitore').value = allievaInfo.CodiceFiscaleGenitore;
@@ -76,7 +108,8 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         DataCertificato: document.getElementById('dtpDataCertificato').value,
         DataNascita: document.getElementById('dtpDataNascita').value,
         LuogoNascita: document.getElementById('textLuogoNascita').value,
-        Disciplina: document.getElementById('textDisciplina').value,
+        Disciplina: document.getElementById('comboboxDisciplina_input').value,
+        Corso: document.getElementById('comboboxCorso_input').value,
         CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
         NomeGenitore: document.getElementById('textNomeGenitore').value,
         CognomeGenitore: document.getElementById('textCognomeGenitore').value
@@ -113,6 +146,8 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
   const resetForm = () => {
     allievaInfo = {};
     document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
+    document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
+    document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
 
     document.getElementById('buttonModificaAllieva').disabled = true;
     document.getElementById('buttonEliminaAllieva').disabled = true;
@@ -158,7 +193,27 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
           <input type="text" id="textLuogoNascita" placeholder="Inserisci LuogoNascita..." />
 
           <label id="labelDisciplina"> Disciplina </label>
-          <input type="text" id="textDisciplina" placeholder="Inserisci Disciplina..." />
+          <Combobox
+            id="comboboxDisciplina"
+            data={discipline}
+            defaultValue={discipline[0]}
+            valueField="id"
+            textField="disciplina"
+            caseSensitive={false}
+            filter="contains"
+          />
+
+          <label id="labelCorso"> Corso </label>
+          <Combobox
+            id="comboboxCorso"
+            data={corsi}
+            defaultValue={corsi[0]}
+            valueField="id"
+            textField="corso"
+            caseSensitive={false}
+            filter="contains"
+            placeholder="Seleziona Corso..."
+          />
 
           <label id="labelDataIscrizione"> Data Iscrizione </label>
           <input id="dtpDataIscrizione" type="date" />
