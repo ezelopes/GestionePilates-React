@@ -12,7 +12,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
 
   const docDefinition = {
     info: {
-      title: `_${allievaInfo.Nome}_${allievaInfo.Cognome}_Modulo_Iscrizione`,
+      title: `${allievaInfo.Nome}_${allievaInfo.Cognome}_Modulo_Iscrizione`,
       author: 'Roxana Carro',
       subject: `Modulo Iscrizione di ${allievaInfo.Nome} ${allievaInfo.Cognome}`
     },
@@ -68,7 +68,25 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
       },
 
       {
-        text: `1- Dichiaro di conoscere lo Statuto ...`,
+        text: [
+          {
+            text:
+              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti sul sito www.acsi.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione dichiara che, tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. La parte cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti saranno inseriti nella piattaforma nazionale di ACSI (ente di promozione sportiva).',
+            fontSize: 8
+          },
+          {
+            text:
+              ' 3-Autorizzo ad effettuare ed utilizzare riprese fotografiche e video per poter propagandare le attività sociali sui canali ufficiali dell’Associazione (sitoweb/facebook/ecc...), ',
+            bold: true,
+            fontSize: 10
+          },
+          { text: ' delle voci 1, 2, 3 ', fontSize: 8 },
+          {
+            text: 'ACCETTO',
+            bold: true,
+            fontSize: 10
+          }
+        ],
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -143,7 +161,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Nome e Cogome di chi esercita la Patria Potestà: ${allievaInfo.NomeGenitore} ${allievaInfo.CognomeGenitore}`,
+        text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore} ${allievaInfo.CognomeGenitore}`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -155,7 +173,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: 'Firma di chi esercita la Patria Potestà ______________________________',
+        text: 'Firma del genitore ______________________________',
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 10]
