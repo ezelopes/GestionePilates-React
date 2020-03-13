@@ -52,6 +52,13 @@ async function getRicevuteOfAllieva(CodiceFiscaleAllieva) {
   return ricevute;
 }
 
+async function getAllRicevute() {
+  const [rows, fields] = await pool.execute(`SELECT * FROM ricevuta;`);
+  const ricevute = mappingRicevuta(rows);
+
+  return ricevute;
+}
+
 async function getAllieve() {
   const [rows, fields] = await pool.execute('SELECT * FROM allieva');
   const allieve = mappingAllieve(rows);
@@ -184,6 +191,7 @@ module.exports = {
   getAllieve,
   getSingleAllieva,
   getRicevuteOfAllieva,
+  getAllRicevute,
   creaRicevuta,
   creaAllieva,
   modificaAllieva,

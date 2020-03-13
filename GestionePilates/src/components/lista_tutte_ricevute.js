@@ -1,0 +1,58 @@
+import React, { useState, useEffect } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import { Link } from 'react-router-dom';
+// import Allieva from '../pages/allieva';
+
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+
+const columnsDefinition = [
+  { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta' },
+  { headerName: 'Data Inizio', field: 'DataInizio' },
+  { headerName: 'Data Scadenza', field: 'DataScadenza' },
+  { headerName: 'Somma Euro', field: 'SommaEuro' },
+  { headerName: 'Tipo Pagamento', field: 'TipoPagamento' },
+  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
+];
+
+const gridOptionsDefault = {
+  masterDetail: true,
+  defaultColDef: {
+    resizable: true,
+    sortable: true,
+    filter: true,
+    cellStyle: { fontSize: '1.5em' }
+  },
+  rowSelection: 'single'
+};
+
+const ListaAllieve = () => {
+  const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
+  const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
+  const [rowData, setRowData] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('/api/getAllRicevute');
+      const body = await result.json();
+      setRowData(body);
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <div className="ag-theme-balham" style={{ height: '30em', width: '100%' }}>
+      <AgGridReact
+        reactNext={true}
+        rowSelection="multiple"
+        scrollbarWidth
+        rowHeight="45"
+        gridOptions={gridOptions}
+        columnDefs={columnDefs}
+        rowData={rowData}
+      ></AgGridReact>
+    </div>
+  );
+};
+
+export default ListaAllieve;

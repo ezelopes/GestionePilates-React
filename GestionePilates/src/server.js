@@ -11,6 +11,7 @@ import iscrizioneallieve from './pages/iscrizioneallieve';
 import allieva from './pages/allieva';
 import modificaeliminaallieva from './pages/modificaeliminaallieva';
 import paginaallieve from './pages/paginaallieve';
+import paginaricevute from './pages/paginaricevute';
 import paginacorsi from './pages/paginacorsi';
 import paginainsegnanti from './pages/paginainsegnanti';
 import notfoundpage from './pages/notfoundpage';
@@ -25,6 +26,7 @@ function App() {
           <Switch>
             <Route path="/" component={homepage} exact />
             <Route path="/paginaallieve" component={paginaallieve} exact />
+            <Route path="/paginaricevute" component={paginaricevute} exact />
             <Route path="/paginaallieve/:codicefiscale" component={allieva} exact />
             {/* <Route path="/allieva" component={allieva} exact />
             <Route path="/allieva/:codicefiscale" component={allieva} exact /> */}
