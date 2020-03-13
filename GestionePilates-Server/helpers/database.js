@@ -18,6 +18,20 @@ function mappingRicevuta(rows) {
   return ricevute;
 }
 
+function mappingAllRicevute(rows) {
+  const ricevute = rows.map(row => {
+    return {
+      Nome: row.Nome,
+      Cognome: row.Cognome,
+      DataInizio: moment(row.DataInizio).format('DD-MM-YYYY'),
+      DataScadenza: moment(row.DataScadenza).format('DD-MM-YYYY'),
+      NumeroRicevuta: row.NumeroRicevuta,
+      SommaEuro: row.SommaEuro
+    };
+  });
+  return ricevute;
+}
+
 function mappingAllieve(rows) {
   const allieve = rows.map(row => {
     return {
@@ -53,8 +67,13 @@ async function getRicevuteOfAllieva(CodiceFiscaleAllieva) {
 }
 
 async function getAllRicevute() {
-  const [rows, fields] = await pool.execute(`SELECT * FROM ricevuta;`);
-  const ricevute = mappingRicevuta(rows);
+  const [rows, fields] = await pool.execute(
+    `SELECT Nome, Cognome, DataInizio, DataScadenza, NumeroRicevuta, SommaEuro
+    FROM ricevuta
+    INNER JOIN allieva
+    ON ricevuta.FK_CodiceFiscale = allieva.CodiceFiscale;`
+  );
+  const ricevute = mappingAllRicevute(rows);
 
   return ricevute;
 }

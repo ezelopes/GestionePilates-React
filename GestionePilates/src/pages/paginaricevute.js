@@ -1,11 +1,14 @@
 import React from 'react';
 import ListaTutteRicevute from '../components/lista_tutte_ricevute';
 
-function PaginaAllieve(/*props*/) {
+function PaginaAllieve() {
   return (
-    <div className="paginaallieve-body">
-      <ListaTutteRicevute />
-    </div>
+    <>
+      <div className="page-body">
+        <h1> Ricevute </h1>
+        <ListaTutteRicevute />
+      </div>
+    </>
   );
 }
 

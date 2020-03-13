@@ -6,13 +6,15 @@ import { Link } from 'react-router-dom';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
+// nome cognome numeroricevuta somma datainizio e datascadenza
+// filtra per anno -> ricevuta 001/19 , 001/20, 001/21 ...
 const columnsDefinition = [
+  { headerName: 'Nome Allieva', field: 'Nome' },
+  { headerName: 'Cognome Allieva', field: 'Cognome' },
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta' },
   { headerName: 'Data Inizio', field: 'DataInizio' },
   { headerName: 'Data Scadenza', field: 'DataScadenza' },
-  { headerName: 'Somma Euro', field: 'SommaEuro' },
-  { headerName: 'Tipo Pagamento', field: 'TipoPagamento' },
-  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
+  { headerName: 'Somma Euro', field: 'SommaEuro' }
 ];
 
 const gridOptionsDefault = {
