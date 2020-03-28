@@ -5,7 +5,6 @@ function PaginaAllieve() {
   return (
     <>
       <div className="page-body">
-        <h1> Ricevute </h1>
         <ListaTutteRicevute />
       </div>
     </>
