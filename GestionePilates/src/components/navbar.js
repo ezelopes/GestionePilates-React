@@ -19,7 +19,7 @@ const NavBar = () => (
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> Insegnanti </a>
             <div class="dropdown-menu">
                 <a href="/paginainsegnanti" class="dropdown-item"> Lista Insegnanti </a>
-                <a href="/paginainsegnanti" class="dropdown-item"> Iscrizione Insegnanti </a>
+                <a href="/iscrizioneinsegnanti" class="dropdown-item"> Iscrizione Insegnanti </a>
                 <a href="/paginainsegnanti" class="dropdown-item"> Modifica/Elimina Insegnanti </a>
             </div>
           </li>

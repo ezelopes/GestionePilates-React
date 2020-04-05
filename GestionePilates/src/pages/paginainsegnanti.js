@@ -1,8 +1,12 @@
 import React from 'react';
+import ListaInsegnanti from '../components/lista_insegnanti';
 
 function InsegnantiPage(props) {
-  return <h1> Insegnanti Page </h1>;
-  //
+  return (
+    <div className="page-body">
+      <ListaInsegnanti />
+    </div>
+  );
 }
 
 export default InsegnantiPage;

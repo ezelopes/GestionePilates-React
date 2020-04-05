@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from 'react-mdl';
 import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
 import { Combobox } from 'react-widgets';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
-import reverseDate from '../helpers/reverse-date-for-input-date';
+import formatDate from '../helpers/format-date-for-input-date';
 import commondata from '../commondata/commondata'
 
 moment.locale('es');
@@ -13,54 +13,21 @@ momentLocalizer();
 
 simpleNumberLocalizer();
 
-const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
-  let [allievaInfo, setallievaInfo] = useState(allievaInfoParam);
+const FormCreaInsegnante = () => {
+  const today = formatDate(new Date(), true);
 
-  const eta = commondata.eta;
   const discipline = commondata.discipline;
   const corsi = commondata.corsi;
   const scuole = commondata.scuole;
 
-  allievaInfo = allievaInfoParam;
-
-  useEffect(() => {
-    if (allievaInfoParam) {
-      allievaInfo = allievaInfoParam;
-      document.getElementById('comboboxEta_input').value =
-        eta.find(currentEta => {
-          return currentEta.eta === allievaInfo.Maggiorenne;
-        }).eta || 'Maggiorenne';
-      document.getElementById('textCodiceFiscale').value = allievaInfo.CodiceFiscale;
-      document.getElementById('textNomeAllieva').value = allievaInfo.Nome;
-      document.getElementById('textCognomeAllieva').value = allievaInfo.Cognome;
-      document.getElementById('textCitta').value = allievaInfo.Citta;
-      document.getElementById('textIndirizzo').value = allievaInfo.Indirizzo;
-      document.getElementById('textCellulare').value = allievaInfo.Cellulare;
-      document.getElementById('textEmail').value = allievaInfo.Email;
-      document.getElementById('dtpDataIscrizione').value = reverseDate(allievaInfo.DataIscrizione);
-      document.getElementById('dtpDataCertificato').value = reverseDate(allievaInfo.DataCertificato);
-      document.getElementById('dtpDataNascita').value = reverseDate(allievaInfo.DataNascita);
-      document.getElementById('textLuogoNascita').value = allievaInfo.LuogoNascita;
-      document.getElementById('comboboxDisciplina_input').value = allievaInfo.Disciplina;
-      document.getElementById('comboboxCorso_input').value = allievaInfo.Corso;
-      document.getElementById('comboboxScuola_input').value = allievaInfo.Scuola;
-      document.getElementById('textNomeGenitore').value = allievaInfo.NomeGenitore;
-      document.getElementById('textCognomeGenitore').value = allievaInfo.CognomeGenitore;
-      document.getElementById('textCodiceFiscaleGenitore').value = allievaInfo.CodiceFiscaleGenitore;
-
-      document.getElementById('buttonModificaAllieva').disabled = false;
-      document.getElementById('buttonEliminaAllieva').disabled = false;
-    }
-  }, [allievaInfo]);
-
-  const modificaAllieva = async () => {
+  const creaInsegnante = async () => {
     // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
     if (document.getElementById('textCodiceFiscale').value === '') {
       document.getElementById('textCodiceFiscale').style.borderColor = 'red';
       return;
     }
 
-    const response = await fetch('/api/modificaAllieva', {
+    const response = await fetch('/api/creaInsegnante', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -69,9 +36,8 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       },
       body: JSON.stringify({
         CodiceFiscale: document.getElementById('textCodiceFiscale').value,
-        Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
-        Nome: document.getElementById('textNomeAllieva').value,
-        Cognome: document.getElementById('textCognomeAllieva').value,
+        Nome: document.getElementById('textNomeInsegnante').value,
+        Cognome: document.getElementById('textCognomeInsegnante').value,
         Citta: document.getElementById('textCitta').value,
         Indirizzo: document.getElementById('textIndirizzo').value,
         Cellulare: document.getElementById('textCellulare').value,
@@ -83,31 +49,6 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         Disciplina: document.getElementById('comboboxDisciplina_input').value,
         Corso: document.getElementById('comboboxCorso_input').value,
         Scuola: document.getElementById('comboboxScuola_input').value,
-        CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
-        NomeGenitore: document.getElementById('textNomeGenitore').value,
-        CognomeGenitore: document.getElementById('textCognomeGenitore').value
-      })
-    });
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
-    resetForm();
-  };
-
-  const eliminaAllieva = async () => {
-    if (document.getElementById('textCodiceFiscale').value === '') {
-      document.getElementById('textCodiceFiscale').style.borderColor = 'red';
-      return;
-    }
-
-    const response = await fetch('/api/eliminaAllieva', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
-      },
-      body: JSON.stringify({
-        CodiceFiscale: document.getElementById('textCodiceFiscale').value
       })
     });
     const responseParsed = await response.json();
@@ -116,39 +57,25 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
   };
 
   const resetForm = () => {
-    allievaInfo = {};
-    document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
     document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
     document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
     document.getElementById('comboboxScuola_input').defaultValue = scuole[0].scuola;
-
-    document.getElementById('buttonModificaAllieva').disabled = true;
-    document.getElementById('buttonEliminaAllieva').disabled = true;
-    document.getElementById('formModificaEliminaAllieva').reset();
+    document.getElementById('formCreaInsegnante').reset();
   };
 
   return (
     <>
       <div className="formWrapper">
-        <form id="formModificaEliminaAllieva">
-          <label id="labelEta"> Età </label>
-          <Combobox
-            id="comboboxEta"
-            data={eta}
-            valueField="id"
-            textField="eta"
-            caseSensitive={false}
-            filter="contains"
-          />
+        <form id="formCreaInsegnante">
 
           <label id="labelCodiceFiscale"> Codice Fiscale </label>
           <input type="text" id="textCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
 
-          <label id="labelNomeAllieva"> Nome Allieva </label>
-          <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." />
+          <label id="labelNomeInsegnante"> Nome Insegnante </label>
+          <input type="text" id="textNomeInsegnante" placeholder="Inserisci Nome Insegnante..." />
 
-          <label id="labelCognomeAllieva"> Cognome Allieva </label>
-          <input type="text" id="textCognomeAllieva" placeholder="Inserisci Cognome Allieva..." />
+          <label id="labelCognomeInsegnante"> Cognome Insegnante </label>
+          <input type="text" id="textCognomeInsegnante" placeholder="Inserisci Cognome Insegnante..." />
 
           <label id="labelCitta"> Citta </label>
           <input type="text" id="textCitta" placeholder="Inserisci Citta..." />
@@ -201,13 +128,13 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
           />
 
           <label id="labelDataIscrizione"> Data Iscrizione </label>
-          <input id="dtpDataIscrizione" type="date" />
+          <input id="dtpDataIscrizione" type="date" defaultValue={today} />
 
           <label id="labelDataCertificato"> Data Certificato </label>
-          <input id="dtpDataCertificato" type="date" />
+          <input id="dtpDataCertificato" type="date" defaultValue={today} />
 
           <label id="labelDataNascita"> Data Nascita </label>
-          <input id="dtpDataNascita" type="date" />
+          <input id="dtpDataNascita" type="date" defaultValue={today} />
 
           <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
           <input
@@ -222,15 +149,15 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
           <label id="labelCognomeGenitore"> Cognome Genitore </label>
           <input type="text" id="textCognomeGenitore" placeholder="Inserisci Cognome Genitore..." />
         </form>
-        <Button raised ripple id="buttonModificaAllieva" onClick={modificaAllieva} disabled={!allievaInfo}>
-          Modifica Allieva
+        <Button raised ripple id="buttonCreaInsegnante" onClick={creaInsegnante}>
+          Crea Insegnante
         </Button>
-        <Button raised ripple id="buttonEliminaAllieva" onClick={eliminaAllieva} disabled={!allievaInfo}>
-          Elimina Allieva
+        <Button raised ripple id="buttonResetForm" onClick={resetForm}>
+          Reset Form
         </Button>
       </div>
     </>
   );
 };
 
-export default FormModificaEliminaAllieva;
+export default FormCreaInsegnante;

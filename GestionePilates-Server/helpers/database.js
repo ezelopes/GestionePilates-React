@@ -64,6 +64,28 @@ function mappingAllieve(rows) {
   return allieve;
 }
 
+function mappingInsegnanti(rows) {
+  const insegnanti = rows.map(row => {
+    return {
+      CodiceFiscale: row.CodiceFiscale,
+      Nome: row.Nome,
+      Cognome: row.Cognome,
+      Citta: row.Citta,
+      Indirizzo: row.Indirizzo,
+      Cellulare: row.Cellulare,
+      Email: row.Email,
+      DataIscrizione: moment(row.DataIscrizione).format('DD-MM-YYYY'),
+      DataCertificato: moment(row.DataCertificato).format('DD-MM-YYYY'),
+      DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
+      LuogoNascita: row.LuogoNascita,
+      Disciplina: row.Disciplina,
+      Corso: row.Corso,
+      Scuola: row.Scuola,
+    };
+  });
+  return insegnanti;
+}
+
 async function getRicevuteOfAllieva(CodiceFiscaleAllieva) {
   const [rows, fields] = await pool.execute(
     `SELECT * FROM ricevuta WHERE FK_CodiceFiscale='${CodiceFiscaleAllieva}';`
@@ -93,9 +115,24 @@ async function getAllieve() {
   return allieve;
 }
 
+async function getInsegnanti() {
+  const [rows, fields] = await pool.execute('SELECT * FROM insegnante');
+  const insegnante = mappingInsegnanti(rows);
+
+  console.log(insegnante);
+  return insegnante;
+}
+
 async function getSingleAllieva(CodiceFiscale) {
   const [rows, fields] = await pool.execute(`SELECT * FROM allieva WHERE CodiceFiscale='${CodiceFiscale}';`);
   const allieva = mappingAllieve(rows);
+
+  return allieva;
+}
+
+async function getSingleInsegnante(CodiceFiscale) {
+  const [rows, fields] = await pool.execute(`SELECT * FROM insegnante WHERE CodiceFiscale='${CodiceFiscale}';`);
+  const allieva = mappingInsegnanti(rows);
 
   return allieva;
 }
@@ -156,6 +193,36 @@ async function creaAllieva(
   }
 }
 
+async function creaInsegnante(
+  CodiceFiscale,
+  Nome,
+  Cognome,
+  Citta,
+  Indirizzo,
+  Cellulare,
+  Email,
+  DataIscrizione,
+  DataCertificato,
+  DataNascita,
+  LuogoNascita,
+  Disciplina,
+  Corso,
+  Scuola,
+) {
+  try {
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
+    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
+    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
+    const [rows, fields] = await pool.execute(
+      `INSERT INTO insegnante VALUES ('${CodiceFiscale}','${Nome}','${Cognome}','${Citta}','${Indirizzo}','${Cellulare}','${Email}','${DataIscrizioneFormatted}','${DataCertificatoFormatted}','${DataNascitaFormatted}','${LuogoNascita}','${Disciplina}','${Corso}','${Scuola}');`
+    );
+    return 'Insegnante Inserita Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return 'Errore nel creare Insegnante!';
+  }
+}
+
 async function modificaAllieva(
   CodiceFiscale,
   Maggiorenne,
@@ -190,6 +257,36 @@ async function modificaAllieva(
   }
 }
 
+async function modificaInsegnante(
+  CodiceFiscale,
+  Nome,
+  Cognome,
+  Citta,
+  Indirizzo,
+  Cellulare,
+  Email,
+  DataIscrizione,
+  DataCertificato,
+  DataNascita,
+  LuogoNascita,
+  Disciplina,
+  Corso,
+  Scuola,
+) {
+  try {
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
+    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
+    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
+    const [rows, fields] = await pool.execute(
+      `UPDATE insegnante SET Nome='${Nome}', Cognome='${Cognome}', Citta='${Citta}', Indirizzo='${Indirizzo}', Cellulare='${Cellulare}', Email='${Email}', DataIscrizione='${DataIscrizioneFormatted}', DataCertificato='${DataCertificatoFormatted}', DataNascita='${DataNascitaFormatted}', LuogoNascita='${LuogoNascita}', Disciplina='${Disciplina}', Corso='${Corso}', Scuola='${Scuola}' WHERE CodiceFiscale='${CodiceFiscale}';`
+    );
+    return 'Insegnante Aggiornata Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'aggiornare Insegnante!`;
+  }
+}
+
 async function eliminaAllieva(CodiceFiscale) {
   try {
     const [rows, fields] = await pool.execute(`DELETE FROM allieva WHERE CodiceFiscale='${CodiceFiscale}';`);
@@ -197,6 +294,16 @@ async function eliminaAllieva(CodiceFiscale) {
   } catch (error) {
     console.log(error);
     return `Errore nell'eliminare Allieva!`;
+  }
+}
+
+async function eliminaInsegnante(CodiceFiscale) {
+  try {
+    const [rows, fields] = await pool.execute(`DELETE FROM insegnante WHERE CodiceFiscale='${CodiceFiscale}';`);
+    return 'Insegnante Eliminata Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'eliminare Insegnante!`;
   }
 }
 
@@ -217,13 +324,18 @@ async function eliminaRicevute(RicevuteId) {
 
 module.exports = {
   getAllieve,
+  getInsegnanti,
   getSingleAllieva,
+  getSingleInsegnante,
   getRicevuteOfAllieva,
   getAllRicevute,
   creaRicevuta,
   creaAllieva,
+  creaInsegnante,
   modificaAllieva,
+  modificaInsegnante,
   eliminaAllieva,
+  eliminaInsegnante,
   eliminaRicevute
 };
 

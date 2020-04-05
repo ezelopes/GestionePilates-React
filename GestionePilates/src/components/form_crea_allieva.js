@@ -72,7 +72,7 @@ const FormCreaAllieva = () => {
   return (
     <>
       <div className="formWrapper">
-        <form className="formCreaRicevuta" id="formCreaAllieva">
+        <form id="formCreaAllieva">
           <label id="labelEta"> Età </label>
           <Combobox
             id="comboboxEta"

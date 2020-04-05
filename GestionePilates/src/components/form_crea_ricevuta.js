@@ -53,7 +53,7 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
 
   return (
     <div className="formWrapper">
-      <div className="formCreaRicevuta">
+      <form className="formCreaRicevuta">
         <label id="labelNumRicevuta"> Numero Ricevuta </label>
         <input type="text" id="textNumeroRicevuta" placeholder="Inserisci Numero Ricevuta..." />
         <label id="labelPagamento"> Tipo Pagamento </label>
@@ -82,7 +82,7 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
         <label id="labelDataScadenza"> Data Scadenza </label>
         <input id="dtpDataScadenza" type="date" defaultValue={today} />
         {/* <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
-      </div>
+      </form>
       <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
         Crea Ricevuta
       </Button>
