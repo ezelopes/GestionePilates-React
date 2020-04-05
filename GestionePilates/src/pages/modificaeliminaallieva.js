@@ -20,7 +20,7 @@ function ModificaEliminaAllieve(props) {
 
   return (
     <>
-      <div id="cercaAllievaForm">
+      <div className="cercaForm">
         <label id="labelNumRicevuta"> Cerca Allieva per Codice Fiscale </label>
         <input type="text" id="cercaCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
         <Button raised ripple id="buttonCercaAllieva" onClick={cercaAllieva}>

@@ -20,7 +20,7 @@ const NavBar = () => (
             <div class="dropdown-menu">
                 <a href="/paginainsegnanti" class="dropdown-item"> Lista Insegnanti </a>
                 <a href="/iscrizioneinsegnanti" class="dropdown-item"> Iscrizione Insegnanti </a>
-                <a href="/paginainsegnanti" class="dropdown-item"> Modifica/Elimina Insegnanti </a>
+                <a href="/modificaeliminainsegnante" class="dropdown-item"> Modifica/Elimina Insegnanti </a>
             </div>
           </li>
           <li class="nav-item">
