@@ -26,14 +26,6 @@ const NavBar = () => (
               <a href="/paginaricevute" class="nav-link"> Ricevute </a>
           </li>
         </ul>
-        <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Admin</a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#"class="dropdown-item">Logout</a>
-                </div>
-            </li>
-        </ul>
     </div>
   </nav>
 );
