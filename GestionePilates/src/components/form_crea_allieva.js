@@ -6,6 +6,7 @@ import { Combobox } from 'react-widgets';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import formatDate from '../helpers/format-date-for-input-date';
+import commondata from '../commondata/commondata'
 
 moment.locale('es');
 momentLocalizer();
@@ -15,40 +16,10 @@ simpleNumberLocalizer();
 const FormCreaAllieva = () => {
   const today = formatDate(new Date(), true);
 
-  let eta = [
-    { id: 0, eta: 'Maggiorenne' },
-    { id: 1, eta: 'Minorenne' }
-  ];
-
-  let discipline = [
-    { id: 0, disciplina: 'Fitness' },
-    { id: 1, disciplina: 'Danza Sportiva' }
-  ];
-
-  let corsi = [
-    { id: 0, corso: '' },
-    { id: 1, corso: 'Giocodanza I' },
-    { id: 2, corso: 'Giocodanza II' },
-    { id: 3, corso: 'Tecnica Propedeutica I' },
-    { id: 4, corso: 'Tecnica Propedeutica II' },
-    { id: 5, corso: 'I Corso Danza Classica' },
-    { id: 6, corso: 'Corso Pre-Accademico' },
-    { id: 7, corso: 'I Corso Accademico' },
-    { id: 8, corso: 'Propedeutica Danza Moderna' },
-    { id: 9, corso: 'Danza Moderna Principianti' },
-    { id: 10, corso: 'Danza Moderna Intermedio' },
-    { id: 11, corso: 'Danza Moderna Avanzato' },
-    { id: 12, corso: 'Hip Hop Break Baby' },
-    { id: 13, corso: 'Hip Hop Break Children' },
-    { id: 14, corso: 'Hip Hop Principianti' },
-    { id: 15, corso: 'Hip Hop Intermedio' },
-    { id: 16, corso: 'Hip Hop Avanzato' },
-    { id: 17, corso: 'Cheerleader Senior' },
-    { id: 18, corso: 'Cheerleader Peewe' },
-    { id: 19, corso: 'Cheerleader Mini' },
-    { id: 20, corso: 'Musical Children' },
-    { id: 21, corso: 'Musiscal Teens' }
-  ];
+  const eta = commondata.eta;
+  const discipline = commondata.discipline;
+  const corsi = commondata.corsi;
+  const scuole = commondata.scuole;
 
   const creaAllieva = async () => {
     // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
@@ -79,6 +50,7 @@ const FormCreaAllieva = () => {
         LuogoNascita: document.getElementById('textLuogoNascita').value,
         Disciplina: document.getElementById('comboboxDisciplina_input').value,
         Corso: document.getElementById('comboboxCorso_input').value,
+        Scuola: document.getElementById('comboboxScuola_input').value,
         CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
         NomeGenitore: document.getElementById('textNomeGenitore').value,
         CognomeGenitore: document.getElementById('textCognomeGenitore').value
@@ -93,6 +65,7 @@ const FormCreaAllieva = () => {
     document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
     document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
     document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
+    document.getElementById('comboboxScuola_input').defaultValue = scuole[0].scuola;
     document.getElementById('formCreaAllieva').reset();
   };
 
@@ -156,6 +129,18 @@ const FormCreaAllieva = () => {
             caseSensitive={false}
             filter="contains"
             placeholder="Seleziona Corso..."
+          />
+
+          <label id="labelScuole"> Scuola Corso </label>
+          <Combobox
+            id="comboboxScuola"
+            data={scuole}
+            defaultValue={scuole[0]}
+            valueField="id"
+            textField="scuola"
+            caseSensitive={false}
+            filter="contains"
+            placeholder="Seleziona Scuola..."
           />
 
           <label id="labelDataIscrizione"> Data Iscrizione </label>

@@ -158,6 +158,10 @@ nav a:hover {
   width: 16em;
 }
 
+.formCreaRicevuta #comboboxScuola {
+  width: 16em;
+}
+
 .formCreaRicevuta #buttonCreaAllieva {
   width: 50%;
   margin-left: 1em;

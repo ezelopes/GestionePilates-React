@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-// import Allieva from '../pages/allieva';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -10,7 +9,6 @@ const columnsDefinition = [
   {
     headerName: 'Codice Fiscale',
     field: 'CodiceFiscale',
-    // checkboxSelection: true,
     cellRendererFramework: params => {
       return <Link to={`/paginaallieve/${params.data.CodiceFiscale}`}>{params.value}</Link>;
     }
@@ -28,6 +26,7 @@ const columnsDefinition = [
   { headerName: 'Luogo Nascita', field: 'LuogoNascita' },
   { headerName: 'Disciplina', field: 'Disciplina' },
   { headerName: 'Corso', field: 'Corso' },
+  { headerName: 'Scuola', field: 'Scuola' },
   { headerName: 'Codice Fiscale Genitore', field: 'CodiceFiscaleGenitore' },
   { headerName: 'Nome Genitore', field: 'NomeGenitore' },
   { headerName: 'Cognome Genitore', field: 'CognomeGenitore' }
