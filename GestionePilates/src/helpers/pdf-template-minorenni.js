@@ -87,6 +87,12 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
+        text: 'FIRMA ______________________________',
+        alignment: 'left',
+        fontSize: 10,
+        margin: [0, 0, 0, 15]
+      },
+      {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
         fontSize: 8,
@@ -160,6 +166,12 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
       {
         text: 'Roxana Carro',
         alignment: 'right',
+        fontSize: 10,
+        margin: [0, 0, 0, 15]
+      },
+      {
+        text: 'FIRMA ______________________________',
+        alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
       },
