@@ -59,6 +59,22 @@ input[type='date'] {
   margin-left: 1em;
 }
 
+.cercaForm {
+  margin-top: 2em;
+  margin-left: 5em;
+}
+
+.cercaForm input[type='text'] {
+  width: 16em;
+  padding-left: 0.5em;
+  height: 2em;
+  margin-left: 1em;
+}
+
+.cercaForm Button {
+  margin-left: 1em;
+}
+
 #navbarCollapse ul {
   margin-left: 2em;
 }
@@ -69,20 +85,4 @@ input[type='date'] {
 
 #navbarCollapse li a {
   font-weight: bold;
-}
-
-#cercaAllievaForm {
-  margin-top: 2em;
-  margin-left: 5em;
-}
-
-#cercaAllievaForm input[type='text'] {
-  width: 16em;
-  padding-left: 0.5em;
-  height: 2em;
-  margin-left: 1em;
-}
-
-#cercaAllievaForm Button {
-  margin-left: 1em;
 }
