@@ -47,7 +47,7 @@ const ListaInsegnanti = () => {
   }, []);
 
   return (
-    <div className="ag-theme-balham" style={{ height: '50em', width: '100%' }}>
+    <div className="ag-theme-balham" style={{ height: '30em', width: '100%' }}>
       <AgGridReact
         reactNext={true}
         rowSelection="multiple"

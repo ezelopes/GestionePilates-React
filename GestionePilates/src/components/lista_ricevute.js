@@ -34,7 +34,7 @@ const columnsDefinition = [
 const ListaRicevute = ({ ricevute, allievaInfo }) => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
-  // const [rowData /*setRowData*/] = useState(rowDataFromDB);
+
   const rowData = ricevute;
 
   const stampaRicevute = async () => {
@@ -52,7 +52,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
 
   const eliminaRicevute = async () => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
-    if (ricevuteSelezionate.length === 0) return; // alert('Nessuna Ricevuta Selezionata')
+    if (ricevuteSelezionate.length === 0) return;
 
     const idRicevuteSelezionate = ricevuteSelezionate.map(ricevuta => {
       return ricevuta.data.RicevutaID;
@@ -71,10 +71,6 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     });
     const responseParsed = await response.json();
     alert(responseParsed.message);
-    // const CodiceFiscale = ricevuteSelezionate[0].data.FK_CodiceFiscale;
-    // const getRicevuteOfAllievaResult = await fetch(`/api/getRicevuteOfAllieva/${CodiceFiscale}`);
-    // const ricevute = await getRicevuteOfAllievaResult.json();
-    // setRowData(ricevute);
   };
 
   return (
@@ -109,39 +105,5 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     </>
   );
 };
-
-// class ListaRicevute extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       gridOptions: {
-//         masterDetail: true,
-//         defaultColDef: {
-//           resizable: true,
-//           sortable: true,
-//           filter: true,
-//           cellStyle: { fontSize: '1.5em' }
-//         },
-//         columnDefs: columnDefs
-//         // rowData: rowData
-//       }
-//     };
-//   }
-
-//   render() {
-//     return (
-//       <div className="ag-theme-balham" style={{ marginTop: '2em', height: '15em', width: '70%' }}>
-//         <AgGridReact
-//           rowSelection="multiple"
-//           scrollbarWidth
-//           rowHeight="45"
-//           gridOptions={this.state.gridOptions}
-//           columnDefs={this.state.gridOptions.columnDefs}
-//           rowData={this.state.gridOptions.rowData}
-//         ></AgGridReact>
-//       </div>
-//     );
-//   }
-// }
 
 export default ListaRicevute;
