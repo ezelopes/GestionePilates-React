@@ -1,5 +1,17 @@
 /* NUOVO CSS */
 
+#navbarCollapse ul {
+  margin-left: 2em;
+}
+
+#navbarCollapse li {
+  margin-left: 2em;
+}
+
+#navbarCollapse li a {
+  font-weight: bold;
+}
+
 input[type='date'] {
   font-size: 1em;
   border-radius: 2px;
@@ -10,12 +22,7 @@ input[type='date'] {
   margin-top: 2em;
   margin-left: 5em;
   margin-right: 5em;
-}
-
-.paginaallieve-body {
-  margin-top: 2em;
-  margin-left: 3%;
-  width: 94%;
+  margin-bottom: 2em;
 }
 
 .ag-pivot-off .ag-header-cell-label {
@@ -23,10 +30,10 @@ input[type='date'] {
   font-size: 1.3em;
 }
 
-nav {
+/* nav {
   border-bottom: 4px solid black;
   text-align: center;
-  /* position: fixed; */
+  /* position: fixed; 
   top: 0;
   width: 100%;
   background: white;
@@ -54,7 +61,7 @@ nav a {
 nav a:hover {
   background: black;
   color: white;
-}
+} */
 
 .formWrapper {
   margin-top: 2em;
