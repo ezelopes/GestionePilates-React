@@ -11,7 +11,6 @@ import modificaeliminaallieva from './pages/modificaeliminaallieva';
 import modificaeliminainsegnante from './pages/modificaeliminainsegnante';
 import paginaallieve from './pages/paginaallieve';
 import paginaricevute from './pages/paginaricevute';
-import paginacorsi from './pages/paginacorsi';
 import paginainsegnanti from './pages/paginainsegnanti';
 import notfoundpage from './pages/notfoundpage';
 
@@ -32,7 +31,6 @@ function App() {
             <Route path="/modificaeliminaallieva" component={modificaeliminaallieva} exact />
             <Route path="/modificaeliminainsegnante" component={modificaeliminainsegnante} exact />
             <Route path="/paginainsegnanti" component={paginainsegnanti} exact />
-            <Route path="/paginacorsi" component={paginacorsi} exact />
             {/* If it doesn't match any of the above, then not found */}
             <Route component={notfoundpage} />
           </Switch>

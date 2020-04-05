@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 
 const NavBar = () => (
   <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -26,9 +25,6 @@ const NavBar = () => (
           <li class="nav-item">
               <a href="/paginaricevute" class="nav-link"> Ricevute </a>
           </li>
-          <li class="nav-item">
-              <a href="/paginacorsi" class="nav-link"> Corsi </a>
-          </li>
         </ul>
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item dropdown">
@@ -40,31 +36,6 @@ const NavBar = () => (
         </ul>
     </div>
   </nav>
-  // <nav>
-  //   <ul>
-  //     <li>
-  //       <Link to="/"> HomePage </Link>
-  //     </li>
-  //     <li>
-  //       <Link to="/paginaallieve"> Allieve </Link>
-  //     </li>
-  //     <li>
-  //       <Link to="/paginaricevute"> Ricevute </Link>
-  //     </li>
-  //     <li>
-  //       <Link to="/iscrizioneallieve"> Iscrizione Allieve </Link>
-  //     </li>
-  //     <li>
-  //       <Link to="/modificaeliminaallieva"> Modifica/Elimina Allieve </Link>
-  //     </li>
-  //     <li>
-  //       <Link to="/paginainsegnanti"> Insegnanti </Link>
-  //     </li>
-  //     <li>
-  //       <Link to="/paginacorsi"> Corsi </Link>
-  //     </li>
-  //   </ul>
-  // </nav>
 );
 
 export default NavBar;
