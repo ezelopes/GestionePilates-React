@@ -1,5 +1,64 @@
 /* NUOVO CSS */
 
+label {
+  margin-left: 1em;
+  font-weight: bold;
+}
+
+form {
+  padding: 1.5em 1.5em 1.5em 1.5em;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-gap: 1em;
+
+  align-items: center;
+  justify-content: center;
+}
+
+form input[type='text'] {
+  width: 16em;
+  padding-left: 0.5em;
+  height: 2em;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: #6eb3ea;
+}
+
+input[type='date'] {
+  font-size: 1em;
+  border-radius: 2px;
+  width: 16em;
+  padding-left: 0.5em;
+  height: 2em;
+}
+
+.page-body {
+  margin-top: 2em;
+  margin-left: 5em;
+  margin-right: 5em;
+  margin-bottom: 2em;
+}
+
+.ag-pivot-off .ag-header-cell-label {
+  color: #8a6d3b;
+  font-size: 1.3em;
+}
+
+.formWrapper {
+  margin-top: 2em;
+  border-color: gray;
+  border-style: solid;
+  border-radius: 0.5em;
+  border-width: 0.1em;
+  padding-bottom: 1.5em;
+}
+
+.formWrapper Button {
+  margin-left: 1em;
+}
+
 #navbarCollapse ul {
   margin-left: 2em;
 }
@@ -12,175 +71,9 @@
   font-weight: bold;
 }
 
-input[type='date'] {
-  font-size: 1em;
-  border-radius: 2px;
-}
-
-.page-body {
-  /* position: relative; */
-  margin-top: 2em;
-  margin-left: 5em;
-  margin-right: 5em;
-  margin-bottom: 2em;
-}
-
-.ag-pivot-off .ag-header-cell-label {
-  color: #8a6d3b;
-  font-size: 1.3em;
-}
-
-/* nav {
-  border-bottom: 4px solid black;
-  text-align: center;
-  /* position: fixed; 
-  top: 0;
-  width: 100%;
-  background: white;
-}
-
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-nav li {
-  display: inline-block;
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-
-nav a {
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-  padding: 16px 32px;
-}
-
-nav a:hover {
-  background: black;
-  color: white;
-} */
-
-.formWrapper {
-  margin-top: 2em;
-  border-color: gray;
-  border-style: solid;
-  border-radius: 0.5em;
-  border-width: 0.1em;
-  padding-bottom: 1.5em;
-}
-
-.formWrapper #buttonCreaRicevuta {
-  margin-left: 1em;
-}
-
-.formWrapper #buttonCreaAllieva {
-  margin-left: 1em;
-}
-
-.formWrapper #buttonResetForm {
-  margin-left: 3em;
-}
-
-.formWrapper #buttonModificaAllieva {
-  margin-left: 1em;
-}
-
-.formWrapper #buttonEliminaAllieva {
-  margin-left: 3em;
-}
-
-.formCreaRicevuta {
-  padding: 1.5em 1.5em 1.5em 1.5em;
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  grid-gap: 1em;
-
-  align-items: center;
-  justify-content: center;
-}
-
-.formCreaRicevuta label {
-  margin-left: 1em;
-  font-weight: bold;
-}
-
-.formCreaRicevuta #buttonCreaRicevuta {
-  width: 50%;
-  margin-left: 1em;
-}
-
-.formCreaRicevuta input[type='text'] {
-  /*  #textNumeroRicevuta */
-  /* border-radius: 3px; */
-  width: 16em;
-  padding-left: 0.5em;
-  height: 2em;
-}
-
-.formCreaRicevuta input[type='text']:focus {
-  /*  #textNumeroRicevuta */
-  outline: none;
-  border-color: #6eb3ea;
-}
-
-.formCreaRicevuta #comboboxTipoPagamento {
-  width: 16em;
-}
-
-.formCreaRicevuta #comboboxSommaEuro {
-  width: 16em;
-}
-
-.formCreaRicevuta #dtpDataInizio {
-  width: 16em;
-}
-
-.formCreaRicevuta #dtpDataScadenza {
-  width: 16em;
-}
-
-.formCreaRicevuta #comboboxEta {
-  width: 16em;
-}
-
-.formCreaRicevuta #comboboxDisciplina {
-  width: 16em;
-}
-.formCreaRicevuta #comboboxCorso {
-  width: 16em;
-}
-
-.formCreaRicevuta #dtpDataIscrizione {
-  width: 16em;
-}
-
-.formCreaRicevuta #dtpDataCertificato {
-  width: 16em;
-}
-
-.formCreaRicevuta #dtpDataNascita {
-  width: 16em;
-}
-
-.formCreaRicevuta #comboboxScuola {
-  width: 16em;
-}
-
-.formCreaRicevuta #buttonCreaAllieva {
-  width: 50%;
-  margin-left: 1em;
-}
-
 #cercaAllievaForm {
   margin-top: 2em;
   margin-left: 5em;
-}
-
-#cercaAllievaForm label {
-  font-weight: bold;
 }
 
 #cercaAllievaForm input[type='text'] {
@@ -190,6 +83,6 @@ nav a:hover {
   margin-left: 1em;
 }
 
-#cercaAllievaForm button {
+#cercaAllievaForm Button {
   margin-left: 1em;
 }
