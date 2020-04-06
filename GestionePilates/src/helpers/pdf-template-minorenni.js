@@ -8,7 +8,18 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const SommaEuroInLettere = convertNumberIntoWord(ricevutaInfo.SommaEuro);
+  let somma = ricevutaInfo.SommaEuro;
+  somma = somma.replace('.', ',')
+  const euro_and_centesimi = somma.split(',');
+  const euro = euro_and_centesimi[0];
+  const centesimi = euro_and_centesimi[1];
+
+  const EuroInLettere = convertNumberIntoWord(euro);
+  let CentesimiInLettere = '';
+  if (centesimi !== '00' && centesimi !== '0' && centesimi !== undefined) {
+    CentesimiInLettere = ` e ${convertNumberIntoWord(centesimi)} Centesimi`;
+  }
+
   const today = formatDate(new Date(), false);
 
   const docDefinition = {
@@ -43,14 +54,13 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        // ${sommaEuroInLettere.ToUpper()}
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.NomeGenitore} ${
           allievaInfo.CognomeGenitore
         }, C.F. ${
           allievaInfo.CodiceFiscaleGenitore
         }, il pagamento effetuato tramite ${ricevutaInfo.TipoPagamento.toUpperCase()} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
-        }€ (${SommaEuroInLettere} Euro), per l'iscrizione di ${allievaInfo.Nome} ${
+        }€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}), per l'iscrizione di ${allievaInfo.Nome} ${
           allievaInfo.Cognome
         }, C.F. ${allievaInfo.CodiceFiscale} nato/a a ${allievaInfo.LuogoNascita}, il ${
           allievaInfo.DataNascita
@@ -126,14 +136,13 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        // ${sommaEuroInLettere.ToUpper()}
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.NomeGenitore} ${
           allievaInfo.CognomeGenitore
         }, C.F. ${
           allievaInfo.CodiceFiscaleGenitore
         }, il pagamento effetuato tramite ${ricevutaInfo.TipoPagamento.toUpperCase()} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
-        }€ (${SommaEuroInLettere} Euro), per l'iscrizione di ${allievaInfo.Nome} ${
+        }€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}), per l'iscrizione di ${allievaInfo.Nome} ${
           allievaInfo.Cognome
         }, C.F. ${allievaInfo.CodiceFiscale} nato/a a ${allievaInfo.LuogoNascita}, il ${
           allievaInfo.DataNascita

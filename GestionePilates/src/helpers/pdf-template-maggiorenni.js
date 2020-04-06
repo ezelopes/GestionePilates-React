@@ -8,7 +8,19 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const SommaEuroInLettere = convertNumberIntoWord(ricevutaInfo.SommaEuro);
+
+  let somma = ricevutaInfo.SommaEuro;
+  somma = somma.replace('.', ',')
+  const euro_and_centesimi = somma.split(',');
+  const euro = euro_and_centesimi[0];
+  const centesimi = euro_and_centesimi[1];
+
+  const EuroInLettere = convertNumberIntoWord(euro);
+  let CentesimiInLettere = '';
+  if (centesimi !== '00' && centesimi !== '0' && centesimi !== undefined) {
+    CentesimiInLettere = ` e ${convertNumberIntoWord(centesimi)} Centesimi`;
+  }
+
   const today = formatDate(new Date(), false);
 
   const docDefinition = {
@@ -43,8 +55,8 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        // ${sommaEuroInLettere.ToUpper()}
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${SommaEuroInLettere} Euro) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
+        // ${EuroInLettere.toUpperCase()}
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -107,8 +119,7 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        // ${sommaEuroInLettere.ToUpper()}
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${SommaEuroInLettere} Euro) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]

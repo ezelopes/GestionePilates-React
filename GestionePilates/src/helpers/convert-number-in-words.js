@@ -5,7 +5,7 @@
  */
 const convNumLett = (n, abbr, separator) => {
   if (isNaN(n) == true) {
-    return '!!! Inserisci un numero valido !!!';
+    return '00';
   }
   if (n.indexOf('.') >= 0 || n.indexOf(',') >= 0) {
     return '!!! Solo numeri interi !!!';
