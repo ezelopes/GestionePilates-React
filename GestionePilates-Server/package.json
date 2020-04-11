@@ -1,11 +1,11 @@
 {
-  "name": "gestione-pilates",
+  "name": "Gestione-Pilates",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon --exec npx babel-node server.js"
+    "start": "npx nodemon --exec npx babel-node server.js && cd client && npm run start"
   },
   "keywords": [],
   "author": "Ezequiel Lopes",
