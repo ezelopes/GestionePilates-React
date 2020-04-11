@@ -2,7 +2,7 @@ const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('./get-base64-image');
 const formatDate = require('./format-date-for-input-date');
-const convertNumberIntoWord = require('../helpers/convert-number-in-words');
+const convertNumberIntoWord = require('./convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
