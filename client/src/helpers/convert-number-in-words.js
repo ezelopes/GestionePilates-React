@@ -4,14 +4,14 @@
  * converte i numeri da cifre a lettere
  */
 const convNumLett = (n, abbr, separator) => {
-  if (isNaN(n) == true) {
+  if (isNaN(n) === true) {
     return '00';
   }
   if (n.indexOf('.') >= 0 || n.indexOf(',') >= 0) {
     return '!!! Solo numeri interi !!!';
   }
 
-  if (n == '0') {
+  if (n === '0') {
     return 'ZERO';
   }
   const lettere = {

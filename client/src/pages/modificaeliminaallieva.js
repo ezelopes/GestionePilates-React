@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-mdl';
 import FormModificaEliminaAllieva from '../components/form_modifica_elimina_allieva';
 

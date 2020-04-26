@@ -1,14 +1,12 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('./get-base64-image');
-const formatDate = require('./format-date-for-input-date');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateModuloIscrizione = async allievaInfo => {
   // print only if allievaInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const today = formatDate(new Date(), false);
 
   const docDefinition = {
     info: {

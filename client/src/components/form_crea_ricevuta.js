@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-mdl';
 import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
-import { Combobox, DateTimePicker } from 'react-widgets';
+import { Combobox } from 'react-widgets';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import formatDate from '../helpers/format-date-for-input-date';
