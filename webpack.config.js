@@ -7,10 +7,16 @@ const BUILD_DIR = path.join(__dirname, 'dist')
 
 const config = {
     entry: APP_DIR + '/index.js', // react index
-    plugins: [new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'client', 'public', 'index.html'),
-        filename: "index.html"
-    })],
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'client', 'public', 'index.html'),
+            filename: "index.html"
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        })
+    ],
     output: {
         path: BUILD_DIR,
         filename: '[name].js'

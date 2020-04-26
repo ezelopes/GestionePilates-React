@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npx nodemon --exec npx babel-node server.js\" \"cd ./client && npm start\" ",
-    "dev": "webpack --mode development && node server/index.js",
-    "build": "webpack --mode production",
+    "start": "npx nodemon --exec npx babel-node server.js",
+    "dev": "webpack --mode development && node server.js",
+    "build": "SET NODE_ENV=production && webpack -p",
     "test": "echo \"Error: no test specified\" && exit 1",
     "http-server": "http-server --proxy http://localhost:8080? dist/"
   },
