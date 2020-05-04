@@ -196,4 +196,4 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
   return docDefinition;
 };
 
-module.exports = pdfTemplateMinorenni;
+export default pdfTemplateMinorenni;

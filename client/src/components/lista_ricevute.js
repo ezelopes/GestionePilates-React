@@ -41,13 +41,17 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
     if (ricevuteSelezionate.length === 0 || ricevuteSelezionate.length > 1) return;
 
-    let documentDefinition;
-    if (allievaInfo.Maggiorenne === 'Maggiorenne') {
-      documentDefinition = await pdfTemplateMaggiorenni(allievaInfo, ricevuteSelezionate[0].data);
-    } else {
-      documentDefinition = await pdfTemplateMinorenni(allievaInfo, ricevuteSelezionate[0].data);
+    try {
+      let documentDefinition;
+      if (allievaInfo.Maggiorenne === 'Maggiorenne') {
+        documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
+      } else {
+        documentDefinition = await pdfTemplateMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
+      }
+      pdfMake.createPdf(documentDefinition).open({}, window);
+    } catch (error) {
+      console.log(error);
     }
-    pdfMake.createPdf(documentDefinition).open({}, window);
   };
 
   const eliminaRicevute = async () => {
@@ -81,7 +85,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
         style={{ marginTop: '2em', height: '20em', width: '90%' }}
       >
         <AgGridReact
-          rowSelection="multiple"
+          // rowSelection="multiple"
           scrollbarWidth
           rowHeight="45"
           gridOptions={gridOptions}
