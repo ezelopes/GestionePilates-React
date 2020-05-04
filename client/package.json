@@ -6,6 +6,7 @@
   "proxy": "http://localhost:8000/",
   "dependencies": {
     "@progress/kendo-react-intl": "^3.0.0",
+    "@react-pdf/renderer": "^1.6.8",
     "ag-grid": "^18.1.2",
     "ag-grid-community": "^22.1.1",
     "ag-grid-react": "^22.1.1",
