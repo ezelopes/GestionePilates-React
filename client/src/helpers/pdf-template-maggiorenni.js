@@ -86,7 +86,7 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
       },
       {
         // ${EuroInLettere.toUpperCase()}
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -149,7 +149,7 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]

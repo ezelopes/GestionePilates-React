@@ -68,6 +68,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
+        Selected_CodiceFiscale: allievaInfo.CodiceFiscale,
         CodiceFiscale: document.getElementById('textCodiceFiscale').value,
         Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
         Nome: document.getElementById('textNomeAllieva').value,

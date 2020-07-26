@@ -66,7 +66,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.DataNascita
         } residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta} al corso di ${
           allievaInfo.Disciplina
-        } dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
+        } dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -148,7 +148,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.DataNascita
         } residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta} al corso di ${
           allievaInfo.Disciplina
-        } dal ${ricevutaInfo.DataInizio} al ${ricevutaInfo.DataScadenza}`,
+        } dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]

@@ -7,47 +7,7 @@ modificaAllievaRouter.get('/', modificaAllieva);
 
 async function modificaAllieva(req, res, next) {
   try {
-    const {
-      CodiceFiscale,
-      Maggiorenne,
-      Nome,
-      Cognome,
-      Citta,
-      Indirizzo,
-      Cellulare,
-      Email,
-      DataIscrizione,
-      DataCertificato,
-      DataNascita,
-      LuogoNascita,
-      Disciplina,
-      Corso,
-      Scuola,
-      CodiceFiscaleGenitore,
-      NomeGenitore,
-      CognomeGenitore
-    } = req.body;
-
-    const response = await database.modificaAllieva(
-      CodiceFiscale,
-      Maggiorenne,
-      Nome,
-      Cognome,
-      Citta,
-      Indirizzo,
-      Cellulare,
-      Email,
-      DataIscrizione,
-      DataCertificato,
-      DataNascita,
-      LuogoNascita,
-      Disciplina,
-      Corso,
-      Scuola,
-      CodiceFiscaleGenitore,
-      NomeGenitore,
-      CognomeGenitore
-    );
+    const response = await database.modificaAllieva(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

@@ -40,8 +40,8 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
       },
       body: JSON.stringify({
         NumeroRicevuta: document.getElementById('textNumeroRicevuta').value,
-        DataInizio: document.getElementById('dtpDataInizio').value,
-        DataScadenza: document.getElementById('dtpDataScadenza').value,
+        DataInizioCorso: document.getElementById('dtpDataInizioCorso').value,
+        DataScadenzaCorso: document.getElementById('dtpDataScadenzaCorso').value,
         SommaEuro: document.getElementById('comboboxSommaEuro_input').value,
         TipoPagamento: document.getElementById('comboboxTipoPagamento_input').value,
         CodiceFiscale: CodiceFiscale
@@ -76,12 +76,12 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
           caseSensitive={false}
           filter="contains"
         />
-        <label id="labelDataInizio"> Data Inizio </label>
-        <input id="dtpDataInizio" type="date" defaultValue={today} />
-        {/* <DateTimePicker id="dtpDataInizio" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
-        <label id="labelDataScadenza"> Data Scadenza </label>
-        <input id="dtpDataScadenza" type="date" defaultValue={today} />
-        {/* <DateTimePicker id="dtpDataScadenza" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
+        <label id="labelDataInizioCorso"> Data Inizio Corso </label>
+        <input id="dtpDataInizioCorso" type="date" defaultValue={today} />
+        {/* <DateTimePicker id="dtpDataInizioCorso" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
+        <label id="labelDataScadenzaCorso"> Data Scadenza Corso </label>
+        <input id="dtpDataScadenzaCorso" type="date" defaultValue={today} />
+        {/* <DateTimePicker id="dtpDataScadenzaCorso" defaultValue={new Date()} format="MM/DD/YYYY" time={false} /> */}
       </form>
       <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
         Crea Ricevuta

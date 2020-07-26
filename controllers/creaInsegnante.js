@@ -7,39 +7,7 @@ creaInsegnanteRouter.get('/', creaInsegnante);
 
 async function creaInsegnante(req, res, next) {
   try {
-    const {
-      CodiceFiscale,
-      Nome,
-      Cognome,
-      Citta,
-      Indirizzo,
-      Cellulare,
-      Email,
-      DataIscrizione,
-      DataCertificato,
-      DataNascita,
-      LuogoNascita,
-      Disciplina,
-      Corso,
-      Scuola,
-    } = req.body;
-
-    const response = await database.creaInsegnante(
-      CodiceFiscale,
-      Nome,
-      Cognome,
-      Citta,
-      Indirizzo,
-      Cellulare,
-      Email,
-      DataIscrizione,
-      DataCertificato,
-      DataNascita,
-      LuogoNascita,
-      Disciplina,
-      Corso,
-      Scuola,
-    );
+    const response = await database.creaInsegnante(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

@@ -7,11 +7,11 @@ creaRicevutaRouter.get('/', creaRicevuta);
 
 async function creaRicevuta(req, res, next) {
   try {
-    const { NumeroRicevuta, DataInizio, DataScadenza, SommaEuro, TipoPagamento, CodiceFiscale } = req.body;
+    const { NumeroRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, TipoPagamento, CodiceFiscale } = req.body;
     const response = await database.creaRicevuta(
       NumeroRicevuta,
-      DataInizio,
-      DataScadenza,
+      DataInizioCorso,
+      DataScadenzaCorso,
       SommaEuro,
       TipoPagamento,
       CodiceFiscale

@@ -7,47 +7,7 @@ creaAllievaRouter.get('/', creaAllieva);
 
 async function creaAllieva(req, res, next) {
   try {
-    const {
-      CodiceFiscale,
-      Maggiorenne,
-      Nome,
-      Cognome,
-      Citta,
-      Indirizzo,
-      Cellulare,
-      Email,
-      DataIscrizione,
-      DataCertificato,
-      DataNascita,
-      LuogoNascita,
-      Disciplina,
-      Corso,
-      Scuola,
-      CodiceFiscaleGenitore,
-      NomeGenitore,
-      CognomeGenitore
-    } = req.body;
-
-    const response = await database.creaAllieva(
-      CodiceFiscale,
-      Maggiorenne,
-      Nome,
-      Cognome,
-      Citta,
-      Indirizzo,
-      Cellulare,
-      Email,
-      DataIscrizione,
-      DataCertificato,
-      DataNascita,
-      LuogoNascita,
-      Disciplina,
-      Corso,
-      Scuola,
-      CodiceFiscaleGenitore,
-      NomeGenitore,
-      CognomeGenitore
-    );
+    const response = await database.creaAllieva(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

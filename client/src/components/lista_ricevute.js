@@ -24,8 +24,8 @@ const gridOptionsDefault = {
 
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true },
-  { headerName: 'Data Inizio', field: 'DataInizio' },
-  { headerName: 'Data Scadenza', field: 'DataScadenza' },
+  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso' },
+  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso' },
   { headerName: 'Somma Euro', field: 'SommaEuro' },
   { headerName: 'Tipo Pagamento', field: 'TipoPagamento' },
   { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }

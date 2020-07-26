@@ -12,8 +12,8 @@ function mappingRicevuta(rows) {
   const ricevute = rows.map(row => {
     return {
       RicevutaID: row.RicevutaID,
-      DataInizio: moment(row.DataInizio).format('DD-MM-YYYY'),
-      DataScadenza: moment(row.DataScadenza).format('DD-MM-YYYY'),
+      DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
+      DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
       SommaEuro: row.SommaEuro,
       FK_CodiceFiscale: row.FK_CodiceFiscale,
@@ -29,8 +29,8 @@ function mappingAllRicevute(rows) {
     return {
       Nome: row.Nome,
       Cognome: row.Cognome,
-      DataInizio: moment(row.DataInizio).format('DD-MM-YYYY'),
-      DataScadenza: moment(row.DataScadenza).format('DD-MM-YYYY'),
+      DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
+      DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
       SommaEuro: row.SommaEuro
     };
@@ -86,6 +86,13 @@ function mappingInsegnanti(rows) {
   return insegnanti;
 }
 
+async function contaRicevuteAllieva(CodiceFiscaleAllieva) {
+  const [rows, fields] = await pool.execute(
+    `SELECT RicevutaID FROM Ricevuta WHERE FK_CodiceFiscale='${CodiceFiscaleAllieva}' LIMIT 1`
+  );
+  return rows.length;
+}
+
 async function getRicevuteOfAllieva(CodiceFiscaleAllieva) {
   const [rows, fields] = await pool.execute(
     `SELECT * FROM ricevuta WHERE FK_CodiceFiscale='${CodiceFiscaleAllieva}';`
@@ -97,7 +104,7 @@ async function getRicevuteOfAllieva(CodiceFiscaleAllieva) {
 
 async function getAllRicevute() {
   const [rows, fields] = await pool.execute(
-    `SELECT Nome, Cognome, DataInizio, DataScadenza, NumeroRicevuta, SommaEuro
+    `SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro
     FROM ricevuta
     INNER JOIN allieva
     ON ricevuta.FK_CodiceFiscale = allieva.CodiceFiscale;`
@@ -139,27 +146,27 @@ async function getSingleInsegnante(CodiceFiscale) {
 
 async function creaRicevuta(
   NumeroRicevuta,
-  DataInizio,
-  DataScadenza,
+  DataInizioCorso,
+  DataScadenzaCorso,
   SommaEuro,
   TipoPagamento,
   CodiceFiscale
 ) {
   try {
-    const DataInizioFormatted = moment(DataInizio).format('YYYY-MM-DD HH:mm:ss');
-    const DataScadenzaFormatted = moment(DataScadenza).format('YYYY-MM-DD HH:mm:ss');
+    const DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
+    const DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
     const [rows, fields] = await pool.execute(
-      `INSERT INTO Ricevuta (DataInizio, DataScadenza, NumeroRicevuta, SommaEuro, FK_CodiceFiscale, TipoPagamento, Archiviata) VALUES ('${DataInizioFormatted}','${DataScadenzaFormatted}','${NumeroRicevuta}','${SommaEuro}','${CodiceFiscale}','${TipoPagamento}',${false});`
+      `INSERT INTO Ricevuta (DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, FK_CodiceFiscale, TipoPagamento, Archiviata) VALUES ('${DataInizioCorsoFormatted}','${DataScadenzaCorsoFormatted}','${NumeroRicevuta}','${SommaEuro}','${CodiceFiscale}','${TipoPagamento}',${false});`
     );
     return 'Ricevuta Inserita Correttamente!';
   } catch (error) {
     console.log(error);
     return 'Errore nel creare la Ricevuta!';
   }
-  // [DataInizio, DataScadenza, NumeroRicevuta, SommaEuro, CodiceFiscale, TipoPagamento, false]
+  // [DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, CodiceFiscale, TipoPagamento, false]
 }
 
-async function creaAllieva(
+async function creaAllieva({
   CodiceFiscale,
   Maggiorenne,
   Nome,
@@ -178,7 +185,7 @@ async function creaAllieva(
   CodiceFiscaleGenitore,
   NomeGenitore,
   CognomeGenitore
-) {
+}) {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
@@ -193,7 +200,7 @@ async function creaAllieva(
   }
 }
 
-async function creaInsegnante(
+async function creaInsegnante({
   CodiceFiscale,
   Nome,
   Cognome,
@@ -208,7 +215,7 @@ async function creaInsegnante(
   Disciplina,
   Corso,
   Scuola,
-) {
+}) {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
@@ -223,7 +230,8 @@ async function creaInsegnante(
   }
 }
 
-async function modificaAllieva(
+async function modificaAllieva({
+  Selected_CodiceFiscale,
   CodiceFiscale,
   Maggiorenne,
   Nome,
@@ -242,14 +250,25 @@ async function modificaAllieva(
   CodiceFiscaleGenitore,
   NomeGenitore,
   CognomeGenitore
-) {
+}) {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
     const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
-    const [rows, fields] = await pool.execute(
-      `UPDATE Allieva SET Maggiorenne='${Maggiorenne}', Nome='${Nome}', Cognome='${Cognome}', Citta='${Citta}', Indirizzo='${Indirizzo}', Cellulare='${Cellulare}', Email='${Email}', DataIscrizione='${DataIscrizioneFormatted}', DataCertificato='${DataCertificatoFormatted}', DataNascita='${DataNascitaFormatted}', LuogoNascita='${LuogoNascita}', Disciplina='${Disciplina}', CodiceFiscaleGenitore='${CodiceFiscaleGenitore}', NomeGenitore='${NomeGenitore}', CognomeGenitore='${CognomeGenitore}', Corso='${Corso}', Scuola='${Scuola}' WHERE CodiceFiscale='${CodiceFiscale}';`
-    );
+    
+    const numeroRicevute = await contaRicevuteAllieva(Selected_CodiceFiscale);
+    console.log(numeroRicevute);
+    if (numeroRicevute > 0) {
+      await pool.execute(
+        `UPDATE Allieva, Ricevuta SET Allieva.CodiceFiscale='${CodiceFiscale}', Allieva.Maggiorenne='${Maggiorenne}', Allieva.Nome='${Nome}', Allieva.Cognome='${Cognome}', Allieva.Citta='${Citta}', Allieva.Indirizzo='${Indirizzo}', Allieva.Cellulare='${Cellulare}', Allieva.Email='${Email}', Allieva.DataIscrizione='${DataIscrizioneFormatted}', Allieva.DataCertificato='${DataCertificatoFormatted}', Allieva.DataNascita='${DataNascitaFormatted}', Allieva.LuogoNascita='${LuogoNascita}', Allieva.Disciplina='${Disciplina}', Allieva.CodiceFiscaleGenitore='${CodiceFiscaleGenitore}', Allieva.NomeGenitore='${NomeGenitore}', Allieva.CognomeGenitore='${CognomeGenitore}', Allieva.Corso='${Corso}', Allieva.Scuola='${Scuola}', Ricevuta.FK_CodiceFiscale='${CodiceFiscale}' WHERE Allieva.CodiceFiscale='${Selected_CodiceFiscale}' AND Ricevuta.FK_CodiceFiscale='${Selected_CodiceFiscale}';`
+      );
+    } else {
+      await pool.execute(
+        `UPDATE Allieva SET Allieva.CodiceFiscale='${CodiceFiscale}', Allieva.Maggiorenne='${Maggiorenne}', Allieva.Nome='${Nome}', Allieva.Cognome='${Cognome}', Allieva.Citta='${Citta}', Allieva.Indirizzo='${Indirizzo}', Allieva.Cellulare='${Cellulare}', Allieva.Email='${Email}', Allieva.DataIscrizione='${DataIscrizioneFormatted}', Allieva.DataCertificato='${DataCertificatoFormatted}', Allieva.DataNascita='${DataNascitaFormatted}', Allieva.LuogoNascita='${LuogoNascita}', Allieva.Disciplina='${Disciplina}', Allieva.CodiceFiscaleGenitore='${CodiceFiscaleGenitore}', Allieva.NomeGenitore='${NomeGenitore}', Allieva.CognomeGenitore='${CognomeGenitore}', Allieva.Corso='${Corso}', Allieva.Scuola='${Scuola}' WHERE Allieva.CodiceFiscale='${Selected_CodiceFiscale}';`
+      );
+    }
+    // else
+
     return 'Allieva Aggiornata Correttamente!';
   } catch (error) {
     console.log(error);
@@ -257,7 +276,7 @@ async function modificaAllieva(
   }
 }
 
-async function modificaInsegnante(
+async function modificaInsegnante({
   CodiceFiscale,
   Nome,
   Cognome,
@@ -272,7 +291,7 @@ async function modificaInsegnante(
   Disciplina,
   Corso,
   Scuola,
-) {
+}) {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
@@ -289,7 +308,9 @@ async function modificaInsegnante(
 
 async function eliminaAllieva(CodiceFiscale) {
   try {
-    const [rows, fields] = await pool.execute(`DELETE FROM allieva WHERE CodiceFiscale='${CodiceFiscale}';`);
+    // elimina anche le ricevute?
+    await pool.execute(`DELETE FROM ricevuta WHERE FK_CodiceFiscale='${CodiceFiscale}';`);
+    await pool.execute(`DELETE FROM allieva WHERE CodiceFiscale='${CodiceFiscale}';`);
     return 'Allieva Eliminata Correttamente!';
   } catch (error) {
     console.log(error);
@@ -343,7 +364,7 @@ module.exports = {
  * INSERT INTO allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, LuogoNascita, Disciplina)
  * VALUES ('LPSZQL97LPSZQL97', true, 'Ezequiel', 'Lopes', 'Basingstoke', 'Crown Heights', '07397509041','ezelopes97@gmail.com', '2020-02-01', '2020-12-31', '1997-03-30', 'Buenos Aires','Fitness');
  *
- * INSERT INTO ricevuta (DataInizio, DataScadenza, NumeroRicevuta, SommaEuro, FK_CodiceFiscale, TipoPagamento, Archiviata)
+ * INSERT INTO ricevuta (DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, FK_CodiceFiscale, TipoPagamento, Archiviata)
  * VALUES ('2020-02-11', '2020-06-11', '345', '90', 'LPSZQL97LPSZQL97', 'Contanti', false);
  *
  * REMEMBER ON UPDATE CASCADE IN RICEVUTA TABLE

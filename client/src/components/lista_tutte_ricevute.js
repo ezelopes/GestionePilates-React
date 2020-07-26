@@ -4,14 +4,14 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-// nome cognome numeroricevuta somma datainizio e datascadenza
+// nome cognome numeroricevuta somma datainiziocorso e datascadenzacorso
 // filtra per anno -> ricevuta 001/19 , 001/20, 001/21 ...
 const columnsDefinition = [
   { headerName: 'Nome Allieva', field: 'Nome' },
   { headerName: 'Cognome Allieva', field: 'Cognome' },
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta' },
-  { headerName: 'Data Inizio', field: 'DataInizio' },
-  { headerName: 'Data Scadenza', field: 'DataScadenza' },
+  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso' },
+  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso' },
   { headerName: 'Somma Euro', field: 'SommaEuro' }
 ];
 
