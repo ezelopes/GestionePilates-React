@@ -24,11 +24,13 @@ const gridOptionsDefault = {
 
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true, editable: true },
-  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true },
-  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true },
+  { headerName: 'Tipo Ricevuta', field: 'TipoRicevuta', editable: true },
+  { headerName: 'Data Ricevuta', field: 'DataRicevuta', editable: true },
+  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
   { headerName: 'Somma Euro', field: 'SommaEuro', editable: true },
   { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true },
-  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale'  }
+  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
 ];
 
 const ListaRicevute = ({ ricevute, allievaInfo }) => {
@@ -36,12 +38,14 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
 
   const rowData = ricevute;
+  console.log(rowData);
 
   const stampaRicevute = async () => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
     if (ricevuteSelezionate.length === 0 || ricevuteSelezionate.length > 1) return;
 
     try {
+      // CHIEDI COME STAMPARE QUOTA ASSOCIATIVA
       let documentDefinition;
       if (allievaInfo.Maggiorenne === 'Maggiorenne') {
         documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
@@ -87,6 +91,8 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
       body: JSON.stringify({
         RicevutaID: updatedRicevuta.RicevutaID,
         NumeroRicevuta: updatedRicevuta.NumeroRicevuta,
+        TipoRicevuta: updatedRicevuta.TipoRicevuta,
+        DataRicevuta: updatedRicevuta.DataRicevuta.split("-").reverse().join("-"),
         DataInizioCorso: updatedRicevuta.DataInizioCorso.split("-").reverse().join("-"),
         DataScadenzaCorso: updatedRicevuta.DataScadenzaCorso.split("-").reverse().join("-"),
         SommaEuro: updatedRicevuta.SommaEuro,

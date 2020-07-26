@@ -7,15 +7,8 @@ creaRicevutaRouter.get('/', creaRicevuta);
 
 async function creaRicevuta(req, res, next) {
   try {
-    const { NumeroRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, TipoPagamento, CodiceFiscale } = req.body;
-    const response = await database.creaRicevuta(
-      NumeroRicevuta,
-      DataInizioCorso,
-      DataScadenzaCorso,
-      SommaEuro,
-      TipoPagamento,
-      CodiceFiscale
-    );
+    console.log(req.body);
+    const response = await database.creaRicevuta(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

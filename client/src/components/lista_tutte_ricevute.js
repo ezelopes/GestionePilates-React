@@ -10,8 +10,8 @@ const columnsDefinition = [
   { headerName: 'Nome Allieva', field: 'Nome' },
   { headerName: 'Cognome Allieva', field: 'Cognome' },
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta' },
-  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso' },
-  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso' },
+  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
   { headerName: 'Somma Euro', field: 'SommaEuro' }
 ];
 

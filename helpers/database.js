@@ -12,6 +12,8 @@ function mappingRicevuta(rows) {
   const ricevute = rows.map(row => {
     return {
       RicevutaID: row.RicevutaID,
+      TipoRicevuta: row.TipoRicevuta,
+      DataRicevuta: moment(row.DataRicevuta).format('DD-MM-YYYY'),
       DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
       DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
@@ -144,26 +146,34 @@ async function getSingleInsegnante(CodiceFiscale) {
   return allieva;
 }
 
-async function creaRicevuta(
+async function creaRicevuta({
   NumeroRicevuta,
+  TipoPagamento,
+  TipoRicevuta,
+  DataRicevuta,
   DataInizioCorso,
   DataScadenzaCorso,
   SommaEuro,
-  TipoPagamento,
   CodiceFiscale
-) {
+}) {
   try {
-    const DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
-    const DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
-    const [rows, fields] = await pool.execute(
-      `INSERT INTO Ricevuta (DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, FK_CodiceFiscale, TipoPagamento, Archiviata) VALUES ('${DataInizioCorsoFormatted}','${DataScadenzaCorsoFormatted}','${NumeroRicevuta}','${SommaEuro}','${CodiceFiscale}','${TipoPagamento}',${false});`
-    );
+    // console.log({ NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, CodiceFiscale });
+    const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
+
+    if (TipoRicevuta == 'Quota Associativa') {
+      await pool.execute(`INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, Archiviata) VALUES ('${NumeroRicevuta}','${TipoPagamento}','${TipoRicevuta}','${DataRicevutaFormatted}','${SommaEuro}','${CodiceFiscale}',${false});`);
+      return 'Ricevuta Inserita Correttamente!';
+    }
+
+    let DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
+    let DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
+
+    await pool.execute(`INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, Archiviata) VALUES ('${NumeroRicevuta}','${TipoPagamento}','${TipoRicevuta}','${DataRicevutaFormatted}','${DataInizioCorsoFormatted}','${DataScadenzaCorsoFormatted}','${SommaEuro}','${CodiceFiscale}',${false});`);
     return 'Ricevuta Inserita Correttamente!';
   } catch (error) {
     console.log(error);
     return 'Errore nel creare la Ricevuta!';
   }
-  // [DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, CodiceFiscale, TipoPagamento, false]
 }
 
 async function creaAllieva({
@@ -347,20 +357,24 @@ async function modificaRicevuta({
   RicevutaID,
   NumeroRicevuta,
   TipoPagamento,
-  // TipoRicevuta,
-  // DataRicevuta,
+  TipoRicevuta,
+  DataRicevuta,
   DataInizioCorso,
   DataScadenzaCorso,
   SommaEuro,
-  // FK_CodiceFiscale,
-  // Archiviata
 }) {
   try {
+    const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
+
+    if (TipoRicevuta == 'Quota Associativa') {
+      await pool.execute(`UPDATE ricevuta SET NumeroRicevuta='${NumeroRicevuta}', TipoPagamento='${TipoPagamento}', TipoRicevuta='${TipoRicevuta}', DataRicevuta='${DataRicevutaFormatted}', SommaEuro='${SommaEuro}' WHERE RicevutaID='${RicevutaID}';`);
+      return 'Ricevuta Aggiornata Correttamente!';
+    }
+
     const DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
     const DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
-    const [rows, fields] = await pool.execute(
-      `UPDATE ricevuta SET NumeroRicevuta='${NumeroRicevuta}', TipoPagamento='${TipoPagamento}', DataInizioCorso='${DataInizioCorsoFormatted}', DataScadenzaCorso='${DataScadenzaCorsoFormatted}', SommaEuro='${SommaEuro}' WHERE RicevutaID='${RicevutaID}';`
-    );
+    
+    await pool.execute(`UPDATE ricevuta SET NumeroRicevuta='${NumeroRicevuta}', TipoPagamento='${TipoPagamento}', TipoRicevuta='${TipoRicevuta}', DataRicevuta='${DataRicevutaFormatted}', DataInizioCorso='${DataInizioCorsoFormatted}', DataScadenzaCorso='${DataScadenzaCorsoFormatted}', SommaEuro='${SommaEuro}' WHERE RicevutaID='${RicevutaID}';`);
     return 'Ricevuta Aggiornata Correttamente!';
   } catch (error) {
     console.log(error);
