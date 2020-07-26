@@ -343,6 +343,31 @@ async function eliminaRicevute(RicevuteId) {
   }
 }
 
+async function modificaRicevuta({
+  RicevutaID,
+  NumeroRicevuta,
+  TipoPagamento,
+  // TipoRicevuta,
+  // DataRicevuta,
+  DataInizioCorso,
+  DataScadenzaCorso,
+  SommaEuro,
+  // FK_CodiceFiscale,
+  // Archiviata
+}) {
+  try {
+    const DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
+    const DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
+    const [rows, fields] = await pool.execute(
+      `UPDATE ricevuta SET NumeroRicevuta='${NumeroRicevuta}', TipoPagamento='${TipoPagamento}', DataInizioCorso='${DataInizioCorsoFormatted}', DataScadenzaCorso='${DataScadenzaCorsoFormatted}', SommaEuro='${SommaEuro}' WHERE RicevutaID='${RicevutaID}';`
+    );
+    return 'Ricevuta Aggiornata Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'aggiornare Ricevuta!`;
+  }
+} 
+
 module.exports = {
   getAllieve,
   getInsegnanti,
@@ -355,6 +380,7 @@ module.exports = {
   creaInsegnante,
   modificaAllieva,
   modificaInsegnante,
+  modificaRicevuta,
   eliminaAllieva,
   eliminaInsegnante,
   eliminaRicevute

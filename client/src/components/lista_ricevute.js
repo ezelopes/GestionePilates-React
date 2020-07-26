@@ -23,12 +23,12 @@ const gridOptionsDefault = {
 };
 
 const columnsDefinition = [
-  { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true },
-  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso' },
-  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso' },
-  { headerName: 'Somma Euro', field: 'SommaEuro' },
-  { headerName: 'Tipo Pagamento', field: 'TipoPagamento' },
-  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
+  { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true, editable: true },
+  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true },
+  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true },
+  { headerName: 'Somma Euro', field: 'SommaEuro', editable: true },
+  { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true },
+  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale'  }
 ];
 
 const ListaRicevute = ({ ricevute, allievaInfo }) => {
@@ -67,7 +67,6 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
         RicevuteId: idRicevuteSelezionate
@@ -76,6 +75,27 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     const responseParsed = await response.json();
     alert(responseParsed.message);
   };
+
+  const modificaRicevuta = async (event) => {
+    const updatedRicevuta = event.data;
+    const response = await fetch('/api/modificaRicevuta', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        RicevutaID: updatedRicevuta.RicevutaID,
+        NumeroRicevuta: updatedRicevuta.NumeroRicevuta,
+        DataInizioCorso: updatedRicevuta.DataInizioCorso.split("-").reverse().join("-"),
+        DataScadenzaCorso: updatedRicevuta.DataScadenzaCorso.split("-").reverse().join("-"),
+        SommaEuro: updatedRicevuta.SommaEuro,
+        TipoPagamento: updatedRicevuta.TipoPagamento,
+      })
+    });
+    const responseParsed = await response.json();
+    alert(responseParsed.message);
+  }
 
   return (
     <>
@@ -91,6 +111,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           rowData={rowData}
+          onCellValueChanged={modificaRicevuta}
         ></AgGridReact>
       </div>
 

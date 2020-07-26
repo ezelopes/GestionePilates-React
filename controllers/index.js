@@ -10,6 +10,7 @@ const creaAllieva = require('./creaAllieva');
 const creaInsegnante = require('./creaInsegnante');
 const modificaAllieva = require('./modificaAllieva');
 const modificaInsegnante = require('./modificaInsegnante');
+const modificaRicevuta = require('./modificaRicevuta');
 const eliminaAllieva = require('./eliminaAllieva');
 const eliminaInsegnante = require('./eliminaInsegnante');
 const eliminaRicevute = require('./eliminaRicevute');
@@ -32,6 +33,7 @@ router.use('/eliminaAllieva', eliminaAllieva);
 router.use('/eliminaInsegnante', eliminaInsegnante);
 
 router.use('/creaRicevuta', creaRicevuta);
+router.use('/modificaRicevuta', modificaRicevuta);
 router.use('/eliminaRicevute', eliminaRicevute);
 
 // if path corresponds to none of the above
