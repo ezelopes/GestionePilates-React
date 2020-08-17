@@ -20,7 +20,9 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
     CentesimiInLettere = ` e ${convertNumberIntoWord(centesimi)} Centesimi`;
   }
 
-  const today = formatDate(new Date(), false);
+  const tipoPagamento = ricevutaInfo.TipoPagamento.toUpperCase();
+
+  const today = formatDate(new Date(), false); // forse DataRicevuta?
 
   const docDefinition = {
     info: {
@@ -58,7 +60,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.CognomeGenitore
         }, C.F. ${
           allievaInfo.CodiceFiscaleGenitore
-        }, il pagamento effetuato tramite ${ricevutaInfo.TipoPagamento.toUpperCase()} equilavente alla somma di ${
+        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
         }€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}), per l'iscrizione di ${allievaInfo.Nome} ${
           allievaInfo.Cognome
@@ -136,19 +138,38 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.NomeGenitore} ${
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
+          allievaInfo.NomeGenitore
+        } ${
           allievaInfo.CognomeGenitore
         }, C.F. ${
           allievaInfo.CodiceFiscaleGenitore
-        }, il pagamento effetuato tramite ${ricevutaInfo.TipoPagamento.toUpperCase()} equilavente alla somma di ${
+        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
-        }€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}), per l'iscrizione di ${allievaInfo.Nome} ${
+        }€ (${
+          EuroInLettere.toUpperCase()
+        } EURO${CentesimiInLettere.toUpperCase()
+        }), per l'iscrizione di ${
+          allievaInfo.Nome
+        } ${
           allievaInfo.Cognome
-        }, C.F. ${allievaInfo.CodiceFiscale} nato/a a ${allievaInfo.LuogoNascita}, il ${
+        }, C.F. ${
+          allievaInfo.CodiceFiscale
+        } nato/a a ${
+          allievaInfo.LuogoNascita
+        }, il ${
           allievaInfo.DataNascita
-        } residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta} al corso di ${
+        } residente in ${
+          allievaInfo.Indirizzo
+        }, ${
+          allievaInfo.Citta
+        } al corso di ${
           allievaInfo.Disciplina
-        } dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
+        } dal ${
+          ricevutaInfo.DataInizioCorso
+        } al ${
+          ricevutaInfo.DataScadenzaCorso
+        }`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]

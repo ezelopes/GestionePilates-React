@@ -1,33 +1,3 @@
-// import React from 'react';
-// import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-
-// // Create styles
-// const styles = StyleSheet.create({
-//   page: {
-//     flexDirection: 'row',
-//     backgroundColor: '#E4E4E4'
-//   },
-//   section: {
-//     margin: 10,
-//     padding: 10,
-//     flexGrow: 1
-//   }
-// });
-
-// const MyDocument = () => (
-//   <Document>
-//     <Page size="A4" style={styles.page}>
-//       <View style={styles.section}>
-//         <Text>Section #1</Text>
-//       </View>
-//       <View style={styles.section}>
-//         <Text>Section #2</Text>
-//       </View>
-//     </Page>
-//   </Document>
-// );
-
-
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('./get-base64-image');
@@ -51,7 +21,9 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
     CentesimiInLettere = ` e ${convertNumberIntoWord(centesimi)} Centesimi`;
   }
 
-  const today = formatDate(new Date(), false);
+  const tipoPagamento = ricevutaInfo.TipoPagamento.toUpperCase();
+
+  const today = formatDate(new Date(), false); // forse DataRicevuta?
 
   const docDefinition = {
     info: {
@@ -85,8 +57,33 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        // ${EuroInLettere.toUpperCase()}
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
+          allievaInfo.Nome
+        } ${
+          allievaInfo.Cognome
+        } , C.F. ${
+          allievaInfo.CodiceFiscale
+        }, nato/a a ${
+          allievaInfo.LuogoNascita
+        }, il ${
+          allievaInfo.DataNascita
+        } residente in ${
+          allievaInfo.Indirizzo
+        }, ${
+          allievaInfo.Citta
+        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
+          ricevutaInfo.SommaEuro
+        }€ (${
+          EuroInLettere.toUpperCase()
+        } EURO${
+          CentesimiInLettere.toUpperCase()
+        }) per l'iscrizione al corso di ${
+          allievaInfo.Disciplina
+        } dal ${
+          ricevutaInfo.DataInizioCorso
+        } al ${
+          ricevutaInfo.DataScadenzaCorso
+        }`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -149,7 +146,33 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.Nome} ${allievaInfo.Cognome} , C.F. ${allievaInfo.CodiceFiscale}, nato/a a ${allievaInfo.LuogoNascita}, il ${allievaInfo.DataNascita} residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta}, la somma di ${ricevutaInfo.SommaEuro}€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}) per l'iscrizione al corso di ${allievaInfo.Disciplina} dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
+          allievaInfo.Nome
+        } ${
+          allievaInfo.Cognome
+        } , C.F. ${
+          allievaInfo.CodiceFiscale
+        }, nato/a a ${
+          allievaInfo.LuogoNascita
+        }, il ${
+          allievaInfo.DataNascita
+        } residente in ${
+          allievaInfo.Indirizzo
+        }, ${
+          allievaInfo.Citta
+        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
+          ricevutaInfo.SommaEuro
+        }€ (${
+          EuroInLettere.toUpperCase()
+        } EURO${
+          CentesimiInLettere.toUpperCase()
+        }) per l'iscrizione al corso di ${
+          allievaInfo.Disciplina
+        } dal ${
+          ricevutaInfo.DataInizioCorso
+        } al ${
+          ricevutaInfo.DataScadenzaCorso
+        }`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
