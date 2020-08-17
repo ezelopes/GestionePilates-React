@@ -1,16 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from 'react-mdl';
-import { PDFDownloadLink } from '@react-pdf/renderer'
 import NotFoundPage from './notfoundpage';
 import ListaRicevute from '../components/lista_ricevute';
 import FormCreaRicevuta from '../components/form_crea_ricevuta';
-import ModuloIscrizione from '../helpers/pdf-template-modulo-iscrizione';
+
+const React = require('react');
+const { useState, useEffect } = require('react');
+const { Button } = require('react-mdl');
+const { Link } = require('react-router-dom');
+const pdfMake = require('pdfmake/build/pdfmake.js');
+const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const pdfTemplateModuloIscrizione = require('../helpers/pdf-template-modulo-iscrizione-old');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+require('ag-grid-community/dist/styles/ag-grid.css');
+require('ag-grid-community/dist/styles/ag-theme-balham.css');
+
 
 function Allieva({ match }) {
   const CodiceFiscale = match.params.codicefiscale;
   const [allievaInfo, setAllievaInfo] = useState({});
   const [allievaRicevute, setAllievaRicevute] = useState([]);
+
+  const stampaModuloIscrizione = async () => {
+    try {
+      const documentDefinition = await pdfTemplateModuloIscrizione.default(allievaInfo);
+      pdfMake.createPdf(documentDefinition).open();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +53,11 @@ function Allieva({ match }) {
           {allievaInfo.Nome} {allievaInfo.Cognome}
         </h2>
 
-        <PDFDownloadLink
+        <Button raised ripple id="buttonStampaRicevute" onClick={stampaModuloIscrizione} style={{ marginTop: '2em' }}>
+          SCARICA MODULO ISCRIZIONE
+        </Button>
+
+        {/* <PDFDownloadLink
           document={<ModuloIscrizione allievaInfo={allievaInfo} />}
           fileName={`Modulo_Iscrizione_${allievaInfo.Cognome}_${allievaInfo.Nome}`}
           style={{
@@ -54,7 +76,7 @@ function Allieva({ match }) {
           {({ blob, url, loading, error }) =>
             loading ? "Loading document..." : "SCARICA MODULO ISCRIZIONE"
           }
-        </PDFDownloadLink>
+        </PDFDownloadLink> */}
 
         <Link
           to={{

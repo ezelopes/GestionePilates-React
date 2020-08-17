@@ -7,6 +7,9 @@ const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const pdfTemplateMaggiorenni = require('../helpers/pdf-template-maggiorenni');
 const pdfTemplateMinorenni = require('../helpers/pdf-template-minorenni');
 
+const pdfTemplateQuotaAssociativaMaggiorenni = require('../helpers/pdf-template-quota-associativa-maggiorenni');
+const pdfTemplateQuotaAssociativaMinorenni = require('../helpers/pdf-template-quota-associativa-minorenni');
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 require('ag-grid-community/dist/styles/ag-grid.css');
@@ -45,14 +48,19 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     if (ricevuteSelezionate.length === 0 || ricevuteSelezionate.length > 1) return;
 
     try {
-      // CHIEDI COME STAMPARE QUOTA ASSOCIATIVA
       let documentDefinition;
-      if (allievaInfo.Maggiorenne === 'Maggiorenne') {
+
+      if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota') 
         documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      } else {
+      else if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota Associativa')
+        documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
+      else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota')
         documentDefinition = await pdfTemplateMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      }
-      pdfMake.createPdf(documentDefinition).open({}, window);
+      else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota Associativa')
+        documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
+      
+
+      pdfMake.createPdf(documentDefinition).open();
     } catch (error) {
       console.log(error);
     }
