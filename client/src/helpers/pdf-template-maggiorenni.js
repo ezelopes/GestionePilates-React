@@ -23,8 +23,6 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
 
   const tipoPagamento = ricevutaInfo.TipoPagamento.toUpperCase();
 
-  const today = formatDate(new Date(), false); // forse DataRicevuta?
-
   const docDefinition = {
     info: {
       title: `${ricevutaInfo.NumeroRicevuta}_${allievaInfo.Nome}_${allievaInfo.Cognome}_Ricevuta`,
@@ -89,7 +87,7 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${today}`,
+        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -178,7 +176,7 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${today}`,
+        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]

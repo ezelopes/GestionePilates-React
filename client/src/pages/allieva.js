@@ -8,7 +8,7 @@ const { Button } = require('react-mdl');
 const { Link } = require('react-router-dom');
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const pdfTemplateModuloIscrizione = require('../helpers/pdf-template-modulo-iscrizione-old');
+const pdfTemplateModuloIscrizione = require('../helpers/pdf-template-modulo-iscrizione');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
