@@ -1,8 +1,8 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('./get-base64-image');
-const formatDate = require('./format-date-for-input-date');
-const convertNumberIntoWord = require('./convert-number-in-words');
+const getBase64ImageFromURL = require('../helpers/get-base64-image');
+const formatDate = require('../helpers/format-date-for-input-date');
+const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -63,8 +63,10 @@ const pdfTemplateQuotaAssociativaMaggiorenni = async (allievaInfo, ricevutaInfo)
             allievaInfo.CodiceFiscale
         }, nato/a a ${
             allievaInfo.LuogoNascita
-        }, il ${
-            allievaInfo.DataNascita
+        }, il ${ 
+          (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+            ? '____/____/________'
+            : allievaInfo.DataNascita
         } residente in ${
             allievaInfo.Indirizzo
         }, ${
@@ -81,7 +83,11 @@ const pdfTemplateQuotaAssociativaMaggiorenni = async (allievaInfo, ricevutaInfo)
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
+        text: `Stezzano, ${ 
+          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+            ? '____/____/________'
+            : ricevutaInfo.DataRicevuta
+        }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -146,8 +152,10 @@ const pdfTemplateQuotaAssociativaMaggiorenni = async (allievaInfo, ricevutaInfo)
             allievaInfo.CodiceFiscale
         }, nato/a a ${
             allievaInfo.LuogoNascita
-        }, il ${
-            allievaInfo.DataNascita
+        }, il ${ 
+          (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+            ? '____/____/________'
+            : allievaInfo.DataNascita
         } residente in ${
             allievaInfo.Indirizzo
         }, ${
@@ -164,7 +172,11 @@ const pdfTemplateQuotaAssociativaMaggiorenni = async (allievaInfo, ricevutaInfo)
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
+        text: `Stezzano, ${ 
+          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+            ? '____/____/________'
+            : ricevutaInfo.DataRicevuta
+        }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]

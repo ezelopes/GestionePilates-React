@@ -4,11 +4,11 @@ const { Button } = require('react-mdl');
 const { AgGridReact } = require('ag-grid-react');
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const pdfTemplateMaggiorenni = require('../helpers/pdf-template-maggiorenni');
-const pdfTemplateMinorenni = require('../helpers/pdf-template-minorenni');
+const pdfTemplateMaggiorenni = require('../pdfTemplates/pdf-template-maggiorenni');
+const pdfTemplateMinorenni = require('../pdfTemplates/pdf-template-minorenni');
 
-const pdfTemplateQuotaAssociativaMaggiorenni = require('../helpers/pdf-template-quota-associativa-maggiorenni');
-const pdfTemplateQuotaAssociativaMinorenni = require('../helpers/pdf-template-quota-associativa-minorenni');
+const pdfTemplateQuotaAssociativaMaggiorenni = require('../pdfTemplates/pdf-template-quota-associativa-maggiorenni');
+const pdfTemplateQuotaAssociativaMinorenni = require('../pdfTemplates/pdf-template-quota-associativa-minorenni');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -28,7 +28,7 @@ const gridOptionsDefault = {
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true, editable: true },
   { headerName: 'Tipo Ricevuta', field: 'TipoRicevuta', editable: true },
-  { headerName: 'Data Ricevuta', field: 'DataRicevuta', editable: true },
+  { headerName: 'Data Ricevuta', field: 'DataRicevuta', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
   { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
   { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
   { headerName: 'Somma Euro', field: 'SommaEuro', editable: true },

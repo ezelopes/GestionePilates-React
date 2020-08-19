@@ -62,6 +62,7 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
     });
     const responseParsed = await response.json();
     alert(responseParsed.message);
+    window.location.reload();
   };
 
   return (

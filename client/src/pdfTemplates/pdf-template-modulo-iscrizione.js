@@ -1,12 +1,13 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('./get-base64-image');
+const getBase64ImageFromURL = require('../helpers/get-base64-image');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateModuloIscrizione = async allievaInfo => {
   // print only if allievaInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const BLANK_SPACE = '___________________________';
 
   const docDefinition = {
     info: {
@@ -36,21 +37,25 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
       {
         text: [
           'Il sottoscritto/a ',
-          { text: `${allievaInfo.Nome} ${allievaInfo.Cognome}`, bold: true },
+          { text: `${allievaInfo.Nome || BLANK_SPACE } ${allievaInfo.Cognome || BLANK_SPACE }`, bold: true },
           ' nato/a a ',
-          { text: `${allievaInfo.LuogoNascita}`, bold: true },
+          { text: `${allievaInfo.LuogoNascita || BLANK_SPACE }`, bold: true },
           ' il ',
-          { text: `${allievaInfo.DataNascita}`, bold: true },
+          { text: `${ 
+            (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+              ? '____/____/________'
+              : allievaInfo.DataNascita
+          }`, bold: true },
           ' C.F. ',
-          { text: `${allievaInfo.CodiceFiscale}`, bold: true },
-          '. Residente in via ',
-          { text: `${allievaInfo.Indirizzo}`, bold: true },
+          { text: `${allievaInfo.CodiceFiscale || BLANK_SPACE }`, bold: true },
+          '. Residente in ',
+          { text: `${allievaInfo.Indirizzo || BLANK_SPACE }`, bold: true },
           ' a ',
-          { text: `${allievaInfo.Citta}`, bold: true },
+          { text: `${allievaInfo.Citta || BLANK_SPACE }`, bold: true },
           '. Cellulare: ',
-          { text: `${allievaInfo.Cellulare}`, bold: true },
+          { text: `${allievaInfo.Cellulare || BLANK_SPACE }`, bold: true },
           ' Email: ',
-          { text: `${allievaInfo.Email}`, bold: true }
+          { text: `${allievaInfo.Email || BLANK_SPACE }`, bold: true }
         ],
         alignment: 'left',
         fontSize: 10,
@@ -92,9 +97,9 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
       {
         text: [
           'La disciplina sportiva svolta nella ASD PIL ART è ',
-          { text: `${allievaInfo.Disciplina}`, bold: true },
+          { text: `${allievaInfo.Disciplina || BLANK_SPACE }`, bold: true },
           ' per cui il socio ci consegna un certificato medico di idoneità sportiva con scadenza ',
-          { text: `${allievaInfo.DataCertificato}`, bold: true },
+          { text: `${allievaInfo.DataCertificato || BLANK_SPACE }`, bold: true },
           ' del tipo:'
         ],
         alignment: 'left',
@@ -159,13 +164,13 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore} ${allievaInfo.CognomeGenitore}`,
+        text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore || BLANK_SPACE } ${allievaInfo.CognomeGenitore}`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Codice Fiscale di chi firma: ${allievaInfo.CodiceFiscaleGenitore}`,
+        text: `Codice Fiscale di chi firma: ${allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]

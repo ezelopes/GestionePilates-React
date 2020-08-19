@@ -1,14 +1,13 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('./get-base64-image');
-const formatDate = require('./format-date-for-input-date');
-const convertNumberIntoWord = require('./convert-number-in-words');
+const getBase64ImageFromURL = require('../helpers/get-base64-image');
+const formatDate = require('../helpers/format-date-for-input-date');
+const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
+const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-
   let somma = ricevutaInfo.SommaEuro;
   somma = somma.replace('.', ',')
   const euro_and_centesimi = somma.split(',');
@@ -56,38 +55,51 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          allievaInfo.Nome
+          allievaInfo.NomeGenitore
         } ${
-          allievaInfo.Cognome
-        } , C.F. ${
-          allievaInfo.CodiceFiscale
-        }, nato/a a ${
-          allievaInfo.LuogoNascita
-        }, il ${
-          allievaInfo.DataNascita
-        } residente in ${
-          allievaInfo.Indirizzo
-        }, ${
-          allievaInfo.Citta
+          allievaInfo.CognomeGenitore
+        }, C.F. ${
+          allievaInfo.CodiceFiscaleGenitore
         }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
         }€ (${
           EuroInLettere.toUpperCase()
         } EURO${
           CentesimiInLettere.toUpperCase()
-        }) per l'iscrizione al corso di ${
-          allievaInfo.Disciplina
-        } dal ${
-          ricevutaInfo.DataInizioCorso
-        } al ${
-          ricevutaInfo.DataScadenzaCorso
-        }`,
+        }), per il contributo relativo alla quota associativa di ${
+          allievaInfo.Nome
+        } ${
+          allievaInfo.Cognome
+        }, C.F. ${
+          allievaInfo.CodiceFiscale
+        } nato/a a ${
+          allievaInfo.LuogoNascita
+        }, il ${ 
+          (ricevutaInfo.DataNascita === 'Invalid date' || !ricevutaInfo.DataNascita) 
+            ? '____/____/________'
+            : ricevutaInfo.DataNascita
+        } residente in ${
+          allievaInfo.Indirizzo
+        }, ${
+          allievaInfo.Citta
+        } della durata di un anno.`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
+        text:
+          'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
+        alignment: 'center',
+        fontSize: 10,
+        margin: [0, 0, 0, 15]
+      },
+      {
+        text: `Stezzano, ${ 
+          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+            ? '____/____/________'
+            : ricevutaInfo.DataRicevuta
+        }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -145,38 +157,51 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          allievaInfo.Nome
+          allievaInfo.NomeGenitore
         } ${
-          allievaInfo.Cognome
-        } , C.F. ${
-          allievaInfo.CodiceFiscale
-        }, nato/a a ${
-          allievaInfo.LuogoNascita
-        }, il ${
-          allievaInfo.DataNascita
-        } residente in ${
-          allievaInfo.Indirizzo
-        }, ${
-          allievaInfo.Citta
+          allievaInfo.CognomeGenitore
+        }, C.F. ${
+          allievaInfo.CodiceFiscaleGenitore
         }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
           ricevutaInfo.SommaEuro
         }€ (${
           EuroInLettere.toUpperCase()
         } EURO${
           CentesimiInLettere.toUpperCase()
-        }) per l'iscrizione al corso di ${
-          allievaInfo.Disciplina
-        } dal ${
-          ricevutaInfo.DataInizioCorso
-        } al ${
-          ricevutaInfo.DataScadenzaCorso
-        }`,
+        }), per il contributo relativo alla quota associativa di ${
+          allievaInfo.Nome
+        } ${
+          allievaInfo.Cognome
+        }, C.F. ${
+          allievaInfo.CodiceFiscale
+        } nato/a a ${
+          allievaInfo.LuogoNascita
+        }, il ${ 
+          (ricevutaInfo.DataNascita === 'Invalid date' || !ricevutaInfo.DataNascita) 
+            ? '____/____/________'
+            : ricevutaInfo.DataNascita
+        } residente in ${
+          allievaInfo.Indirizzo
+        }, ${
+          allievaInfo.Citta
+        } della durata di un anno.`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
+        text:
+          'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
+        alignment: 'center',
+        fontSize: 10,
+        margin: [0, 0, 0, 15]
+      },
+      {
+        text: `Stezzano, ${ 
+          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+            ? '____/____/________'
+            : ricevutaInfo.DataRicevuta
+        }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -211,4 +236,33 @@ const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
   return docDefinition;
 };
 
-export default pdfTemplateMaggiorenni;
+export default pdfTemplateQuotaAssociativaMinorenni;
+
+
+
+
+/**
+ 											Ricevuta n° 000/00
+
+
+L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9/A, C.F. 95229530167
+
+DICHIARA
+
+di aver ricevuto dal/dalla Sig./Sig.Ra SARA BARTOLI, C.F. BRTSRA82D60A794X, il pagamento effettuato 
+equivalente alla somma di 10 € (DIECI Euro), per il contributo quota associativa di AMELIE NEGRONI, C.F. NGRMLA10D70A794W nato/a a BERGAMO, il 30/04/2010 residente in Via Castellana 15/A, STEZZANO
+per la durata di un anno. 
+
+Si comunica che ai sensi dell’art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a
+210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni,
+ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso
+dei requisiti a tal fine richiesti
+
+Stezzano, 00/00/0000
+
+Il Presidente
+Roxana Carro
+
+Pil-Art è affiliata all’Acsi e regolarmente iscritta sul registro del CONI
+
+ */

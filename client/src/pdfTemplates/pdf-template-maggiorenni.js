@@ -1,13 +1,15 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('./get-base64-image');
-const formatDate = require('./format-date-for-input-date');
-const convertNumberIntoWord = require('./convert-number-in-words');
+const getBase64ImageFromURL = require('../helpers/get-base64-image');
+const formatDate = require('../helpers/format-date-for-input-date');
+const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
+const pdfTemplateMaggiorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const BLANK_SPACE = '___________________________';
+
   let somma = ricevutaInfo.SommaEuro;
   somma = somma.replace('.', ',')
   const euro_and_centesimi = somma.split(',');
@@ -35,7 +37,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta}`,
+        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE }`,
         alignment: 'right',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -54,32 +56,49 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${allievaInfo.NomeGenitore} ${
-          allievaInfo.CognomeGenitore
-        }, C.F. ${
-          allievaInfo.CodiceFiscaleGenitore
+        text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
+          allievaInfo.Nome || BLANK_SPACE 
+        } ${
+          allievaInfo.Cognome || BLANK_SPACE 
+        } , C.F. ${
+          allievaInfo.CodiceFiscale || BLANK_SPACE 
+        }, nato/a a ${
+          allievaInfo.LuogoNascita || BLANK_SPACE 
+        }, il ${ 
+          (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+            ? '____/____/________'
+            : allievaInfo.DataNascita
+        } residente in ${
+          allievaInfo.Indirizzo || BLANK_SPACE 
+        }, ${
+          allievaInfo.Citta || BLANK_SPACE 
         }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
-          ricevutaInfo.SommaEuro
-        }€ (${EuroInLettere.toUpperCase()} EURO${CentesimiInLettere.toUpperCase()}), per l'iscrizione di ${allievaInfo.Nome} ${
-          allievaInfo.Cognome
-        }, C.F. ${allievaInfo.CodiceFiscale} nato/a a ${allievaInfo.LuogoNascita}, il ${
-          allievaInfo.DataNascita
-        } residente in ${allievaInfo.Indirizzo}, ${allievaInfo.Citta} al corso di ${
-          allievaInfo.Disciplina
-        } dal ${ricevutaInfo.DataInizioCorso} al ${ricevutaInfo.DataScadenzaCorso}`,
+          ricevutaInfo.SommaEuro || BLANK_SPACE 
+        }€ (${
+          EuroInLettere.toUpperCase() || BLANK_SPACE 
+        } EURO${
+          CentesimiInLettere.toUpperCase()
+        }) per l'iscrizione al corso di ${
+          allievaInfo.Disciplina || BLANK_SPACE 
+        } dal ${ 
+          (ricevutaInfo.DataInizioCorso === 'Invalid date' || !ricevutaInfo.DataInizioCorso) 
+            ? '____/____/________'
+            : ricevutaInfo.DataInizioCorso
+        } al ${ 
+          (ricevutaInfo.DataScadenzaCorso === 'Invalid date' || !ricevutaInfo.DataScadenzaCorso) 
+            ? '____/____/________'
+            : ricevutaInfo.DataScadenzaCorso
+        }`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
       },
       {
-        text:
-          'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
-        alignment: 'center',
-        fontSize: 10,
-        margin: [0, 0, 0, 15]
-      },
-      {
-        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
+        text: `Stezzano, ${ 
+          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+            ? '____/____/________'
+            : ricevutaInfo.DataRicevuta
+        }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -117,7 +136,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta}`,
+        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE }`,
         alignment: 'right',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -137,50 +156,48 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          allievaInfo.NomeGenitore
+          allievaInfo.Nome || BLANK_SPACE 
         } ${
-          allievaInfo.CognomeGenitore
-        }, C.F. ${
-          allievaInfo.CodiceFiscaleGenitore
-        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
-          ricevutaInfo.SommaEuro
-        }€ (${
-          EuroInLettere.toUpperCase()
-        } EURO${CentesimiInLettere.toUpperCase()
-        }), per l'iscrizione di ${
-          allievaInfo.Nome
-        } ${
-          allievaInfo.Cognome
-        }, C.F. ${
-          allievaInfo.CodiceFiscale
-        } nato/a a ${
-          allievaInfo.LuogoNascita
-        }, il ${
-          allievaInfo.DataNascita
+          allievaInfo.Cognome || BLANK_SPACE 
+        } , C.F. ${
+          allievaInfo.CodiceFiscale || BLANK_SPACE 
+        }, nato/a a ${
+          allievaInfo.LuogoNascita || BLANK_SPACE 
+        }, il ${ 
+          (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+            ? '____/____/________'
+            : allievaInfo.DataNascita
         } residente in ${
-          allievaInfo.Indirizzo
+          allievaInfo.Indirizzo || BLANK_SPACE 
         }, ${
-          allievaInfo.Citta
-        } al corso di ${
-          allievaInfo.Disciplina
-        } dal ${
-          ricevutaInfo.DataInizioCorso
-        } al ${
-          ricevutaInfo.DataScadenzaCorso
+          allievaInfo.Citta || BLANK_SPACE 
+        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
+          ricevutaInfo.SommaEuro || BLANK_SPACE 
+        }€ (${
+          EuroInLettere.toUpperCase() || BLANK_SPACE 
+        } EURO${
+          CentesimiInLettere.toUpperCase()
+        }) per l'iscrizione al corso di ${
+          allievaInfo.Disciplina || BLANK_SPACE 
+        } dal ${ 
+          (ricevutaInfo.DataInizioCorso === 'Invalid date' || !ricevutaInfo.DataInizioCorso) 
+            ? '____/____/________'
+            : ricevutaInfo.DataInizioCorso
+        } al ${ 
+          (ricevutaInfo.DataScadenzaCorso === 'Invalid date' || !ricevutaInfo.DataScadenzaCorso) 
+            ? '____/____/________'
+            : ricevutaInfo.DataScadenzaCorso
         }`,
         alignment: 'center',
         fontSize: 10,
         margin: [0, 0, 0, 15]
       },
       {
-        text:
-          'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
-        alignment: 'center',
-        fontSize: 10,
-        margin: [0, 0, 0, 15]
-      },
-      {
-        text: `Stezzano, ${ricevutaInfo.DataRicevuta}`,
+        text: `Stezzano, ${ 
+          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+            ? '____/____/________'
+            : ricevutaInfo.DataRicevuta
+        }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
@@ -208,11 +225,11 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         alignment: 'left',
         fontSize: 8,
         margin: [0, 0, 0, 15]
-      }
+      },
     ]
   };
 
   return docDefinition;
 };
 
-export default pdfTemplateMinorenni;
+export default pdfTemplateMaggiorenni;
