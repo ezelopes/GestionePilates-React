@@ -53,8 +53,14 @@ function PaginaAllieve(/*props*/) {
       const result = await fetch('/api/getAllieve');
       const body = await result.json();
       setRowData(body);
+      localStorage.setItem('listaAllieve', JSON.stringify(body));
     };
-    fetchData();
+    
+    if (!localStorage.getItem('listaAllieve') || (localStorage.getItem('listaAllieve') === [])) fetchData();
+    else {
+      const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+      setRowData(listaAllieveCached)
+    }
   }, []);
 
   return (

@@ -60,6 +60,28 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       return;
     }
 
+    const dataAllievaModificata = {
+      Selected_CodiceFiscale: allievaInfo.CodiceFiscale,
+      CodiceFiscale: document.getElementById('textCodiceFiscale').value,
+      Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
+      Nome: document.getElementById('textNomeAllieva').value,
+      Cognome: document.getElementById('textCognomeAllieva').value,
+      Citta: document.getElementById('textCitta').value,
+      Indirizzo: document.getElementById('textIndirizzo').value,
+      Cellulare: document.getElementById('textCellulare').value,
+      Email: document.getElementById('textEmail').value,
+      DataIscrizione: document.getElementById('dtpDataIscrizione').value,
+      DataCertificato: document.getElementById('dtpDataCertificato').value,
+      DataNascita: document.getElementById('dtpDataNascita').value,
+      LuogoNascita: document.getElementById('textLuogoNascita').value,
+      Disciplina: document.getElementById('comboboxDisciplina_input').value,
+      Corso: document.getElementById('comboboxCorso_input').value,
+      Scuola: document.getElementById('comboboxScuola_input').value,
+      CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
+      NomeGenitore: document.getElementById('textNomeGenitore').value,
+      CognomeGenitore: document.getElementById('textCognomeGenitore').value
+    };
+
     const response = await fetch('/api/modificaAllieva', {
       method: 'POST',
       headers: {
@@ -67,29 +89,23 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         'Content-Type': 'application/json'
         // Authorization: 'Bearer ' + idToken
       },
-      body: JSON.stringify({
-        Selected_CodiceFiscale: allievaInfo.CodiceFiscale,
-        CodiceFiscale: document.getElementById('textCodiceFiscale').value,
-        Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
-        Nome: document.getElementById('textNomeAllieva').value,
-        Cognome: document.getElementById('textCognomeAllieva').value,
-        Citta: document.getElementById('textCitta').value,
-        Indirizzo: document.getElementById('textIndirizzo').value,
-        Cellulare: document.getElementById('textCellulare').value,
-        Email: document.getElementById('textEmail').value,
-        DataIscrizione: document.getElementById('dtpDataIscrizione').value,
-        DataCertificato: document.getElementById('dtpDataCertificato').value,
-        DataNascita: document.getElementById('dtpDataNascita').value,
-        LuogoNascita: document.getElementById('textLuogoNascita').value,
-        Disciplina: document.getElementById('comboboxDisciplina_input').value,
-        Corso: document.getElementById('comboboxCorso_input').value,
-        Scuola: document.getElementById('comboboxScuola_input').value,
-        CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
-        NomeGenitore: document.getElementById('textNomeGenitore').value,
-        CognomeGenitore: document.getElementById('textCognomeGenitore').value
-      })
+      body: JSON.stringify(dataAllievaModificata)
     });
     const responseParsed = await response.json();
+
+    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+    console.log(listaAllieveCached);
+
+    delete dataAllievaModificata.Selected_CodiceFiscale;
+
+    const listaAllieveCachedUpdated = listaAllieveCached.filter((currentAllieva) => {
+      if(currentAllieva.CodiceFiscale !== dataAllievaModificata.CodiceFiscale) return currentAllieva;
+    })
+
+    listaAllieveCachedUpdated.push(dataAllievaModificata);
+
+    localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCachedUpdated));
+
     alert(responseParsed.message);
     resetForm();
   };
@@ -100,6 +116,8 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       return;
     }
 
+    const codiceFiscaleAllievaDaEliminare = document.getElementById('textCodiceFiscale').value;
+
     const response = await fetch('/api/eliminaAllieva', {
       method: 'DELETE',
       headers: {
@@ -108,10 +126,22 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
-        CodiceFiscale: document.getElementById('textCodiceFiscale').value
+        CodiceFiscale: codiceFiscaleAllievaDaEliminare
       })
     });
     const responseParsed = await response.json();
+
+    
+    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+    console.log(listaAllieveCached);
+
+    const listaAllieveCachedUpdated = listaAllieveCached.filter((currentAllieva) => {
+      if(currentAllieva.CodiceFiscale !== codiceFiscaleAllievaDaEliminare) return currentAllieva;
+    })
+
+    localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCachedUpdated));
+    
+
     alert(responseParsed.message);
     resetForm();
   };
