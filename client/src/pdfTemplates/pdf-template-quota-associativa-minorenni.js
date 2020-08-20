@@ -1,7 +1,6 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('../helpers/get-base64-image');
-const formatDate = require('../helpers/format-date-for-input-date');
 const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -37,21 +36,25 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
       {
         text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta}`,
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'DICHIARA',
+        bold: true,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
@@ -76,7 +79,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
           allievaInfo.LuogoNascita
         }, il ${ 
           (ricevutaInfo.DataNascita === 'Invalid date' || !ricevutaInfo.DataNascita) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataNascita
         } residente in ${
           allievaInfo.Indirizzo
@@ -84,53 +87,60 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
           allievaInfo.Citta
         } della durata di un anno.`,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `Stezzano, ${ 
           (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataRicevuta
         }`,
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Il Presidente',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
         text: 'Roxana Carro',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'FIRMA ______________________________',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 1 }],
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         image: label_logo,
@@ -139,21 +149,25 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
       {
         text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta}`,
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'DICHIARA',
+        bold: true,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
@@ -178,7 +192,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
           allievaInfo.LuogoNascita
         }, il ${ 
           (ricevutaInfo.DataNascita === 'Invalid date' || !ricevutaInfo.DataNascita) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataNascita
         } residente in ${
           allievaInfo.Indirizzo
@@ -186,49 +200,56 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
           allievaInfo.Citta
         } della durata di un anno.`,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `Stezzano, ${ 
           (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataRicevuta
         }`,
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Il Presidente',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
         text: 'Roxana Carro',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'FIRMA ______________________________',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       }
     ]
   };
@@ -237,32 +258,3 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
 };
 
 export default pdfTemplateQuotaAssociativaMinorenni;
-
-
-
-
-/**
- 											Ricevuta n° 000/00
-
-
-L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9/A, C.F. 95229530167
-
-DICHIARA
-
-di aver ricevuto dal/dalla Sig./Sig.Ra SARA BARTOLI, C.F. BRTSRA82D60A794X, il pagamento effettuato 
-equivalente alla somma di 10 € (DIECI Euro), per il contributo quota associativa di AMELIE NEGRONI, C.F. NGRMLA10D70A794W nato/a a BERGAMO, il 30/04/2010 residente in Via Castellana 15/A, STEZZANO
-per la durata di un anno. 
-
-Si comunica che ai sensi dell’art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a
-210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni,
-ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso
-dei requisiti a tal fine richiesti
-
-Stezzano, 00/00/0000
-
-Il Presidente
-Roxana Carro
-
-Pil-Art è affiliata all’Acsi e regolarmente iscritta sul registro del CONI
-
- */

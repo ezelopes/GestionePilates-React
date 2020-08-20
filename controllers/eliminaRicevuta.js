@@ -1,14 +1,14 @@
 const { Router } = require('express');
 const database = require('../helpers/database');
 
-const eliminaRicevuteRouter = new Router();
+const eliminaRicevutaRouter = new Router();
 
-eliminaRicevuteRouter.get('/', eliminaRicevute);
+eliminaRicevutaRouter.get('/', eliminaRicevuta);
 
-async function eliminaRicevute(req, res, next) {
+async function eliminaRicevuta(req, res, next) {
   try {
     const RicevuteId = req.body.RicevuteId;
-    const response = await database.eliminaRicevute(RicevuteId);
+    const response = await database.eliminaRicevuta(RicevuteId);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -17,4 +17,4 @@ async function eliminaRicevute(req, res, next) {
   }
 }
 
-module.exports = eliminaRicevute;
+module.exports = eliminaRicevuta;

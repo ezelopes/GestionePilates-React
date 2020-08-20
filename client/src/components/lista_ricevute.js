@@ -28,9 +28,9 @@ const gridOptionsDefault = {
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true, editable: true },
   { headerName: 'Tipo Ricevuta', field: 'TipoRicevuta', editable: true },
-  { headerName: 'Data Ricevuta', field: 'DataRicevuta', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true, cellRenderer: (params) => (params.value != 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Ricevuta', field: 'DataRicevuta', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Somma Euro', field: 'SommaEuro', editable: true },
   { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true },
   { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
@@ -66,26 +66,27 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     }
   };
 
-  const eliminaRicevute = async () => {
+  const eliminaRicevuta = async () => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
     if (ricevuteSelezionate.length === 0) return;
 
-    const idRicevuteSelezionate = ricevuteSelezionate.map(ricevuta => {
-      return ricevuta.data.RicevutaID;
-    });
+    const ricevutaIDSelezionata = ricevuteSelezionate[0].data.RicevutaID;
+    console.log(JSON.stringify(ricevuteSelezionate[0].data));
+    console.log(ricevute);
 
-    const response = await fetch('/api/eliminaRicevute', {
+    const response = await fetch('/api/eliminaRicevuta', {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        RicevuteId: idRicevuteSelezionate
+        RicevuteId: ricevutaIDSelezionata
       })
     });
     const responseParsed = await response.json();
     alert(responseParsed.message);
+    window.location.reload();
   };
 
   const modificaRicevuta = async (event) => {
@@ -135,8 +136,8 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
       <Button
         raised
         ripple
-        id="buttonEliminaRicevute"
-        onClick={eliminaRicevute}
+        id="buttonEliminaRicevuta"
+        onClick={eliminaRicevuta}
         style={{ marginTop: '2em', marginLeft: '2em' }}
       >
         Elimina Ricevuta

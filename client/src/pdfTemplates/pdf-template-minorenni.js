@@ -1,7 +1,6 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('../helpers/get-base64-image');
-const formatDate = require('../helpers/format-date-for-input-date');
 const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -39,21 +38,25 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
       {
         text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE }`,
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'DICHIARA',
+        bold: true,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
@@ -74,7 +77,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.LuogoNascita || BLANK_SPACE 
         }, il ${ 
           (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
-            ? '____/____/________'
+            ? '______/______/________'
             : allievaInfo.DataNascita
         } residente in ${
           allievaInfo.Indirizzo || BLANK_SPACE 
@@ -84,61 +87,68 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.Disciplina || BLANK_SPACE 
         } dal ${ 
           (ricevutaInfo.DataInizioCorso === 'Invalid date' || !ricevutaInfo.DataInizioCorso) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataInizioCorso
         } al ${ 
           (ricevutaInfo.DataScadenzaCorso === 'Invalid date' || !ricevutaInfo.DataScadenzaCorso) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataScadenzaCorso
         }`,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `Stezzano, ${ 
           (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataRicevuta
         }`,
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Il Presidente',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
         text: 'Roxana Carro',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'FIRMA ______________________________',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 1 }],
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         image: label_logo,
@@ -147,21 +157,25 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
       {
         text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE }`,
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'DICHIARA',
+        bold: true,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
@@ -182,7 +196,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.LuogoNascita || BLANK_SPACE 
         }, il ${ 
           (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
-            ? '____/____/________'
+            ? '______/______/________'
             : allievaInfo.DataNascita
         } residente in ${
           allievaInfo.Indirizzo || BLANK_SPACE 
@@ -192,57 +206,64 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
           allievaInfo.Disciplina || BLANK_SPACE 
         } dal ${ 
           (ricevutaInfo.DataInizioCorso === 'Invalid date' || !ricevutaInfo.DataInizioCorso) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataInizioCorso
         } al ${ 
           (ricevutaInfo.DataScadenzaCorso === 'Invalid date' || !ricevutaInfo.DataScadenzaCorso) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataScadenzaCorso
         }`,
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `Stezzano, ${ 
           (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
-            ? '____/____/________'
+            ? '______/______/________'
             : ricevutaInfo.DataRicevuta
         }`,
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Il Presidente',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
         text: 'Roxana Carro',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'FIRMA ______________________________',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
     ]
   };

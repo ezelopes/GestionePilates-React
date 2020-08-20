@@ -5,9 +5,8 @@ const reverseDate = date => {
   const month = dateSplit[1];
   const year = dateSplit[2];
 
-  const dateFormatted = `${year}-${month}-${day}`;
-
-  return dateFormatted;
+  if (day && month && year) return `${year}-${month}-${day}`;
+  else return '1900-01-01';
 };
 
 module.exports = reverseDate;

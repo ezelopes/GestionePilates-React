@@ -7,7 +7,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const pdfTemplateModuloIscrizione = async allievaInfo => {
   // print only if allievaInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const BLANK_SPACE = '___________________________';
+  const BLANK_SPACE = '________________________________________';
 
   const docDefinition = {
     info: {
@@ -22,16 +22,18 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         fit: [100, 100]
       },
       {
-        text: `Data ____/____/________`,
+        text: `Data ______/______/________`,
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'DOMANDA DI ISCRIZIONE A SOCIO / ATLETA',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15],
+        margin: [0, 0, 0, 12],
         bold: true
       },
       {
@@ -43,7 +45,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
           ' il ',
           { text: `${ 
             (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
-              ? '____/____/________'
+              ? '______/______/________'
               : allievaInfo.DataNascita
           }`, bold: true },
           ' C.F. ',
@@ -58,15 +60,17 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
           { text: `${allievaInfo.Email || BLANK_SPACE }`, bold: true }
         ],
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text:
           'richiede la tessere associativa alla A.S.D PIL ART sito a STEZZANO, Via CESARE BATTISTI n. 9/A',
         alignment: 'center',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15],
+        margin: [0, 0, 0, 12],
         bold: true
       },
 
@@ -75,34 +79,42 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
           {
             text:
               '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti sul sito www.acsi.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione dichiara che, tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. La parte cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti saranno inseriti nella piattaforma nazionale di ACSI (ente di promozione sportiva).',
-            fontSize: 8
+            lineHeight: 1.5,
+              fontSize: 10
           },
           {
             text:
               ' 3-Autorizzo ad effettuare ed utilizzare riprese fotografiche e video per poter propagandare le attività sociali sui canali ufficiali dell’Associazione (sitoweb/facebook/ecc...), ',
             bold: true,
+            lineHeight: 1.5,
             fontSize: 10
           },
-          { text: ' delle voci 1, 2, 3 ', fontSize: 8 },
+          { 
+            text: ' delle voci 1, 2, 3 ', 
+            fontSize: 10
+          },
           {
             text: 'ACCETTO',
             bold: true,
+            lineHeight: 1.5,
             fontSize: 10
           }
         ],
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: [
           'La disciplina sportiva svolta nella ASD PIL ART è ',
           { text: `${allievaInfo.Disciplina || BLANK_SPACE }`, bold: true },
           ' per cui il socio ci consegna un certificato medico di idoneità sportiva con scadenza ',
-          { text: `${allievaInfo.DataCertificato || BLANK_SPACE }`, bold: true },
+          { text: `${ '______/______/________' }`, bold: true },
           ' del tipo:'
         ],
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
@@ -124,30 +136,35 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
           }
         ],
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'La copertura assicurativa proposta è (barrare la copertura scelta)',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: '___ Base \t\t\t  ___ Integrativa \t\t\t ___ Superintegrativa',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'N. Tessera ACSI assegnato __________________',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Firma __________________________',
         alignment: 'right',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 25]
       },
@@ -159,25 +176,29 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         // bold
         text: 'PER I MINORI',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
         bold: true,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore || BLANK_SPACE } ${allievaInfo.CognomeGenitore || '' }`,
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: `Codice Fiscale di chi firma: ${allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE }`,
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 15]
+        margin: [0, 0, 0, 12]
       },
       {
         text: 'Firma del genitore ______________________________',
         alignment: 'left',
+        lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       }

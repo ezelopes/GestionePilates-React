@@ -24,6 +24,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
   allievaInfo = allievaInfoParam;
 
   useEffect(() => {
+    alert(reverseDate(allievaInfo.DataCertificato));
     if (allievaInfoParam) {
       allievaInfo = allievaInfoParam;
       document.getElementById('comboboxEta_input').value =
@@ -37,9 +38,9 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       document.getElementById('textIndirizzo').value = allievaInfo.Indirizzo;
       document.getElementById('textCellulare').value = allievaInfo.Cellulare;
       document.getElementById('textEmail').value = allievaInfo.Email;
-      document.getElementById('dtpDataIscrizione').value = reverseDate(allievaInfo.DataIscrizione);
-      document.getElementById('dtpDataCertificato').value = reverseDate(allievaInfo.DataCertificato);
-      document.getElementById('dtpDataNascita').value = reverseDate(allievaInfo.DataNascita);
+      document.getElementById('dtpDataIscrizione').value = reverseDate(allievaInfo.DataIscrizione) || '1900-01-01';
+      document.getElementById('dtpDataCertificato').value = reverseDate(allievaInfo.DataCertificato) || '1900-01-01';
+      document.getElementById('dtpDataNascita').value = reverseDate(allievaInfo.DataNascita) || '1900-01-01';
       document.getElementById('textLuogoNascita').value = allievaInfo.LuogoNascita;
       document.getElementById('comboboxDisciplina_input').value = allievaInfo.Disciplina;
       document.getElementById('comboboxCorso_input').value = allievaInfo.Corso;
@@ -219,7 +220,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
             placeholder="Seleziona Corso..."
           />
 
-          <label id="labelScuole"> Scuola Corso </label>
+          <label id="labelScuole"> Scuola </label>
           <Combobox
             id="comboboxScuola"
             data={scuole}

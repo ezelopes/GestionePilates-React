@@ -346,15 +346,11 @@ async function eliminaInsegnante(CodiceFiscale) {
   }
 }
 
-async function eliminaRicevute(RicevuteId) {
+async function eliminaRicevuta(RicevutaID) {
   try {
-    const deletePromises = [];
-    RicevuteId.map(RicevutaID => {
-      deletePromises.push(pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [RicevutaID]));
-    });
-    await Promise.all(deletePromises);
+    await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [RicevutaID])
 
-    return 'Ricevute Eliminate Correttamente!';
+    return 'Ricevuta Eliminata Correttamente!';
   } catch (error) {
     console.log(error);
     return `Errore nell'eliminare Ricevute!`;
@@ -411,5 +407,5 @@ module.exports = {
   modificaRicevuta,
   eliminaAllieva,
   eliminaInsegnante,
-  eliminaRicevute
+  eliminaRicevuta
 };

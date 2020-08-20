@@ -20,7 +20,7 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
   ];
   let tipoPagamento = [
     { id: 0, tipo: 'Contanti' },
-    { id: 1, tipo: 'Carta di Credito' },
+    { id: 1, tipo: 'Assegno' },
     { id: 2, tipo: 'Bonifico' }
   ];
   let sommaEuro = [

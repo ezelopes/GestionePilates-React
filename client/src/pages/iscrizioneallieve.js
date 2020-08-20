@@ -132,7 +132,7 @@ function IscrizioneAllieve() {
               placeholder="Seleziona Corso..."
             />
 
-            <label id="labelScuole"> Scuola Corso </label>
+            <label id="labelScuole"> Scuola </label>
             <Combobox
               id="comboboxScuola"
               data={scuole}
