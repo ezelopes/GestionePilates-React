@@ -164,7 +164,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         margin: [0, 0, 0, 15]
       },
       {
-        text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore || BLANK_SPACE } ${allievaInfo.CognomeGenitore}`,
+        text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore || BLANK_SPACE } ${allievaInfo.CognomeGenitore || '' }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 15]
