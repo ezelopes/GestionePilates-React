@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const database = require('../helpers/database');
+const database = require('../database/database');
 
 const creaAllievaRouter = new Router();
 
