@@ -7,8 +7,8 @@ eliminaAllievaRouter.get('/', eliminaAllieva);
 
 async function eliminaAllieva(req, res, next) {
   try {
-    const CodiceFiscale = req.body.CodiceFiscale;
-    const response = await database.eliminaAllieva(CodiceFiscale);
+    const AllievaID = req.body.AllievaID;
+    const response = await database.eliminaAllieva(AllievaID);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

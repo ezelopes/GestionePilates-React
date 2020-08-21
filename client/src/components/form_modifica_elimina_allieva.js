@@ -24,7 +24,6 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
   allievaInfo = allievaInfoParam;
 
   useEffect(() => {
-    alert(reverseDate(allievaInfo.DataCertificato));
     if (allievaInfoParam) {
       allievaInfo = allievaInfoParam;
       document.getElementById('comboboxEta_input').value =
@@ -55,16 +54,15 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
   }, [allievaInfo]);
 
   const modificaAllieva = async () => {
-    // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
     if (document.getElementById('textCodiceFiscale').value === '') {
       document.getElementById('textCodiceFiscale').style.borderColor = 'red';
       return;
     }
 
     const dataAllievaModificata = {
-      Selected_CodiceFiscale: allievaInfo.CodiceFiscale,
+      AllievaID: allievaInfo.AllievaID,
       CodiceFiscale: document.getElementById('textCodiceFiscale').value,
-      Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
+      Maggiorenne: document.getElementById('comboboxEta_input').value,
       Nome: document.getElementById('textNomeAllieva').value,
       Cognome: document.getElementById('textCognomeAllieva').value,
       Citta: document.getElementById('textCitta').value,
@@ -88,19 +86,16 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify(dataAllievaModificata)
     });
     const responseParsed = await response.json();
-
+    // check if query worked correctly first
     const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
     console.log(listaAllieveCached);
 
-    delete dataAllievaModificata.Selected_CodiceFiscale;
-
     const listaAllieveCachedUpdated = listaAllieveCached.filter((currentAllieva) => {
-      if(currentAllieva.CodiceFiscale !== dataAllievaModificata.CodiceFiscale) return currentAllieva;
+      if(currentAllieva.AllievaID !== dataAllievaModificata.AllievaID) return currentAllieva;
     })
 
     listaAllieveCachedUpdated.push(dataAllievaModificata);
@@ -127,7 +122,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
-        CodiceFiscale: codiceFiscaleAllievaDaEliminare
+        AllievaID: allievaInfo.AllievaID
       })
     });
     const responseParsed = await response.json();

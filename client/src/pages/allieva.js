@@ -57,27 +57,6 @@ function Allieva({ match }) {
           SCARICA MODULO ISCRIZIONE
         </Button>
 
-        {/* <PDFDownloadLink
-          document={<ModuloIscrizione allievaInfo={allievaInfo} />}
-          fileName={`Modulo_Iscrizione_${allievaInfo.Cognome}_${allievaInfo.Nome}`}
-          style={{
-            borderRadius: '2px',
-            textDecoration: 'none',
-            color: 'black',
-            backgroundColor: '#f2f2f2',
-            marginTop: '2em',
-            padding: '0 16px',
-            display: 'inline-block',
-            cursor: 'pointer',
-            lineHeight: '36px',
-            verticalAlign: 'middle',
-          }}
-        >
-          {({ blob, url, loading, error }) =>
-            loading ? "Loading document..." : "SCARICA MODULO ISCRIZIONE"
-          }
-        </PDFDownloadLink> */}
-
         <Link
           to={{
             pathname: '/modificaeliminaallieva',
@@ -94,7 +73,7 @@ function Allieva({ match }) {
           </Button>
         </Link>
         <ListaRicevute ricevute={allievaRicevute} allievaInfo={allievaInfo} />
-        <FormCreaRicevuta CodiceFiscale={CodiceFiscale} />
+        <FormCreaRicevuta CodiceFiscale={CodiceFiscale} AllievaID={allievaInfo.AllievaID} />
       </div>
     </>
   );

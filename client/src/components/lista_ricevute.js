@@ -32,8 +32,7 @@ const columnsDefinition = [
   { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Somma Euro', field: 'SommaEuro', editable: true },
-  { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true },
-  { headerName: 'Codice Fiscale', field: 'FK_CodiceFiscale' }
+  { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true }
 ];
 
 const ListaRicevute = ({ ricevute, allievaInfo }) => {

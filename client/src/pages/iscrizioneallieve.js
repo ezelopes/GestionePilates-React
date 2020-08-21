@@ -28,36 +28,47 @@ function IscrizioneAllieve() {
       return;
     }
 
+    const nuovaAllievaData = {
+      CodiceFiscale: document.getElementById('textCodiceFiscale').value,
+      Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
+      Nome: document.getElementById('textNomeAllieva').value,
+      Cognome: document.getElementById('textCognomeAllieva').value,
+      Citta: document.getElementById('textCitta').value,
+      Indirizzo: document.getElementById('textIndirizzo').value,
+      Cellulare: document.getElementById('textCellulare').value,
+      Email: document.getElementById('textEmail').value,
+      DataIscrizione: document.getElementById('dtpDataIscrizione').value,
+      DataCertificato: document.getElementById('dtpDataCertificato').value,
+      DataNascita: document.getElementById('dtpDataNascita').value,
+      LuogoNascita: document.getElementById('textLuogoNascita').value,
+      Disciplina: document.getElementById('comboboxDisciplina_input').value,
+      Corso: document.getElementById('comboboxCorso_input').value,
+      Scuola: document.getElementById('comboboxScuola_input').value,
+      CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
+      NomeGenitore: document.getElementById('textNomeGenitore').value,
+      CognomeGenitore: document.getElementById('textCognomeGenitore').value
+    };
+
     const response = await fetch('/api/creaAllieva', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
-      body: JSON.stringify({
-        CodiceFiscale: document.getElementById('textCodiceFiscale').value,
-        Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
-        Nome: document.getElementById('textNomeAllieva').value,
-        Cognome: document.getElementById('textCognomeAllieva').value,
-        Citta: document.getElementById('textCitta').value,
-        Indirizzo: document.getElementById('textIndirizzo').value,
-        Cellulare: document.getElementById('textCellulare').value,
-        Email: document.getElementById('textEmail').value,
-        DataIscrizione: document.getElementById('dtpDataIscrizione').value,
-        DataCertificato: document.getElementById('dtpDataCertificato').value,
-        DataNascita: document.getElementById('dtpDataNascita').value,
-        LuogoNascita: document.getElementById('textLuogoNascita').value,
-        Disciplina: document.getElementById('comboboxDisciplina_input').value,
-        Corso: document.getElementById('comboboxCorso_input').value,
-        Scuola: document.getElementById('comboboxScuola_input').value,
-        CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
-        NomeGenitore: document.getElementById('textNomeGenitore').value,
-        CognomeGenitore: document.getElementById('textCognomeGenitore').value
-      })
+      body: JSON.stringify(nuovaAllievaData)
     });
     const responseParsed = await response.json();
-    alert(responseParsed.message);
+    const AllievaID = responseParsed.AllievaID;
+    alert(AllievaID);
+
+    nuovaAllievaData.AllievaID = AllievaID;
+
+    
+    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+    listaAllieveCached.push(nuovaAllievaData);
+    localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+
+    alert('Allieva Inserita Correttamente!');
     resetForm();
   };
 

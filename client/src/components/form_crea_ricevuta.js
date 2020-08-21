@@ -12,7 +12,7 @@ momentLocalizer();
 
 simpleNumberLocalizer();
 
-const FormCreaRicevuta = ({ CodiceFiscale }) => {
+const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
   const today = formatDate(new Date(), true);
   let tipoRicevuta = [
     { id: 0, tipo: 'Quota' },
@@ -44,7 +44,8 @@ const FormCreaRicevuta = ({ CodiceFiscale }) => {
       SommaEuro: document.getElementById('comboboxSommaEuro_input').value,
       TipoPagamento: document.getElementById('comboboxTipoPagamento_input').value,
       TipoRicevuta: document.getElementById('comboboxTipoRicevuta_input').value,
-      CodiceFiscale: CodiceFiscale
+      CodiceFiscale: CodiceFiscale,
+      AllievaID: AllievaID
     };
     const tipoRicevuta = document.getElementById('comboboxTipoRicevuta_input').value;
     if (tipoRicevuta === 'Quota Associativa') {
