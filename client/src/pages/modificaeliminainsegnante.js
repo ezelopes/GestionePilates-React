@@ -13,7 +13,7 @@ function ModificaEliminaInseganti(props) {
       document.getElementById('cercaCodiceFiscale').style.borderColor = 'red';
       return;
     }
-    const getSingleInsegnanteResult = await fetch(`/api/getSingleInsegnante/${CodiceFiscale}`);
+    const getSingleInsegnanteResult = await fetch(`/api/insegnante/getSingleInsegnante/${CodiceFiscale}`);
     const info = await getSingleInsegnanteResult.json();
     if (info !== 0) {
       setInsegnanteInfo(info[0]);

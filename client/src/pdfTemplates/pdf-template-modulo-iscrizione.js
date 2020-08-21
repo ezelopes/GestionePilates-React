@@ -15,7 +15,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
       author: 'Roxana Carro',
       subject: `Modulo Iscrizione di ${allievaInfo.Nome} ${allievaInfo.Cognome}`
     },
-    pageMargins: [40, 40, 40, 0],
+    pageMargins: [40, 20, 40, 0],
     content: [
       {
         image: label_logo,
@@ -26,14 +26,14 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'DOMANDA DI ISCRIZIONE A SOCIO / ATLETA',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12],
+        margin: [0, 0, 0, 10],
         bold: true
       },
       {
@@ -62,7 +62,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text:
@@ -70,7 +70,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12],
+        margin: [0, 0, 0, 10],
         bold: true
       },
 
@@ -103,7 +103,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: [
@@ -138,28 +138,28 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'La copertura assicurativa proposta è (barrare la copertura scelta)',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: '___ Base \t\t\t  ___ Integrativa \t\t\t ___ Superintegrativa',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'N. Tessera ACSI assegnato __________________',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'Firma __________________________',
@@ -179,21 +179,21 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         lineHeight: 1.5,
         fontSize: 10,
         bold: true,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore || BLANK_SPACE } ${allievaInfo.CognomeGenitore || '' }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: `Codice Fiscale di chi firma: ${allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'Firma del genitore ______________________________',

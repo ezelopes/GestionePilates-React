@@ -81,7 +81,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       CognomeGenitore: document.getElementById('textCognomeGenitore').value
     };
 
-    const response = await fetch('/api/modificaAllieva', {
+    const response = await fetch('/api/allieva/modificaAllieva', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -114,7 +114,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
 
     const codiceFiscaleAllievaDaEliminare = document.getElementById('textCodiceFiscale').value;
 
-    const response = await fetch('/api/eliminaAllieva', {
+    const response = await fetch('/api/allieva/eliminaAllieva', {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',

@@ -27,8 +27,8 @@ function IscrizioneInsegnanti() {
       return;
     }
 
-    const response = await fetch('/api/creaInsegnante', {
-      method: 'POST',
+    const response = await fetch('/api/insegnante/creaInsegnante', {
+      method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

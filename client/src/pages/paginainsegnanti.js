@@ -38,7 +38,7 @@ function InsegnantiPage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('/api/getInsegnanti');
+      const result = await fetch('/api/insegnante/getInsegnanti');
       const body = await result.json();
       setRowData(body);
     };

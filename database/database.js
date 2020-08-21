@@ -167,7 +167,7 @@ async function creaRicevuta({
       CodiceFiscale,
       AllievaID
     });
-    if (TipoRicevuta == 'Quota Associativa') {
+    if (TipoRicevuta.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
       'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
       VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
@@ -386,7 +386,7 @@ async function modificaRicevuta({
   try {
     const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
 
-    if (TipoRicevuta == 'Quota Associativa') {
+    if (TipoRicevuta.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
         'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, SommaEuro=? WHERE RicevutaID=?;', 
         [NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevutaFormatted, SommaEuro, RicevutaID]

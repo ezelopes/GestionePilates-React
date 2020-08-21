@@ -53,8 +53,8 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
       delete infoRicevuta.DataScadenzaCorso;
     }
 
-    const response = await fetch('/api/creaRicevuta', {
-      method: 'POST',
+    const response = await fetch('/api/ricevuta/creaRicevuta', {
+      method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

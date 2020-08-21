@@ -103,7 +103,6 @@ const convNumLett = (n, abbr, separator) => {
   let result = '';
   let i = 0;
   while (i < len) {
-    console.log('group', numero.substr(i, 3));
     let v = parseInt(numero.substr(i, 3));
     let r = '';
     //cifra delle centinaia

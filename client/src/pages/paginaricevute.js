@@ -34,7 +34,7 @@ function PaginaAllieve() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('/api/getAllRicevute');
+      const result = await fetch('/api/ricevuta/getAllRicevute');
       const body = await result.json();
       setRowData(body);
     };

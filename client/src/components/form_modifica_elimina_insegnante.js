@@ -54,7 +54,7 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
       return;
     }
 
-    const response = await fetch('/api/modificaInsegnante', {
+    const response = await fetch('/api/insegnante/modificaInsegnante', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -89,7 +89,7 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
       return;
     }
 
-    const response = await fetch('/api/eliminaInsegnante', {
+    const response = await fetch('/api/insegnante/eliminaInsegnante', {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',

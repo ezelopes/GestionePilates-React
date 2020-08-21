@@ -49,8 +49,8 @@ function IscrizioneAllieve() {
       CognomeGenitore: document.getElementById('textCognomeGenitore').value
     };
 
-    const response = await fetch('/api/creaAllieva', {
-      method: 'POST',
+    const response = await fetch('/api/allieva/creaAllieva', {
+      method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

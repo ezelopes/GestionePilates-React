@@ -32,11 +32,11 @@ function Allieva({ match }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const getSingleAllievaResult = await fetch(`/api/getSingleAllieva/${CodiceFiscale}`);
+      const getSingleAllievaResult = await fetch(`/api/allieva/getSingleAllieva/${CodiceFiscale}`);
       const info = await getSingleAllievaResult.json();
       setAllievaInfo(info[0]);
 
-      const getRicevuteOfAllievaResult = await fetch(`/api/getRicevuteOfAllieva/${CodiceFiscale}`);
+      const getRicevuteOfAllievaResult = await fetch(`/api/ricevuta/getRicevuteOfAllieva/${CodiceFiscale}`);
       const ricevute = await getRicevuteOfAllievaResult.json();
       setAllievaRicevute(ricevute);
     };

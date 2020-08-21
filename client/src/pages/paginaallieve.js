@@ -51,7 +51,7 @@ function PaginaAllieve(/*props*/) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('/api/getAllieve');
+      const result = await fetch('/api/allieva/getAllieve');
       const body = await result.json();
       setRowData(body);
       localStorage.setItem('listaAllieve', JSON.stringify(body));

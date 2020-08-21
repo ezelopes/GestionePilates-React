@@ -11,7 +11,7 @@ function ModificaEliminaAllieve(props) {
       document.getElementById('cercaCodiceFiscale').style.borderColor = 'red';
       return;
     }
-    const getSingleAllievaResult = await fetch(`/api/getSingleAllieva/${CodiceFiscale}`);
+    const getSingleAllievaResult = await fetch(`/api/allieva/getSingleAllieva/${CodiceFiscale}`);
     const info = await getSingleAllievaResult.json();
     if (info !== 0) {
       setAllievaInfo(info[0]);

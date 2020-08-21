@@ -51,11 +51,11 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
 
       if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota') 
         documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      else if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota Associativa')
+      else if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
         documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
       else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota')
         documentDefinition = await pdfTemplateMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota Associativa')
+      else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
         documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
       
 
@@ -73,7 +73,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     console.log(JSON.stringify(ricevuteSelezionate[0].data));
     console.log(ricevute);
 
-    const response = await fetch('/api/eliminaRicevuta', {
+    const response = await fetch('/api/ricevuta/eliminaRicevuta', {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
@@ -90,7 +90,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
 
   const modificaRicevuta = async (event) => {
     const updatedRicevuta = event.data;
-    const response = await fetch('/api/modificaRicevuta', {
+    const response = await fetch('/api/ricevuta/modificaRicevuta', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

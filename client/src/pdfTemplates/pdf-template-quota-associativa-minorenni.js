@@ -7,6 +7,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const BLANK_SPACE = '___________________________';
+
   let somma = ricevutaInfo.SommaEuro;
   somma = somma.replace('.', ',')
   const euro_and_centesimi = somma.split(',');
@@ -27,18 +29,18 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
       author: 'Roxana Carro',
       subject: `Ricevuta ${ricevutaInfo.NumeroRicevuta} di ${allievaInfo.Nome} ${allievaInfo.Cognome}`
     },
-    pageMargins: [40, 40, 40, 0],
+    pageMargins: [40, 20, 40, 0],
     content: [
       {
         image: label_logo,
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta}`,
+        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE}`,
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text:
@@ -46,7 +48,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'DICHIARA',
@@ -54,42 +56,42 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          allievaInfo.NomeGenitore
+          allievaInfo.NomeGenitore || BLANK_SPACE
         } ${
-          allievaInfo.CognomeGenitore
+          allievaInfo.CognomeGenitore || BLANK_SPACE
         }, C.F. ${
-          allievaInfo.CodiceFiscaleGenitore
+          allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE
         }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
-          ricevutaInfo.SommaEuro
+          ricevutaInfo.SommaEuro || BLANK_SPACE
         }€ (${
-          EuroInLettere.toUpperCase()
+          EuroInLettere.toUpperCase() || BLANK_SPACE
         } EURO${
           CentesimiInLettere.toUpperCase()
         }), per il contributo relativo alla quota associativa di ${
-          allievaInfo.Nome
+          allievaInfo.Nome || BLANK_SPACE
         } ${
-          allievaInfo.Cognome
+          allievaInfo.Cognome || BLANK_SPACE
         }, C.F. ${
-          allievaInfo.CodiceFiscale
+          allievaInfo.CodiceFiscale || BLANK_SPACE
         } nato/a a ${
-          allievaInfo.LuogoNascita
+          allievaInfo.LuogoNascita || BLANK_SPACE
         }, il ${ 
           (ricevutaInfo.DataNascita === 'Invalid date' || !ricevutaInfo.DataNascita) 
             ? '______/______/________'
             : ricevutaInfo.DataNascita
         } residente in ${
-          allievaInfo.Indirizzo
+          allievaInfo.Indirizzo || BLANK_SPACE
         }, ${
-          allievaInfo.Citta
+          allievaInfo.Citta || BLANK_SPACE
         } della durata di un anno.`,
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text:
@@ -97,7 +99,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: `Stezzano, ${ 
@@ -106,52 +108,50 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
             : ricevutaInfo.DataRicevuta
         }`,
         alignment: 'left',
-        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 2]
       },
       {
         text: 'Il Presidente',
         alignment: 'right',
-        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 2]
       },
       {
         text: 'Roxana Carro',
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'FIRMA ______________________________',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 1 }],
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         image: label_logo,
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta}`,
+        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE}`,
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text:
@@ -159,7 +159,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'DICHIARA',
@@ -167,42 +167,42 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          allievaInfo.NomeGenitore
+          allievaInfo.NomeGenitore || BLANK_SPACE
         } ${
-          allievaInfo.CognomeGenitore
+          allievaInfo.CognomeGenitore || BLANK_SPACE
         }, C.F. ${
-          allievaInfo.CodiceFiscaleGenitore
+          allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE
         }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
-          ricevutaInfo.SommaEuro
+          ricevutaInfo.SommaEuro || BLANK_SPACE
         }€ (${
-          EuroInLettere.toUpperCase()
+          EuroInLettere.toUpperCase() || BLANK_SPACE
         } EURO${
           CentesimiInLettere.toUpperCase()
         }), per il contributo relativo alla quota associativa di ${
-          allievaInfo.Nome
+          allievaInfo.Nome || BLANK_SPACE
         } ${
-          allievaInfo.Cognome
+          allievaInfo.Cognome || BLANK_SPACE
         }, C.F. ${
-          allievaInfo.CodiceFiscale
+          allievaInfo.CodiceFiscale || BLANK_SPACE
         } nato/a a ${
-          allievaInfo.LuogoNascita
+          allievaInfo.LuogoNascita || BLANK_SPACE
         }, il ${ 
           (ricevutaInfo.DataNascita === 'Invalid date' || !ricevutaInfo.DataNascita) 
             ? '______/______/________'
             : ricevutaInfo.DataNascita
         } residente in ${
-          allievaInfo.Indirizzo
+          allievaInfo.Indirizzo || BLANK_SPACE
         }, ${
-          allievaInfo.Citta
+          allievaInfo.Citta || BLANK_SPACE
         } della durata di un anno.`,
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text:
@@ -210,7 +210,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: `Stezzano, ${ 
@@ -219,37 +219,35 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
             : ricevutaInfo.DataRicevuta
         }`,
         alignment: 'left',
-        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 2]
       },
       {
         text: 'Il Presidente',
         alignment: 'right',
-        lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 2]
       },
       {
         text: 'Roxana Carro',
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'FIRMA ______________________________',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 12]
+        margin: [0, 0, 0, 10]
       }
     ]
   };
