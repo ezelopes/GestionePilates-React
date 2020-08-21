@@ -1,11 +1,11 @@
 const { Router } = require('express');
-const database = require('../database/database');
+const { getInsegnanti, getSingleInsegnante, creaInsegnante, modificaInsegnante, eliminaInsegnante} = require('../database/insegnante');
 
 const insegnanteRouter = new Router();
 
-async function getInsegnanti(req, res, next) {
+async function getInsegnantiEndpoint(req, res, next) {
   try {
-    const insegnanti = await database.getInsegnanti();
+    const insegnanti = await getInsegnanti();
     console.log(insegnanti);
     res.status(200).send(insegnanti);
   } catch (e) {
@@ -14,10 +14,10 @@ async function getInsegnanti(req, res, next) {
   }
 }
 
-async function getSingleInsegnante(req, res, next) {
+async function getSingleInsegnanteEndpoint(req, res, next) {
   try {
     const CodiceFiscale = req.params.CodiceFiscale;
-    const insegnante = await database.getSingleInsegnante(CodiceFiscale);
+    const insegnante = await getSingleInsegnante(CodiceFiscale);
     res.status(200).send(insegnante);
   } catch (e) {
     console.log(e);
@@ -25,9 +25,9 @@ async function getSingleInsegnante(req, res, next) {
   }
 }
 
-async function creaInsegnante(req, res, next) {
+async function creaInsegnanteEndpoint(req, res, next) {
   try {
-    const response = await database.creaInsegnante(req.body);
+    const response = await creaInsegnante(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -35,9 +35,9 @@ async function creaInsegnante(req, res, next) {
   }
 }
 
-async function modificaInsegnante(req, res, next) {
+async function modificaInsegnanteEndpoint(req, res, next) {
   try {
-    const response = await database.modificaInsegnante(req.body);
+    const response = await modificaInsegnante(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -45,10 +45,10 @@ async function modificaInsegnante(req, res, next) {
   }
 }
 
-async function eliminaInsegnante(req, res, next) {
+async function eliminaInsegnanteEndpoint(req, res, next) {
   try {
     const CodiceFiscale = req.body.CodiceFiscale;
-    const response = await database.eliminaInsegnante(CodiceFiscale);
+    const response = await eliminaInsegnante(CodiceFiscale);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -57,10 +57,10 @@ async function eliminaInsegnante(req, res, next) {
   }
 }
 
-insegnanteRouter.get('/getInsegnanti', getInsegnanti);
-insegnanteRouter.get('/getSingleInsegnante/:CodiceFiscale', getSingleInsegnante);
-insegnanteRouter.put('/creaInsegnante', creaInsegnante);
-insegnanteRouter.post('/modificaInsegnante', modificaInsegnante);
-insegnanteRouter.delete('/eliminaInsegnante', eliminaInsegnante);
+insegnanteRouter.get('/getInsegnanti', getInsegnantiEndpoint);
+insegnanteRouter.get('/getSingleInsegnante/:CodiceFiscale', getSingleInsegnanteEndpoint);
+insegnanteRouter.put('/creaInsegnante', creaInsegnanteEndpoint);
+insegnanteRouter.post('/modificaInsegnante', modificaInsegnanteEndpoint);
+insegnanteRouter.delete('/eliminaInsegnante', eliminaInsegnanteEndpoint);
 
 module.exports = insegnanteRouter;

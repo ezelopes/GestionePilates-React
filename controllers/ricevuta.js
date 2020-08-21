@@ -1,14 +1,14 @@
 const { Router } = require('express');
-const database = require('../database/database');
+const { getRicevuteOfAllieva, getAllRicevute, creaRicevuta, modificaRicevuta, eliminaRicevuta } = require('../database/ricevutaQuery');
 
 const ricevutaRouter = new Router();
 
 ricevutaRouter.get('/', creaRicevuta);
 
-async function getRicevuteOfAllieva(req, res, next) {
+async function getRicevuteOfAllievaEndpoint(req, res, next) {
   try {
     const CodiceFiscale = req.params.CodiceFiscale;
-    const ricevute = await database.getRicevuteOfAllieva(CodiceFiscale);
+    const ricevute = await getRicevuteOfAllieva(CodiceFiscale);
     res.status(200).send(ricevute);
   } catch (e) {
     console.log(e);
@@ -16,9 +16,9 @@ async function getRicevuteOfAllieva(req, res, next) {
   }
 }
 
-async function getAllRicevute(req, res, next) {
+async function getAllRicevuteEndpoint(req, res, next) {
   try {
-    const ricevute = await database.getAllRicevute();
+    const ricevute = await getAllRicevute();
     console.log(ricevute);
     res.status(200).send(ricevute);
   } catch (e) {
@@ -27,9 +27,9 @@ async function getAllRicevute(req, res, next) {
   }
 }
 
-async function creaRicevuta(req, res, next) {
+async function creaRicevutaEndpoint(req, res, next) {
   try {
-    const response = await database.creaRicevuta(req.body);
+    const response = await creaRicevuta(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -37,9 +37,9 @@ async function creaRicevuta(req, res, next) {
   }
 }
 
-async function modificaRicevuta(req, res, next) {
+async function modificaRicevutaEndpoint(req, res, next) {
   try {
-    const response = await database.modificaRicevuta(req.body);
+    const response = await modificaRicevuta(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -47,10 +47,10 @@ async function modificaRicevuta(req, res, next) {
   }
 }
 
-async function eliminaRicevuta(req, res, next) {
+async function eliminaRicevutaEndpoint(req, res, next) {
   try {
     const RicevuteId = req.body.RicevuteId;
-    const response = await database.eliminaRicevuta(RicevuteId);
+    const response = await eliminaRicevuta(RicevuteId);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -59,10 +59,10 @@ async function eliminaRicevuta(req, res, next) {
   }
 }
 
-ricevutaRouter.get('/getRicevuteOfAllieva/:CodiceFiscale', getRicevuteOfAllieva);
-ricevutaRouter.get('/getAllRicevute', getAllRicevute);
-ricevutaRouter.put('/creaRicevuta', creaRicevuta);
-ricevutaRouter.post('/modificaRicevuta', modificaRicevuta);
-ricevutaRouter.delete('/eliminaRicevuta', eliminaRicevuta);
+ricevutaRouter.get('/getRicevuteOfAllieva/:CodiceFiscale', getRicevuteOfAllievaEndpoint);
+ricevutaRouter.get('/getAllRicevute', getAllRicevuteEndpoint);
+ricevutaRouter.put('/creaRicevuta', creaRicevutaEndpoint);
+ricevutaRouter.post('/modificaRicevuta', modificaRicevutaEndpoint);
+ricevutaRouter.delete('/eliminaRicevuta', eliminaRicevutaEndpoint);
 
 module.exports = ricevutaRouter;
