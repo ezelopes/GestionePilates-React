@@ -21,6 +21,12 @@ function IscrizioneAllieve() {
   const corsi = commondata.corsi;
   const scuole = commondata.scuole;
 
+  const updateCache = (nuovaAllievaData) => {
+    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+    listaAllieveCached.push(nuovaAllievaData);
+    return localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+  }
+
   const creaAllieva = async () => {
     // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
     if (document.getElementById('textCodiceFiscale').value === '') {
@@ -58,15 +64,11 @@ function IscrizioneAllieve() {
       body: JSON.stringify(nuovaAllievaData)
     });
     const responseParsed = await response.json();
-    const AllievaID = responseParsed.AllievaID;
-    alert(AllievaID);
 
+    const AllievaID = responseParsed.AllievaID;
     nuovaAllievaData.AllievaID = AllievaID;
 
-    
-    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
-    listaAllieveCached.push(nuovaAllievaData);
-    localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+    updateCache(nuovaAllievaData);
 
     alert('Allieva Inserita Correttamente!');
     resetForm();

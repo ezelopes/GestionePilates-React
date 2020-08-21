@@ -14,7 +14,7 @@ momentLocalizer();
 simpleNumberLocalizer();
 
 const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
-  let [insegnanteInfo, setInsegnanteInfo] = useState(insegnanteInfoParam);
+  let [insegnanteInfo, /*setInsegnanteInfo*/] = useState(insegnanteInfoParam);
 
   const discipline = commondata.discipline;
   const corsi = commondata.corsi;
@@ -25,7 +25,7 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
 
   useEffect(() => {
     if (insegnanteInfoParam) {
-      console.log(insegnanteInfo);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       insegnanteInfo = insegnanteInfoParam;
       document.getElementById('textCodiceFiscale').value = insegnanteInfo.CodiceFiscale;
       document.getElementById('textNomeInsegnante').value = insegnanteInfo.Nome;
@@ -45,6 +45,7 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
       document.getElementById('buttonModificaInsegnante').disabled = false;
       document.getElementById('buttonEliminaInsegnante').disabled = false;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [insegnanteInfo]);
 
   const modificaInsegnante = async () => {
@@ -59,7 +60,6 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
         CodiceFiscale: document.getElementById('textCodiceFiscale').value,
@@ -94,7 +94,6 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
         CodiceFiscale: document.getElementById('textCodiceFiscale').value

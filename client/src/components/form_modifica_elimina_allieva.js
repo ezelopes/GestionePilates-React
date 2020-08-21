@@ -14,7 +14,7 @@ momentLocalizer();
 simpleNumberLocalizer();
 
 const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
-  let [allievaInfo, setallievaInfo] = useState(allievaInfoParam);
+  let [allievaInfo, /* setallievaInfo */] = useState(allievaInfoParam);
 
   const eta = commondata.eta;
   const discipline = commondata.discipline;
@@ -25,6 +25,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
 
   useEffect(() => {
     if (allievaInfoParam) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       allievaInfo = allievaInfoParam;
       document.getElementById('comboboxEta_input').value =
         eta.find(currentEta => {
@@ -51,7 +52,21 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       document.getElementById('buttonModificaAllieva').disabled = false;
       document.getElementById('buttonEliminaAllieva').disabled = false;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allievaInfo]);
+
+  const updateCache = (operazione, allieva) => {
+    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+
+    // eslint-disable-next-line array-callback-return
+    const listaAllieveCachedUpdated = listaAllieveCached.filter((currentAllieva) => {
+      if(currentAllieva.AllievaID !== allieva.AllievaID) return currentAllieva;
+    })
+
+    if (operazione === 'Modifica') listaAllieveCachedUpdated.push(allieva);
+
+    return localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCachedUpdated));
+  }
 
   const modificaAllieva = async () => {
     if (document.getElementById('textCodiceFiscale').value === '') {
@@ -59,7 +74,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       return;
     }
 
-    const dataAllievaModificata = {
+    const allievaModificata = {
       AllievaID: allievaInfo.AllievaID,
       CodiceFiscale: document.getElementById('textCodiceFiscale').value,
       Maggiorenne: document.getElementById('comboboxEta_input').value,
@@ -87,20 +102,12 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(dataAllievaModificata)
+      body: JSON.stringify(allievaModificata)
     });
     const responseParsed = await response.json();
+
     // check if query worked correctly first
-    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
-    console.log(listaAllieveCached);
-
-    const listaAllieveCachedUpdated = listaAllieveCached.filter((currentAllieva) => {
-      if(currentAllieva.AllievaID !== dataAllievaModificata.AllievaID) return currentAllieva;
-    })
-
-    listaAllieveCachedUpdated.push(dataAllievaModificata);
-
-    localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCachedUpdated));
+    updateCache('Modifica', allievaModificata);
 
     alert(responseParsed.message);
     resetForm();
@@ -112,14 +119,11 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
       return;
     }
 
-    const codiceFiscaleAllievaDaEliminare = document.getElementById('textCodiceFiscale').value;
-
     const response = await fetch('/api/allieva/eliminaAllieva', {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
         AllievaID: allievaInfo.AllievaID
@@ -127,16 +131,7 @@ const FormModificaEliminaAllieva = ({ allievaInfoParam }) => {
     });
     const responseParsed = await response.json();
 
-    
-    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
-    console.log(listaAllieveCached);
-
-    const listaAllieveCachedUpdated = listaAllieveCached.filter((currentAllieva) => {
-      if(currentAllieva.CodiceFiscale !== codiceFiscaleAllievaDaEliminare) return currentAllieva;
-    })
-
-    localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCachedUpdated));
-    
+    updateCache('Elimina', allievaInfo);
 
     alert(responseParsed.message);
     resetForm();

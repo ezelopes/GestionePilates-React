@@ -32,7 +32,6 @@ function IscrizioneInsegnanti() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        // Authorization: 'Bearer ' + idToken
       },
       body: JSON.stringify({
         CodiceFiscale: document.getElementById('textCodiceFiscale').value,
