@@ -61,7 +61,8 @@ async function creaRicevuta({
   DataScadenzaCorso,
   SommaEuro,
   CodiceFiscale,
-  AllievaID
+  AllievaID,
+  DataIscrizione
 }) {
   try {
     const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
@@ -82,6 +83,14 @@ async function creaRicevuta({
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevutaFormatted, DataInizioCorsoFormatted, DataScadenzaCorsoFormatted, SommaEuro, CodiceFiscale, AllievaID, false]
     );
+
+    if (DataIscrizione === true) {
+      await pool.execute(
+        `UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`,
+        [DataInizioCorsoFormatted, AllievaID]
+      );
+    }
+
     return 'Ricevuta Inserita Correttamente!';
   } catch (error) {
     console.log(error);

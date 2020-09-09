@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-mdl';
+import { Button, Checkbox } from 'react-mdl';
 import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
 import { Combobox } from 'react-widgets';
@@ -21,7 +21,7 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
   let tipoPagamento = [
     { id: 0, tipo: 'Contanti' },
     { id: 1, tipo: 'Assegno' },
-    { id: 2, tipo: 'Bonifico' }
+    { id: 2, tipo: 'Bonifico Bancario' }
   ];
   let sommaEuro = [
     { id: 0, somma: '90' },
@@ -45,7 +45,8 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
       TipoPagamento: document.getElementById('comboboxTipoPagamento_input').value,
       TipoRicevuta: document.getElementById('comboboxTipoRicevuta_input').value,
       CodiceFiscale: CodiceFiscale,
-      AllievaID: AllievaID
+      AllievaID: AllievaID,
+      DataIscrizione: document.getElementById("dataIscrizione").checked
     };
     const tipoRicevuta = document.getElementById('comboboxTipoRicevuta_input').value;
     if (tipoRicevuta === 'Quota Associativa') {
@@ -65,6 +66,11 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
     alert(responseParsed.message);
     window.location.reload();
   };
+
+  const checkboxChanged = (e, t) => { 
+    const value = document.getElementById("dataIscrizione").checked;
+    console.log(value);
+  }
 
   return (
     <div className="formWrapper">
@@ -111,6 +117,7 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
         <label id="labelDataScadenzaCorso"> Data Scadenza Corso </label>
         <input id="dtpDataScadenzaCorso" type="date" defaultValue={today} />
         
+        <Checkbox label="Usa Data Ricevuta come Data Iscrizione" id="dataIscrizione" onChange={checkboxChanged} />
       </form>
       <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
         Crea Ricevuta

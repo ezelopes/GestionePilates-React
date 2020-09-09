@@ -3,8 +3,6 @@ const { getRicevuteOfAllieva, getAllRicevute, creaRicevuta, modificaRicevuta, el
 
 const ricevutaRouter = new Router();
 
-ricevutaRouter.get('/', creaRicevuta);
-
 async function getRicevuteOfAllievaEndpoint(req, res, next) {
   try {
     const CodiceFiscale = req.params.CodiceFiscale;
