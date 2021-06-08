@@ -34,11 +34,22 @@ input[type='date'] {
   height: 2em;
 }
 
+.filter-form {
+  display: flex;
+  justify-content: flex-start; 
+  align-items: center;
+  padding: 1em;
+}
+
+.filter-form > * {
+  margin: 1em;
+}
+
 .page-body {
   margin-top: 2em;
   margin-left: 5em;
   margin-right: 5em;
-  margin-bottom: 2em;
+  padding-bottom: 5em;
 }
 
 .ag-pivot-off .ag-header-cell-label {
