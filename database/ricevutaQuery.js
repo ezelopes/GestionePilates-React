@@ -27,7 +27,8 @@ function mappingAllRicevute(rows) {
       DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
       DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
-      SommaEuro: row.SommaEuro
+      SommaEuro: row.SommaEuro,
+      TipoPagamento: row.TipoPagamento
     };
   });
   return ricevute;
@@ -42,7 +43,7 @@ async function getRicevuteOfAllieva(CodiceFiscale) {
 
 async function getAllRicevute() {
   const [rows, fields] = await pool.execute(
-    'SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro \
+    'SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, TipoPagamento \
     FROM ricevuta \
     INNER JOIN allieva \
     ON ricevuta.FK_AllievaID = allieva.AllievaID;'

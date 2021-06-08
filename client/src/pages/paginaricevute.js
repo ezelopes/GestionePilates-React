@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { Button } from 'react-mdl';
+import { Button, Form } from 'react-bootstrap';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-// nome cognome numeroricevuta somma datainiziocorso e datascadenzacorso
-// filtra per anno -> ricevuta 001/19 , 001/20, 001/21 ...
 const columnsDefinition = [
-  { headerName: 'Nome Allieva', field: 'Nome' },
-  { headerName: 'Cognome Allieva', field: 'Cognome' },
-  { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta' },
-  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Somma Euro', field: 'SommaEuro' }
+  { headerName: 'Nome', field: 'Nome' },
+  { headerName: 'Cognome', field: 'Cognome' },
+  { headerName: 'N° Ricevuta', field: 'NumeroRicevuta' },
+  { headerName: 'Inizio Corso', field: 'DataInizioCorso', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Scadenza Corso', field: 'DataScadenzaCorso', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Somma Euro', field: 'SommaEuro' },
+  { headerName: 'Tipo Pagamento', field: 'TipoPagamento' }
 ];
 
 const gridOptionsDefault = {
@@ -27,10 +26,16 @@ const gridOptionsDefault = {
   rowSelection: 'single'
 };
 
+const years = [ null, 2019, 2020, 2021, 2022, 2023 ];
+const paymentMethods = [ null, 'Contanti', 'Bonifico Bancario', 'Assegno' ];
+
 function PaginaAllieve() {
-  const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
-  const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
+  const [gridOptions] = useState(gridOptionsDefault);
+  const [columnDefs] = useState(columnsDefinition);
   const [rowData, setRowData] = useState();
+
+  const selectYearRef = useRef();
+  const selectPaymentMethodRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,49 +44,72 @@ function PaginaAllieve() {
       setRowData(body);
     };
     fetchData();
+    gridOptions.api.sizeColumnsToFit();
+
+    window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
   }, []);
 
-  
-  const visualizza2019 = () => {
+  const visualizzaAnno = (anno) => {
     const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
 
-    NumeroRicevutaFilterComponent.setModel({
-        type: 'endsWith',
-        filter: '/19'
-    });
+    if (anno == '') NumeroRicevutaFilterComponent.setModel(null);
+    else {
+      const endDigits = anno.substr(anno.length - 2);
+      NumeroRicevutaFilterComponent.setModel({
+          type: 'endsWith',
+          filter: `/${endDigits}`
+      });
+    }
 
     gridOptions.api.onFilterChanged();
   }
+  
+  const viewPaymentMethod = (method) => {
+    const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('TipoPagamento');
 
-  const visualizza2020 = () => {
-    const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
-
-    NumeroRicevutaFilterComponent.setModel({
-        type: 'endsWith',
-        filter: '/20'
-    });
+    if (method == '') PaymentMethodFilterComponent.setModel(null);
+    else {
+      PaymentMethodFilterComponent.setModel({
+          type: 'endsWith',
+          filter: method
+      });
+    }
 
     gridOptions.api.onFilterChanged();
   }
 
   const visualizzaTutte = () => {
-    var NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
+    const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
+    const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('TipoPagamento');
+    
     NumeroRicevutaFilterComponent.setModel(null);
+    PaymentMethodFilterComponent.setModel(null);
     gridOptions.api.onFilterChanged();
+
+    // set default values in other components
+    selectYearRef.current.value = null;
+    selectPaymentMethodRef.current.value = null;
   }
 
   return (
     <>
       <div className="page-body">
-        <Button raised ripple id="buttonVisualizza2019" onClick={visualizza2019} style={{ marginBottom: '2em', marginRight: '2em' }}>
-          Visualizza 2019
-        </Button>
-        <Button raised ripple id="buttonVisualizza2020" onClick={visualizza2020} style={{ marginBottom: '2em', marginRight: '2em' }}>
-          Visualizza 2020
-        </Button>
-        <Button raised ripple id="buttonVisualizzaTutteRicevute" onClick={visualizzaTutte} style={{ marginBottom: '2em', marginRight: '2em' }}>
-          Visualizza Tutti
-        </Button>
+        <div className="filter-form">
+          <Form.Label> Seleziona Anno: </Form.Label>
+          <Form.Control ref={selectYearRef} as="select" onChange={({ target }) => { visualizzaAnno(target.value) } } style={{ width: '10vw' }}>
+            { years.map(year => <option key={`select_${year}`} value={year}> {year} </option>) }
+          </Form.Control>
+          
+          <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
+          <Form.Control ref={selectPaymentMethodRef} as="select" onChange={({ target }) => { viewPaymentMethod(target.value) } } style={{ width: '10vw' }}>
+            { paymentMethods.map(method => <option key={`select_${method}`} value={method}> {method} </option>) }
+          </Form.Control>
+
+          <Button id="buttonVisualizzaTutteRicevute" onClick={visualizzaTutte}>
+            Rimuovi Filtri
+          </Button>
+        </div>
+
         <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
           <AgGridReact
             reactNext={true}

@@ -1,5 +1,5 @@
 const React = require('react');
-const { useState } = require('react');
+const { useState, useEffect } = require('react');
 const { Button } = require('react-mdl');
 const { AgGridReact } = require('ag-grid-react');
 const pdfMake = require('pdfmake/build/pdfmake.js');
@@ -41,6 +41,12 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
 
   const rowData = ricevute;
   console.log(rowData);
+
+  useEffect(() => {
+    gridOptions.api.sizeColumnsToFit();
+
+    window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+  }, [])
 
   const stampaRicevute = async () => {
     const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
