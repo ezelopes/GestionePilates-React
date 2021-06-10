@@ -45,7 +45,7 @@ async function getSingleAllieva(CodiceFiscale) {
   const [rows, fields] = await pool.execute('SELECT * FROM allieva WHERE CodiceFiscale= ?;', [CodiceFiscale]);
   const allieva = mappingAllieve(rows);
   
-  return allieva;
+  return allieva; // allieva[0]
 }
 
 async function creaAllieva({
@@ -69,9 +69,9 @@ async function creaAllieva({
   CognomeGenitore
 }) {
   try {
-    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
-    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
-    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
+    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD');
+    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD');
     const [rows, fields] = await pool.execute(
       'INSERT INTO Allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscaleGenitore, NomeGenitore, CognomeGenitore) \
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
@@ -110,10 +110,11 @@ async function modificaAllieva({
   CognomeGenitore
 }) {
   try {
-    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
-    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
-    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
-    
+
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
+    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD');
+    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD'); 
+
     const numeroRicevute = await contaRicevuteAllieva(AllievaID);
   
     if (numeroRicevute > 0) {
@@ -146,10 +147,24 @@ async function eliminaAllieva(AllievaID) {
   }
 }
 
+async function aggiornaDataIscrizione(DataIscrizione, AllievaID) {
+  try {    
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
+    console.log(DataIscrizioneFormatted)
+
+    await pool.execute(`UPDATE Allieva SET Allieva.DataIscrizione = ? WHERE AllievaID = ?;`, [DataIscrizioneFormatted, AllievaID]);
+    return 'Data Iscrizione Aggiornata Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'aggiornare Data Iscrizione!`;
+  }
+}
+
 module.exports = {
   getAllieve,
   getSingleAllieva,  
   creaAllieva,  
   modificaAllieva,  
-  eliminaAllieva
+  eliminaAllieva,
+  aggiornaDataIscrizione
 };

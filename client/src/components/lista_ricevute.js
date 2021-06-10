@@ -1,9 +1,12 @@
-const React = require('react');
-const { useState, useEffect } = require('react');
-const { Button } = require('react-mdl');
-const { AgGridReact } = require('ag-grid-react');
-const pdfMake = require('pdfmake/build/pdfmake.js');
-const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { AgGridReact } from 'ag-grid-react';
+import pdfMake from 'pdfmake/build/pdfmake.js';
+import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+
+import { updateReceipt, deleteReceipt } from '../helpers/api-calls';
+
 const pdfTemplateMaggiorenni = require('../pdfTemplates/pdf-template-maggiorenni');
 const pdfTemplateMinorenni = require('../pdfTemplates/pdf-template-minorenni');
 
@@ -39,31 +42,33 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
   const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
   const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
 
-  const rowData = ricevute;
-  console.log(rowData);
+  const [selectedReceipt, setSelectedReceipt] = useState();
+  const [showDeleteReceiptModal, setShowDeleteReceiptModal] = useState(false);
+
 
   useEffect(() => {
-    gridOptions.api.sizeColumnsToFit();
-
-    window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+    try{
+      gridOptions.api.sizeColumnsToFit();
+      window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+    } catch (err) {
+      console.log(err);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const stampaRicevute = async () => {
-    const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
-    if (ricevuteSelezionate.length === 0 || ricevuteSelezionate.length > 1) return;
-
+  const stampaRicevute = async () => {    
     try {
+      if (!selectedReceipt) return alert('Seleziona Ricevuta per Stamparla');
       let documentDefinition;
 
-      if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota') 
-        documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      else if (allievaInfo.Maggiorenne === 'Maggiorenne' && ricevuteSelezionate[0].data.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-        documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta === 'Quota')
-        documentDefinition = await pdfTemplateMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      else if (allievaInfo.Maggiorenne === 'Minorenne' && ricevuteSelezionate[0].data.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-        documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(allievaInfo, ricevuteSelezionate[0].data);
-      
+      if (allievaInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta === 'Quota') 
+        documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, selectedReceipt);
+      else if (allievaInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(allievaInfo, selectedReceipt);
+      else if (allievaInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta === 'Quota')
+        documentDefinition = await pdfTemplateMinorenni.default(allievaInfo, selectedReceipt);
+      else if (allievaInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(allievaInfo, selectedReceipt);
 
       pdfMake.createPdf(documentDefinition).open();
     } catch (error) {
@@ -71,50 +76,11 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     }
   };
 
-  const eliminaRicevuta = async () => {
-    const ricevuteSelezionate = gridOptions.api.getSelectedNodes();
-    if (ricevuteSelezionate.length === 0) return;
+  const onReceiptSelectionChanged = () => {
+    const selectedNode = gridOptions.api.getSelectedNodes();
+    if (selectedNode.length === 0) return setSelectedReceipt(null);
 
-    const ricevutaIDSelezionata = ricevuteSelezionate[0].data.RicevutaID;
-    console.log(JSON.stringify(ricevuteSelezionate[0].data));
-    console.log(ricevute);
-
-    const response = await fetch('/api/ricevuta/eliminaRicevuta', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        RicevuteId: ricevutaIDSelezionata
-      })
-    });
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
-    window.location.reload();
-  };
-
-  const modificaRicevuta = async (event) => {
-    const updatedRicevuta = event.data;
-    const response = await fetch('/api/ricevuta/modificaRicevuta', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        RicevutaID: updatedRicevuta.RicevutaID,
-        NumeroRicevuta: updatedRicevuta.NumeroRicevuta,
-        TipoRicevuta: updatedRicevuta.TipoRicevuta,
-        DataRicevuta: updatedRicevuta.DataRicevuta.split("-").reverse().join("-"),
-        DataInizioCorso: updatedRicevuta.DataInizioCorso.split("-").reverse().join("-"),
-        DataScadenzaCorso: updatedRicevuta.DataScadenzaCorso.split("-").reverse().join("-"),
-        SommaEuro: updatedRicevuta.SommaEuro,
-        TipoPagamento: updatedRicevuta.TipoPagamento,
-      })
-    });
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
+    setSelectedReceipt(selectedNode[0].data);
   }
 
   return (
@@ -122,7 +88,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
       <div
         className="ag-theme-balham"
         id="listaRicevute"
-        style={{ marginTop: '2em', height: '20em', width: '90%' }}
+        style={{ marginTop: '2em', height: '20em', width: '90%', marginBottom: '2em' }}
       >
         <AgGridReact
           // rowSelection="multiple"
@@ -130,23 +96,42 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
           rowHeight="45"
           gridOptions={gridOptions}
           columnDefs={columnDefs}
-          rowData={rowData}
-          onCellValueChanged={modificaRicevuta}
+          rowData={ricevute}
+          onCellValueChanged={({ data }) => updateReceipt(data)}
+          onSelectionChanged={onReceiptSelectionChanged}
         ></AgGridReact>
       </div>
 
-      <Button raised ripple id="buttonStampaRicevute" onClick={stampaRicevute} style={{ marginTop: '2em' }}>
-        Stampa Ricevuta
+      <Button onClick={stampaRicevute}>
+        <span role='img' aria-label='receipt'>🧾</span> STAMPA RICEVUTA
       </Button>
-      <Button
-        raised
-        ripple
-        id="buttonEliminaRicevuta"
-        onClick={eliminaRicevuta}
-        style={{ marginTop: '2em', marginLeft: '2em' }}
-      >
-        Elimina Ricevuta
+      <Button variant='danger' style={{  marginLeft: '2em' }} onClick={ () => { 
+        if (!selectedReceipt) return alert('Seleziona Ricevuta per Eliminarla'); 
+        setShowDeleteReceiptModal(true)} 
+      }>
+        <span role='img' aria-label='bin'>🗑️</span> ELIMINA RICEVUTA
       </Button>
+
+      <Modal show={showDeleteReceiptModal} onHide={ () => setShowDeleteReceiptModal(false) } centered>
+        <Modal.Header closeButton>
+          <Modal.Title> Elimina Ricevuta </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
+            Sei sicura di voler eliminare la ricevuta selezionata?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={() => { 
+            deleteReceipt(selectedReceipt.RicevutaID);
+            setShowDeleteReceiptModal(false); } 
+          }>
+            ELIMINA
+          </Button>
+          <Button variant="secondary" onClick={() => { setShowDeleteReceiptModal(false) } }>
+            CHIUDI
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
     </>
   );
 };

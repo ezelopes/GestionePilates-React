@@ -54,12 +54,12 @@ function PaginaAllieve(/*props*/) {
       const result = await fetch('/api/allieva/getAllieve');
       const body = await result.json();
       setRowData(body);
-      localStorage.setItem('listaAllieve', JSON.stringify(body));
+      sessionStorage.setItem('listaAllieve', JSON.stringify(body));
     };
     
-    if (!localStorage.getItem('listaAllieve') || (localStorage.getItem('listaAllieve') === [])) fetchData();
+    if (!sessionStorage.getItem('listaAllieve') || (sessionStorage.getItem('listaAllieve') === [])) fetchData();
     else {
-      const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
+      const listaAllieveCached = JSON.parse(sessionStorage.getItem('listaAllieve'));
       setRowData(listaAllieveCached)
     }
   }, []);

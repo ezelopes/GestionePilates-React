@@ -1,193 +1,127 @@
-import React from 'react';
-import { Button } from 'react-mdl';
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { createStudent } from '../helpers/api-calls';
+
+import FormAllieva from '../components/form_allieva';
 import 'react-widgets/dist/css/react-widgets.css';
-import simpleNumberLocalizer from 'react-widgets-simple-number';
-import { Combobox } from 'react-widgets';
-import moment from 'moment';
-import momentLocalizer from 'react-widgets-moment';
+
 import formatDate from '../helpers/format-date-for-input-date';
+import reverseDate from '../helpers/reverse-date-for-input-date';
 import commondata from '../commondata/commondata'
 
-moment.locale('es');
-momentLocalizer();
-
-simpleNumberLocalizer();
 
 function IscrizioneAllieve() {
   const today = formatDate(new Date(), true);
 
-  const eta = commondata.eta;
-  const discipline = commondata.discipline;
-  const corsi = commondata.corsi;
-  const scuole = commondata.scuole;
+  const { eta, discipline, corsi, scuole } = commondata;
 
-  const updateCache = (nuovaAllievaData) => {
-    const listaAllieveCached = JSON.parse(localStorage.getItem('listaAllieve'));
-    listaAllieveCached.push(nuovaAllievaData);
-    return localStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+  const allievaInfoDefault = { 
+    Maggiorenne: eta[0].eta,
+    CodiceFiscale: '',
+    Nome: '',
+    Cognome: '',
+    Citta: '',
+    Indirizzo: '',
+    Cellulare: '',
+    Email: '',
+    LuogoNascita: '',
+    Disciplina: discipline[0].disciplina,
+    Corso: corsi[0].corso,
+    Scuola: scuole[0].scuola,
+    DataIscrizione: reverseDate(today),
+    DataCertificato: reverseDate(today),
+    DataNascita: reverseDate(today),
+    CodiceFiscaleGenitore: '',
+    NomeGenitore: '',
+    CognomeGenitore: ''
   }
 
-  const creaAllieva = async () => {
-    // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-    if (document.getElementById('textCodiceFiscale').value === '') {
-      document.getElementById('textCodiceFiscale').style.borderColor = 'red';
-      return;
-    }
-
-    const nuovaAllievaData = {
-      CodiceFiscale: document.getElementById('textCodiceFiscale').value,
-      Maggiorenne: document.getElementById('comboboxEta_input').value, // Maggiorenne,
-      Nome: document.getElementById('textNomeAllieva').value,
-      Cognome: document.getElementById('textCognomeAllieva').value,
-      Citta: document.getElementById('textCitta').value,
-      Indirizzo: document.getElementById('textIndirizzo').value,
-      Cellulare: document.getElementById('textCellulare').value,
-      Email: document.getElementById('textEmail').value,
-      DataIscrizione: document.getElementById('dtpDataIscrizione').value,
-      DataCertificato: document.getElementById('dtpDataCertificato').value,
-      DataNascita: document.getElementById('dtpDataNascita').value,
-      LuogoNascita: document.getElementById('textLuogoNascita').value,
-      Disciplina: document.getElementById('comboboxDisciplina_input').value,
-      Corso: document.getElementById('comboboxCorso_input').value,
-      Scuola: document.getElementById('comboboxScuola_input').value,
-      CodiceFiscaleGenitore: document.getElementById('textCodiceFiscaleGenitore').value,
-      NomeGenitore: document.getElementById('textNomeGenitore').value,
-      CognomeGenitore: document.getElementById('textCognomeGenitore').value
-    };
-
-    const response = await fetch('/api/allieva/creaAllieva', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(nuovaAllievaData)
-    });
-    const responseParsed = await response.json();
-
-    const AllievaID = responseParsed.AllievaID;
-    nuovaAllievaData.AllievaID = AllievaID;
-
-    updateCache(nuovaAllievaData);
-
-    alert('Allieva Inserita Correttamente!');
-    resetForm();
-  };
+  const [newMaggiorenne, setNewMaggiorenne] = useState(eta[0].eta);
+  const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
+  const [newNome, setNewNome] = useState('');
+  const [newCognome, setNewCognome] = useState('');
+  const [newCitta, setNewCitta] = useState('');
+  const [newIndirizzo, setNewIndirizzo] = useState('');
+  const [newCellulare, setNewCellulare] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newLuogoNascita, setNewLuogoNascita] = useState('');
+  const [newDisciplina, setNewDisciplina] = useState(discipline[0].disciplina);
+  const [newCorso, setNewCorso] = useState(corsi[0].corso);
+  const [newScuola, setNewScuola] = useState(scuole[0].scuola);
+  const [newDataIscrizione, setNewDataIscrizione] = useState(today);
+  const [newDataCertificato, setNewDataCertificato] = useState(today);
+  const [newDataNascita, setNewDataNascita] = useState(today);
+  const [newCodiceFiscaleGenitore, setNewCodiceFiscaleGenitore] = useState('');
+  const [newNomeGenitore, setNewNomeGenitore] = useState('');
+  const [newCognomeGenitore, setNewCognomeGenitore] = useState('');
 
   const resetForm = () => {
-    document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
-    document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
-    document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
-    document.getElementById('comboboxScuola_input').defaultValue = scuole[0].scuola;
-    document.getElementById('formCreaAllieva').reset();
-  };
+    setNewMaggiorenne(eta[0].eta);
+    setNewCodiceFiscale('');
+    setNewNome('');
+    setNewCognome('');
+    setNewCitta('');
+    setNewIndirizzo('');
+    setNewCellulare('');
+    setNewEmail('');
+    setNewLuogoNascita('');
+    setNewDisciplina(discipline[0].disciplina);
+    setNewCorso(corsi[0].corso);
+    setNewScuola(scuole[0].scuola);
+    setNewDataIscrizione(today);
+    setNewDataCertificato(today);
+    setNewDataNascita(today);
+    setNewCodiceFiscaleGenitore('');
+    setNewNomeGenitore('');
+    setNewCognomeGenitore('');
+  }
+
+  // const resetForm = () => {
+  //   document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
+  //   document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
+  //   document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
+  //   document.getElementById('comboboxScuola_input').defaultValue = scuole[0].scuola;
+  //   document.getElementById('formCreaAllieva').reset();
+  // };
 
   return (
-    <>
-      <div className="page-body">
-        <div className="formWrapper">
-          <form id="formCreaAllieva">
-            <label id="labelEta"> Età </label>
-            <Combobox
-              id="comboboxEta"
-              data={eta}
-              defaultValue={eta[0]}
-              valueField="id"
-              textField="eta"
-              caseSensitive={false}
-              filter="contains"
-            />
-
-            <label id="labelCodiceFiscale"> Codice Fiscale </label>
-            <input type="text" id="textCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
-
-            <label id="labelNomeAllieva"> Nome Allieva </label>
-            <input type="text" id="textNomeAllieva" placeholder="Inserisci Nome Allieva..." />
-
-            <label id="labelCognomeAllieva"> Cognome Allieva </label>
-            <input type="text" id="textCognomeAllieva" placeholder="Inserisci Cognome Allieva..." />
-
-            <label id="labelCitta"> Citta </label>
-            <input type="text" id="textCitta" placeholder="Inserisci Citta..." />
-
-            <label id="labelIndirizzo"> Indirizzo </label>
-            <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." />
-
-            <label id="labelCellulare"> Cellulare </label>
-            <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." />
-
-            <label id="labelEmail"> Email </label>
-            <input type="text" id="textEmail" placeholder="Inserisci Email..." />
-
-            <label id="labelLuogoNascita"> Luogo Nascita </label>
-            <input type="text" id="textLuogoNascita" placeholder="Inserisci LuogoNascita..." />
-
-            <label id="labelDisciplina"> Disciplina </label>
-            <Combobox
-              id="comboboxDisciplina"
-              data={discipline}
-              defaultValue={discipline[0]}
-              valueField="id"
-              textField="disciplina"
-              caseSensitive={false}
-              filter="contains"
-            />
-
-            <label id="labelCorso"> Corso </label>
-            <Combobox
-              id="comboboxCorso"
-              data={corsi}
-              defaultValue={corsi[0]}
-              valueField="id"
-              textField="corso"
-              caseSensitive={false}
-              filter="contains"
-              placeholder="Seleziona Corso..."
-            />
-
-            <label id="labelScuole"> Scuola </label>
-            <Combobox
-              id="comboboxScuola"
-              data={scuole}
-              defaultValue={scuole[0]}
-              valueField="id"
-              textField="scuola"
-              caseSensitive={false}
-              filter="contains"
-              placeholder="Seleziona Scuola..."
-            />
-
-            <label id="labelDataIscrizione"> Data Iscrizione </label>
-            <input id="dtpDataIscrizione" type="date" defaultValue={today} />
-
-            <label id="labelDataCertificato"> Data Certificato </label>
-            <input id="dtpDataCertificato" type="date" defaultValue={today} />
-
-            <label id="labelDataNascita"> Data Nascita </label>
-            <input id="dtpDataNascita" type="date" defaultValue={today} />
-
-            <label id="labelCodiceFiscaleGenitore"> Codice Fiscale Genitore </label>
-            <input
-              type="text"
-              id="textCodiceFiscaleGenitore"
-              placeholder="Inserisci Codice Fiscale Genitore..."
-            />
-
-            <label id="labelNomeGenitore"> Nome Genitore </label>
-            <input type="text" id="textNomeGenitore" placeholder="Inserisci Nome Genitore..." />
-
-            <label id="labelCognomeGenitore"> Cognome Genitore </label>
-            <input type="text" id="textCognomeGenitore" placeholder="Inserisci Cognome Genitore..." />
-          </form>
-          <Button raised ripple id="buttonCreaAllieva" onClick={creaAllieva}>
-            Crea Allieva
-          </Button>
-          <Button raised ripple id="buttonResetForm" onClick={resetForm}>
-            Reset Form
-          </Button>
-        </div>
+    <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
+      <div className="create-student-form">
+        <FormAllieva 
+          allievaInfo={ allievaInfoDefault }
+          setNewMaggiorenne={setNewMaggiorenne}
+          setNewCodiceFiscale={setNewCodiceFiscale}
+          setNewNome={setNewNome}
+          setNewCognome={setNewCognome}
+          setNewCitta={setNewCitta}
+          setNewIndirizzo={setNewIndirizzo}
+          setNewCellulare={setNewCellulare}
+          setNewEmail={setNewEmail}
+          setNewLuogoNascita={setNewLuogoNascita}
+          setNewDisciplina={setNewDisciplina}
+          setNewCorso={setNewCorso}
+          setNewScuola={setNewScuola}
+          setNewDataIscrizione={setNewDataIscrizione}
+          setNewDataCertificato={setNewDataCertificato}
+          setNewDataNascita={setNewDataNascita}
+          setNewCodiceFiscaleGenitore={setNewCodiceFiscaleGenitore}
+          setNewNomeGenitore={setNewNomeGenitore}
+          setNewCognomeGenitore={setNewCognomeGenitore}
+        />
       </div>
-    </>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
+        <Button variant="success" id="buttonCreaAllieva" onClick={() => {
+          const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
+          createStudent(newAllieva);
+          resetForm();
+        }}>
+          Crea Allieva
+        </Button>
+        <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
+          Reset Form
+        </Button>
+      </div>
+    </div>
   );
 }
 

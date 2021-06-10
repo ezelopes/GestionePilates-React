@@ -36,13 +36,53 @@ input[type='date'] {
 
 .filter-form {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: center; 
   align-items: center;
   padding: 1em;
 }
 
 .filter-form > * {
   margin: 1em;
+}
+
+.create-student-form {
+  display: grid;
+  grid-template-columns: 10% 20% 10% 20%;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.5vw;
+  column-gap: 1vw;
+}
+
+.create-student-form > label {
+  margin-top: 0.7vw;
+  /* margin-left: 3vw; */
+}
+
+.create-student-form > input, select, option, form-control {
+  margin: 0.7vw 1vw;  /*  top, right, bottom, left  */
+  min-width: 0;
+}
+
+.update-student-modal {
+  width: 70vw;
+  max-width: 70vw;
+}
+
+.update-student-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.update-student-form > label {
+  flex: 0 3 10vw; /* flex-grow, flex-shrink, flex-basis */
+  margin-top: 0.7vw;
+}
+.update-student-form > input, select, option, form-control {
+  flex: 1 0 20vw; /* flex-grow, flex-shrink, flex-basis */
+  margin: 0.7vw 1vw;  /*  top, right, bottom, left  */
 }
 
 .page-body {
@@ -96,4 +136,8 @@ input[type='date'] {
 
 #navbarCollapse li a {
   font-weight: bold;
+}
+
+.btn {
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
 }

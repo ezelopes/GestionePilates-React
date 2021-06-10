@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { getAllieve, getSingleAllieva, creaAllieva, modificaAllieva, eliminaAllieva } = require('../database/allievaQuery');
+const { getAllieve, getSingleAllieva, creaAllieva, modificaAllieva, eliminaAllieva, aggiornaDataIscrizione } = require('../database/allievaQuery');
 
 const allievaRouter = new Router();
 
@@ -57,10 +57,25 @@ async function eliminaAllievaEndpoint(req, res, next) {
   }
 }
 
+async function aggiornaDataIscrizioneEndpoint(req, res, next) {
+  try {
+    const AllievaID = req.body.AllievaID;
+    const DataIscrizione = req.body.DataIscrizione;
+
+    const response = await aggiornaDataIscrizione(DataIscrizione, AllievaID);
+    const responseObject = { message: response };
+    res.status(200).send(responseObject);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+}
+
 allievaRouter.get('/getAllieve', getAllieveEndpoint);
 allievaRouter.get('/getSingleAllieva/:CodiceFiscale', getSingleAllievaEndpoint);
 allievaRouter.put('/creaAllieva', creaAllievaEndpoint);
 allievaRouter.post('/modificaAllieva', modificaAllievaEndpoint);
+allievaRouter.post('/aggiornaDataIscrizione', aggiornaDataIscrizioneEndpoint);
 allievaRouter.delete('/eliminaAllieva', eliminaAllievaEndpoint);
 
 module.exports = allievaRouter;

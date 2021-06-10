@@ -47,12 +47,13 @@ function PaginaAllieve() {
     gridOptions.api.sizeColumnsToFit();
 
     window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const visualizzaAnno = (anno) => {
     const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
 
-    if (anno == '') NumeroRicevutaFilterComponent.setModel(null);
+    if (anno === '') NumeroRicevutaFilterComponent.setModel(null);
     else {
       const endDigits = anno.substr(anno.length - 2);
       NumeroRicevutaFilterComponent.setModel({
@@ -67,7 +68,7 @@ function PaginaAllieve() {
   const viewPaymentMethod = (method) => {
     const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('TipoPagamento');
 
-    if (method == '') PaymentMethodFilterComponent.setModel(null);
+    if (method === '') PaymentMethodFilterComponent.setModel(null);
     else {
       PaymentMethodFilterComponent.setModel({
           type: 'endsWith',
