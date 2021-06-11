@@ -1,7 +1,8 @@
 /* NUOVO CSS */
 
 label {
-  margin-left: 1em;
+  /* margin-left: 1em; */
+  padding-right: 1em;
   font-weight: bold;
 }
 
@@ -45,6 +46,19 @@ input[type='date'] {
   margin: 1em;
 }
 
+.create-receipt-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2vw;
+}
+
+.flex-element {
+  flex: 1 3 15vw;
+  margin-top: 0.7vw;
+}
+
 .create-student-form {
   display: grid;
   grid-template-columns: 10% 20% 10% 20%;
@@ -60,7 +74,7 @@ input[type='date'] {
 }
 
 .create-student-form > input, select, option, form-control {
-  margin: 0.7vw 1vw;  /*  top, right, bottom, left  */
+  /* margin: 0.7vw 1vw;   top, right, bottom, left  */
   min-width: 0;
 }
 
@@ -82,7 +96,7 @@ input[type='date'] {
 }
 .update-student-form > input, select, option, form-control {
   flex: 1 0 20vw; /* flex-grow, flex-shrink, flex-basis */
-  margin: 0.7vw 1vw;  /*  top, right, bottom, left  */
+  /* margin: 0.7vw 1vw;   top, right, bottom, left  */
 }
 
 .page-body {
@@ -99,10 +113,10 @@ input[type='date'] {
 
 .formWrapper {
   margin-top: 2em;
-  border-color: gray;
+  /* border-color: gray;
   border-style: solid;
   border-radius: 0.5em;
-  border-width: 0.1em;
+  border-width: 0.1em; */
   padding-bottom: 1.5em;
 }
 

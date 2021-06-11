@@ -7,7 +7,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import NotFoundPage from './notfoundpage';
 import FormAllieva from '../components/form_allieva';
 import ListaRicevute from '../components/lista_ricevute';
-import FormCreaRicevuta from '../components/form_crea_ricevuta';
+import FormCreaRicevuta from '../components/form_ricevuta';
 import reverseDate from '../helpers/reverse-date-for-input-date';
 import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/api-calls';
 
@@ -104,9 +104,7 @@ function Allieva({ match }) {
   return (
     <>
       <div className="page-body">
-        <h2>
-          {allievaInfo.Nome} {allievaInfo.Cognome}
-        </h2>
+        <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: '1.2' }}>{allievaInfo.Nome} {allievaInfo.Cognome}</h2>
 
         <Button id="buttonStampaRicevute" onClick={stampaModuloIscrizione} style={{ marginTop: '1em' }}>
            <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
