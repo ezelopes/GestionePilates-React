@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-mdl';
+import { Button } from 'react-bootstrap';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -94,13 +94,13 @@ function PaginaAllieve(/*props*/) {
 
   return (
     <div className="page-body">
-      <Button raised ripple id="buttonVisualizzaMaggiorenni" onClick={visualizzaMaggiorenni} style={{ marginBottom: '2em', marginRight: '2em' }}>
+      <Button variant="secondary" id="buttonVisualizzaMaggiorenni" onClick={visualizzaMaggiorenni} style={{ marginBottom: '2em', marginRight: '2em' }}>
         Visualizza Maggiorenni
       </Button>
-      <Button raised ripple id="buttonVisualizzaMinorenni" onClick={visualizzaMinorenni} style={{ marginBottom: '2em', marginRight: '2em' }}>
+      <Button variant="secondary" id="buttonVisualizzaMinorenni" onClick={visualizzaMinorenni} style={{ marginBottom: '2em', marginRight: '2em' }}>
         Visualizza Minorenni
       </Button>
-      <Button raised ripple id="buttonVisualizzaTutti" onClick={visualizzaTutti} style={{ marginBottom: '2em', marginRight: '2em' }}>
+      <Button variant="secondary" id="buttonVisualizzaTutti" onClick={visualizzaTutti} style={{ marginBottom: '2em', marginRight: '2em' }}>
         Visualizza Tutti
       </Button>
       <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>

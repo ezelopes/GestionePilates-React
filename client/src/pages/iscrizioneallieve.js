@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import { createStudent } from '../helpers/api-calls';
 
 import FormAllieva from '../components/form_allieva';
-import 'react-widgets/dist/css/react-widgets.css';
 
 import formatDate from '../helpers/format-date-for-input-date';
 import reverseDate from '../helpers/reverse-date-for-input-date';

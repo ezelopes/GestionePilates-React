@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import 'react-widgets/dist/css/react-widgets.css';
-import simpleNumberLocalizer from 'react-widgets-simple-number';
 import formatDate from '../helpers/format-date-for-input-date';
 
-
-simpleNumberLocalizer();
 
 let tipoRicevuta = [
   { id: 0, tipo: 'Quota' },

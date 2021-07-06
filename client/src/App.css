@@ -30,7 +30,7 @@ input[type='text']:focus {
 input[type='date'] {
   font-size: 1em;
   border-radius: 2px;
-  width: 16em;
+  /* width: 16em; */
   padding-left: 0.5em;
   height: 2em;
 }
@@ -52,6 +52,10 @@ input[type='date'] {
   justify-content: center;
   flex-wrap: wrap;
   gap: 2vw;
+}
+
+.create-receipt-form input[type='date'] {
+  width: 15vw;
 }
 
 .flex-element {
@@ -84,19 +88,22 @@ input[type='date'] {
 }
 
 .update-student-form {
-  display: flex;
+  display: grid;
+  grid-template-columns: 15% 25% 15% 25%;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  row-gap: 1vw;
+  column-gap: 1vw;
 }
 
 .update-student-form > label {
-  flex: 0 3 10vw; /* flex-grow, flex-shrink, flex-basis */
-  margin-top: 0.7vw;
+  margin-top: 0.3vw;
+  margin-left: 0.7vw;
 }
 .update-student-form > input, select, option, form-control {
-  flex: 1 0 20vw; /* flex-grow, flex-shrink, flex-basis */
-  /* margin: 0.7vw 1vw;   top, right, bottom, left  */
+  /* flex: 1 0 20vw; /* flex-grow, flex-shrink, flex-basis */
+  margin-top: 0.3vw;  
+   /* top, right, bottom, left  */
 }
 
 .page-body {
@@ -154,4 +161,22 @@ input[type='date'] {
 
 .btn {
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+}
+
+.updateRegistrationDate {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteStudentModalBody {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.updateStudentModalBody {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
 }

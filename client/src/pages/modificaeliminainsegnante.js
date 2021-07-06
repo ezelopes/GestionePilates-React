@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-mdl';
+import { Button } from 'react-bootstrap';
 import FormModificaEliminaInsegnante from '../components/form_modifica_elimina_insegnante';
 
 function ModificaEliminaInseganti(props) {
@@ -26,7 +26,7 @@ function ModificaEliminaInseganti(props) {
       <div className="cercaForm">
         <label id="labelNumRicevuta"> Cerca Insegnante per Codice Fiscale </label>
         <input type="text" id="cercaCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
-        <Button raised ripple id="buttonCercaInsegnante" onClick={cercaInsegnante}>
+        <Button variant="secondary" id="buttonCercaInsegnante" onClick={cercaInsegnante}>
           Cerca Insegnante
         </Button>
       </div>

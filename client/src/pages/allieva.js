@@ -96,7 +96,7 @@ function Allieva({ match }) {
       setAllievaRicevute(ricevute);
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   if (!allievaInfo) return <NotFoundPage />;
@@ -134,7 +134,7 @@ function Allieva({ match }) {
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Modal.Body className="updateRegistrationDate">
             <input type="date" defaultValue={ reverseDate(allievaInfo.DataIscrizione) } onChange={({ target }) => setNewRegistrationDate(target.value)} />
         </Modal.Body>
         <Modal.Footer>
@@ -151,7 +151,7 @@ function Allieva({ match }) {
         <Modal.Header closeButton>
           <Modal.Title> Elimina Allieva </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
+        <Modal.Body className="deleteStudentModalBody">
             Sei sicura di voler eliminare {allievaInfo.Nome} {allievaInfo.Cognome}?
         </Modal.Body>
         <Modal.Footer>
@@ -168,7 +168,7 @@ function Allieva({ match }) {
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Allieva </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
+        <Modal.Body className="updateStudentModalBody">
             <div className="update-student-form">
               <FormAllieva 
                 allievaInfo={allievaInfo}

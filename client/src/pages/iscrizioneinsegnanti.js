@@ -1,17 +1,12 @@
 import React from 'react';
-import { Button } from 'react-mdl';
-import 'react-widgets/dist/css/react-widgets.css';
-import simpleNumberLocalizer from 'react-widgets-simple-number';
+import { Button } from 'react-bootstrap';
+// import 'react-widgets/dist/css/react-widgets.css';
 import { Combobox } from 'react-widgets';
 import moment from 'moment';
-import momentLocalizer from 'react-widgets-moment';
 import formatDate from '../helpers/format-date-for-input-date';
 import commondata from '../commondata/commondata'
 
 moment.locale('es');
-momentLocalizer();
-
-simpleNumberLocalizer();
 
 function IscrizioneInsegnanti() {
   const today = formatDate(new Date(), true);
@@ -137,10 +132,10 @@ function IscrizioneInsegnanti() {
             <input id="dtpDataNascita" type="date" defaultValue={today} />
 
           </form>
-          <Button raised ripple id="buttonCreaInsegnante" onClick={creaInsegnante}>
+          <Button variant="secondary" id="buttonCreaInsegnante" onClick={creaInsegnante}>
             Crea Insegnante
           </Button>
-          <Button raised ripple id="buttonResetForm" onClick={resetForm}>
+          <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
             Reset Form
           </Button>
         </div>

@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-mdl';
-import 'react-widgets/dist/css/react-widgets.css';
-import simpleNumberLocalizer from 'react-widgets-simple-number';
+import { Button } from 'react-bootstrap';
 import { Combobox } from 'react-widgets';
 import moment from 'moment';
-import momentLocalizer from 'react-widgets-moment';
 import reverseDate from '../helpers/reverse-date-for-input-date';
 import commondata from '../commondata/commondata'
 
 moment.locale('es');
-momentLocalizer();
 
-simpleNumberLocalizer();
 
 const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
   let [insegnanteInfo, /*setInsegnanteInfo*/] = useState(insegnanteInfoParam);
@@ -25,7 +20,7 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
 
   useEffect(() => {
     if (insegnanteInfoParam) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+
       insegnanteInfo = insegnanteInfoParam;
       document.getElementById('textCodiceFiscale').value = insegnanteInfo.CodiceFiscale;
       document.getElementById('textNomeInsegnante').value = insegnanteInfo.Nome;
@@ -45,7 +40,7 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
       document.getElementById('buttonModificaInsegnante').disabled = false;
       document.getElementById('buttonEliminaInsegnante').disabled = false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [insegnanteInfo]);
 
   const modificaInsegnante = async () => {
@@ -189,10 +184,10 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
           <input id="dtpDataNascita" type="date" />
 
         </form>
-        <Button raised ripple id="buttonModificaInsegnante" onClick={modificaInsegnante} disabled={!insegnanteInfo}>
+        <Button variant="secondary" id="buttonModificaInsegnante" onClick={modificaInsegnante} disabled={!insegnanteInfo}>
           Modifica Insegnante
         </Button>
-        <Button raised ripple id="buttonEliminaInsegnante" onClick={eliminaInsegnante} disabled={!insegnanteInfo}>
+        <Button variant="secondary" id="buttonEliminaInsegnante" onClick={eliminaInsegnante} disabled={!insegnanteInfo}>
           Elimina Insegnante
         </Button>
       </div>

@@ -47,7 +47,7 @@ function PaginaAllieve() {
     gridOptions.api.sizeColumnsToFit();
 
     window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const visualizzaAnno = (anno) => {
