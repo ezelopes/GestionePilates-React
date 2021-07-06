@@ -37,7 +37,6 @@ async function getAllieve() {
   const [rows, fields] = await pool.execute('SELECT * FROM allieva');
   const allieve = mappingAllieve(rows);
   
-  console.log(allieve);
   return allieve;
 }
 
@@ -150,7 +149,6 @@ async function eliminaAllieva(AllievaID) {
 async function aggiornaDataIscrizione(DataIscrizione, AllievaID) {
   try {    
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
-    console.log(DataIscrizioneFormatted)
 
     await pool.execute(`UPDATE Allieva SET Allieva.DataIscrizione = ? WHERE AllievaID = ?;`, [DataIscrizioneFormatted, AllievaID]);
     return 'Data Iscrizione Aggiornata Correttamente!';

@@ -27,7 +27,6 @@ async function getInsegnanti() {
   const [rows, fields] = await pool.execute('SELECT * FROM insegnante');
   const insegnante = mappingInsegnanti(rows);
 
-  console.log(insegnante);
   return insegnante;
 }
 

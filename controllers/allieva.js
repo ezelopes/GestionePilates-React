@@ -6,7 +6,6 @@ const allievaRouter = new Router();
 async function getAllieveEndpoint(req, res, next) {
   try {
     const allieve = await getAllieve();
-    console.log(allieve);
     res.status(200).send(allieve);
   } catch (e) {
     console.log(e);

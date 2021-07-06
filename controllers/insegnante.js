@@ -6,7 +6,6 @@ const insegnanteRouter = new Router();
 async function getInsegnantiEndpoint(req, res, next) {
   try {
     const insegnanti = await getInsegnanti();
-    console.log(insegnanti);
     res.status(200).send(insegnanti);
   } catch (e) {
     console.log(e);

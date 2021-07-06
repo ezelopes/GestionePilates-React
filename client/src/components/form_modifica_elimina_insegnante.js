@@ -16,7 +16,6 @@ const FormModificaEliminaInsegnante = ({ insegnanteInfoParam }) => {
   const scuole = commondata.scuole;
 
   insegnanteInfo = insegnanteInfoParam;
-  console.log(insegnanteInfo);
 
   useEffect(() => {
     if (insegnanteInfoParam) {

@@ -17,7 +17,6 @@ async function getRicevuteOfAllievaEndpoint(req, res, next) {
 async function getAllRicevuteEndpoint(req, res, next) {
   try {
     const ricevute = await getAllRicevute();
-    console.log(ricevute);
     res.status(200).send(ricevute);
   } catch (e) {
     console.log(e);

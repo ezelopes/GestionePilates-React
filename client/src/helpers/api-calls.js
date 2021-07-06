@@ -46,7 +46,6 @@ const updateStudent = async (allievaModificata) => {
     
     for (let i = 0; i < listaAllieveCached.length; i++) {
       if(allievaModificata.AllievaID === listaAllieveCached[i].AllievaID) {
-        console.log('Found');
         listaAllieveCached[i] = allievaModificata;
         break;
       }
@@ -76,7 +75,6 @@ const updateRegistrationDate = async (AllievaID, DataIscrizione) => {
     
     for (let i = 0; i < listaAllieveCached.length; i++) {
       if(AllievaID === listaAllieveCached[i].AllievaID) {
-        console.log('Found');
         listaAllieveCached[i].DataIscrizione = reverseDate(DataIscrizione) || '1900-01-01';
         break;
       }
