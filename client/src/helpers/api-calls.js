@@ -27,6 +27,53 @@ const createStudent = async (newAllieva) => {
   // resetForm();
 };
 
+const createReceipt = async (newReceipt) => {
+  // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
+  if (!newReceipt.NumeroRicevuta || newReceipt.NumeroRicevuta === '') return alert('Numero Ricevuta non puo essere vuoto');
+
+  const response = await fetch('/api/ricevuta/creaRicevuta', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newReceipt)
+  });
+
+  if (newReceipt.TipoRicevuta === 'Quota Associativa') {
+    delete newReceipt.DataInizioCorso;
+    delete newReceipt.DataScadenzaCorso;
+  }
+
+  if (response.status === 200) {
+    const responseParsed = await response.json();
+    alert(responseParsed.message);
+    window.location.reload();
+  }
+};
+
+const createTeacher = async (newTeacher) => {
+  // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
+  if (!newTeacher.CodiceFiscale || newTeacher.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+
+  const response = await fetch('/api/insegnante/creaInsegnante', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newTeacher)
+  });
+
+  if (response.status === 200) {
+    const responseParsed = await response.json();
+    console.log(responseParsed)
+    
+    alert('Insegnante Creata Correttamente');
+  }
+  // resetForm();
+};
+
 const updateStudent = async (allievaModificata) => {
   if (!allievaModificata.CodiceFiscale || allievaModificata.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
 
@@ -58,6 +105,11 @@ const updateStudent = async (allievaModificata) => {
     alert(responseParsed.message);
   }
   
+}
+
+const updateTeacher = async (updatedTeacherInfo) => {
+  console.log(updatedTeacherInfo)
+  return;
 }
 
 const updateRegistrationDate = async (AllievaID, DataIscrizione) => {
@@ -152,8 +204,11 @@ const deleteReceipt = async (RicevutaID) => {
 
 export {
   createStudent,
+  createReceipt,
+  createTeacher,
   updateStudent,
   updateRegistrationDate,
+  updateTeacher,
   updateReceipt,
   deleteStudent,
   deleteReceipt,

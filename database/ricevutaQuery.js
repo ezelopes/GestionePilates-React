@@ -1,7 +1,7 @@
 const pool = require('./pool');
 const moment = require('moment');
 
-function mappingRicevuta(rows) {
+const mappingRicevuta = (rows) => {
   const ricevute = rows.map(row => {
     return {
       RicevutaID: row.RicevutaID,
@@ -19,7 +19,7 @@ function mappingRicevuta(rows) {
   return ricevute;
 }
   
-function mappingAllRicevute(rows) {
+const mappingAllRicevute = (rows) => {
   const ricevute = rows.map(row => {
     return {
       Nome: row.Nome,
@@ -34,14 +34,14 @@ function mappingAllRicevute(rows) {
   return ricevute;
 }
 
-async function getRicevuteOfAllieva(CodiceFiscale) {
+const getRicevuteOfAllieva = async (CodiceFiscale) => {
   const [rows, fields] = await pool.execute('SELECT * FROM Ricevuta WHERE FK_CodiceFiscale = ?', [CodiceFiscale]);
   const ricevute = mappingRicevuta(rows);
   
   return ricevute;
 }
 
-async function getAllRicevute() {
+const getAllRicevute = async () => {
   const [rows, fields] = await pool.execute(
     'SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, TipoPagamento \
     FROM ricevuta \
@@ -53,7 +53,7 @@ async function getAllRicevute() {
   return ricevute;
 }
 
-async function creaRicevuta({
+const creaRicevuta = async ({
   NumeroRicevuta,
   TipoPagamento,
   TipoRicevuta,
@@ -64,7 +64,7 @@ async function creaRicevuta({
   CodiceFiscale,
   AllievaID,
   DataIscrizione
-}) {
+}) => {
   try {
     const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
     if (TipoRicevuta.toUpperCase() == 'QUOTA ASSOCIATIVA') {
@@ -99,7 +99,7 @@ async function creaRicevuta({
   }
 }
 
-async function eliminaRicevuta(RicevutaID) {
+const eliminaRicevuta = async (RicevutaID) => {
   try {
     await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [RicevutaID])
 
@@ -110,7 +110,7 @@ async function eliminaRicevuta(RicevutaID) {
   }
 }
   
-async function modificaRicevuta({
+const modificaRicevuta = async({
   RicevutaID,
   NumeroRicevuta,
   TipoPagamento,
@@ -119,7 +119,7 @@ async function modificaRicevuta({
   DataInizioCorso,
   DataScadenzaCorso,
   SommaEuro,
-}) {
+}) => {
   try {
     const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
   

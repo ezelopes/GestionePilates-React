@@ -19,7 +19,7 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 
-function Allieva({ match }) {
+const Allieva = ({ match }) => {
 
   const [allievaInfo, setAllievaInfo] = useState({});
   const [allievaRicevute, setAllievaRicevute] = useState([]);
@@ -44,7 +44,7 @@ function Allieva({ match }) {
   const [newNomeGenitore, setNewNomeGenitore] = useState('');
   const [newCognomeGenitore, setNewCognomeGenitore] = useState('');
   
-  const [showUpdateStudenttModal, setShowUpdateStudenttModal] = useState(false);
+  const [showUpdateStudentModal, setShowUpdateStudentModal] = useState(false);
   const [showRegistrationDateModal, setShowRegistrationDateModal] = useState(false);
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
 
@@ -71,7 +71,7 @@ function Allieva({ match }) {
 
   const handleUpdateStudentModal = () => {
     setFormData(allievaInfo); // if closed without saving
-    setShowUpdateStudenttModal(false);
+    setShowUpdateStudentModal(false);
   }
 
 
@@ -110,7 +110,7 @@ function Allieva({ match }) {
            <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
         </Button>
         
-        <Button variant="warning" onClick={ () => setShowUpdateStudenttModal(true) } style={{ marginLeft: '2em', marginTop: '1em' }}>
+        <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) } style={{ marginLeft: '2em', marginTop: '1em' }}>
           <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
         </Button>
 
@@ -164,7 +164,7 @@ function Allieva({ match }) {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showUpdateStudenttModal} onHide={() => handleUpdateStudentModal()} dialogClassName="update-student-modal" centered>
+      <Modal show={showUpdateStudentModal} onHide={() => handleUpdateStudentModal()} dialogClassName="update-student-modal" centered>
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Allieva </Modal.Title>
         </Modal.Header>

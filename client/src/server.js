@@ -7,14 +7,12 @@ import homepage from './pages/homepage';
 import iscrizioneallieve from './pages/iscrizioneallieve';
 import iscrizioneinsegnanti from './pages/iscrizioneinsegnanti';
 import allieva from './pages/allieva';
-// import modificaeliminaallieva from './pages/modificaeliminaallieva';
-import modificaeliminainsegnante from './pages/modificaeliminainsegnante';
 import paginaallieve from './pages/paginaallieve';
 import paginaricevute from './pages/paginaricevute';
 import paginainsegnanti from './pages/paginainsegnanti';
 import notfoundpage from './pages/notfoundpage';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <div className="App">
@@ -28,10 +26,7 @@ function App() {
             <Route path="/paginaallieve/:codicefiscale" component={allieva} exact />
             <Route path="/iscrizioneallieve" component={iscrizioneallieve} exact />
             <Route path="/iscrizioneinsegnanti" component={iscrizioneinsegnanti} exact />
-            {/* <Route path="/modificaeliminaallieva" component={modificaeliminaallieva} exact /> */}
-            <Route path="/modificaeliminainsegnante" component={modificaeliminainsegnante} exact />
             <Route path="/paginainsegnanti" component={paginainsegnanti} exact />
-            {/* If it doesn't match any of the above, then not found */}
             <Route component={notfoundpage} />
           </Switch>
         </div>

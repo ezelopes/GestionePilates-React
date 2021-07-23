@@ -1,7 +1,7 @@
 const pool = require('./pool');
 const moment = require('moment');
 
-function mappingInsegnanti(rows) {
+const mappingInsegnanti = (rows) => {
   const insegnanti = rows.map(row => {
     return {
       CodiceFiscale: row.CodiceFiscale,
@@ -23,21 +23,21 @@ function mappingInsegnanti(rows) {
   return insegnanti;
 }
 
-async function getInsegnanti() {
+const getInsegnanti = async () => {
   const [rows, fields] = await pool.execute('SELECT * FROM insegnante');
   const insegnante = mappingInsegnanti(rows);
 
   return insegnante;
 }
 
-async function getSingleInsegnante(CodiceFiscale) {
+const getSingleInsegnante = async (CodiceFiscale) => {
   const [rows, fields] = await pool.execute('SELECT * FROM insegnante WHERE CodiceFiscale= ?;', [CodiceFiscale]);
   const allieva = mappingInsegnanti(rows);
 
   return allieva;
 }
 
-async function creaInsegnante({
+const creaInsegnante = async ({
   CodiceFiscale,
   Nome,
   Cognome,
@@ -52,7 +52,7 @@ async function creaInsegnante({
   Disciplina,
   Corso,
   Scuola,
-}) {
+}) => {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
@@ -69,7 +69,7 @@ async function creaInsegnante({
   }
 }
 
-async function modificaInsegnante({
+const modificaInsegnante = async ({
   CodiceFiscale,
   Nome,
   Cognome,
@@ -84,7 +84,7 @@ async function modificaInsegnante({
   Disciplina,
   Corso,
   Scuola,
-}) {
+}) => {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
@@ -100,7 +100,7 @@ async function modificaInsegnante({
   }
 }
 
-async function eliminaInsegnante(CodiceFiscale) {
+const eliminaInsegnante = async (CodiceFiscale) => {
   try {
     await pool.execute('DELETE FROM insegnante WHERE CodiceFiscale=?;', [CodiceFiscale]);
     return 'Insegnante Eliminata Correttamente!';

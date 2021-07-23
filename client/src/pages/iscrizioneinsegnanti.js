@@ -1,143 +1,106 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-// import 'react-widgets/dist/css/react-widgets.css';
-import { Combobox } from 'react-widgets';
 import moment from 'moment';
 import formatDate from '../helpers/format-date-for-input-date';
 import commondata from '../commondata/commondata'
+import reverseDate from '../helpers/reverse-date-for-input-date';
+
+import FormInsegnante from '../components/form_insegnante';
+
+import { createTeacher } from '../helpers/api-calls';
 
 moment.locale('es');
 
-function IscrizioneInsegnanti() {
+const IscrizioneInsegnanti = () => {
   const today = formatDate(new Date(), true);
 
-  const discipline = commondata.discipline;
-  const corsi = commondata.corsi;
-  const scuole = commondata.scuole;
+  const { discipline, corsi, scuole } = commondata;
 
-  const creaInsegnante = async () => {
-    // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-    if (document.getElementById('textCodiceFiscale').value === '') {
-      document.getElementById('textCodiceFiscale').style.borderColor = 'red';
-      return;
-    }
+  const insegnanteInfoDefault = { 
+    CodiceFiscale: '',
+    Nome: '',
+    Cognome: '',
+    Citta: '',
+    Indirizzo: '',
+    Cellulare: '',
+    Email: '',
+    LuogoNascita: '',
+    Disciplina: discipline[0].disciplina,
+    Corso: corsi[0].corso,
+    Scuola: scuole[0].scuola,
+    DataIscrizione: reverseDate(today),
+    DataCertificato: reverseDate(today),
+    DataNascita: reverseDate(today),
+  }
 
-    const response = await fetch('/api/insegnante/creaInsegnante', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        CodiceFiscale: document.getElementById('textCodiceFiscale').value,
-        Nome: document.getElementById('textNomeInsegnante').value,
-        Cognome: document.getElementById('textCognomeInsegnante').value,
-        Citta: document.getElementById('textCitta').value,
-        Indirizzo: document.getElementById('textIndirizzo').value,
-        Cellulare: document.getElementById('textCellulare').value,
-        Email: document.getElementById('textEmail').value,
-        DataIscrizione: document.getElementById('dtpDataIscrizione').value,
-        DataCertificato: document.getElementById('dtpDataCertificato').value,
-        DataNascita: document.getElementById('dtpDataNascita').value,
-        LuogoNascita: document.getElementById('textLuogoNascita').value,
-        Disciplina: document.getElementById('comboboxDisciplina_input').value,
-        Corso: document.getElementById('comboboxCorso_input').value,
-        Scuola: document.getElementById('comboboxScuola_input').value,
-      })
-    });
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
-    resetForm();
-  };
+  const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
+  const [newNome, setNewNome] = useState('');
+  const [newCognome, setNewCognome] = useState('');
+  const [newCitta, setNewCitta] = useState('');
+  const [newIndirizzo, setNewIndirizzo] = useState('');
+  const [newCellulare, setNewCellulare] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newLuogoNascita, setNewLuogoNascita] = useState('');
+  const [newDisciplina, setNewDisciplina] = useState(discipline[0].disciplina);
+  const [newCorso, setNewCorso] = useState(corsi[0].corso);
+  const [newScuola, setNewScuola] = useState(scuole[0].scuola);
+  const [newDataIscrizione, setNewDataIscrizione] = useState(today);
+  const [newDataCertificato, setNewDataCertificato] = useState(today);
+  const [newDataNascita, setNewDataNascita] = useState(today);
 
   const resetForm = () => {
-    document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
-    document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
-    document.getElementById('comboboxScuola_input').defaultValue = scuole[0].scuola;
-    document.getElementById('formCreaInsegnante').reset();
-  };
+    setNewCodiceFiscale('');
+    setNewNome('');
+    setNewCognome('');
+    setNewCitta('');
+    setNewIndirizzo('');
+    setNewCellulare('');
+    setNewEmail('');
+    setNewLuogoNascita('');
+    setNewDisciplina(discipline[0].disciplina);
+    setNewCorso(corsi[0].corso);
+    setNewScuola(scuole[0].scuola);
+    setNewDataIscrizione(today);
+    setNewDataCertificato(today);
+    setNewDataNascita(today);
+
+    // Reset UI Values
+  }
 
   return (
     <>
-      <div className="page-body">
-        <div className="formWrapper">
-          <form id="formCreaInsegnante">
-
-            <label id="labelCodiceFiscale"> Codice Fiscale </label>
-            <input type="text" id="textCodiceFiscale" placeholder="Inserisci Codice Fiscale..." />
-
-            <label id="labelNomeInsegnante"> Nome Insegnante </label>
-            <input type="text" id="textNomeInsegnante" placeholder="Inserisci Nome Insegnante..." />
-
-            <label id="labelCognomeInsegnante"> Cognome Insegnante </label>
-            <input type="text" id="textCognomeInsegnante" placeholder="Inserisci Cognome Insegnante..." />
-
-            <label id="labelCitta"> Citta </label>
-            <input type="text" id="textCitta" placeholder="Inserisci Citta..." />
-
-            <label id="labelIndirizzo"> Indirizzo </label>
-            <input type="text" id="textIndirizzo" placeholder="Inserisci Indirizzo..." />
-
-            <label id="labelCellulare"> Cellulare </label>
-            <input type="text" id="textCellulare" placeholder="Inserisci Cellulare..." />
-
-            <label id="labelEmail"> Email </label>
-            <input type="text" id="textEmail" placeholder="Inserisci Email..." />
-
-            <label id="labelLuogoNascita"> Luogo Nascita </label>
-            <input type="text" id="textLuogoNascita" placeholder="Inserisci LuogoNascita..." />
-
-            <label id="labelDisciplina"> Disciplina </label>
-            <Combobox
-              id="comboboxDisciplina"
-              data={discipline}
-              defaultValue={discipline[0]}
-              valueField="id"
-              textField="disciplina"
-              caseSensitive={false}
-              filter="contains"
-            />
-
-            <label id="labelCorso"> Corso </label>
-            <Combobox
-              id="comboboxCorso"
-              data={corsi}
-              defaultValue={corsi[0]}
-              valueField="id"
-              textField="corso"
-              caseSensitive={false}
-              filter="contains"
-              placeholder="Seleziona Corso..."
-            />
-
-            <label id="labelScuole"> Scuola </label>
-            <Combobox
-              id="comboboxScuola"
-              data={scuole}
-              defaultValue={scuole[0]}
-              valueField="id"
-              textField="scuola"
-              caseSensitive={false}
-              filter="contains"
-              placeholder="Seleziona Scuola..."
-            />
-
-            <label id="labelDataIscrizione"> Data Iscrizione </label>
-            <input id="dtpDataIscrizione" type="date" defaultValue={today} />
-
-            <label id="labelDataCertificato"> Data Certificato </label>
-            <input id="dtpDataCertificato" type="date" defaultValue={today} />
-
-            <label id="labelDataNascita"> Data Nascita </label>
-            <input id="dtpDataNascita" type="date" defaultValue={today} />
-
-          </form>
-          <Button variant="secondary" id="buttonCreaInsegnante" onClick={creaInsegnante}>
+      <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
+        <div className="create-student-form">
+          <FormInsegnante
+            insegnanteInfo={ insegnanteInfoDefault }
+            setNewCodiceFiscale={setNewCodiceFiscale}
+            setNewNome={setNewNome}
+            setNewCognome={setNewCognome}
+            setNewCitta={setNewCitta}
+            setNewIndirizzo={setNewIndirizzo}
+            setNewCellulare={setNewCellulare}
+            setNewEmail={setNewEmail}
+            setNewLuogoNascita={setNewLuogoNascita}
+            setNewDisciplina={setNewDisciplina}
+            setNewCorso={setNewCorso}
+            setNewScuola={setNewScuola}
+            setNewDataIscrizione={setNewDataIscrizione}
+            setNewDataCertificato={setNewDataCertificato}
+            setNewDataNascita={setNewDataNascita}
+          />
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
+          <Button variant="success" id="buttonCreaInsegnante" onClick={() => {
+              const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita };
+              createTeacher(newTeacher);
+              resetForm();
+          }}>
             Crea Insegnante
           </Button>
           <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
             Reset Form
-          </Button>
+          </Button>  
         </div>
       </div>
     </>

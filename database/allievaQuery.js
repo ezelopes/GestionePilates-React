@@ -1,7 +1,7 @@
 const pool = require('./pool');
 const moment = require('moment');
 
-function mappingAllieve(rows) {
+const mappingAllieve = (rows) => {
   const allieve = rows.map(row => {
     return {
       AllievaID: row.AllievaID,
@@ -28,26 +28,26 @@ function mappingAllieve(rows) {
   return allieve;
 }
 
-async function contaRicevuteAllieva(AllievaID) {
+const contaRicevuteAllieva = async (AllievaID) => {
   const [rows, fields] = await pool.execute('SELECT RicevutaID FROM Ricevuta WHERE FK_AllievaID = ? LIMIT 1', [AllievaID]);
   return rows.length;
 }
 
-async function getAllieve() {
+const getAllieve = async () => {
   const [rows, fields] = await pool.execute('SELECT * FROM allieva');
   const allieve = mappingAllieve(rows);
   
   return allieve;
 }
 
-async function getSingleAllieva(CodiceFiscale) {
+const getSingleAllieva = async (CodiceFiscale) => {
   const [rows, fields] = await pool.execute('SELECT * FROM allieva WHERE CodiceFiscale= ?;', [CodiceFiscale]);
   const allieva = mappingAllieve(rows);
   
   return allieva; // allieva[0]
 }
 
-async function creaAllieva({
+const creaAllieva = async ({
   CodiceFiscale,
   Maggiorenne,
   Nome,
@@ -66,7 +66,7 @@ async function creaAllieva({
   CodiceFiscaleGenitore,
   NomeGenitore,
   CognomeGenitore
-}) {
+}) => {
   try {
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD');
@@ -87,7 +87,7 @@ async function creaAllieva({
   }
 }
 
-async function modificaAllieva({
+const modificaAllieva = async ({
   AllievaID,
   CodiceFiscale,
   Maggiorenne,
@@ -107,7 +107,7 @@ async function modificaAllieva({
   CodiceFiscaleGenitore,
   NomeGenitore,
   CognomeGenitore
-}) {
+}) => {
   try {
 
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
@@ -135,7 +135,7 @@ async function modificaAllieva({
   }
 }
 
-async function eliminaAllieva(AllievaID) {
+const eliminaAllieva = async (AllievaID) => {
   try {
     await pool.execute('DELETE FROM ricevuta WHERE FK_AllievaID=?;', [AllievaID]);
     await pool.execute('DELETE FROM allieva WHERE AllievaID=?;', [AllievaID]);
@@ -146,7 +146,7 @@ async function eliminaAllieva(AllievaID) {
   }
 }
 
-async function aggiornaDataIscrizione(DataIscrizione, AllievaID) {
+const aggiornaDataIscrizione = async (DataIscrizione, AllievaID) => {
   try {    
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
 

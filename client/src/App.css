@@ -1,7 +1,13 @@
-/* NUOVO CSS */
+/* NEW CSS */
+
+.homepage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 label {
-  /* margin-left: 1em; */
   padding-right: 1em;
   font-weight: bold;
 }
@@ -30,20 +36,19 @@ input[type='text']:focus {
 input[type='date'] {
   font-size: 1em;
   border-radius: 2px;
-  /* width: 16em; */
   padding-left: 0.5em;
   height: 2em;
 }
 
 .filter-form {
   display: flex;
-  justify-content: center; 
+  justify-content: left; 
   align-items: center;
-  padding: 1em;
+  padding-bottom: 1em;
 }
 
 .filter-form > * {
-  margin: 1em;
+  margin-right: 1em;
 }
 
 .create-receipt-form {
@@ -74,11 +79,9 @@ input[type='date'] {
 
 .create-student-form > label {
   margin-top: 0.7vw;
-  /* margin-left: 3vw; */
 }
 
 .create-student-form > input, select, option, form-control {
-  /* margin: 0.7vw 1vw;   top, right, bottom, left  */
   min-width: 0;
 }
 
@@ -100,6 +103,7 @@ input[type='date'] {
   margin-top: 0.3vw;
   margin-left: 0.7vw;
 }
+
 .update-student-form > input, select, option, form-control {
   /* flex: 1 0 20vw; /* flex-grow, flex-shrink, flex-basis */
   margin-top: 0.3vw;  
@@ -120,10 +124,6 @@ input[type='date'] {
 
 .formWrapper {
   margin-top: 2em;
-  /* border-color: gray;
-  border-style: solid;
-  border-radius: 0.5em;
-  border-width: 0.1em; */
   padding-bottom: 1.5em;
 }
 
@@ -179,4 +179,8 @@ input[type='date'] {
 .updateStudentModalBody {
   max-height: calc(100vh - 150px);
   overflow-y: auto;
+}
+
+.ag-theme-balham {
+  margin-top: 1em;
 }

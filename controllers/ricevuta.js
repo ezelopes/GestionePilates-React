@@ -3,48 +3,44 @@ const { getRicevuteOfAllieva, getAllRicevute, creaRicevuta, modificaRicevuta, el
 
 const ricevutaRouter = new Router();
 
-async function getRicevuteOfAllievaEndpoint(req, res, next) {
+const getRicevuteOfAllievaEndpoint = async (req, res) => {
   try {
     const CodiceFiscale = req.params.CodiceFiscale;
     const ricevute = await getRicevuteOfAllieva(CodiceFiscale);
     res.status(200).send(ricevute);
   } catch (e) {
     console.log(e);
-    next(e);
   }
 }
 
-async function getAllRicevuteEndpoint(req, res, next) {
+const getAllRicevuteEndpoint = async (req, res) => {
   try {
     const ricevute = await getAllRicevute();
     res.status(200).send(ricevute);
   } catch (e) {
     console.log(e);
-    next(e);
   }
 }
 
-async function creaRicevutaEndpoint(req, res, next) {
+const creaRicevutaEndpoint = async (req, res) => {
   try {
     const response = await creaRicevuta(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
-    next(e);
   }
 }
 
-async function modificaRicevutaEndpoint(req, res, next) {
+const modificaRicevutaEndpoint = async (req, res) => {
   try {
     const response = await modificaRicevuta(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
-    next(e);
   }
 }
 
-async function eliminaRicevutaEndpoint(req, res, next) {
+const eliminaRicevutaEndpoint = async (req, res) => {
   try {
     const RicevuteId = req.body.RicevuteId;
     const response = await eliminaRicevuta(RicevuteId);
@@ -52,7 +48,6 @@ async function eliminaRicevutaEndpoint(req, res, next) {
     res.status(200).send(responseObject);
   } catch (e) {
     console.log(e);
-    next(e);
   }
 }
 

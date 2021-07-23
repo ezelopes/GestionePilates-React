@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import formatDate from '../helpers/format-date-for-input-date';
 
+import { createReceipt } from '../helpers/api-calls';
 
 let tipoRicevuta = [
   { id: 0, tipo: 'Quota' },
@@ -51,31 +52,6 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
       delete infoRicevuta.DataScadenzaCorso;
     }
 
-    // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-    // if (document.getElementById('textNumeroRicevuta').value === '') {
-    //   document.getElementById('textNumeroRicevuta').style.borderColor = 'red';
-    //   return;
-    // }
-
-    // let infoRicevuta = {
-    //   NumeroRicevuta: document.getElementById('textNumeroRicevuta').value,
-    //   DataRicevuta: document.getElementById('dtpDataRicevuta').value,
-    //   DataInizioCorso: document.getElementById('dtpDataInizioCorso').value,
-    //   DataScadenzaCorso: document.getElementById('dtpDataScadenzaCorso').value,
-    //   SommaEuro: document.getElementById('comboboxSommaEuro_input').value,
-    //   TipoPagamento: document.getElementById('comboboxTipoPagamento_input').value,
-    //   TipoRicevuta: document.getElementById('comboboxTipoRicevuta_input').value,
-    //   CodiceFiscale: CodiceFiscale,
-    //   AllievaID: AllievaID,
-    //   DataIscrizione: document.getElementById("dataIscrizione").checked
-    // };
-    
-    // const tipoRicevuta = document.getElementById('comboboxTipoRicevuta_input').value;
-    // if (tipoRicevuta === 'Quota Associativa') {
-    //   delete infoRicevuta.DataInizioCorso;
-    //   delete infoRicevuta.DataScadenzaCorso;
-    // }
-
     const response = await fetch('/api/ricevuta/creaRicevuta', {
       method: 'PUT',
       headers: {
@@ -88,11 +64,6 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
     alert(responseParsed.message);
     window.location.reload();
   };
-
-  const checkboxChanged = (e, t) => { 
-    const value = document.getElementById("dataIscrizione").checked;
-    console.log(value);
-  }
 
   return (
     <div style={{ marginTop: '2em', border: '1px solid', borderRadius: '8px', padding: '1em' }}>
@@ -141,60 +112,12 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
         <div className="flex-element">
           <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' onChange={ ({ target }) =>  setUpdateDataIscrizione(target.checked) } />
         </div>
-    {/* <Checkbox label="Usa Data Ricevuta come Data Iscrizione" id="dataIscrizione" onChange={checkboxChanged} /> */}
-
-    {/* <div className="formWrapper">
-      <form className="formCreaRicevuta">
-        <label id="labelNumRicevuta"> Numero Ricevuta </label>
-        <input type="text" id="textNumeroRicevuta" placeholder="Inserisci Numero Ricevuta..." />
-        <label id="labelRicevuta"> Tipo Ricevuta </label>
-        <Combobox
-          id="comboboxTipoRicevuta"
-          data={tipoRicevuta}
-          defaultValue={tipoRicevuta[0]}
-          valueField="id"
-          textField="tipo"
-          caseSensitive={false}
-          filter="contains"
-        />
-        <label id="labelPagamento"> Tipo Pagamento </label>
-        <Combobox
-          id="comboboxTipoPagamento"
-          data={tipoPagamento}
-          defaultValue={tipoPagamento[0]}
-          valueField="id"
-          textField="tipo"
-          caseSensitive={false}
-          filter="contains"
-        />
-        <label id="labelSomma"> Somma Euro </label>
-        <Combobox
-          id="comboboxSommaEuro"
-          data={sommaEuro}
-          defaultValue={sommaEuro[0]}
-          valueField="id"
-          textField="somma"
-          caseSensitive={false}
-          filter="contains"
-        />
-
-        <label id="labelDataRicevuta"> Data Ricevuta </label>
-        <input id="dtpDataRicevuta" type="date" defaultValue={today} />
-
-        <label id="labelDataInizioCorso"> Data Inizio Corso </label>
-        <input id="dtpDataInizioCorso" type="date" defaultValue={today} />
-
-        <label id="labelDataScadenzaCorso"> Data Scadenza Corso </label>
-        <input id="dtpDataScadenzaCorso" type="date" defaultValue={today} />
-        
-        <Checkbox label="Usa Data Ricevuta come Data Iscrizione" id="dataIscrizione" onChange={checkboxChanged} />
-      </form>
-      <Button raised ripple id="buttonCreaRicevuta" onClick={creaRicevuta}>
-        Crea Ricevuta
-      </Button>
-    </div> */}
       </div>
-      <Button variant='success' style={{ marginTop: '2em' }} onClick={creaRicevuta}>
+      <Button variant='success' style={{ marginTop: '2em' }} onClick={() => {
+        // creaRicevuta
+        const newReceipt = { NumeroRicevuta: newNumeroRicevuta, DataRicevuta: newDataRicevuta, DataInizioCorso: newDataInizioCorso, DataScadenzaCorso: newDataScadenzaCorso, SommaEuro: newSommaEuro, TipoPagamento: newTipoPagamento, TipoRicevuta: newTipoRicevuta, CodiceFiscale: CodiceFiscale, AllievaID: AllievaID, DataIscrizione: updateDataIscrizione }
+        createReceipt(newReceipt)
+      }}>
         <span role='img' aria-label='create'>🆕</span> CREA RICEVUTA
       </Button>
     </div>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -44,10 +44,17 @@ const gridOptionsDefault = {
   rowSelection: 'single'
 };
 
-function PaginaAllieve(/*props*/) {
-  const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
-  const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
+const PaginaAllieve = () => {
+  const [gridOptions] = useState(gridOptionsDefault);
+  const [columnDefs] = useState(columnsDefinition);
   const [rowData, setRowData] = useState();
+  
+  const filterNameRef = useRef();
+  const filterSurnameRef = useRef();
+  const filterCityRef = useRef();
+  const filterAgeRef = useRef();
+
+  const ages = [ null, 'Maggiorenne', 'Minorenne' ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,46 +71,98 @@ function PaginaAllieve(/*props*/) {
     }
   }, []);
 
-  const visualizzaMaggiorenni = () => {
+  const clearFilters = () => {
+    const filterColumns = ['Maggiorenne', 'Nome', 'Cognome', 'Citta']
+
+    filterColumns.forEach(columnName => {
+      const filterComponent = gridOptions.api.getFilterInstance(columnName);
+      filterComponent.setModel(null);
+    });
+    
+    filterNameRef.current.value = null;
+    filterSurnameRef.current.value = null;
+    filterCityRef.current.value = null;
+    filterAgeRef.current.value = null;
+
+    gridOptions.api.onFilterChanged();
+  }
+
+  const viewAge = (age) => {
     const filterInstance = gridOptions.api.getFilterInstance('Maggiorenne');
 
     filterInstance.setModel({
-        type: 'endsWith',
-        filter: 'Maggiorenne'
+        type: 'contains',
+        filter: age
     });
 
     gridOptions.api.onFilterChanged();
   }
 
-  const visualizzaMinorenni = () => {
-    const filterInstance = gridOptions.api.getFilterInstance('Maggiorenne');
+  const viewStudentName = (studentName) => {
+    const studentNameFilterComponent = gridOptions.api.getFilterInstance('Nome');
 
-    filterInstance.setModel({
-        type: 'endsWith',
-        filter: 'Minorenne'
+    studentNameFilterComponent.setModel({
+        type: 'contains',
+        filter: studentName
     });
 
     gridOptions.api.onFilterChanged();
   }
+  
+  const viewStudentSurname = (studentSurname) => {
+    const studentSurnameFilterComponent = gridOptions.api.getFilterInstance('Cognome');
 
-  const visualizzaTutti = () => {
-    var maggiorenneFilterComponent = gridOptions.api.getFilterInstance('Maggiorenne');
-    maggiorenneFilterComponent.setModel(null);
+    studentSurnameFilterComponent.setModel({
+        type: 'contains',
+        filter: studentSurname
+    });
+
+    gridOptions.api.onFilterChanged();
+  }
+  
+  const viewStudentCity = (studentCity) => {
+    const studentCityFilterComponent = gridOptions.api.getFilterInstance('Citta');
+
+    studentCityFilterComponent.setModel({
+        type: 'contains',
+        filter: studentCity
+    });
+
     gridOptions.api.onFilterChanged();
   }
 
   return (
     <div className="page-body">
-      <Button variant="secondary" id="buttonVisualizzaMaggiorenni" onClick={visualizzaMaggiorenni} style={{ marginBottom: '2em', marginRight: '2em' }}>
-        Visualizza Maggiorenni
-      </Button>
-      <Button variant="secondary" id="buttonVisualizzaMinorenni" onClick={visualizzaMinorenni} style={{ marginBottom: '2em', marginRight: '2em' }}>
-        Visualizza Minorenni
-      </Button>
-      <Button variant="secondary" id="buttonVisualizzaTutti" onClick={visualizzaTutti} style={{ marginBottom: '2em', marginRight: '2em' }}>
-        Visualizza Tutti
-      </Button>
-      <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
+      <div className="filter-form">
+
+        <Form.Group>
+          <Form.Label> Nome Allieva </Form.Label> 
+          <Form.Control ref={filterNameRef} type="text" placeholder="Nome Allieva..." onChange={(e) => { viewStudentName(e.target.value) }}/> 
+        </Form.Group>
+        
+        <Form.Group>
+          <Form.Label> Cognome Allieva </Form.Label> 
+          <Form.Control ref={filterSurnameRef} type="text" placeholder="Cognome Allieva..." onChange={(e) => { viewStudentSurname(e.target.value) }}/> 
+        </Form.Group>
+        
+        <Form.Group>
+          <Form.Label> Città </Form.Label> 
+          <Form.Control ref={filterCityRef} type="text" placeholder="Città..." onChange={(e) => { viewStudentCity(e.target.value) }}/> 
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label> Età </Form.Label> 
+          <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { viewAge(target.value) } }>
+              { ages.map(age => <option key={`select_${age}`} value={age}> {age} </option>) }
+            </Form.Control>
+        </Form.Group>
+
+        <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
+          Rimuovi Filtri
+        </Button>
+      </div>
+
+      <div className="ag-theme-balham" style={{ height: '60vh', width: '100%' }}>
         <AgGridReact
           reactNext={true}
           rowSelection="multiple"

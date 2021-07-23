@@ -4,9 +4,9 @@ import Logo from '../images/PILATES_LOGO.png'
   semantic ui graphs per mostrare quante allieve e insegnanti
   divise per corso (e disicplina). Eta media, 
 */
-function HomePage(props) {
+const HomePage = () => {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="homepage">
       <img src={Logo} alt='Pilates Logo' style={{ maxWidth: '50%', marginTop: '3em' }}
       />
     </div>

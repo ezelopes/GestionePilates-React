@@ -3,48 +3,44 @@ const { getAllieve, getSingleAllieva, creaAllieva, modificaAllieva, eliminaAllie
 
 const allievaRouter = new Router();
 
-async function getAllieveEndpoint(req, res, next) {
+const getAllieveEndpoint = async (req, res) => {
   try {
     const allieve = await getAllieve();
     res.status(200).send(allieve);
   } catch (e) {
     console.log(e);
-    next(e);
-  }
+ }
 }
 
-async function getSingleAllievaEndpoint(req, res, next) {
+const getSingleAllievaEndpoint = async (req, res) => {
   try {
     const CodiceFiscale = req.params.CodiceFiscale;
     const allieva = await getSingleAllieva(CodiceFiscale);
     res.status(200).send(allieva);
   } catch (e) {
     console.log(e);
-    next(e);
-  }
+ }
 }
 
-async function creaAllievaEndpoint(req, res, next) {
+const creaAllievaEndpoint = async (req, res) => {
   try {
     const response = await creaAllieva(req.body);
     const responseObject = { AllievaID: response };
     res.status(200).send(responseObject);
   } catch (e) {
-    next(e);
-  }
+ }
 }
 
-async function modificaAllievaEndpoint(req, res, next) {
+const modificaAllievaEndpoint = async (req, res) => {
   try {
     const response = await modificaAllieva(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
-    next(e);
-  }
+ }
 }
 
-async function eliminaAllievaEndpoint(req, res, next) {
+const eliminaAllievaEndpoint = async (req, res) => {
   try {
     const AllievaID = req.body.AllievaID;
     const response = await eliminaAllieva(AllievaID);
@@ -52,11 +48,10 @@ async function eliminaAllievaEndpoint(req, res, next) {
     res.status(200).send(responseObject);
   } catch (e) {
     console.log(e);
-    next(e);
-  }
+ }
 }
 
-async function aggiornaDataIscrizioneEndpoint(req, res, next) {
+const aggiornaDataIscrizioneEndpoint = async (req, res) => {
   try {
     const AllievaID = req.body.AllievaID;
     const DataIscrizione = req.body.DataIscrizione;
@@ -66,8 +61,7 @@ async function aggiornaDataIscrizioneEndpoint(req, res, next) {
     res.status(200).send(responseObject);
   } catch (e) {
     console.log(e);
-    next(e);
-  }
+ }
 }
 
 allievaRouter.get('/getAllieve', getAllieveEndpoint);

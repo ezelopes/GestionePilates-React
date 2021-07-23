@@ -9,7 +9,7 @@ import reverseDate from '../helpers/reverse-date-for-input-date';
 import commondata from '../commondata/commondata'
 
 
-function IscrizioneAllieve() {
+const IscrizioneAllieve = () => {
   const today = formatDate(new Date(), true);
 
   const { eta, discipline, corsi, scuole } = commondata;
@@ -73,15 +73,9 @@ function IscrizioneAllieve() {
     setNewCodiceFiscaleGenitore('');
     setNewNomeGenitore('');
     setNewCognomeGenitore('');
-  }
 
-  // const resetForm = () => {
-  //   document.getElementById('comboboxEta_input').defaultValue = eta[0].eta;
-  //   document.getElementById('comboboxDisciplina_input').defaultValue = discipline[0].disciplina;
-  //   document.getElementById('comboboxCorso_input').defaultValue = corsi[0].corso;
-  //   document.getElementById('comboboxScuola_input').defaultValue = scuole[0].scuola;
-  //   document.getElementById('formCreaAllieva').reset();
-  // };
+    // Reset UI Values
+  }
 
   return (
     <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
@@ -112,7 +106,7 @@ function IscrizioneAllieve() {
         <Button variant="success" id="buttonCreaAllieva" onClick={() => {
           const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
           createStudent(newAllieva);
-          resetForm();
+          // resetForm();
         }}>
           Crea Allieva
         </Button>

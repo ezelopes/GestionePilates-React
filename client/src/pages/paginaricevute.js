@@ -29,7 +29,7 @@ const gridOptionsDefault = {
 const years = [ null, 2019, 2020, 2021, 2022, 2023 ];
 const paymentMethods = [ null, 'Contanti', 'Bonifico Bancario', 'Assegno' ];
 
-function PaginaAllieve() {
+const PaginaAllieve = () => {
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
   const [rowData, setRowData] = useState();
@@ -50,7 +50,7 @@ function PaginaAllieve() {
 
   }, []);
 
-  const visualizzaAnno = (anno) => {
+  const viewYear = (anno) => {
     const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
 
     if (anno === '') NumeroRicevutaFilterComponent.setModel(null);
@@ -79,7 +79,7 @@ function PaginaAllieve() {
     gridOptions.api.onFilterChanged();
   }
 
-  const visualizzaTutte = () => {
+  const clearFilters = () => {
     const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
     const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('TipoPagamento');
     
@@ -96,19 +96,25 @@ function PaginaAllieve() {
     <>
       <div className="page-body">
         <div className="filter-form">
-          <Form.Label> Seleziona Anno: </Form.Label>
-          <Form.Control ref={selectYearRef} as="select" onChange={({ target }) => { visualizzaAnno(target.value) } } style={{ width: '10vw' }}>
-            { years.map(year => <option key={`select_${year}`} value={year}> {year} </option>) }
-          </Form.Control>
-          
-          <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
-          <Form.Control ref={selectPaymentMethodRef} as="select" onChange={({ target }) => { viewPaymentMethod(target.value) } } style={{ width: '10vw' }}>
-            { paymentMethods.map(method => <option key={`select_${method}`} value={method}> {method} </option>) }
-          </Form.Control>
 
-          <Button id="buttonVisualizzaTutteRicevute" onClick={visualizzaTutte}>
+          <Form.Group>
+            <Form.Label> Seleziona Anno: </Form.Label>
+            <Form.Control ref={selectYearRef} as="select" onChange={({ target }) => { viewYear(target.value) } }>
+              { years.map(year => <option key={`select_${year}`} value={year}> {year} </option>) }
+            </Form.Control>
+          </Form.Group>
+          
+        <Form.Group>
+            <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
+            <Form.Control ref={selectPaymentMethodRef} as="select" onChange={({ target }) => { viewPaymentMethod(target.value) } }>
+              { paymentMethods.map(method => <option key={`select_${method}`} value={method}> {method} </option>) }
+            </Form.Control>
+          </Form.Group>
+
+          <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
             Rimuovi Filtri
           </Button>
+
         </div>
 
         <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
