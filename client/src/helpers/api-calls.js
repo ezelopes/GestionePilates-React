@@ -109,6 +109,17 @@ const updateStudent = async (allievaModificata) => {
 
 const updateTeacher = async (updatedTeacherInfo) => {
   console.log(updatedTeacherInfo)
+
+  const response = await fetch('/api/insegnante/modificaInsegnante', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedTeacherInfo)
+  });
+  const responseParsed = await response.json();
+  alert(responseParsed.message);
   return;
 }
 

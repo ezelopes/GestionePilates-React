@@ -4,6 +4,7 @@ const moment = require('moment');
 const mappingInsegnanti = (rows) => {
   const insegnanti = rows.map(row => {
     return {
+      InsegnanteID: row.InsegnanteID,
       CodiceFiscale: row.CodiceFiscale,
       Nome: row.Nome,
       Cognome: row.Cognome,
@@ -70,6 +71,7 @@ const creaInsegnante = async ({
 }
 
 const modificaInsegnante = async ({
+  InsegnanteID,
   CodiceFiscale,
   Nome,
   Cognome,
@@ -86,12 +88,13 @@ const modificaInsegnante = async ({
   Scuola,
 }) => {
   try {
-    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
-    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
-    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
+    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
+    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD');
+    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD');
+
     const [rows, fields] = await pool.execute(
-      `UPDATE insegnante SET Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE CodiceFiscale=?;`,
-      [Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscale]
+      `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
+      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, LuogoNascita, Disciplina, Corso, Scuola, InsegnanteID]
     );
     return 'Insegnante Aggiornata Correttamente!';
   } catch (error) {

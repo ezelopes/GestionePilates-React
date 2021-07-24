@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Modal, Button } from 'react-bootstrap';
+import pdfMake from 'pdfmake/build/pdfmake.js';
+import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import FormInsegnante from '../components/form_insegnante'
 
@@ -9,24 +11,31 @@ import { updateTeacher } from '../helpers/api-calls';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
+
+const pdfTemplateModuloIscrizione = require('../pdfTemplates/pdf-template-modulo-iscrizione');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+const teacherDefaultData = {
+  CodiceFiscale: '',
+  Nome: '',
+  Cognome: '',
+  Citta: '',
+  Indirizzo: '',
+  Cellulare: '',
+  Email: '',
+  LuogoNascita: '',
+  Disciplina: '',
+  Corso: '',
+  Scuola: '',
+  DataIscrizione: '',
+  DataCertificato: '',
+  DataNascita: ''
+}
+
 const InsegnantiPage = () => {
   const [teachersList, setTeachersList] = useState();
-  const [teacherInfo, setTeacherInfo] = useState({
-    CodiceFiscale: '',
-    Nome: '',
-    Cognome: '',
-    Citta: '',
-    Indirizzo: '',
-    Cellulare: '',
-    Email: '',
-    LuogoNascita: '',
-    Disciplina: '',
-    Corso: '',
-    Scuola: '',
-    DataIscrizione: '',
-    DataCertificato: '',
-    DataNascita: ''
-  });
+  const [teacherInfo, setTeacherInfo] = useState(teacherDefaultData);
 
   const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
   const [newNome, setNewNome] = useState('');
@@ -48,6 +57,7 @@ const InsegnantiPage = () => {
   const teacherRowClicked = ({ data }) => {
     console.log(data)
     setTeacherInfo({
+      InsegnanteID: data.InsegnanteID,
       CodiceFiscale: data.CodiceFiscale,
       Nome: data.Nome,
       Cognome: data.Cognome,
@@ -91,9 +101,18 @@ const InsegnantiPage = () => {
   }, []);
 
   const handleUpdateTeacherModal = () => {
-    setTeachersList(teacherInfo); // if closed without saving
+    setTeacherInfo(teacherDefaultData); // if closed without saving
     setShowUpdateTeacherModal(false);
   }
+
+  const stampaModuloIscrizione = async ({ data }) => {
+    try {
+      const documentDefinition = await pdfTemplateModuloIscrizione.default(data);
+      pdfMake.createPdf(documentDefinition).open();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const columnsDefinition = [
     {
@@ -104,6 +123,18 @@ const InsegnantiPage = () => {
         return (
           <>
             <Button onClick={ () => teacherRowClicked(params) }> Test </Button>
+          </>
+        )
+      }
+    },
+    {
+      headerName: 'Modulo Iscrizione',
+      field: 'module',
+      cellRendererFramework: params => {
+        // return <Link to={`/paginaallieve/${params.data.CodiceFiscale}`}>{params.value}</Link>;
+        return (
+          <>
+            <Button onClick={ () => stampaModuloIscrizione(params)}> Modulo </Button>
           </>
         )
       }
@@ -153,6 +184,7 @@ const InsegnantiPage = () => {
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Insegnante </Modal.Title>
         </Modal.Header>
+        {/* change class name */}
         <Modal.Body className="updateStudentModalBody">
             <div className="update-student-form">
               <FormInsegnante 
@@ -175,10 +207,10 @@ const InsegnantiPage = () => {
             </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={() => { 
-            // AllievaID: allievaInfo.AllievaID,
-            const updatedTeacherInfo = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita };
-            updateTeacher(updatedTeacherInfo); // refreshing the page
+          <Button variant="success" onClick={async () => { 
+            const updatedTeacherInfo = { InsegnanteID: teacherInfo.InsegnanteID, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione.split("-").reverse().join("-"), DataCertificato: newDataCertificato.split("-").reverse().join("-"), DataNascita: newDataNascita.split("-").reverse().join("-") };
+            await updateTeacher(updatedTeacherInfo); // refreshing the page
+            handleUpdateTeacherModal()
           } }>
             AGGIORNA
           </Button>
