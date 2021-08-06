@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import Select from 'react-select';
 import formatDate from '../helpers/format-date-for-input-date';
 
 import { createReceipt } from '../helpers/api-calls';
@@ -13,10 +14,10 @@ let tipoPagamento = [
   { id: 1, tipo: 'Assegno' },
   { id: 2, tipo: 'Bonifico Bancario' }
 ];
-let sommaEuro = [
-  { id: 0, somma: '90' },
-  { id: 1, somma: '120' },
-  { id: 2, somma: '150' }
+let defaultAmounts = [
+  { value: '90', label: '90' },
+  { value: '120', label: '120' },
+  { value: '150', label: '150' }
 ];
 
 const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
@@ -25,45 +26,11 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
   const [newNumeroRicevuta, setNewNumeroRicevuta] = useState('');
   const [newTipoRicevuta, setNewTipoRicevuta] = useState(tipoRicevuta[0].tipo);
   const [newTipoPagamento, setNewTipoPagamento] = useState(tipoPagamento[0].tipo);
-  const [newSommaEuro, setNewSommaEuro] = useState(sommaEuro[0].somma);
+  const [newSommaEuro, setNewSommaEuro] = useState(defaultAmounts[0].value);
   const [newDataRicevuta, setNewDataRicevuta] = useState(today);
   const [newDataInizioCorso, setNewDataInizioCorso] = useState(today);
   const [newDataScadenzaCorso, setNewDataScadenzaCorso] = useState(today);
   const [updateDataIscrizione, setUpdateDataIscrizione] = useState(false);
-
-  const creaRicevuta = async () => {
-    if (!newNumeroRicevuta || newNumeroRicevuta === '') return alert('Aggiungi Numero Ricevuta!');
-
-    const infoRicevuta = {
-      NumeroRicevuta: newNumeroRicevuta,
-      DataRicevuta: newDataRicevuta,
-      DataInizioCorso: newDataInizioCorso,
-      DataScadenzaCorso: newDataScadenzaCorso,
-      SommaEuro: newSommaEuro,
-      TipoPagamento: newTipoPagamento,
-      TipoRicevuta: newTipoRicevuta,
-      CodiceFiscale: CodiceFiscale,
-      AllievaID: AllievaID,
-      DataIscrizione: updateDataIscrizione,
-    }
-
-    if (newTipoRicevuta === 'Quota Associativa') {
-      delete infoRicevuta.DataInizioCorso;
-      delete infoRicevuta.DataScadenzaCorso;
-    }
-
-    const response = await fetch('/api/ricevuta/creaRicevuta', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(infoRicevuta)
-    });
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
-    window.location.reload();
-  };
 
   return (
     <div style={{ marginTop: '2em', border: '1px solid', borderRadius: '8px', padding: '1em' }}>
@@ -89,9 +56,14 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
         
         <div className="flex-element">
           <Form.Label> Somma Euro </Form.Label>
-          <Form.Control as="select" onChange={({ target }) => setNewSommaEuro(target.value)} defaultValue={newSommaEuro}>
-            {sommaEuro.map(currentSomma =>  <option key={`select_${currentSomma.somma}`} value={currentSomma.somma}> {currentSomma.somma} </option>)}
-          </Form.Control>
+          <Select
+            defaultValue={defaultAmounts[0]}
+            onChange={(target) => {
+              setNewSommaEuro(target.value)
+              console.log(target.value)
+            }}
+            options={defaultAmounts}
+          />
         </div>
 
         <div className="flex-element">
