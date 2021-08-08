@@ -24,6 +24,7 @@ const mappingAllRicevute = (rows) => {
     return {
       Nome: row.Nome,
       Cognome: row.Cognome,
+      DataRicevuta: moment(row.DataRicevuta).format('DD-MM-YYYY'),
       DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
       DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
       NumeroRicevuta: row.NumeroRicevuta,
@@ -43,7 +44,7 @@ const getRicevuteOfAllieva = async (CodiceFiscale) => {
 
 const getAllRicevute = async () => {
   const [rows, fields] = await pool.execute(
-    'SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, NumeroRicevuta, SommaEuro, TipoPagamento \
+    'SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, DataRicevuta, NumeroRicevuta, SommaEuro, TipoPagamento \
     FROM ricevuta \
     INNER JOIN allieva \
     ON ricevuta.FK_AllievaID = allieva.AllievaID;'
