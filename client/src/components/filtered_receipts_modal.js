@@ -1,6 +1,7 @@
 import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap'
+import orderReceiptsBasedOnReceiptNumber from '../helpers/order-receipts';
 
 const pdfTemplateImportoSummary = require('../pdfTemplates/pdf-template-importo-summary');
 

@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button, Form } from 'react-bootstrap';
 import FilteredReceiptsModal from '../components/filtered_receipts_modal'
 import formatDate from '../helpers/format-date-for-input-date';
-
+import orderReceiptsBasedOnReceiptNumber from '../helpers/order-receipts';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -57,8 +57,11 @@ const PaginaAllieve = () => {
     const fetchData = async () => {
       const result = await fetch('/api/ricevuta/getAllRicevute');
       const body = await result.json();
-      setAllReceipts(body);
-      setCurrentReceipts(body);
+      
+      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(body)
+
+      setAllReceipts(orderedReceipts);
+      setCurrentReceipts(orderedReceipts);
     };
     fetchData();
     gridOptions.api.sizeColumnsToFit();
@@ -82,7 +85,7 @@ const PaginaAllieve = () => {
 
     const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ TipoPagamento }) =>
        TipoPagamento.includes(filteredPaymentMethod)
-    )
+    )    
 
     setCurrentReceipts(receiptsWithPaymentAndDateFilters)
   }
@@ -120,9 +123,19 @@ const PaginaAllieve = () => {
       return accumulator +  parseFloat(SommaEuro);
     }, 0);
     
-    setFilteredReceipts(receipts)
+    const copy = [...receipts]
+    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy)
+
+    setFilteredReceipts(orderedReceipts)
     setFilteredTotalAmount(filteredAmount)
     setShowFilteredAmountModal(true)
+  }
+
+  const orderReceipts = () => {
+    const copy = [...currentReceipts]
+    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy)
+
+    setCurrentReceipts(orderedReceipts)
   }
 
   return (
@@ -147,12 +160,20 @@ const PaginaAllieve = () => {
             <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
           </Form.Group>
 
+
+        </div>
+        
+        <div className="filter-form" style={{ marginTop: '-2em'}}>
           <Button variant="success" onClick={calculateAmountBetweenDates} style={{ marginTop: '1.2em' }}>
             Calcola Importo Totale
           </Button>
           
           <Button variant="primary" onClick={filterReceipts} style={{ marginTop: '1.2em' }}>
             Filtra
+          </Button>
+          
+          <Button variant="primary" onClick={orderReceipts} style={{ marginTop: '1.2em' }}>
+            Ordina per Numero Ricevuta
           </Button>
 
           <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1.2em' }}>
