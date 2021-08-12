@@ -7,6 +7,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const signature = await getBase64ImageFromURL('../images/Signature.png');
+  const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
 
   let somma = ricevutaInfo.SommaEuro;
@@ -29,7 +31,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
       author: 'Roxana Carro',
       subject: `Ricevuta ${ricevutaInfo.NumeroRicevuta} di ${allievaInfo.Nome} ${allievaInfo.Cognome}`
     },
-    pageMargins: [40, 20, 40, 0],
+    pageMargins: [40, 5, 40, 0],
     content: [
       {
         image: label_logo,
@@ -122,21 +124,35 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 0]
       },
       {
-        text: 'FIRMA ______________________________',
-        alignment: 'left',
-        lineHeight: 1.5,
-        fontSize: 10,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 2],
+        columnGap: 5,
+        columns: [{
+            text: 'Firma ',
+            alignment: 'left',
+            width: 50,
+            height: 70,
+            margin: [0, 20, 0, 10]
+        }, {
+            image: signature,
+            width: 80,
+            height: 40,
+            margin: [-15, -5, 0, 10]
+        }, {
+          image: stamp,
+          width: 80,
+          height: 40,
+          margin: [15, -5, 0, 10]
+        }]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 5]
       },
       {
         canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 1 }],
@@ -233,21 +249,35 @@ const pdfTemplateQuotaAssociativaMinorenni = async (allievaInfo, ricevutaInfo) =
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 0]
       },
       {
-        text: 'FIRMA ______________________________',
-        alignment: 'left',
-        lineHeight: 1.5,
-        fontSize: 10,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 2],
+        columnGap: 5,
+        columns: [{
+            text: 'Firma ',
+            alignment: 'left',
+            width: 50,
+            height: 70,
+            margin: [0, 20, 0, 10]
+        }, {
+            image: signature,
+            width: 80,
+            height: 40,
+            margin: [-15, -5, 0, 10]
+        }, {
+          image: stamp,
+          width: 80,
+          height: 40,
+          margin: [15, -5, 0, 10]
+        }]
       },
       {
         text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 8,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 0]
       }
     ]
   };
