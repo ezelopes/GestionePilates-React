@@ -94,11 +94,11 @@ const IscrizioneInsegnanti = () => {
           <Button variant="success" id="buttonCreaInsegnante" onClick={() => {
               const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita };
               createTeacher(newTeacher);
-              resetForm();
+              window.location.reload()
           }}>
             Crea Insegnante
           </Button>
-          <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
+          <Button variant="secondary" id="buttonResetForm" onClick={() => window.location.reload()}>
             Reset Form
           </Button>  
         </div>

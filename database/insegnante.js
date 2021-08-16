@@ -103,9 +103,9 @@ const modificaInsegnante = async ({
   }
 }
 
-const eliminaInsegnante = async (CodiceFiscale) => {
+const eliminaInsegnante = async (InsegnanteID) => {
   try {
-    await pool.execute('DELETE FROM insegnante WHERE CodiceFiscale=?;', [CodiceFiscale]);
+    await pool.execute('DELETE FROM insegnante WHERE InsegnanteID=?;', [InsegnanteID]);
     return 'Insegnante Eliminata Correttamente!';
   } catch (error) {
     console.log(error);

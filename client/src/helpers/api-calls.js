@@ -108,7 +108,7 @@ const updateStudent = async (allievaModificata) => {
 }
 
 const updateTeacher = async (updatedTeacherInfo) => {
-  console.log(updatedTeacherInfo)
+  if (!updatedTeacherInfo.CodiceFiscale || updatedTeacherInfo.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
 
   const response = await fetch('/api/insegnante/modificaInsegnante', {
     method: 'POST',
@@ -120,6 +120,7 @@ const updateTeacher = async (updatedTeacherInfo) => {
   });
   const responseParsed = await response.json();
   alert(responseParsed.message);
+  window.location.reload();
   return;
 }
 
@@ -213,6 +214,22 @@ const deleteReceipt = async (RicevutaID) => {
   window.location.reload();
 }
 
+const deleteTeacher = async (TeacherID) => {
+  const response = await fetch('/api/insegnante/eliminaInsegnante', {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      InsegnanteID: TeacherID
+    })
+  });
+  const responseParsed = await response.json();
+  alert(responseParsed.message);
+  window.location.reload();
+}
+
 export {
   createStudent,
   createReceipt,
@@ -223,4 +240,5 @@ export {
   updateReceipt,
   deleteStudent,
   deleteReceipt,
+  deleteTeacher,
 };

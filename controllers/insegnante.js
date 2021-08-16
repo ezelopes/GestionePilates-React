@@ -42,8 +42,8 @@ const modificaInsegnanteEndpoint = async (req, res) => {
 
 const eliminaInsegnanteEndpoint = async (req, res) => {
   try {
-    const CodiceFiscale = req.body.CodiceFiscale;
-    const response = await eliminaInsegnante(CodiceFiscale);
+    const InsegnanteID = req.body.InsegnanteID;
+    const response = await eliminaInsegnante(InsegnanteID);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

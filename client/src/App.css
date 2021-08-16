@@ -181,6 +181,17 @@ input[type='date'] {
   overflow-y: auto;
 }
 
+.updateTeacherModalBody {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  width: 100%;
+}
+
+.update-teacher-modal {
+  width: 70vw;
+  max-width: 70vw;
+}
+
 .ag-theme-balham {
   margin-top: 1em;
 }
