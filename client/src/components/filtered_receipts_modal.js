@@ -6,7 +6,7 @@ import orderReceiptsBasedOnReceiptNumber from '../helpers/order-receipts';
 const pdfTemplateImportoSummary = require('../pdfTemplates/pdf-template-importo-summary');
 
 const columnDefs = [
-    { headerName: 'N° Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true },
+    { headerName: 'N° Ricevuta', field: 'NumeroRicevuta' },
     { headerName: 'Data Ricevuta', field: 'DataRicevuta', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
     { headerName: 'Somma Euro', field: 'SommaEuro' }
 ]
@@ -63,7 +63,6 @@ const FilteredReceiptsModal = ({ filteredReceipts, filteredTotalAmount, showFilt
                     <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
                         <AgGridReact
                         reactNext={true}
-                        rowSelection="multiple"
                         scrollbarWidth
                         rowHeight="45"
                         gridOptions={gridOptions}
