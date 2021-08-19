@@ -22,14 +22,32 @@ const mappingRicevuta = (rows) => {
 const mappingAllRicevute = (rows) => {
   const ricevute = rows.map(row => {
     return {
+      Maggiorenne: row.Maggiorenne,
+      CodiceFiscale: row.CodiceFiscale,
       Nome: row.Nome,
       Cognome: row.Cognome,
+      Citta: row.Citta,
+      Indirizzo: row.Indirizzo,
+      Cellulare: row.Cellulare,
+      Email: row.Email,
+      DataIscrizione: moment(row.DataIscrizione).format('DD-MM-YYYY'),
+      DataCertificato: moment(row.DataCertificato).format('DD-MM-YYYY'),
+      DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
+      LuogoNascita: row.LuogoNascita,
+      Disciplina: row.Disciplina,
+      Corso: row.Corso,
+      Scuola: row.Scuola,
+      NomeGenitore: row.NomeGenitore,
+      CognomeGenitore: row.CognomeGenitore,
+      CodiceFiscaleGenitore: row.CodiceFiscaleGenitore,
+
+      NumeroRicevuta: row.NumeroRicevuta,
+      SommaEuro: row.SommaEuro,
+      TipoPagamento: row.TipoPagamento,
+      TipoRicevuta: row.TipoRicevuta,
       DataRicevuta: moment(row.DataRicevuta).format('DD-MM-YYYY'),
       DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
       DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
-      NumeroRicevuta: row.NumeroRicevuta,
-      SommaEuro: row.SommaEuro,
-      TipoPagamento: row.TipoPagamento
     };
   });
   return ricevute;
@@ -44,7 +62,7 @@ const getRicevuteOfAllieva = async (CodiceFiscale) => {
 
 const getAllRicevute = async () => {
   const [rows, fields] = await pool.execute(
-    'SELECT Nome, Cognome, DataInizioCorso, DataScadenzaCorso, DataRicevuta, NumeroRicevuta, SommaEuro, TipoPagamento \
+    'SELECT * \
     FROM ricevuta \
     INNER JOIN allieva \
     ON ricevuta.FK_AllievaID = allieva.AllievaID;'

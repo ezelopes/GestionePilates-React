@@ -1,13 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AgGridReact } from 'ag-grid-react';
 import { Button, Form } from 'react-bootstrap';
+import { AgGridReact } from 'ag-grid-react';
+import pdfMake from 'pdfmake/build/pdfmake.js';
+import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import FilteredReceiptsModal from '../components/filtered_receipts_modal'
 import formatDate from '../helpers/format-date-for-input-date';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/order-receipts';
-
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import reverseDate from '../helpers/reverse-date-for-input-date';
+
+const pdfTemplateMaggiorenni = require('../pdfTemplates/pdf-template-maggiorenni');
+const pdfTemplateMinorenni = require('../pdfTemplates/pdf-template-minorenni');
+
+const pdfTemplateQuotaAssociativaMaggiorenni = require('../pdfTemplates/pdf-template-quota-associativa-maggiorenni');
+const pdfTemplateQuotaAssociativaMinorenni = require('../pdfTemplates/pdf-template-quota-associativa-minorenni');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+require('ag-grid-community/dist/styles/ag-grid.css');
+require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true },
@@ -43,6 +53,7 @@ const PaginaAllieve = () => {
   const [allReceipts, setAllReceipts] = useState([]);
   const [currentReceipts, setCurrentReceipts] = useState([]);
   const [filteredReceipts, setFilteredReceipts] = useState([]);
+  const [selectedReceipts, setSelectedReceipts] = useState([]);
   const [filteredTotalAmount, setFilteredTotalAmount] = useState(0);
   const [showFilteredAmountModal, setShowFilteredAmountModal] = useState(false);
   const [filteredPaymentMethod, setFilteredPaymentMethod] = useState(null);
@@ -69,6 +80,88 @@ const PaginaAllieve = () => {
     window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
 
   }, []);
+
+  const onReceiptSelectionChanged = () => {
+    const selectedNodes = gridOptions.api.getSelectedNodes();
+    if (selectedNodes.length === 0) return setSelectedReceipts([]);
+
+    const receipts = []
+    selectedNodes.forEach(node => {
+      receipts.push(node.data)
+    });
+
+    setSelectedReceipts(receipts);
+  }
+
+  const printReceipts = async () => {    
+    try {
+      if (selectedReceipts.length === 0) return alert('Seleziona Ricevute per Stamparle');
+
+      const finalDocumentDefinition = { 
+        info: { author: "Roxana Carro", subject: "Ricevute", title: "Ricevute Multiple" }, 
+        pageMargins: [40, 5, 40, 0], 
+        content: [],
+      }
+
+      for (const [index, data] of selectedReceipts.entries()) {
+        console.log(index)
+        let documentDefinition;
+
+        const studentInfo = {
+          Maggiorenne: data.Maggiorenne,
+          CodiceFiscale: data.CodiceFiscale,
+          Nome: data.Nome,
+          Cognome: data.Cognome,
+          Citta: data.Citta,
+          Indirizzo: data.Indirizzo,
+          Cellulare: data.Cellulare,
+          Email: data.Email,
+          DataIscrizione: data.DataIscrizione,
+          DataCertificato: data.DataCertificato,
+          DataNascita: data.DataNascita,
+          LuogoNascita: data.LuogoNascita,
+          Disciplina: data.Disciplina,
+          Corso: data.Corso,
+          Scuola: data.Scuola,
+          NomeGenitore: data.NomeGenitore,
+          CognomeGenitore: data.CognomeGenitore,
+          CodiceFiscaleGenitore: data.CodiceFiscaleGenitore
+        }
+        
+        const receiptInfo = {
+          NumeroRicevuta: data.NumeroRicevuta,
+          SommaEuro: data.SommaEuro,
+          TipoPagamento: data.TipoPagamento,
+          TipoRicevuta: data.TipoRicevuta,
+          DataRicevuta: data.DataRicevuta,
+          DataInizioCorso: data.DataInizioCorso,
+          DataScadenzaCorso: data.DataScadenzaCorso
+        }
+
+        if (studentInfo.Maggiorenne === 'Maggiorenne' && receiptInfo.TipoRicevuta === 'Quota') 
+          documentDefinition = await pdfTemplateMaggiorenni.default(studentInfo, receiptInfo);
+        else if (studentInfo.Maggiorenne === 'Maggiorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+          documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(studentInfo, receiptInfo);
+        else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta === 'Quota')
+          documentDefinition = await pdfTemplateMinorenni.default(studentInfo, receiptInfo);
+        else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+          documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(studentInfo, receiptInfo);
+
+        console.log('documentDefinition', documentDefinition)
+        if (index % 2 == 1) {
+          console.log(documentDefinition.content[documentDefinition.content.length - 1])
+          documentDefinition.content[documentDefinition.content.length - 1].pageBreak = "after"
+          documentDefinition.content[documentDefinition.content.length - 1].canvas = []
+        }
+        Array.prototype.push.apply(finalDocumentDefinition.content, documentDefinition.content);
+      }
+
+      console.log('finalDocumentDefinition', finalDocumentDefinition)
+      pdfMake.createPdf(finalDocumentDefinition).open();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const filterReceipts = () => {
     const fromDateFormatted = new Date(fromDate)
@@ -191,8 +284,14 @@ const PaginaAllieve = () => {
             gridOptions={gridOptions}
             columnDefs={columnDefs}
             rowData={currentReceipts}
+            onSelectionChanged={onReceiptSelectionChanged}
           ></AgGridReact>
         </div>
+        
+        {/* printReceipts */}
+        <Button variant="success" onClick={printReceipts} style={{ marginTop: '1.2em' }}>
+          Stampa Ricevute Selezionate
+        </Button>
       </div>
 
       <FilteredReceiptsModal 
