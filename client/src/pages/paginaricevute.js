@@ -104,7 +104,6 @@ const PaginaAllieve = () => {
       }
 
       for (const [index, data] of selectedReceipts.entries()) {
-        console.log(index)
         let documentDefinition;
 
         const studentInfo = {
@@ -147,16 +146,13 @@ const PaginaAllieve = () => {
         else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
           documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(studentInfo, receiptInfo);
 
-        console.log('documentDefinition', documentDefinition)
         if (index % 2 == 1) {
-          console.log(documentDefinition.content[documentDefinition.content.length - 1])
           documentDefinition.content[documentDefinition.content.length - 1].pageBreak = "after"
           documentDefinition.content[documentDefinition.content.length - 1].canvas = []
         }
         Array.prototype.push.apply(finalDocumentDefinition.content, documentDefinition.content);
       }
 
-      console.log('finalDocumentDefinition', finalDocumentDefinition)
       pdfMake.createPdf(finalDocumentDefinition).open();
     } catch (error) {
       console.log(error);
