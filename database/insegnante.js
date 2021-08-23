@@ -15,6 +15,7 @@ const mappingInsegnanti = (rows) => {
       DataIscrizione: moment(row.DataIscrizione).format('DD-MM-YYYY'),
       DataCertificato: moment(row.DataCertificato).format('DD-MM-YYYY'),
       DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
+      DataGreenPass: moment(row.DataGreenPass).format('DD-MM-YYYY'),
       LuogoNascita: row.LuogoNascita,
       Disciplina: row.Disciplina,
       Corso: row.Corso,
@@ -49,6 +50,7 @@ const creaInsegnante = async ({
   DataIscrizione,
   DataCertificato,
   DataNascita,
+  DataGreenPass,
   LuogoNascita,
   Disciplina,
   Corso,
@@ -58,10 +60,12 @@ const creaInsegnante = async ({
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
     const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
+    const DataGreenPassFormatted = moment(DataGreenPass).format('YYYY-MM-DD HH:mm:ss');
+
     const [rows, fields] = await pool.execute(
-      'INSERT INTO Insegnante (CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, LuogoNascita, Disciplina, Corso, Scuola) \
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, LuogoNascita, Disciplina, Corso, Scuola]
+      'INSERT INTO Insegnante (CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola) \
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
+      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, DataGreenPassFormatted, LuogoNascita, Disciplina, Corso, Scuola]
     );
     return 'Insegnante Inserita Correttamente!';
   } catch (error) {
@@ -82,6 +86,7 @@ const modificaInsegnante = async ({
   DataIscrizione,
   DataCertificato,
   DataNascita,
+  DataGreenPass,
   LuogoNascita,
   Disciplina,
   Corso,
@@ -91,10 +96,11 @@ const modificaInsegnante = async ({
     const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
     const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD');
     const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD');
+    const DataGreenPassFormatted = moment(DataGreenPass).format('YYYY-MM-DD');
 
     const [rows, fields] = await pool.execute(
-      `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
-      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, LuogoNascita, Disciplina, Corso, Scuola, InsegnanteID]
+      `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
+      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, DataGreenPassFormatted, LuogoNascita, Disciplina, Corso, Scuola, InsegnanteID]
     );
     return 'Insegnante Aggiornata Correttamente!';
   } catch (error) {

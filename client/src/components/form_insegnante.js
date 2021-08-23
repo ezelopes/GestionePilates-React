@@ -19,7 +19,8 @@ const FormInsegnante = ({
   setNewScuola,
   setNewDataIscrizione,
   setNewDataCertificato,
-  setNewDataNascita
+  setNewDataNascita,
+  setNewDataGreenPass
 }) => {
 
   return (
@@ -71,6 +72,9 @@ const FormInsegnante = ({
 
       <Form.Label> Data Nascita </Form.Label>
       <input type="date" onChange={({ target }) => setNewDataNascita(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataNascita) } />
+      
+      <Form.Label> Data Scadenza Green Pass </Form.Label>
+      <input type="date" onChange={({ target }) => setNewDataGreenPass(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataGreenPass) } />
 
     </>
   );

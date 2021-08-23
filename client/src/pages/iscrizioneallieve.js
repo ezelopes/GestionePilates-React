@@ -30,6 +30,7 @@ const IscrizioneAllieve = () => {
     DataIscrizione: reverseDate(today),
     DataCertificato: reverseDate(today),
     DataNascita: reverseDate(today),
+    DataGreenPass: reverseDate(today),
     CodiceFiscaleGenitore: '',
     NomeGenitore: '',
     CognomeGenitore: ''
@@ -50,6 +51,7 @@ const IscrizioneAllieve = () => {
   const [newDataIscrizione, setNewDataIscrizione] = useState(today);
   const [newDataCertificato, setNewDataCertificato] = useState(today);
   const [newDataNascita, setNewDataNascita] = useState(today);
+  const [newDataGreenPass, setNewDataGreenPass] = useState(today);
   const [newCodiceFiscaleGenitore, setNewCodiceFiscaleGenitore] = useState('');
   const [newNomeGenitore, setNewNomeGenitore] = useState('');
   const [newCognomeGenitore, setNewCognomeGenitore] = useState('');
@@ -97,6 +99,7 @@ const IscrizioneAllieve = () => {
           setNewDataIscrizione={setNewDataIscrizione}
           setNewDataCertificato={setNewDataCertificato}
           setNewDataNascita={setNewDataNascita}
+          setNewDataGreenPass={setNewDataGreenPass}
           setNewCodiceFiscaleGenitore={setNewCodiceFiscaleGenitore}
           setNewNomeGenitore={setNewNomeGenitore}
           setNewCognomeGenitore={setNewCognomeGenitore}
@@ -104,7 +107,7 @@ const IscrizioneAllieve = () => {
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
         <Button variant="success" id="buttonCreaAllieva" onClick={() => {
-          const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
+          const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
           createStudent(newAllieva);
           // resetForm();
         }}>

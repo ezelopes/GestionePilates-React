@@ -24,6 +24,7 @@ const columnsDefinition = [
   { headerName: 'Data Iscrizione', field: 'DataIscrizione', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Data Certificato', field: 'DataCertificato', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Data Nascita', field: 'DataNascita', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Green Pass', field: 'DataGreenPass', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Luogo Nascita', field: 'LuogoNascita' },
   { headerName: 'Disciplina', field: 'Disciplina' },
   { headerName: 'Corso', field: 'Corso' },

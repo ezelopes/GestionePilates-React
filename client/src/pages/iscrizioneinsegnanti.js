@@ -31,6 +31,7 @@ const IscrizioneInsegnanti = () => {
     DataIscrizione: reverseDate(today),
     DataCertificato: reverseDate(today),
     DataNascita: reverseDate(today),
+    DataGreenPass: reverseDate(today),
   }
 
   const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
@@ -47,6 +48,7 @@ const IscrizioneInsegnanti = () => {
   const [newDataIscrizione, setNewDataIscrizione] = useState(today);
   const [newDataCertificato, setNewDataCertificato] = useState(today);
   const [newDataNascita, setNewDataNascita] = useState(today);
+  const [newDataGreenPass, setNewDataGreenPass] = useState(today);
 
   const resetForm = () => {
     setNewCodiceFiscale('');
@@ -63,6 +65,7 @@ const IscrizioneInsegnanti = () => {
     setNewDataIscrizione(today);
     setNewDataCertificato(today);
     setNewDataNascita(today);
+    setNewDataGreenPass(today);
 
     // Reset UI Values
   }
@@ -87,13 +90,14 @@ const IscrizioneInsegnanti = () => {
             setNewDataIscrizione={setNewDataIscrizione}
             setNewDataCertificato={setNewDataCertificato}
             setNewDataNascita={setNewDataNascita}
+            setNewDataGreenPass={setNewDataGreenPass}
           />
         </div>
         
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
-          <Button variant="success" id="buttonCreaInsegnante" onClick={() => {
-              const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita };
-              createTeacher(newTeacher);
+          <Button variant="success" id="buttonCreaInsegnante" onClick={async () => {
+              const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass };
+              await createTeacher(newTeacher);
               window.location.reload()
           }}>
             Crea Insegnante

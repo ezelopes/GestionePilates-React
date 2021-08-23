@@ -21,6 +21,7 @@ const FormAllieva = ({
   setNewDataIscrizione,
   setNewDataCertificato,
   setNewDataNascita,
+  setNewDataGreenPass,
   setNewCodiceFiscaleGenitore,
   setNewNomeGenitore,
   setNewCognomeGenitore
@@ -80,6 +81,9 @@ const FormAllieva = ({
 
       <Form.Label> Data Nascita </Form.Label>
       <input type="date" onChange={({ target }) => setNewDataNascita(target.value)} defaultValue={ reverseDate(allievaInfo.DataNascita) } />
+      
+      <Form.Label> Data Scadenza Green Pass </Form.Label>
+      <input type="date" onChange={({ target }) => setNewDataGreenPass(target.value)} defaultValue={ reverseDate(allievaInfo.DataGreenPass) } />
 
       <Form.Label> Codice Fiscale Genitore </Form.Label>
       <Form.Control type="text" placeholder="Inserisci Codice Fiscale Genitore..." onChange={({ target }) => setNewCodiceFiscaleGenitore(target.value)} defaultValue={allievaInfo.CodiceFiscaleGenitore} />

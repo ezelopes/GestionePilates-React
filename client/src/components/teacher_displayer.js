@@ -27,9 +27,10 @@ const teachersDisplayer = ({ currentTeacher }) => {
     const [newDisciplina, setNewDisciplina] = useState(teacherInfo.Disciplina);
     const [newCorso, setNewCorso] = useState(teacherInfo.Corso);
     const [newScuola, setNewScuola] = useState(teacherInfo.Scuola);
-    const [newDataIscrizione, setNewDataIscrizione] = useState(teacherInfo.DataIscrizione);
-    const [newDataCertificato, setNewDataCertificato] = useState(teacherInfo.DataCertificato);
-    const [newDataNascita, setNewDataNascita] = useState(teacherInfo.DataNascita);
+    const [newDataIscrizione, setNewDataIscrizione] = useState(teacherInfo.DataIscrizione.split("-").reverse().join("-"));
+    const [newDataCertificato, setNewDataCertificato] = useState(teacherInfo.DataCertificato.split("-").reverse().join("-"));
+    const [newDataNascita, setNewDataNascita] = useState(teacherInfo.DataNascita.split("-").reverse().join("-"));
+    const [newDataGreenPass, setNewDataGreenPass] = useState(teacherInfo.DataGreenPass.split("-").reverse().join("-"));
 
     const setFormData = () => {
       setNewCodiceFiscale(teacherInfo.CodiceFiscale)
@@ -43,9 +44,10 @@ const teachersDisplayer = ({ currentTeacher }) => {
       setNewDisciplina(teacherInfo.Disciplina)
       setNewCorso(teacherInfo.Corso)
       setNewScuola(teacherInfo.Scuola)
-      setNewDataIscrizione(teacherInfo.DataIscrizione)
-      setNewDataCertificato(teacherInfo.DataCertificato)
-      setNewDataNascita(teacherInfo.DataNascita)
+      setNewDataIscrizione(teacherInfo.DataIscrizione.split("-").reverse().join("-"))
+      setNewDataCertificato(teacherInfo.DataCertificato.split("-").reverse().join("-"))
+      setNewDataNascita(teacherInfo.DataNascita.split("-").reverse().join("-"))
+      setNewDataGreenPass(teacherInfo.DataGreenPass.split("-").reverse().join("-"))
     }
 
     const handleUpdateTeacherModal = () => {
@@ -96,6 +98,9 @@ const teachersDisplayer = ({ currentTeacher }) => {
             <Card.Text>
               <b>Data Certificato:</b> {teacherInfo.DataCertificato}
             </Card.Text>
+            <Card.Text>
+              <b>Data Scadenza Green Pass:</b> {teacherInfo.DataGreenPass}
+            </Card.Text>
 
             <Button variant="success" onClick={ () => stampaModuloIscrizione()}> Scarica Modulo </Button>
             <Button variant="primary" onClick={ () => setShowUpdateTeacherModal(true) } style={{ marginLeft: '1em' }}> Aggiorna </Button>
@@ -127,12 +132,13 @@ const teachersDisplayer = ({ currentTeacher }) => {
                   setNewDataIscrizione={setNewDataIscrizione}
                   setNewDataCertificato={setNewDataCertificato}
                   setNewDataNascita={setNewDataNascita}
+                  setNewDataGreenPass={setNewDataGreenPass}
               />
               </div>
           </Modal.Body>
           <Modal.Footer>
-          <Button variant="success" onClick={async () => { 
-              const updatedTeacherInfo = { InsegnanteID: teacherInfo.InsegnanteID, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione.split("-").reverse().join("-"), DataCertificato: newDataCertificato.split("-").reverse().join("-"), DataNascita: newDataNascita.split("-").reverse().join("-") };
+          <Button variant="success" onClick={async () => {
+              const updatedTeacherInfo = { InsegnanteID: teacherInfo.InsegnanteID, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass };
               await updateTeacher(updatedTeacherInfo);
               handleUpdateTeacherModal()
           } }>

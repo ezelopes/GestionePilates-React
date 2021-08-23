@@ -40,6 +40,7 @@ const Allieva = ({ match }) => {
   const [newDataIscrizione, setNewDataIscrizione] = useState('');
   const [newDataCertificato, setNewDataCertificato] = useState('');
   const [newDataNascita, setNewDataNascita] = useState('');
+  const [newDataGreenPass, setNewDataGreenPass] = useState('');
   const [newCodiceFiscaleGenitore, setNewCodiceFiscaleGenitore] = useState('');
   const [newNomeGenitore, setNewNomeGenitore] = useState('');
   const [newCognomeGenitore, setNewCognomeGenitore] = useState('');
@@ -64,6 +65,7 @@ const Allieva = ({ match }) => {
     setNewDataIscrizione(reverseDate(allievaInfo.DataIscrizione));
     setNewDataCertificato(reverseDate(allievaInfo.DataCertificato));
     setNewDataNascita(reverseDate(allievaInfo.DataNascita));
+    setNewDataGreenPass(reverseDate(allievaInfo.DataGreenPass));
     setNewCodiceFiscaleGenitore(allievaInfo.CodiceFiscaleGenitore);
     setNewNomeGenitore(allievaInfo.NomeGenitore);
     setNewCognomeGenitore(allievaInfo.CognomeGenitore);
@@ -90,6 +92,7 @@ const Allieva = ({ match }) => {
       const singleAllieva = await getSingleAllievaResult.json();
       setAllievaInfo(singleAllieva[0]);
       setFormData(singleAllieva[0]);
+      setNewRegistrationDate(singleAllieva[0].DataIscrizione)
 
       const getRicevuteOfAllievaResult = await fetch(`/api/ricevuta/getRicevuteOfAllieva/${match.params.codicefiscale}`);
       const ricevute = await getRicevuteOfAllievaResult.json();
@@ -187,6 +190,7 @@ const Allieva = ({ match }) => {
                 setNewDataIscrizione={setNewDataIscrizione}
                 setNewDataCertificato={setNewDataCertificato}
                 setNewDataNascita={setNewDataNascita}
+                setNewDataGreenPass={setNewDataGreenPass}
                 setNewCodiceFiscaleGenitore={setNewCodiceFiscaleGenitore}
                 setNewNomeGenitore={setNewNomeGenitore}
                 setNewCognomeGenitore={setNewCognomeGenitore}
@@ -194,9 +198,9 @@ const Allieva = ({ match }) => {
             </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={() => { 
-            const updatedAllievaInfo = { AllievaID: allievaInfo.AllievaID, Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
-            updateStudent(updatedAllievaInfo); // refreshing the page
+          <Button variant="success" onClick={async () => {
+            const updatedAllievaInfo = { AllievaID: allievaInfo.AllievaID, Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
+            await updateStudent(updatedAllievaInfo); // refreshing the page
           } }>
             AGGIORNA
           </Button>
