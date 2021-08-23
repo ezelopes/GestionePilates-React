@@ -84,10 +84,10 @@ const teachersDisplayer = ({ currentTeacher }) => {
               <b>Email:</b> {teacherInfo.Email}
             </Card.Text>
             <Card.Text>
-              <b>Luogo e Data Nascita:</b> {teacherInfo.LuogoNascita} - {teacherInfo.DataNascita}
+              <b>Luogo e Data Nascita:</b> {teacherInfo.LuogoNascita} - {teacherInfo.DataNascita === 'Invalid date' ? '01-01-1900' : teacherInfo.DataNascita}
             </Card.Text>
             <Card.Text>
-              <b>Data Iscrizione:</b> {teacherInfo.DataIscrizione}
+              <b>Data Iscrizione:</b> {teacherInfo.DataIscrizione === 'Invalid date' ? '01-01-1900' : teacherInfo.DataIscrizione}
             </Card.Text>
             <Card.Text>
               <b>Disciplina:</b> {teacherInfo.Disciplina}
@@ -96,10 +96,10 @@ const teachersDisplayer = ({ currentTeacher }) => {
               <b>Corso:</b> {teacherInfo.Corso}
             </Card.Text>
             <Card.Text>
-              <b>Data Certificato:</b> {teacherInfo.DataCertificato}
+              <b>Data Certificato:</b> {teacherInfo.DataCertificato === 'Invalid date' ? '01-01-1900' : teacherInfo.DataCertificato}
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Green Pass:</b> {teacherInfo.DataGreenPass}
+              <b>Data Scadenza Green Pass:</b> {teacherInfo.DataGreenPass === 'Invalid date' ? '01-01-1900' : teacherInfo.DataGreenPass}
             </Card.Text>
 
             <Button variant="success" onClick={ () => stampaModuloIscrizione()}> Scarica Modulo </Button>
