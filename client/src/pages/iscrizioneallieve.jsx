@@ -81,41 +81,44 @@ const IscrizioneAllieve = () => {
 
   return (
     <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
-      <div className="create-student-form">
-        <FormAllieva 
-          allievaInfo={ allievaInfoDefault }
-          setNewMaggiorenne={setNewMaggiorenne}
-          setNewCodiceFiscale={setNewCodiceFiscale}
-          setNewNome={setNewNome}
-          setNewCognome={setNewCognome}
-          setNewCitta={setNewCitta}
-          setNewIndirizzo={setNewIndirizzo}
-          setNewCellulare={setNewCellulare}
-          setNewEmail={setNewEmail}
-          setNewLuogoNascita={setNewLuogoNascita}
-          setNewDisciplina={setNewDisciplina}
-          setNewCorso={setNewCorso}
-          setNewScuola={setNewScuola}
-          setNewDataIscrizione={setNewDataIscrizione}
-          setNewDataCertificato={setNewDataCertificato}
-          setNewDataNascita={setNewDataNascita}
-          setNewDataGreenPass={setNewDataGreenPass}
-          setNewCodiceFiscaleGenitore={setNewCodiceFiscaleGenitore}
-          setNewNomeGenitore={setNewNomeGenitore}
-          setNewCognomeGenitore={setNewCognomeGenitore}
-        />
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
-        <Button variant="success" id="buttonCreaAllieva" onClick={() => {
-          const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
-          createStudent(newAllieva);
-          // resetForm();
-        }}>
-          Crea Allieva
-        </Button>
-        <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
-          Reset Form
-        </Button>
+      <div className="formWrapper">
+        <div className="create-student-form">
+          <FormAllieva 
+            allievaInfo={ allievaInfoDefault }
+            setNewMaggiorenne={setNewMaggiorenne}
+            setNewCodiceFiscale={setNewCodiceFiscale}
+            setNewNome={setNewNome}
+            setNewCognome={setNewCognome}
+            setNewCitta={setNewCitta}
+            setNewIndirizzo={setNewIndirizzo}
+            setNewCellulare={setNewCellulare}
+            setNewEmail={setNewEmail}
+            setNewLuogoNascita={setNewLuogoNascita}
+            setNewDisciplina={setNewDisciplina}
+            setNewCorso={setNewCorso}
+            setNewScuola={setNewScuola}
+            setNewDataIscrizione={setNewDataIscrizione}
+            setNewDataCertificato={setNewDataCertificato}
+            setNewDataNascita={setNewDataNascita}
+            setNewDataGreenPass={setNewDataGreenPass}
+            setNewCodiceFiscaleGenitore={setNewCodiceFiscaleGenitore}
+            setNewNomeGenitore={setNewNomeGenitore}
+            setNewCognomeGenitore={setNewCognomeGenitore}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
+          <Button variant="success" id="buttonCreaAllieva" onClick={() => {
+            const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
+            createStudent(newAllieva);
+            // resetForm();
+          }}>
+            Crea Allieva
+          </Button>
+          <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
+            Reset Form
+          </Button>
+        </div>
+
       </div>
     </div>
   );
