@@ -230,48 +230,44 @@ const PaginaAllieve = () => {
   return (
     <>
       <div className="page-body">
-        <div className="filter-form">
+          <div className="filter-form">
+            <Form.Group>
+              <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
+              <Form.Control ref={selectPaymentMethodRef} as="select" onChange={({ target }) => setFilteredPaymentMethod(target.value)}>
+                { paymentMethods.map(method => <option key={`select_${method}`} value={method}> {method} </option>) }
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label> Da: </Form.Label> <br />
+              <input ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label> A: </Form.Label> <br />
+              <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
+            </Form.Group>
+          </div>
           
-          <Form.Group>
-            <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
-            <Form.Control ref={selectPaymentMethodRef} as="select" onChange={({ target }) => setFilteredPaymentMethod(target.value)}>
-              { paymentMethods.map(method => <option key={`select_${method}`} value={method}> {method} </option>) }
-            </Form.Control>
-          </Form.Group>
+          <div className="buttonsContainer">
+            <Button variant="success" onClick={calculateAmountBetweenDates}>
+              Calcola Importo Totale
+            </Button>
+            
+            <Button variant="primary" onClick={filterReceipts}>
+              Filtra
+            </Button>
+            
+            <Button variant="primary" onClick={orderReceipts}>
+              Ordina per Numero Ricevuta
+            </Button>
 
-          <Form.Group>
-            <Form.Label> Da: </Form.Label> <br />
-            <input ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
-          </Form.Group>
+            <Button variant="danger" onClick={clearFilters}>
+              Rimuovi Filtri
+            </Button>
+          </div>
 
-          <Form.Group>
-            <Form.Label> A: </Form.Label> <br />
-            <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
-          </Form.Group>
-
-
-        </div>
-        
-        <div className="filter-form" style={{ marginTop: '-2em'}}>
-          <Button variant="success" onClick={calculateAmountBetweenDates} style={{ marginTop: '1.2em' }}>
-            Calcola Importo Totale
-          </Button>
-          
-          <Button variant="primary" onClick={filterReceipts} style={{ marginTop: '1.2em' }}>
-            Filtra
-          </Button>
-          
-          <Button variant="primary" onClick={orderReceipts} style={{ marginTop: '1.2em' }}>
-            Ordina per Numero Ricevuta
-          </Button>
-
-          <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1.2em' }}>
-            Rimuovi Filtri
-          </Button>
-
-        </div>
-
-        <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
+        <div className="ag-theme-balham" style={{ height: '40em', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)', marginTop: '2em' }}>
           <AgGridReact
             reactNext={true}
             rowSelection="multiple"
@@ -284,10 +280,11 @@ const PaginaAllieve = () => {
           ></AgGridReact>
         </div>
         
-        {/* printReceipts */}
-        <Button variant="success" onClick={printReceipts} style={{ marginTop: '1.2em' }}>
-          Stampa Ricevute Selezionate
-        </Button>
+        <div className="buttonsContainer">
+          <Button variant="success" onClick={printReceipts}>
+            Stampa Ricevute Selezionate
+          </Button>
+        </div>
       </div>
 
       <FilteredReceiptsModal 

@@ -81,10 +81,11 @@ const IscrizioneAllieve = () => {
 
   return (
     <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
-      <div className="formWrapper">
-        <div className="create-student-form">
+      <div className="formWrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
+        <div className="create-student-teacher-form">
           <FormAllieva 
             allievaInfo={ allievaInfoDefault }
+            newMaggiorenne={newMaggiorenne}
             setNewMaggiorenne={setNewMaggiorenne}
             setNewCodiceFiscale={setNewCodiceFiscale}
             setNewNome={setNewNome}

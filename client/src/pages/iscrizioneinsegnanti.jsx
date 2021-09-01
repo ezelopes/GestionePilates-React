@@ -73,38 +73,40 @@ const IscrizioneInsegnanti = () => {
   return (
     <>
       <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
-        <div className="create-student-form">
-          <FormInsegnante
-            insegnanteInfo={ insegnanteInfoDefault }
-            setNewCodiceFiscale={setNewCodiceFiscale}
-            setNewNome={setNewNome}
-            setNewCognome={setNewCognome}
-            setNewCitta={setNewCitta}
-            setNewIndirizzo={setNewIndirizzo}
-            setNewCellulare={setNewCellulare}
-            setNewEmail={setNewEmail}
-            setNewLuogoNascita={setNewLuogoNascita}
-            setNewDisciplina={setNewDisciplina}
-            setNewCorso={setNewCorso}
-            setNewScuola={setNewScuola}
-            setNewDataIscrizione={setNewDataIscrizione}
-            setNewDataCertificato={setNewDataCertificato}
-            setNewDataNascita={setNewDataNascita}
-            setNewDataGreenPass={setNewDataGreenPass}
-          />
-        </div>
-        
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
-          <Button variant="success" id="buttonCreaInsegnante" onClick={async () => {
-              const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass };
-              await createTeacher(newTeacher);
-              window.location.reload()
-          }}>
-            Crea Insegnante
-          </Button>
-          <Button variant="secondary" id="buttonResetForm" onClick={() => window.location.reload()}>
-            Reset Form
-          </Button>  
+        <div className="formWrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
+          <div className="create-student-teacher-form">
+            <FormInsegnante
+              insegnanteInfo={ insegnanteInfoDefault }
+              setNewCodiceFiscale={setNewCodiceFiscale}
+              setNewNome={setNewNome}
+              setNewCognome={setNewCognome}
+              setNewCitta={setNewCitta}
+              setNewIndirizzo={setNewIndirizzo}
+              setNewCellulare={setNewCellulare}
+              setNewEmail={setNewEmail}
+              setNewLuogoNascita={setNewLuogoNascita}
+              setNewDisciplina={setNewDisciplina}
+              setNewCorso={setNewCorso}
+              setNewScuola={setNewScuola}
+              setNewDataIscrizione={setNewDataIscrizione}
+              setNewDataCertificato={setNewDataCertificato}
+              setNewDataNascita={setNewDataNascita}
+              setNewDataGreenPass={setNewDataGreenPass}
+            />
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
+            <Button variant="success" id="buttonCreaInsegnante" onClick={async () => {
+                const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass };
+                await createTeacher(newTeacher);
+                window.location.reload()
+            }}>
+              Crea Insegnante
+            </Button>
+            <Button variant="secondary" id="buttonResetForm" onClick={() => window.location.reload()}>
+              Reset Form
+            </Button>  
+          </div>
         </div>
       </div>
     </>

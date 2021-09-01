@@ -102,9 +102,11 @@ const teachersDisplayer = ({ currentTeacher }) => {
               <b>Data Scadenza Green Pass:</b> {teacherInfo.DataGreenPass === 'Invalid date' ? '01-01-1900' : teacherInfo.DataGreenPass}
             </Card.Text>
 
-            <Button variant="success" onClick={ () => stampaModuloIscrizione()}> Scarica Modulo </Button>
-            <Button variant="primary" onClick={ () => setShowUpdateTeacherModal(true) } style={{ marginLeft: '1em' }}> Aggiorna </Button>
-            <Button variant="danger" onClick={() => setShowDeleteTeacherModal(true) } style={{ marginLeft: '1em' }}> Elimina </Button>
+            <div className="buttonsContainer">
+              <Button variant="success" onClick={ () => stampaModuloIscrizione()}> Scarica Modulo </Button>
+              <Button variant="primary" onClick={ () => setShowUpdateTeacherModal(true) }> Aggiorna </Button>
+              <Button variant="danger" onClick={() => setShowDeleteTeacherModal(true) }> Elimina </Button>
+            </div>
 
           </Card.Body>
         </Card>
@@ -115,7 +117,7 @@ const teachersDisplayer = ({ currentTeacher }) => {
           </Modal.Header>
           <Modal.Body className="updateTeacherModalBody">
               {/* change class name */}
-              <div className="update-student-form">
+              <div className="update-info-form">
               <FormInsegnante 
                   insegnanteInfo={teacherInfo}
                   setNewCodiceFiscale={setNewCodiceFiscale}

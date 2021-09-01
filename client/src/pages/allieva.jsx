@@ -107,27 +107,31 @@ const Allieva = ({ match }) => {
   return (
     <>
       <div className="page-body">
-        <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: '1.2' }}>{allievaInfo.Nome} {allievaInfo.Cognome}</h2>
+        <div className="studentNameTitle">
+          {allievaInfo.Nome} {allievaInfo.Cognome}
+        </div>
 
-        <Button id="buttonStampaRicevute" onClick={stampaModuloIscrizione} style={{ marginTop: '1em' }}>
-           <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
-        </Button>
-        
-        <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) } style={{ marginLeft: '2em', marginTop: '1em' }}>
-          <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
-        </Button>
+        <div className="buttonsContainer">
+          <Button onClick={stampaModuloIscrizione}>
+            <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
+          </Button>
+          
+          <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) }>
+            <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
+          </Button>
 
-        <Button variant="warning" id="aggiornaDataIscrizione" onClick={ () => setShowRegistrationDateModal(true) } style={{ marginLeft: '2em', marginTop: '1em' }}>
-          <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
-        </Button>
+          <Button variant="warning" id="aggiornaDataIscrizione" onClick={ () => setShowRegistrationDateModal(true) }>
+            <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
+          </Button>
 
-        <Button variant='danger' onClick={ () => setShowDeleteStudentModal(true) } style={{ marginLeft: '2em', marginTop: '1em' }}>
-          <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
-        </Button>
+          <Button variant='danger' onClick={ () => setShowDeleteStudentModal(true) }>
+            <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
+          </Button>
 
-        <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') } style={{ marginLeft: '2em', marginTop: '1em' }}>
-          <span role='img' aria-label='back'>🔙</span> INDIETRO
-        </Button>
+          <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') }>
+            <span role='img' aria-label='back'>🔙</span> INDIETRO
+          </Button>
+        </div>
 
         <ListaRicevute ricevute={allievaRicevute} allievaInfo={allievaInfo} />
         <FormCreaRicevuta CodiceFiscale={match.params.codicefiscale} AllievaID={allievaInfo.AllievaID} />
@@ -172,9 +176,10 @@ const Allieva = ({ match }) => {
           <Modal.Title> Aggiorna Allieva </Modal.Title>
         </Modal.Header>
         <Modal.Body className="updateStudentModalBody">
-            <div className="update-student-form">
+            <div className="update-info-form">
               <FormAllieva 
                 allievaInfo={allievaInfo}
+                newMaggiorenne={newMaggiorenne}
                 setNewMaggiorenne={setNewMaggiorenne}
                 setNewCodiceFiscale={setNewCodiceFiscale}
                 setNewNome={setNewNome}

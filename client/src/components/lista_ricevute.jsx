@@ -88,7 +88,7 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
       <div
         className="ag-theme-balham"
         id="listaRicevute"
-        style={{ marginTop: '2em', height: '20em', width: '90%', marginBottom: '2em' }}
+        style={{ marginTop: '2em', height: '20em', width: '90%', marginBottom: '2em', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}
       >
         <AgGridReact
           // rowSelection="multiple"
@@ -102,15 +102,18 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
         ></AgGridReact>
       </div>
 
-      <Button onClick={stampaRicevute}>
-        <span role='img' aria-label='receipt'>🧾</span> STAMPA RICEVUTA
-      </Button>
-      <Button variant='danger' style={{  marginLeft: '2em' }} onClick={ () => { 
-        if (!selectedReceipt) return alert('Seleziona Ricevuta per Eliminarla'); 
-        setShowDeleteReceiptModal(true)} 
-      }>
-        <span role='img' aria-label='bin'>🗑️</span> ELIMINA RICEVUTA
-      </Button>
+      <div className="buttonsContainer">
+        <Button onClick={stampaRicevute}>
+          <span role='img' aria-label='receipt'>🧾</span> STAMPA RICEVUTA
+        </Button>
+
+        <Button variant='danger' onClick={ () => { 
+          if (!selectedReceipt) return alert('Seleziona Ricevuta per Eliminarla'); 
+          setShowDeleteReceiptModal(true)} 
+        }>
+          <span role='img' aria-label='bin'>🗑️</span> ELIMINA RICEVUTA
+        </Button>
+      </div>
 
       <Modal show={showDeleteReceiptModal} onHide={ () => setShowDeleteReceiptModal(false) } centered>
         <Modal.Header closeButton>

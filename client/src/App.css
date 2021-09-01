@@ -1,5 +1,15 @@
 /* NEW CSS */
 
+/* 
+Colors: 
+ Purple: #422970
+ Blue: #009ED5
+ White: #000
+*/
+body {
+  background-color: #F4F4F4;
+}
+
 .homepage {
   display: flex;
   align-items: center;
@@ -35,20 +45,26 @@ input[type='text']:focus {
 
 input[type='date'] {
   font-size: 1em;
-  border-radius: 2px;
-  padding-left: 0.5em;
-  height: 2em;
+  height: 2.5em;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  padding: .375rem .75rem;
+  color: #495057;
 }
 
 .filter-form {
   display: flex;
   justify-content: left; 
   align-items: center;
-  padding-bottom: 1em;
 }
 
 .filter-form > * {
   margin-right: 1em;
+}
+
+.filter-form > .btn {
+  margin-top: 1.5em;
 }
 
 .create-receipt-form {
@@ -56,7 +72,7 @@ input[type='date'] {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 2vw;
+  gap: 1vw;
 }
 
 .create-receipt-form input[type='date'] {
@@ -68,52 +84,48 @@ input[type='date'] {
   margin-top: 0.7vw;
 }
 
-.create-student-form {
+.create-student-teacher-form {
   display: grid;
-  grid-template-columns: 10% 20% 10% 20%;
+  grid-template-columns: 20% 25% 20% 25%;
   align-items: center;
   justify-content: center;
   row-gap: 0.5vw;
   column-gap: 1vw;
 }
 
-.create-student-form > label {
+.create-student-teacher-form > label {
   margin-top: 0.7vw;
 }
 
-.create-student-form > input, select, option, form-control {
+.create-student-teacher-form > input, select, option, form-control {
   min-width: 0;
 }
 
 .update-student-modal {
-  width: 70vw;
-  max-width: 70vw;
+  width: 60vw;
+  max-width: 60vw;
 }
 
-.update-student-form {
+.update-info-form {
   display: grid;
-  grid-template-columns: 15% 25% 15% 25%;
+  grid-template-columns: 20% 25% 20% 25%;
   align-items: center;
   justify-content: center;
-  row-gap: 1vw;
+  row-gap: 0.5vw;
   column-gap: 1vw;
 }
 
-.update-student-form > label {
+.update-info-form > label {
   margin-top: 0.3vw;
   margin-left: 0.7vw;
 }
 
-.update-student-form > input, select, option, form-control {
-  /* flex: 1 0 20vw; /* flex-grow, flex-shrink, flex-basis */
-  margin-top: 0.3vw;  
-   /* top, right, bottom, left  */
+.update-info-form > input, select, option, form-control {
+  margin-top: 0.3vw;
 }
 
 .page-body {
-  margin-top: 2em;
-  margin-left: 5em;
-  margin-right: 5em;
+  margin: 2em 5em;
   padding-bottom: 5em;
 }
 
@@ -123,12 +135,11 @@ input[type='date'] {
 }
 
 .formWrapper {
-  margin-top: 2em;
-  padding-bottom: 1.5em;
-}
-
-.formWrapper Button {
-  margin-left: 1em;
+  border: 2px solid #DCDCDC;
+  border-radius: 5px;
+  padding: 1.5em 1em 1.5em 1em;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  background-color: #F3F4F6;
 }
 
 .cercaForm {
@@ -160,7 +171,7 @@ input[type='date'] {
 }
 
 .btn {
-  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .updateRegistrationDate {
@@ -194,4 +205,44 @@ input[type='date'] {
 
 .ag-theme-balham {
   margin-top: 1em;
+}
+
+.teacherCardWrapper {
+  width: 25vw;
+  font-size: 14px;
+  margin-right: 2.5em;
+  margin-top: 1.5em;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.studentNameTitle {
+  background-color: #F3F4F6;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  display: flex;
+  margin: auto;
+  line-height: 1.2;
+  padding: 0.7em;
+  width: fit-content;
+  font-size: 2em;
+  font-weight: 600;
+  border: 2px solid #DCDCDC;
+  border-radius: 15px;
+  margin-bottom: 0.5em;
+}
+
+.buttonsContainer .btn {
+  margin-top: 1em;
+  margin-right: 1em;
+}
+
+.modal-body {
+  background-color: #F3F4F6;
+}
+
+.modal-footer {
+  background-color: #E8E8E8;
+}
+
+.modal-header {
+  background-color: #E8E8E8;
 }

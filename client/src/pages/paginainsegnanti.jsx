@@ -35,7 +35,7 @@ const InsegnantiPage = () => {
               ? <h2 className='center'> <div> Non ci sono insegnanti </div> </h2>  
               : teachersList.map((currentTeacher) => {
                 return (
-                    <div key={currentTeacher.CodiceFiscale} style={{ width: '30%', fontSize: '14px', marginRight: '2.5em', marginTop: '1.5em' }}>
+                    <div key={currentTeacher.CodiceFiscale} className="teacherCardWrapper">
                       <TeacherDisplayer currentTeacher={currentTeacher} />
                     </div>
                   )

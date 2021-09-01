@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap'
 
 import reverseDate from '../helpers/reverse-date-for-input-date';
 import commondata from '../commondata/commondata'
+import Divider from './divider';
 
 const FormInsegnante = ({ 
   insegnanteInfo,
@@ -29,10 +30,13 @@ const FormInsegnante = ({
       <Form.Control type="text" placeholder="Inserisci Codice Fiscale..." onChange={({ target }) => setNewCodiceFiscale(target.value)} defaultValue={insegnanteInfo.CodiceFiscale} />
 
       <Form.Label> Nome Insegnante </Form.Label>
-      <Form.Control type="text" placeholder="Inserisci Nome Insegnante..." onChange={({ target }) => setNewNome(target.value)} defaultValue={insegnanteInfo.Nome} />
+      <Form.Control type="text" placeholder="Inserisci Nome..." onChange={({ target }) => setNewNome(target.value)} defaultValue={insegnanteInfo.Nome} />
 
       <Form.Label> Cognome Insegnante </Form.Label>
-      <Form.Control type="text" placeholder="Inserisci Cognome Insegnante..." onChange={({ target }) => setNewCognome(target.value)} defaultValue={insegnanteInfo.Cognome} />
+      <Form.Control type="text" placeholder="Inserisci Cognome..." onChange={({ target }) => setNewCognome(target.value)} defaultValue={insegnanteInfo.Cognome} />
+
+      <Divider half={true} />
+      <Divider />
 
       <Form.Label> Citta </Form.Label>
       <Form.Control type="text" placeholder="Inserisci Citta..." onChange={({ target }) => setNewCitta(target.value)} defaultValue={insegnanteInfo.Citta} />
@@ -48,6 +52,11 @@ const FormInsegnante = ({
 
       <Form.Label> Luogo Nascita </Form.Label>
       <Form.Control type="text" placeholder="Inserisci Luogo Nascita..." onChange={({ target }) => setNewLuogoNascita(target.value)} defaultValue={insegnanteInfo.LuogoNascita} />
+
+      <Form.Label> Data Nascita </Form.Label>
+      <input type="date" onChange={({ target }) => setNewDataNascita(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataNascita) } />
+
+      <Divider />
 
       <Form.Label> Disciplina </Form.Label>
       <Form.Control as="select" onChange={({ target }) => setNewDisciplina(target.value)} defaultValue={insegnanteInfo.Disciplina}>
@@ -67,11 +76,10 @@ const FormInsegnante = ({
       <Form.Label> Data Iscrizione </Form.Label>
       <input type="date" onChange={({ target }) => setNewDataIscrizione(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataIscrizione) } />
 
+      <Divider />
+
       <Form.Label> Data Certificato </Form.Label>
       <input type="date" onChange={({ target }) => setNewDataCertificato(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataCertificato) } />
-
-      <Form.Label> Data Nascita </Form.Label>
-      <input type="date" onChange={({ target }) => setNewDataNascita(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataNascita) } />
       
       <Form.Label> Data Scadenza Green Pass </Form.Label>
       <input type="date" onChange={({ target }) => setNewDataGreenPass(target.value)} defaultValue={ reverseDate(insegnanteInfo.DataGreenPass) } />
