@@ -20,14 +20,14 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const columnsDefinition = [
-  { headerName: 'N° Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true },
-  { headerName: 'Nome', field: 'Nome' },
-  { headerName: 'Cognome', field: 'Cognome' },
-  { headerName: 'Data Ricevuta', field: 'DataRicevuta', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Inizio Corso', field: 'DataInizioCorso', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Scadenza Corso', field: 'DataScadenzaCorso', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Somma Euro', field: 'SommaEuro' },
-  { headerName: 'Tipo Pagamento', field: 'TipoPagamento' }
+  { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
+  { headerName: 'Nome', field: 'Name' },
+  { headerName: 'Cognome', field: 'Surname' },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Somma Euro', field: 'AmountPaid' },
+  { headerName: 'Tipo Pagamento', field: 'PaymentType' }
 ];
 
 const gridOptionsDefault = {
@@ -66,7 +66,7 @@ const ReceiptsPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('/api/ricevuta/getAllRicevute');
+      const result = await fetch('/api/receipt/getAllReceipts');
       const body = await result.json();
       
       const orderedReceipts = orderReceiptsBasedOnReceiptNumber(body)
@@ -107,43 +107,43 @@ const ReceiptsPage = () => {
         let documentDefinition;
 
         const studentInfo = {
-          Maggiorenne: data.Maggiorenne,
-          CodiceFiscale: data.CodiceFiscale,
-          Nome: data.Nome,
-          Cognome: data.Cognome,
-          Citta: data.Citta,
-          Indirizzo: data.Indirizzo,
-          Cellulare: data.Cellulare,
+          IsAdult: data.IsAdult,
+          TaxCode: data.TaxCode,
+          Name: data.Name,
+          Surname: data.Surname,
+          City: data.City,
+          Address: data.Address,
+          MobilePhone: data.MobilePhone,
           Email: data.Email,
-          DataIscrizione: data.DataIscrizione,
-          DataCertificato: data.DataCertificato,
-          DataNascita: data.DataNascita,
-          LuogoNascita: data.LuogoNascita,
-          Disciplina: data.Disciplina,
-          Corso: data.Corso,
-          Scuola: data.Scuola,
-          NomeGenitore: data.NomeGenitore,
-          CognomeGenitore: data.CognomeGenitore,
-          CodiceFiscaleGenitore: data.CodiceFiscaleGenitore
+          RegistrationDate: data.RegistrationDate,
+          CertificateExpirationDate: data.CertificateExpirationDate,
+          DOB: data.DOB,
+          BirthPlace: data.BirthPlace,
+          Discipline: data.Discipline,
+          Course: data.Course,
+          School: data.School,
+          ParentName: data.ParentName,
+          ParentSurname: data.ParentSurname,
+          ParentTaxCode: data.ParentTaxCode
         }
         
         const receiptInfo = {
-          NumeroRicevuta: data.NumeroRicevuta,
-          SommaEuro: data.SommaEuro,
-          TipoPagamento: data.TipoPagamento,
-          TipoRicevuta: data.TipoRicevuta,
-          DataRicevuta: data.DataRicevuta,
-          DataInizioCorso: data.DataInizioCorso,
-          DataScadenzaCorso: data.DataScadenzaCorso
+          ReceiptNumber: data.ReceiptNumber,
+          AmountPaid: data.AmountPaid,
+          PaymentType: data.PaymentType,
+          ReceiptType: data.ReceiptType,
+          ReceiptDate: data.ReceiptDate,
+          CourseStartDate: data.CourseStartDate,
+          CourseEndDate: data.CourseEndDate
         }
 
-        if (studentInfo.Maggiorenne === 'Maggiorenne' && receiptInfo.TipoRicevuta === 'Quota') 
+        if (studentInfo.IsAdult === 'Maggiorenne' && receiptInfo.ReceiptType === 'Quota') 
           documentDefinition = await ReceiptTemplateAdultd.default(studentInfo, receiptInfo);
-        else if (studentInfo.Maggiorenne === 'Maggiorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        else if (studentInfo.IsAdult === 'Maggiorenne' && receiptInfo.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
           documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
-        else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta === 'Quota')
+        else if (studentInfo.IsAdult === 'Minorenne' && receiptInfo.ReceiptType === 'Quota')
           documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
-        else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        else if (studentInfo.IsAdult === 'Minorenne' && receiptInfo.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
           documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
 
         if (index % 2 == 1) {
@@ -163,24 +163,24 @@ const ReceiptsPage = () => {
     const fromDateFormatted = new Date(fromDate)
     const toDateFormatted = new Date(toDate)
 
-    const receiptsWithDateFilter = allReceipts.filter(({ DataRicevuta }) =>
-      fromDateFormatted <= new Date(reverseDate(DataRicevuta)) && 
-      toDateFormatted >= new Date(reverseDate(DataRicevuta))
+    const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate }) =>
+      fromDateFormatted <= new Date(reverseDate(ReceiptDate)) && 
+      toDateFormatted >= new Date(reverseDate(ReceiptDate))
     )
 
     if (!filteredPaymentMethod) {
       return setCurrentReceipts(receiptsWithDateFilter)
     }
 
-    const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ TipoPagamento }) =>
-       TipoPagamento.includes(filteredPaymentMethod)
+    const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ PaymentType }) =>
+       PaymentType.includes(filteredPaymentMethod)
     )    
 
     setCurrentReceipts(receiptsWithPaymentAndDateFilters)
   }
 
   const clearFilters = () => {
-    const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('TipoPagamento');
+    const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('PaymentType');
     
     PaymentMethodFilterComponent.setModel(null);
     gridOptions.api.onFilterChanged();
@@ -199,14 +199,14 @@ const ReceiptsPage = () => {
     const fromDateFormatted = new Date(fromDate)
     const toDateFormatted = new Date(toDate)
 
-    const receipts = allReceipts.filter(({ DataRicevuta, TipoPagamento }) =>
-      fromDateFormatted <= new Date(reverseDate(DataRicevuta)) && 
-      toDateFormatted >= new Date(reverseDate(DataRicevuta)) &&
-      TipoPagamento.includes(filteredPaymentMethod)
+    const receipts = allReceipts.filter(({ ReceiptDate, PaymentType }) =>
+      fromDateFormatted <= new Date(reverseDate(ReceiptDate)) && 
+      toDateFormatted >= new Date(reverseDate(ReceiptDate)) &&
+      PaymentType.includes(filteredPaymentMethod)
     )
 
-    const filteredAmount = receipts.reduce((accumulator, { SommaEuro }) => {
-      return accumulator +  parseFloat(SommaEuro);
+    const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => {
+      return accumulator +  parseFloat(AmountPaid);
     }, 0);
     
     const copy = [...receipts]

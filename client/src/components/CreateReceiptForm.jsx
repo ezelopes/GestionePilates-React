@@ -20,7 +20,7 @@ const defaultAmounts = [
   { value: '150', label: '150' }
 ];
 
-const CreateReceiptForm = ({ CodiceFiscale, AllievaID }) => {
+const CreateReceiptForm = ({ TaxCode, StudentID }) => {
   const today = formatDate(new Date(), true);
 
   const [newReceiptNumber, setNewReceiptNumber] = useState('');
@@ -87,20 +87,20 @@ const CreateReceiptForm = ({ CodiceFiscale, AllievaID }) => {
           </div>
         </div>
 
-        <Button variant='success' style={{ marginTop: '2em' }} onClick={() => {
+        <Button variant='success' style={{ marginTop: '2em' }} onClick={async () => {
           const newReceipt = {
-            NumeroRicevuta: newReceiptNumber,
-            DataRicevuta: newReceiptDate,
-            DataInizioCorso: newCourseStartDate,
-            DataScadenzaCorso: newCourseEndDate,
-            SommaEuro: newTotalAmount,
-            TipoPagamento: newPaymentMethod,
-            TipoRicevuta: newReceiptType,
-            CodiceFiscale: CodiceFiscale,
-            AllievaID: AllievaID,
-            DataIscrizione: updateRegistrationDate
+            ReceiptNumber: newReceiptNumber,
+            ReceiptDate: newReceiptDate,
+            CourseStartDate: newCourseStartDate,
+            CourseEndDate: newCourseEndDate,
+            TotalAmount: newTotalAmount,
+            PaymentMethod: newPaymentMethod,
+            ReceiptType: newReceiptType,
+            TaxCode: TaxCode,
+            StudentID,
+            RegistrationDate: updateRegistrationDate
           }
-          createReceipt(newReceipt)
+          await createReceipt(newReceipt)
         }}>
           <span role='img' aria-label='create'>🆕</span> CREA RICEVUTA
         </Button>

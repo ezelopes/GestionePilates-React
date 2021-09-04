@@ -13,7 +13,7 @@ const TeachersPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('/api/insegnante/getInsegnanti');
+      const result = await fetch('/api/teacher/getTeachers');
       const body = await result.json();
       setTeachersList(body);
       setLoading(false);
@@ -35,7 +35,7 @@ const TeachersPage = () => {
               ? <h2 className='center'> <div> Non ci sono insegnanti </div> </h2>  
               : teachersList.map((currentTeacher) => {
                 return (
-                    <div key={currentTeacher.CodiceFiscale} className="teacher-card-wrapper">
+                    <div key={currentTeacher.TaxCode} className="teacher-card-wrapper">
                       <TeacherDisplayer currentTeacher={currentTeacher} />
                     </div>
                   )

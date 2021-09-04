@@ -15,25 +15,25 @@ const StudentSubscriptionPage = () => {
   const { ages, disciplines, courses, schools } = commondata;
 
   const studentInfoDefault = { 
-    Maggiorenne: ages[0].age,
-    CodiceFiscale: '',
-    Nome: '',
-    Cognome: '',
-    Citta: '',
-    Indirizzo: '',
-    Cellulare: '',
+    IsAdult: ages[0].age,
+    TaxCode: '',
+    Name: '',
+    Surname: '',
+    City: '',
+    Address: '',
+    MobilePhone: '',
     Email: '',
-    LuogoNascita: '',
-    Disciplina: disciplines[0].discipline,
-    Corso: courses[0].course,
-    Scuola: schools[0].school,
-    DataIscrizione: reverseDate(today),
-    DataCertificato: reverseDate(today),
-    DataNascita: reverseDate(today),
-    DataGreenPass: reverseDate(today),
-    CodiceFiscaleGenitore: '',
-    NomeGenitore: '',
-    CognomeGenitore: ''
+    BirthPlace: '',
+    Discipline: disciplines[0].discipline,
+    Course: courses[0].course,
+    School: schools[0].school,
+    RegistrationDate: reverseDate(today),
+    CertificateExpirationDate: reverseDate(today),
+    DOB: reverseDate(today),
+    GreenPassExpirationDate: reverseDate(today),
+    ParentTaxCode: '',
+    ParentName: '',
+    ParentSurname: ''
   }
 
   const [newIsAdult, setNewIsAdult] = useState(ages[0].age);
@@ -84,7 +84,7 @@ const StudentSubscriptionPage = () => {
         <div className="create-student-teacher-form">
           <StudentForm 
             studentInfo={ studentInfoDefault }
-            newIsAdult={newMaggiorenne}
+            newIsAdult={newIsAdult}
             setNewIsAdult={setNewIsAdult}
             setNewTaxCode={setNewTaxCode}
             setNewName={setNewName}
@@ -109,25 +109,25 @@ const StudentSubscriptionPage = () => {
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
           <Button variant="success" onClick={() => {
             const newStudent = { 
-              Maggiorenne: newIsAdult,
-              CodiceFiscale: newTaxCode,
-              Nome: newName,
-              Cognome: newSurname,
-              Citta: newCity,
-              Indirizzo: newAddress,
-              Cellulare: newMobilePhone,
+              IsAdult: newIsAdult,
+              TaxCode: newTaxCode,
+              Name: newName,
+              Surname: newSurname,
+              City: newCity,
+              Address: newAddress,
+              MobilePhone: newMobilePhone,
               Email: newEmail,
-              LuogoNascita: newBirthPlace,
-              Disciplina: newDiscipline,
-              Corso: newCourse,
-              Scuola: newSchool,
-              DataIscrizione: newRegistrationDate,
-              DataCertificato: newCertificateExpirationDate,
-              DataNascita: newDOB,
-              DataGreenPass: newGreenPassExpirationDate,
-              CodiceFiscaleGenitore: newParentTaxCode,
-              NomeGenitore: newParentName,
-              CognomeGenitore: newParentSurname 
+              BirthPlace: newBirthPlace,
+              Discipline: newDiscipline,
+              Course: newCourse,
+              School: newSchool,
+              RegistrationDate: newRegistrationDate,
+              CertificateExpirationDate: newCertificateExpirationDate,
+              DOB: newDOB,
+              GreenPassExpirationDate: newGreenPassExpirationDate,
+              ParentTaxCode: newParentTaxCode,
+              ParentName: newParentName,
+              ParentSurname: newParentSurname 
             };
             createStudent(newStudent);
             // resetForm();

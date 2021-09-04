@@ -5,9 +5,9 @@ import { Button, Modal } from 'react-bootstrap'
 const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
 
 const columnDefs = [
-    { headerName: 'N° Ricevuta', field: 'NumeroRicevuta' },
-    { headerName: 'Data Ricevuta', field: 'DataRicevuta', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-    { headerName: 'Somma Euro', field: 'SommaEuro' }
+    { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
+    { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+    { headerName: 'Somma Euro', field: 'AmountPaid' }
 ]
 
 const gridOptions = {

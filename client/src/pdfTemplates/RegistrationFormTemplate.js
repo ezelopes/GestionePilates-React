@@ -11,9 +11,9 @@ const RegistrationFormTemplate = async (studentInfo) => {
 
   const docDefinition = {
     info: {
-      title: `${studentInfo.Nome}_${studentInfo.Cognome}_Modulo_Iscrizione`,
+      title: `${studentInfo.Name}_${studentInfo.Surname}_Modulo_Iscrizione`,
       author: 'Roxana Carro',
-      subject: `Modulo Iscrizione di ${studentInfo.Nome} ${studentInfo.Cognome}`
+      subject: `Modulo Iscrizione di ${studentInfo.Name} ${studentInfo.Surname}`
     },
     pageMargins: [40, 20, 40, 0],
     content: [
@@ -39,23 +39,23 @@ const RegistrationFormTemplate = async (studentInfo) => {
       {
         text: [
           'Il sottoscritto/a ',
-          { text: `${studentInfo.Nome || BLANK_SPACE } ${studentInfo.Cognome || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Name || BLANK_SPACE } ${studentInfo.Surname || BLANK_SPACE }`, bold: true },
           ' nato/a a ',
-          { text: `${studentInfo.LuogoNascita || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.BirthPlace || BLANK_SPACE }`, bold: true },
           ' il ',
           { text: `${ 
-            (studentInfo.DataNascita === 'Invalid date' || !studentInfo.DataNascita) 
+            (studentInfo.DOB === 'Invalid date' || !studentInfo.DOB) 
               ? '______/______/________'
-              : studentInfo.DataNascita
+              : studentInfo.DOB
           }`, bold: true },
           ' C.F. ',
-          { text: `${studentInfo.CodiceFiscale || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.TaxCode || BLANK_SPACE }`, bold: true },
           '. Residente in ',
-          { text: `${studentInfo.Indirizzo || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Address || BLANK_SPACE }`, bold: true },
           ' a ',
-          { text: `${studentInfo.Citta || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.City || BLANK_SPACE }`, bold: true },
           '. Cellulare: ',
-          { text: `${studentInfo.Cellulare || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.MobilePhone || BLANK_SPACE }`, bold: true },
           ' Email: ',
           { text: `${studentInfo.Email || BLANK_SPACE }`, bold: true }
         ],
@@ -108,7 +108,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
       {
         text: [
           'La disciplina sportiva svolta nella ASD PIL ART è ',
-          { text: `${studentInfo.Disciplina || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Discipline || BLANK_SPACE }`, bold: true },
           ' per cui il socio ci consegna un certificato medico di idoneità sportiva con scadenza ',
           { text: `${ '______/______/________' }`, bold: true },
           ' del tipo:'
@@ -182,14 +182,14 @@ const RegistrationFormTemplate = async (studentInfo) => {
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Figlio fiscalmente a carico del genitore: ${studentInfo.NomeGenitore || BLANK_SPACE } ${studentInfo.CognomeGenitore || '' }`,
+        text: `Figlio fiscalmente a carico del genitore: ${studentInfo.ParentName || BLANK_SPACE } ${studentInfo.ParentSurname || '' }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Codice Fiscale di chi firma: ${studentInfo.CodiceFiscaleGenitore || BLANK_SPACE }`,
+        text: `Codice Fiscale di chi firma: ${studentInfo.ParentTaxCode || BLANK_SPACE }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,

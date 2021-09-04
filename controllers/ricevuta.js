@@ -1,49 +1,49 @@
 const { Router } = require('express');
-const { getRicevuteOfAllieva, getAllRicevute, creaRicevuta, modificaRicevuta, eliminaRicevuta } = require('../database/ricevutaQuery');
+const { getStudentReceipts, getAllReceipts, createReceipt, updateReceipt, deleteReceipt } = require('../database/ricevutaQuery');
 
-const ricevutaRouter = new Router();
+const receiptRouter = new Router();
 
-const getRicevuteOfAllievaEndpoint = async (req, res) => {
+const getStudentReceiptsEndpoint = async (req, res) => {
   try {
-    const CodiceFiscale = req.params.CodiceFiscale;
-    const ricevute = await getRicevuteOfAllieva(CodiceFiscale);
-    res.status(200).send(ricevute);
+    const TaxCode = req.params.TaxCode;
+    const receipts = await getStudentReceipts(TaxCode);
+    res.status(200).send(receipts);
   } catch (e) {
     console.log(e);
   }
 }
 
-const getAllRicevuteEndpoint = async (req, res) => {
+const getAllReceiptsEndpoint = async (req, res) => {
   try {
-    const ricevute = await getAllRicevute();
-    res.status(200).send(ricevute);
+    const receipts = await getAllReceipts();
+    res.status(200).send(receipts);
   } catch (e) {
     console.log(e);
   }
 }
 
-const creaRicevutaEndpoint = async (req, res) => {
+const createReceiptEndpoint = async (req, res) => {
   try {
-    const response = await creaRicevuta(req.body);
+    const response = await createReceipt(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
   }
 }
 
-const modificaRicevutaEndpoint = async (req, res) => {
+const updateReceiptEndpoint = async (req, res) => {
   try {
-    const response = await modificaRicevuta(req.body);
+    const response = await updateReceipt(req.body);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
   }
 }
 
-const eliminaRicevutaEndpoint = async (req, res) => {
+const deleteReceiptEndpoint = async (req, res) => {
   try {
-    const RicevuteId = req.body.RicevuteId;
-    const response = await eliminaRicevuta(RicevuteId);
+    const ReceiptID = req.body.ReceiptID;
+    const response = await deleteReceipt(ReceiptID);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -51,10 +51,10 @@ const eliminaRicevutaEndpoint = async (req, res) => {
   }
 }
 
-ricevutaRouter.get('/getRicevuteOfAllieva/:CodiceFiscale', getRicevuteOfAllievaEndpoint);
-ricevutaRouter.get('/getAllRicevute', getAllRicevuteEndpoint);
-ricevutaRouter.put('/creaRicevuta', creaRicevutaEndpoint);
-ricevutaRouter.post('/modificaRicevuta', modificaRicevutaEndpoint);
-ricevutaRouter.delete('/eliminaRicevuta', eliminaRicevutaEndpoint);
+receiptRouter.get('/getStudentReceipts/:TaxCode', getStudentReceiptsEndpoint);
+receiptRouter.get('/getAllReceipts', getAllReceiptsEndpoint);
+receiptRouter.put('/createReceipt', createReceiptEndpoint);
+receiptRouter.post('/updateReceipt', updateReceiptEndpoint);
+receiptRouter.delete('/deleteReceipt', deleteReceiptEndpoint);
 
-module.exports = ricevutaRouter;
+module.exports = receiptRouter;

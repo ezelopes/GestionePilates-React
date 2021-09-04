@@ -26,7 +26,7 @@ const App = () => {
             <Route path="/" component={HomePage} exact />
             <Route path="/paginaallieve" component={StudentsPage} exact />
             <Route path="/paginaricevute" component={ReceiptsPage} exact />
-            <Route path="/paginaallieve/:codicefiscale" component={Student} exact />
+            <Route path="/paginaallieve/:TaxCode" component={Student} exact />
             <Route path="/iscrizioneallieve" component={StudentSubscription} exact />
             <Route path="/iscrizioneinsegnanti" component={TeacherSubscription} exact />
             <Route path="/paginainsegnanti" component={TeachersPage} exact />

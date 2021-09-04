@@ -1,113 +1,113 @@
 const pool = require('./pool');
 const moment = require('moment');
 
-const mappingRicevuta = (rows) => {
-  const ricevute = rows.map(row => {
+const mappingReceipt = (rows) => {
+  const receipts = rows.map(row => {
     return {
-      RicevutaID: row.RicevutaID,
-      TipoRicevuta: row.TipoRicevuta,
-      DataRicevuta: moment(row.DataRicevuta).format('DD-MM-YYYY'),
-      DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
-      DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
-      NumeroRicevuta: row.NumeroRicevuta,
-      SommaEuro: row.SommaEuro,
-      FK_AllievaID: row.FK_AllievaID,
-      TipoPagamento: row.TipoPagamento,
-      Archiviata: row.Archiviata
+      ReceiptID: row.RicevutaID,
+      ReceiptType: row.TipoRicevuta,
+      ReceiptDate: moment(row.DataRicevuta).format('DD-MM-YYYY'),
+      CourseStartDate: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
+      CourseEndDate: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
+      ReceiptNumber: row.NumeroRicevuta,
+      AmountPaid: row.SommaEuro,
+      FK_StudentID: row.FK_AllievaID,
+      PaymentType: row.TipoPagamento,
+      Archived: row.Archiviata
     };
   });
-  return ricevute;
+  return receipts;
 }
   
-const mappingAllRicevute = (rows) => {
-  const ricevute = rows.map(row => {
+const mappingAllReceipts = (rows) => {
+  const receipts = rows.map(row => {
     return {
-      Maggiorenne: row.Maggiorenne,
-      CodiceFiscale: row.CodiceFiscale,
-      Nome: row.Nome,
-      Cognome: row.Cognome,
-      Citta: row.Citta,
-      Indirizzo: row.Indirizzo,
-      Cellulare: row.Cellulare,
+      IsAdult: row.Maggiorenne,
+      TaxCode: row.CodiceFiscale,
+      Name: row.Nome,
+      Surname: row.Cognome,
+      City: row.Citta,
+      Address: row.Indirizzo,
+      MobilePhone: row.Cellulare,
       Email: row.Email,
-      DataIscrizione: moment(row.DataIscrizione).format('DD-MM-YYYY'),
-      DataCertificato: moment(row.DataCertificato).format('DD-MM-YYYY'),
-      DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
-      LuogoNascita: row.LuogoNascita,
-      Disciplina: row.Disciplina,
-      Corso: row.Corso,
-      Scuola: row.Scuola,
-      NomeGenitore: row.NomeGenitore,
-      CognomeGenitore: row.CognomeGenitore,
-      CodiceFiscaleGenitore: row.CodiceFiscaleGenitore,
+      RegistrationDate: moment(row.DataIscrizione).format('DD-MM-YYYY'),
+      CertificateExpirationDate: moment(row.DataCertificato).format('DD-MM-YYYY'),
+      DOB: moment(row.DataNascita).format('DD-MM-YYYY'),
+      BirthPlace: row.LuogoNascita,
+      Discipline: row.Disciplina,
+      Course: row.Corso,
+      School: row.Scuola,
+      ParentName: row.NomeGenitore,
+      ParentSurname: row.CognomeGenitore,
+      ParentTaxCode: row.CodiceFiscaleGenitore,
 
-      NumeroRicevuta: row.NumeroRicevuta,
-      SommaEuro: row.SommaEuro,
-      TipoPagamento: row.TipoPagamento,
-      TipoRicevuta: row.TipoRicevuta,
-      DataRicevuta: moment(row.DataRicevuta).format('DD-MM-YYYY'),
-      DataInizioCorso: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
-      DataScadenzaCorso: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
+      ReceiptNumber: row.NumeroRicevuta,
+      AmountPaid: row.SommaEuro,
+      PaymentType: row.TipoPagamento,
+      ReceiptType: row.TipoRicevuta,
+      ReceiptDate: moment(row.DataRicevuta).format('DD-MM-YYYY'),
+      CourseStartDate: moment(row.DataInizioCorso).format('DD-MM-YYYY'),
+      CourseEndDate: moment(row.DataScadenzaCorso).format('DD-MM-YYYY'),
     };
   });
-  return ricevute;
+  return receipts;
 }
 
-const getRicevuteOfAllieva = async (CodiceFiscale) => {
-  const [rows, fields] = await pool.execute('SELECT * FROM Ricevuta WHERE FK_CodiceFiscale = ?', [CodiceFiscale]);
-  const ricevute = mappingRicevuta(rows);
+const getStudentReceipts = async (TaxCode) => {
+  const [rows] = await pool.execute('SELECT * FROM Ricevuta WHERE FK_CodiceFiscale = ?', [TaxCode]);
+  const receipts = mappingReceipt(rows);
   
-  return ricevute;
+  return receipts;
 }
 
-const getAllRicevute = async () => {
-  const [rows, fields] = await pool.execute(
+const getAllReceipts = async () => {
+  const [rows] = await pool.execute(
     'SELECT * \
     FROM ricevuta \
     INNER JOIN allieva \
     ON ricevuta.FK_AllievaID = allieva.AllievaID;'
   );
-  const ricevute = mappingAllRicevute(rows);
+  const receipts = mappingAllReceipts(rows);
   
-  return ricevute;
+  return receipts;
 }
 
-const creaRicevuta = async ({
-  NumeroRicevuta,
-  TipoPagamento,
-  TipoRicevuta,
-  DataRicevuta,
-  DataInizioCorso,
-  DataScadenzaCorso,
-  SommaEuro,
+const createReceipt = async ({
+  ReceiptNumber,
+  PaymentType,
+  ReceiptType,
+  ReceiptDate,
+  CourseStartDate,
+  CourseEndDate,
+  AmountPaid,
   CodiceFiscale,
-  AllievaID,
-  DataIscrizione
+  StudentID,
+  RegistrationDate
 }) => {
   try {
-    const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
-    if (TipoRicevuta.toUpperCase() == 'QUOTA ASSOCIATIVA') {
+    const ReceiptDateFormatted = moment(ReceiptDate).format('YYYY-MM-DD HH:mm:ss');
+    if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
         'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
-        [NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevutaFormatted, SommaEuro, CodiceFiscale, AllievaID, false]
+        [ReceiptNumber, PaymentType, ReceiptType, ReceiptDateFormatted, AmountPaid, CodiceFiscale, StudentID, false]
       );
       return 'Ricevuta Inserita Correttamente!';
     }
   
-    let DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
-    let DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
+    let CourseStartDateFormatted = moment(CourseStartDate).format('YYYY-MM-DD HH:mm:ss');
+    let CourseEndDateFormatted = moment(CourseEndDate).format('YYYY-MM-DD HH:mm:ss');
   
     await pool.execute(
       'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevutaFormatted, DataInizioCorsoFormatted, DataScadenzaCorsoFormatted, SommaEuro, CodiceFiscale, AllievaID, false]
+      [ReceiptNumber, PaymentType, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, CodiceFiscale, AllievaID, false]
     );
 
-    if (DataIscrizione === true) {
+    if (RegistrationDate === true) {
       await pool.execute(
         `UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`,
-        [DataInizioCorsoFormatted, AllievaID]
+        [CourseStartDateFormatted, StudentID]
       );
     }
 
@@ -117,45 +117,34 @@ const creaRicevuta = async ({
     return 'Errore nel creare la Ricevuta!';
   }
 }
-
-const eliminaRicevuta = async (RicevutaID) => {
-  try {
-    await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [RicevutaID])
-
-    return 'Ricevuta Eliminata Correttamente!';
-  } catch (error) {
-    console.log(error);
-    return `Errore nell'eliminare Ricevute!`;
-  }
-}
   
-const modificaRicevuta = async({
-  RicevutaID,
-  NumeroRicevuta,
-  TipoPagamento,
-  TipoRicevuta,
-  DataRicevuta,
-  DataInizioCorso,
-  DataScadenzaCorso,
-  SommaEuro,
+const updateReceipt = async({
+  ReceiptID,
+  ReceiptNumber,
+  PaymentType,
+  ReceiptType,
+  ReceiptDate,
+  CourseStartDate,
+  CourseEndDate,
+  AmountPaid,
 }) => {
   try {
-    const DataRicevutaFormatted = moment(DataRicevuta).format('YYYY-MM-DD HH:mm:ss');
+    const ReceiptDateFormatted = moment(ReceiptDate).format('YYYY-MM-DD HH:mm:ss');
   
-    if (TipoRicevuta.toUpperCase() == 'QUOTA ASSOCIATIVA') {
+    if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
         'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, SommaEuro=? WHERE RicevutaID=?;', 
-        [NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevutaFormatted, SommaEuro, RicevutaID]
+        [ReceiptNumber, PaymentType, ReceiptType, ReceiptDateFormatted, AmountPaid, ReceiptID]
       );
       return 'Ricevuta Aggiornata Correttamente!';
     }
   
-    const DataInizioCorsoFormatted = moment(DataInizioCorso).format('YYYY-MM-DD HH:mm:ss');
-    const DataScadenzaCorsoFormatted = moment(DataScadenzaCorso).format('YYYY-MM-DD HH:mm:ss');
+    const CourseStartDateFormatted = moment(CourseStartDate).format('YYYY-MM-DD HH:mm:ss');
+    const CourseEndDateFormatted = moment(CourseEndDate).format('YYYY-MM-DD HH:mm:ss');
       
     await pool.execute(
       `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;`,
-      [NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevutaFormatted, DataInizioCorsoFormatted, DataScadenzaCorsoFormatted, SommaEuro, RicevutaID]
+      [ReceiptNumber, PaymentType, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, ReceiptID]
     );
     return 'Ricevuta Aggiornata Correttamente!';
   } catch (error) {
@@ -164,10 +153,21 @@ const modificaRicevuta = async({
   }
 } 
 
+const deleteReceipt = async (ReceiptID) => {
+  try {
+    await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [ReceiptID])
+
+    return 'Ricevuta Eliminata Correttamente!';
+  } catch (error) {
+    console.log(error);
+    return `Errore nell'eliminare Ricevute!`;
+  }
+}
+
 module.exports = {
-  getRicevuteOfAllieva,
-  getAllRicevute,
-  creaRicevuta,
-  modificaRicevuta,
-  eliminaRicevuta
+  getStudentReceipts,
+  getAllReceipts,
+  createReceipt,
+  updateReceipt,
+  deleteReceipt
 };

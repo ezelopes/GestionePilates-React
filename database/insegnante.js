@@ -1,71 +1,71 @@
 const pool = require('./pool');
 const moment = require('moment');
 
-const mappingInsegnanti = (rows) => {
-  const insegnanti = rows.map(row => {
+const mappingTeachers = (rows) => {
+  const teachers = rows.map(row => {
     return {
-      InsegnanteID: row.InsegnanteID,
-      CodiceFiscale: row.CodiceFiscale,
-      Nome: row.Nome,
-      Cognome: row.Cognome,
-      Citta: row.Citta,
-      Indirizzo: row.Indirizzo,
-      Cellulare: row.Cellulare,
+      TeacherID: row.InsegnanteID,
+      TaxCode: row.CodiceFiscale,
+      Name: row.Nome,
+      Surname: row.Cognome,
+      City: row.Citta,
+      Address: row.Indirizzo,
+      MobilePhone: row.Cellulare,
       Email: row.Email,
-      DataIscrizione: moment(row.DataIscrizione).format('DD-MM-YYYY'),
-      DataCertificato: moment(row.DataCertificato).format('DD-MM-YYYY'),
-      DataNascita: moment(row.DataNascita).format('DD-MM-YYYY'),
-      DataGreenPass: moment(row.DataGreenPass).format('DD-MM-YYYY'),
-      LuogoNascita: row.LuogoNascita,
-      Disciplina: row.Disciplina,
-      Corso: row.Corso,
-      Scuola: row.Scuola,
+      RegistrationDate: moment(row.DataIscrizione).format('DD-MM-YYYY'),
+      CertificateExpirationDate: moment(row.DataCertificato).format('DD-MM-YYYY'),
+      DOB: moment(row.DataNascita).format('DD-MM-YYYY'),
+      GreenPassExpirationDate: moment(row.DataGreenPass).format('DD-MM-YYYY'),
+      BirthPlace: row.LuogoNascita,
+      Discipline: row.Disciplina,
+      Course: row.Corso,
+      School: row.Scuola,
     };
   });
-  return insegnanti;
+  return teachers;
 }
 
-const getInsegnanti = async () => {
-  const [rows, fields] = await pool.execute('SELECT * FROM insegnante');
-  const insegnante = mappingInsegnanti(rows);
+const getTeachers = async () => {
+  const [rows] = await pool.execute('SELECT * FROM insegnante');
+  const teachers = mappingTeachers(rows);
 
-  return insegnante;
+  return teachers;
 }
 
-const getSingleInsegnante = async (CodiceFiscale) => {
-  const [rows, fields] = await pool.execute('SELECT * FROM insegnante WHERE CodiceFiscale= ?;', [CodiceFiscale]);
-  const allieva = mappingInsegnanti(rows);
+const getSingleTeacher = async (CodiceFiscale) => {
+  const [rows] = await pool.execute('SELECT * FROM insegnante WHERE CodiceFiscale= ?;', [CodiceFiscale]);
+  const teacher = mappingTeachers(rows);
 
-  return allieva;
+  return teacher;
 }
 
-const creaInsegnante = async ({
-  CodiceFiscale,
-  Nome,
-  Cognome,
-  Citta,
-  Indirizzo,
-  Cellulare,
+const createTeacher = async ({
+  TaxCode,
+  Name,
+  Surname,
+  City,
+  Address,
+  MobilePhone,
   Email,
-  DataIscrizione,
-  DataCertificato,
-  DataNascita,
-  DataGreenPass,
-  LuogoNascita,
-  Disciplina,
-  Corso,
-  Scuola,
+  RegistrationDate,
+  CertificateExpirationDate,
+  DOB,
+  GreenPassExpirationDate,
+  BirthPlace,
+  Discipline,
+  Course,
+  School,
 }) => {
   try {
-    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD HH:mm:ss');
-    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD HH:mm:ss');
-    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD HH:mm:ss');
-    const DataGreenPassFormatted = moment(DataGreenPass).format('YYYY-MM-DD HH:mm:ss');
+    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD HH:mm:ss');
+    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD HH:mm:ss');
+    const DOBFormatted = moment(DOB).format('YYYY-MM-DD HH:mm:ss');
+    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD HH:mm:ss');
 
-    const [rows, fields] = await pool.execute(
+    await pool.execute(
       'INSERT INTO Insegnante (CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola) \
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, DataGreenPassFormatted, LuogoNascita, Disciplina, Corso, Scuola]
+      [TaxCode, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School]
     );
     return 'Insegnante Inserita Correttamente!';
   } catch (error) {
@@ -74,33 +74,33 @@ const creaInsegnante = async ({
   }
 }
 
-const modificaInsegnante = async ({
-  InsegnanteID,
-  CodiceFiscale,
-  Nome,
-  Cognome,
-  Citta,
-  Indirizzo,
-  Cellulare,
+const updateTeacher = async ({
+  TeacherID,
+  TaxCode,
+  Name,
+  Surname,
+  City,
+  Address,
+  MobilePhone,
   Email,
-  DataIscrizione,
-  DataCertificato,
-  DataNascita,
-  DataGreenPass,
-  LuogoNascita,
-  Disciplina,
-  Corso,
-  Scuola,
+  RegistrationDate,
+  CertificateExpirationDate,
+  DOB,
+  GreenPassExpirationDate,
+  BirthPlace,
+  Discipline,
+  Course,
+  School,
 }) => {
   try {
-    const DataIscrizioneFormatted = moment(DataIscrizione).format('YYYY-MM-DD');
-    const DataCertificatoFormatted = moment(DataCertificato).format('YYYY-MM-DD');
-    const DataNascitaFormatted = moment(DataNascita).format('YYYY-MM-DD');
-    const DataGreenPassFormatted = moment(DataGreenPass).format('YYYY-MM-DD');
+    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD HH:mm:ss');
+    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD HH:mm:ss');
+    const DOBFormatted = moment(DOB).format('YYYY-MM-DD HH:mm:ss');
+    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD HH:mm:ss');
 
-    const [rows, fields] = await pool.execute(
+    await pool.execute(
       `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
-      [CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizioneFormatted, DataCertificatoFormatted, DataNascitaFormatted, DataGreenPassFormatted, LuogoNascita, Disciplina, Corso, Scuola, InsegnanteID]
+      [TaxCode, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School, TeacherID]
     );
     return 'Insegnante Aggiornata Correttamente!';
   } catch (error) {
@@ -109,9 +109,9 @@ const modificaInsegnante = async ({
   }
 }
 
-const eliminaInsegnante = async (InsegnanteID) => {
+const deleteTeacher = async (TeacherID) => {
   try {
-    await pool.execute('DELETE FROM insegnante WHERE InsegnanteID=?;', [InsegnanteID]);
+    await pool.execute('DELETE FROM insegnante WHERE InsegnanteID=?;', [TeacherID]);
     return 'Insegnante Eliminata Correttamente!';
   } catch (error) {
     console.log(error);
@@ -120,9 +120,9 @@ const eliminaInsegnante = async (InsegnanteID) => {
 }
 
 module.exports = {
-  getInsegnanti,
-  getSingleInsegnante,
-  creaInsegnante,
-  modificaInsegnante,
-  eliminaInsegnante
+  getTeachers,
+  getSingleTeacher,
+  createTeacher,
+  updateTeacher,
+  deleteTeacher
 };

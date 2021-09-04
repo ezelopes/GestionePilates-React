@@ -16,38 +16,38 @@ const TeacherDisplayer = ({ currentTeacher }) => {
     const [teacherInfo] = useState(currentTeacher);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
 
-    const [newTaxCode, setNewTaxCode] = useState(teacherInfo.CodiceFiscale);
-    const [newName, setNewName] = useState(teacherInfo.Nome);
-    const [newSurname, setNewSurname] = useState(teacherInfo.Cognome);
-    const [newCity, setNewCity] = useState(teacherInfo.Citta);
-    const [newAddress, setNewAddress] = useState(teacherInfo.Indirizzo);
-    const [newMobilePhone, setNewMobilePhone] = useState(teacherInfo.Cellulare);
+    const [newTaxCode, setNewTaxCode] = useState(teacherInfo.TaxCode);
+    const [newName, setNewName] = useState(teacherInfo.Name);
+    const [newSurname, setNewSurname] = useState(teacherInfo.Surname);
+    const [newCity, setNewCity] = useState(teacherInfo.City);
+    const [newAddress, setNewAddress] = useState(teacherInfo.Address);
+    const [newMobilePhone, setNewMobilePhone] = useState(teacherInfo.MobilePhone);
     const [newEmail, setNewEmail] = useState(teacherInfo.Email);
-    const [newBirthPlace, setNewBirthPlace] = useState(teacherInfo.LuogoNascita);
-    const [newDiscipline, setNewDiscipline] = useState(teacherInfo.Disciplina);
-    const [newCourse, setNewCourse] = useState(teacherInfo.Corso);
-    const [newSchool, setNewSchool] = useState(teacherInfo.Scuola);
-    const [newRegistrationDate, setNewRegistrationDate] = useState(teacherInfo.DataIscrizione.split("-").reverse().join("-"));
-    const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(teacherInfo.DataCertificato.split("-").reverse().join("-"));
-    const [newDOB, setNewDOB] = useState(teacherInfo.DataNascita.split("-").reverse().join("-"));
-    const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(teacherInfo.DataGreenPass.split("-").reverse().join("-"));
+    const [newBirthPlace, setNewBirthPlace] = useState(teacherInfo.BirthPlace);
+    const [newDiscipline, setNewDiscipline] = useState(teacherInfo.Discipline);
+    const [newCourse, setNewCourse] = useState(teacherInfo.Course);
+    const [newSchool, setNewSchool] = useState(teacherInfo.School);
+    const [newRegistrationDate, setNewRegistrationDate] = useState(teacherInfo.RegistrationDate.split("-").reverse().join("-"));
+    const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(teacherInfo.CertificateExpirationDate.split("-").reverse().join("-"));
+    const [newDOB, setNewDOB] = useState(teacherInfo.DOB.split("-").reverse().join("-"));
+    const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-"));
 
     const setFormData = () => {
-      setNewTaxCode(teacherInfo.CodiceFiscale)
-      setNewName(teacherInfo.Nome)
-      setNewSurname(teacherInfo.Cognome)
-      setNewCity(teacherInfo.Citta)
-      setNewAddress(teacherInfo.Indirizzo)
-      setNewMobilePhone(teacherInfo.Cellulare)
-      setNewEmail(teacherInfo.Email)
-      setNewBirthPlace(teacherInfo.LuogoNascita)
-      setNewDiscipline(teacherInfo.Disciplina)
-      setNewCourse(teacherInfo.Corso)
-      setNewSchool(teacherInfo.Scuola)
-      setNewRegistrationDate(teacherInfo.DataIscrizione.split("-").reverse().join("-"))
-      setNewCertificateExpirationDate(teacherInfo.DataCertificato.split("-").reverse().join("-"))
-      setNewDOB(teacherInfo.DataNascita.split("-").reverse().join("-"))
-      setNewGreenPassExpirationDate(teacherInfo.DataGreenPass.split("-").reverse().join("-"))
+      setNewTaxCode(teacherInfo.NewTaxCode)
+      setNewName(teacherInfo.NewName)
+      setNewSurname(teacherInfo.NewSurname)
+      setNewCity(teacherInfo.NewCity)
+      setNewAddress(teacherInfo.NewAddress)
+      setNewMobilePhone(teacherInfo.NewMobilePhone)
+      setNewEmail(teacherInfo.NewEmail)
+      setNewBirthPlace(teacherInfo.NewBirthPlace)
+      setNewDiscipline(teacherInfo.NewDiscipline)
+      setNewCourse(teacherInfo.NewCourse)
+      setNewSchool(teacherInfo.NewSchool)
+      setNewRegistrationDate(teacherInfo.NewRegistrationDate.split("-").reverse().join("-"))
+      setNewCertificateExpirationDate(teacherInfo.NewCertificateExpirationDate.split("-").reverse().join("-"))
+      setNewDOB(teacherInfo.NewDOB.split("-").reverse().join("-"))
+      setNewGreenPassExpirationDate(teacherInfo.NewGreenPassExpirationDate.split("-").reverse().join("-"))
     }
 
     const handleUpdateTeacherModal = () => {
@@ -69,37 +69,37 @@ const TeacherDisplayer = ({ currentTeacher }) => {
         <Card>
           <Card.Body>
             <Card.Title>
-              <b>{teacherInfo.Nome} {teacherInfo.Cognome}</b>
+              <b>{teacherInfo.Name} {teacherInfo.Surname}</b>
             </Card.Title>
             <Card.Text>
-              <b>Codice Fiscale:</b> {teacherInfo.CodiceFiscale}
+              <b>Codice Fiscale:</b> {teacherInfo.TaxCode}
             </Card.Text>
             <Card.Text>
-              <b>Citta e Indirizzo:</b> {teacherInfo.Citta} - {teacherInfo.Indirizzo}
+              <b>Citta e Indirizzo:</b> {teacherInfo.City} - {teacherInfo.Address}
             </Card.Text>
             <Card.Text>
-              <b>Cellulare:</b> {teacherInfo.Cellulare}
+              <b>Cellulare:</b> {teacherInfo.MobilePhone}
             </Card.Text>
             <Card.Text>
               <b>Email:</b> {teacherInfo.Email}
             </Card.Text>
             <Card.Text>
-              <b>Luogo e Data Nascita:</b> {teacherInfo.LuogoNascita} - {teacherInfo.DataNascita === 'Invalid date' ? '01-01-1900' : teacherInfo.DataNascita}
+              <b>Luogo e Data Nascita:</b> {teacherInfo.BirthPlace} - {teacherInfo.DOB === 'Invalid date' ? '01-01-1900' : teacherInfo.DOB}
             </Card.Text>
             <Card.Text>
-              <b>Data Iscrizione:</b> {teacherInfo.DataIscrizione === 'Invalid date' ? '01-01-1900' : teacherInfo.DataIscrizione}
+              <b>Data Iscrizione:</b> {teacherInfo.RegistrationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.RegistrationDate}
             </Card.Text>
             <Card.Text>
-              <b>Disciplina:</b> {teacherInfo.Disciplina}
+              <b>Disciplina:</b> {teacherInfo.Discipline}
             </Card.Text>
             <Card.Text>
-              <b>Corso:</b> {teacherInfo.Corso}
+              <b>Corso:</b> {teacherInfo.Course}
             </Card.Text>
             <Card.Text>
-              <b>Data Certificato:</b> {teacherInfo.DataCertificato === 'Invalid date' ? '01-01-1900' : teacherInfo.DataCertificato}
+              <b>Data Certificato:</b> {teacherInfo.CertificateExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.CertificateExpirationDate}
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Green Pass:</b> {teacherInfo.DataGreenPass === 'Invalid date' ? '01-01-1900' : teacherInfo.DataGreenPass}
+              <b>Data Scadenza Green Pass:</b> {teacherInfo.GreenPassExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.GreenPassExpirationDate}
             </Card.Text>
 
             <div className="buttons-container">
@@ -140,22 +140,22 @@ const TeacherDisplayer = ({ currentTeacher }) => {
           <Modal.Footer>
           <Button variant="success" onClick={async () => {
               const updatedTeacherInfo = {
-                InsegnanteID: teacherInfo.InsegnanteID,
-                CodiceFiscale: newTaxCode,
-                Nome: newName,
-                Cognome: newSurname,
-                Citta: newCity,
-                Indirizzo: newAddress,
-                Cellulare: newMobilePhone,
+                TeacherID: teacherInfo.InsegnanteID,
+                TaxCode: newTaxCode,
+                Name: newName,
+                Surname: newSurname,
+                City: newCity,
+                Address: newAddress,
+                MobilePhone: newMobilePhone,
                 Email: newEmail,
-                LuogoNascita: newBirthPlace,
-                Disciplina: newDiscipline,
-                Corso: newCourse,
-                Scuola: newSchool,
-                DataIscrizione: newRegistrationDate,
-                DataCertificato: newCertificateExpirationDate,
-                DataNascita: newDOB,
-                DataGreenPass: newGreenPassExpirationDate
+                BirthPlace: newBirthPlace,
+                Discipline: newDiscipline,
+                Course: newCourse,
+                School: newSchool,
+                RegistrationDate: newRegistrationDate,
+                CertificateExpirationDate: newCertificateExpirationDate,
+                DOB: newDOB,
+                GreenPassExpirationDate: newGreenPassExpirationDate
               };
               await updateTeacher(updatedTeacherInfo);
               handleUpdateTeacherModal()
@@ -173,10 +173,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
             <Modal.Title> Elimina Insegnante </Modal.Title>
           </Modal.Header>
           <Modal.Body className="delete-student-teacher-modal-body">
-              Sei sicura di voler eliminare {teacherInfo.Nome} {teacherInfo.Cognome}?
+              Sei sicura di voler eliminare {teacherInfo.Name} {teacherInfo.Surname}?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={() => { deleteTeacher(teacherInfo.InsegnanteID); setShowDeleteTeacherModal(false); } }>
+            <Button variant="danger" onClick={() => { deleteTeacher(teacherInfo.TeacherID); setShowDeleteTeacherModal(false); } }>
               ELIMINA
             </Button>
             <Button variant="secondary" onClick={() => { setShowDeleteTeacherModal(false) } }>

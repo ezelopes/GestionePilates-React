@@ -49,25 +49,25 @@ const StudentPage = ({ match }) => {
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
 
   const setFormData = (studentInfo) => {
-    setNewIsAdult(studentInfo.Maggiorenne);
-    setNewTaxCode(studentInfo.CodiceFiscale);
-    setNewName(studentInfo.Nome);
-    setNewSurname(studentInfo.Cognome);
-    setNewCity(studentInfo.Citta);
-    setNewAddress(studentInfo.Indirizzo);
-    setNewMobilePhone(studentInfo.Cellulare);
+    setNewIsAdult(studentInfo.IsAdult);
+    setNewTaxCode(studentInfo.TaxCode);
+    setNewName(studentInfo.Name);
+    setNewSurname(studentInfo.Surname);
+    setNewCity(studentInfo.City);
+    setNewAddress(studentInfo.Address);
+    setNewMobilePhone(studentInfo.MobilePhone);
     setNewEmail(studentInfo.Email);
-    setNewBirthPlace(studentInfo.LuogoNascita);
-    setNewDiscipline(studentInfo.Disciplina);
-    setNewCourse(studentInfo.Corso);
-    setNewSchool(studentInfo.Scuola);
-    setNewRegistrationDate(reverseDate(studentInfo.DataIscrizione));
-    setNewCertificateExpirationDate(reverseDate(studentInfo.DataCertificato));
-    setNewDOB(reverseDate(studentInfo.DataNascita));
-    setNewGreenPassExpirationDate(reverseDate(studentInfo.DataGreenPass));
-    setNewParentTaxCode(studentInfo.CodiceFiscaleGenitore);
-    setNewParentName(studentInfo.NomeGenitore);
-    setNewParentSurname(studentInfo.CognomeGenitore);
+    setNewBirthPlace(studentInfo.BirthPlace);
+    setNewDiscipline(studentInfo.Discipline);
+    setNewCourse(studentInfo.Course);
+    setNewSchool(studentInfo.School);
+    setNewRegistrationDate(reverseDate(studentInfo.RegistrationDate));
+    setNewCertificateExpirationDate(reverseDate(studentInfo.CertificateExpirationDate));
+    setNewDOB(reverseDate(studentInfo.DOB));
+    setNewGreenPassExpirationDate(reverseDate(studentInfo.GreenPassExpirationDate));
+    setNewParentTaxCode(studentInfo.ParentTaxCode);
+    setNewParentName(studentInfo.ParentName);
+    setNewParentSurname(studentInfo.ParentSurname);
   }
 
   const handleUpdateStudentModal = () => {
@@ -76,7 +76,7 @@ const StudentPage = ({ match }) => {
   }
 
 
-  const stampaModuloIscrizione = async () => {
+  const printRegistrationForm = async () => {
     try {
       const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
       pdfMake.createPdf(documentDefinition).open();
@@ -88,13 +88,14 @@ const StudentPage = ({ match }) => {
   useEffect(() => {
     // TODO: Reduce this to one endpoint call!
     const fetchData = async () => {
-      const getSingleStudentResult = await fetch(`/api/allieva/getSingleAllieva/${match.params.codicefiscale}`);
+      console.log(match.params)
+      const getSingleStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
       const singleStudent = await getSingleStudentResult.json();
       setStudentInfo(singleStudent);
       setFormData(singleStudent);
-      setNewRegistrationDate(singleStudent.DataIscrizione)
+      setNewRegistrationDate(singleStudent.RegistrationDate)
 
-      const getReceiptsOfStudentResult = await fetch(`/api/ricevuta/getRicevuteOfAllieva/${match.params.codicefiscale}`);
+      const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${match.params.TaxCode}`);
       const receipts = await getReceiptsOfStudentResult.json();
       setStudentReceipts(receipts);
     };
@@ -108,11 +109,11 @@ const StudentPage = ({ match }) => {
     <>
       <div className="page-body">
         <div className="student-name-title">
-          {studentInfo.Nome} {studentInfo.Cognome}
+          {studentInfo.Name} {studentInfo.Surname}
         </div>
 
         <div className="buttons-container">
-          <Button onClick={stampaModuloIscrizione}>
+          <Button onClick={printRegistrationForm}>
             <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
           </Button>
           
@@ -120,7 +121,7 @@ const StudentPage = ({ match }) => {
             <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
           </Button>
 
-          <Button variant="warning" id="aggiornaDataIscrizione" onClick={ () => setShowRegistrationDateModal(true) }>
+          <Button variant="warning" onClick={ () => setShowRegistrationDateModal(true) }>
             <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
           </Button>
 
@@ -134,7 +135,7 @@ const StudentPage = ({ match }) => {
         </div>
 
         <ReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
-        <CreateReceiptForm CodiceFiscale={match.params.codicefiscale} AllievaID={studentInfo.AllievaID} />
+        <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} />
       </div>
 
       <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>
@@ -142,10 +143,10 @@ const StudentPage = ({ match }) => {
           <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-registration-date">
-            <input type="date" defaultValue={ reverseDate(studentInfo.DataIscrizione) } onChange={({ target }) => setNewRegistrationDate(target.value)} />
+            <input type="date" defaultValue={ reverseDate(studentInfo.RegistrationDate) } onChange={({ target }) => setNewRegistrationDate(target.value)} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={() => { updateRegistrationDate(studentInfo.AllievaID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
+          <Button variant="success" onClick={() => { updateRegistrationDate(studentInfo.StudenID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
             AGGIORNA
           </Button>
           <Button variant="secondary" onClick={() => { setShowRegistrationDateModal(false) } }>
@@ -159,10 +160,10 @@ const StudentPage = ({ match }) => {
           <Modal.Title> Elimina Allieva </Modal.Title>
         </Modal.Header>
         <Modal.Body className="delete-student-teacher-modal-body">
-            Sei sicura di voler eliminare {studentInfo.Nome} {studentInfo.Cognome}?
+            Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => { deleteStudent(studentInfo.AllievaID); setShowDeleteStudentModal(false); } }>
+          <Button variant="danger" onClick={() => { deleteStudent(studentInfo.StudentID); setShowDeleteStudentModal(false); } }>
             ELIMINA
           </Button>
           <Button variant="secondary" onClick={() => { setShowDeleteStudentModal(false) } }>
@@ -205,26 +206,26 @@ const StudentPage = ({ match }) => {
         <Modal.Footer>
           <Button variant="success" onClick={async () => {
             const updatedStudentInfo = { 
-              AllievaID: studentInfo.AllievaID,
-              Maggiorenne: newIsAdult,
-              CodiceFiscale: newTaxCode,
-              Nome: newName,
-              Cognome: newSurname,
-              Citta: newCity,
-              Indirizzo: newAddress,
-              Cellulare: newMobilePhone,
+              StudentID: studentInfo.StudenID,
+              IsAdult: newIsAdult,
+              TaxCode: newTaxCode,
+              Name: newName,
+              Surname: newSurname,
+              City: newCity,
+              Address: newAddress,
+              MobilePhone: newMobilePhone,
               Email: newEmail,
-              LuogoNascita: newBirthPlace,
-              Disciplina: newDiscipline,
-              Corso: newCourse,
-              Scuola: newSchool,
-              DataIscrizione: newRegistrationDate,
-              DataCertificato: newCertificateExpirationDate,
-              DataNascita: newDOB,
-              DataGreenPass: newGreenPassExpirationDate,
-              CodiceFiscaleGenitore: newParentTaxCode,
-              NomeGenitore: newParentName,
-              CognomeGenitore: newParentSurname 
+              BirthPlace: newBirthPlace,
+              Discipline: newDiscipline,
+              Course: newCourse,
+              School: newSchool,
+              RegistrationDate: newRegistrationDate,
+              CertificateExpirationDate: newCertificateExpirationDate,
+              DOB: newDOB,
+              GreenPassExpirationDate: newGreenPassExpirationDate,
+              ParentTaxCode: newParentTaxCode,
+              ParentName: newParentName,
+              ParentSurname: newParentSurname 
             };
             await updateStudent(updatedStudentInfo); // refreshing the page
           } }>

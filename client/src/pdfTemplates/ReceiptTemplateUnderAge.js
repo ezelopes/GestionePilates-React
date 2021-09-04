@@ -11,7 +11,7 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
 
-  const totalAmount = receiptInfo.SommaEuro.replace('.', ',');
+  const totalAmount = receiptInfo.AmountPaid.replace('.', ',');
   const euroAndCents = totalAmount.split(',');
   const euro = euroAndCents[0];
   const cents = euroAndCents[1];
@@ -23,9 +23,9 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
 
   const docDefinition = {
     info: {
-      title: `${receiptInfo.NumeroRicevuta}_${studentInfo.Nome}_${studentInfo.Cognome}_Ricevuta`,
+      title: `${receiptInfo.ReceiptNumber}_${studentInfo.Name}_${studentInfo.Surname}_Ricevuta`,
       author: 'Roxana Carro',
-      subject: `Ricevuta ${receiptInfo.NumeroRicevuta} di ${studentInfo.Nome} ${studentInfo.Cognome}`
+      subject: `Ricevuta ${receiptInfo.ReceiptNumber} di ${studentInfo.Name} ${studentInfo.Surname}`
     },
     pageMargins: [40, 5, 40, 0],
     content: [
@@ -34,7 +34,7 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${receiptInfo.NumeroRicevuta || BLANK_SPACE }`,
+        text: `Ricevuta n° ${receiptInfo.ReceiptNumber || BLANK_SPACE }`,
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
@@ -58,39 +58,39 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          studentInfo.NomeGenitore || BLANK_SPACE 
+          studentInfo.ParentName || BLANK_SPACE 
         } ${
-          studentInfo.CognomeGenitore || BLANK_SPACE 
+          studentInfo.ParentSurname || BLANK_SPACE 
         }, C.F. ${
-          studentInfo.CodiceFiscaleGenitore || BLANK_SPACE 
-        }, il pagamento effetuato${(receiptInfo.TipoPagamento.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.TipoPagamento.toUpperCase()}` : '' )} equilavente alla somma di ${
-          receiptInfo.SommaEuro || BLANK_SPACE 
+          studentInfo.ParentTaxCode || BLANK_SPACE 
+        }, il pagamento effetuato${(receiptInfo.PaymentType.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentType.toUpperCase()}` : '' )} equilavente alla somma di ${
+          receiptInfo.AmountPaid || BLANK_SPACE 
         }€ (${eurosInLetters.toUpperCase() || BLANK_SPACE } EURO${centsInLetters.toUpperCase()}), per l'iscrizione di ${
-          studentInfo.Nome || BLANK_SPACE 
+          studentInfo.Name || BLANK_SPACE 
         } ${
-          studentInfo.Cognome || BLANK_SPACE 
+          studentInfo.Surname || BLANK_SPACE 
         }, C.F. ${
-          studentInfo.CodiceFiscale || BLANK_SPACE 
+          studentInfo.TaxCode || BLANK_SPACE 
         } nato/a a ${
-          studentInfo.LuogoNascita || BLANK_SPACE 
+          studentInfo.BirthPlace || BLANK_SPACE 
         }, il ${ 
-          (studentInfo.DataNascita === 'Invalid date' || !studentInfo.DataNascita) 
+          (studentInfo.DOB === 'Invalid date' || !studentInfo.DOB) 
             ? '______/______/________'
-            : studentInfo.DataNascita
+            : studentInfo.DOB
         } residente in ${
-          studentInfo.Indirizzo || BLANK_SPACE 
+          studentInfo.Address || BLANK_SPACE 
         }, ${
-          studentInfo.Citta || BLANK_SPACE 
+          studentInfo.City || BLANK_SPACE 
         } al corso di ${
-          studentInfo.Disciplina || BLANK_SPACE 
+          studentInfo.Discipline || BLANK_SPACE 
         } dal ${ 
-          (receiptInfo.DataInizioCorso === 'Invalid date' || !receiptInfo.DataInizioCorso) 
+          (receiptInfo.CourseStartDate === 'Invalid date' || !receiptInfo.CourseStartDate) 
             ? '______/______/________'
-            : receiptInfo.DataInizioCorso
+            : receiptInfo.CourseStartDate
         } al ${ 
-          (receiptInfo.DataScadenzaCorso === 'Invalid date' || !receiptInfo.DataScadenzaCorso) 
+          (receiptInfo.CourseEndDate === 'Invalid date' || !receiptInfo.CourseEndDate) 
             ? '______/______/________'
-            : receiptInfo.DataScadenzaCorso
+            : receiptInfo.CourseEndDate
         }`,
         alignment: 'center',
         lineHeight: 1.5,
@@ -107,9 +107,9 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
       },
       {
         text: `Stezzano, ${ 
-          (receiptInfo.DataRicevuta === 'Invalid date' || !receiptInfo.DataRicevuta) 
+          (receiptInfo.ReceiptDate === 'Invalid date' || !receiptInfo.ReceiptDate) 
             ? '______/______/________'
-            : receiptInfo.DataRicevuta
+            : receiptInfo.ReceiptDate
         }`,
         alignment: 'left',
         fontSize: 10,

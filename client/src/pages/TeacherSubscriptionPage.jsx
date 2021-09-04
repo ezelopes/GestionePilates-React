@@ -17,21 +17,21 @@ const TeacherSubscriptionPage = () => {
   const { disciplines, courses, schools } = commondata;
 
   const teacherInfoDefault = { 
-    CodiceFiscale: '',
-    Nome: '',
-    Cognome: '',
-    Citta: '',
-    Indirizzo: '',
-    Cellulare: '',
+    TaxCode: '',
+    Name: '',
+    Surname: '',
+    City: '',
+    Address: '',
+    MobilePhone: '',
     Email: '',
-    LuogoNascita: '',
-    Disciplina: disciplines[0].discipline,
-    Corso: courses[0].course,
-    Scuola: schools[0].school,
-    DataIscrizione: reverseDate(today),
-    DataCertificato: reverseDate(today),
-    DataNascita: reverseDate(today),
-    DataGreenPass: reverseDate(today),
+    BirthPlace: '',
+    Discipline: disciplines[0].discipline,
+    Course: courses[0].course,
+    School: schools[0].school,
+    RegistrationDate: reverseDate(today),
+    CertificateExpirationDate: reverseDate(today),
+    DOB: reverseDate(today),
+    GreenPassExpirationDate: reverseDate(today),
   }
 
   const [newTaxCode, setNewTaxCode] = useState('');
@@ -98,21 +98,21 @@ const TeacherSubscriptionPage = () => {
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
             <Button variant="success" onClick={async () => {
                 const newTeacher = {
-                  CodiceFiscale: newTaxCode,
-                  Nome: newName,
-                  Cognome: newSurname,
-                  Citta: newCity,
-                  Indirizzo: newAddress,
-                  Cellulare: newMobilePhone,
+                  TaxCode: newTaxCode,
+                  Name: newName,
+                  Surname: newSurname,
+                  City: newCity,
+                  Address: newAddress,
+                  MobilePhone: newMobilePhone,
                   Email: newEmail,
-                  LuogoNascita: newBirthPlace,
-                  Disciplina: newDiscipline,
-                  Corso: newCourse,
-                  Scuola: newSchool,
-                  DataIscrizione: newRegistrationDate,
-                  DataCertificato: newCertificateExpirationDate,
-                  DataNascita: newDOB,
-                  DataGreenPass: newGreenPassExpirationDate
+                  BirthPlace: newBirthPlace,
+                  Discipline: newDiscipline,
+                  Course: newCourse,
+                  School: newSchool,
+                  RegistrationDate: newRegistrationDate,
+                  CertificateExpirationDate: newCertificateExpirationDate,
+                  DOB: newDOB,
+                  GreenPassExpirationDate: newGreenPassExpirationDate
                 };
                 await createTeacher(newTeacher);
                 window.location.reload()

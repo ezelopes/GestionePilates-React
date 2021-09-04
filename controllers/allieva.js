@@ -1,62 +1,54 @@
 const { Router } = require('express');
-const { getAllieve, getSingleAllieva, creaAllieva, modificaAllieva, eliminaAllieva, aggiornaDataIscrizione } = require('../database/allievaQuery');
+const { getStudents, getSingleStudent, createStudent, updateStudent, updateRegistrationDate, deleteStudent } = require('../database/allievaQuery');
 
-const allievaRouter = new Router();
+const studentRouter = new Router();
 
-const getAllieveEndpoint = async (req, res) => {
+const getStudentsEndpoint = async (req, res) => {
   try {
-    const allieve = await getAllieve();
-    res.status(200).send(allieve);
+    const students = await getStudents();
+    res.status(200).send(students);
   } catch (e) {
     console.log(e);
  }
 }
 
-const getSingleAllievaEndpoint = async (req, res) => {
+const getSingleStudentEndpoint = async (req, res) => {
   try {
-    const CodiceFiscale = req.params.CodiceFiscale;
-    const allieva = await getSingleAllieva(CodiceFiscale);
-    res.status(200).send(allieva);
+    const TaxCode = req.params.TaxCode;
+    const student = await getSingleStudent(TaxCode);
+
+    res.status(200).send(student);
   } catch (e) {
     console.log(e);
  }
 }
 
-const creaAllievaEndpoint = async (req, res) => {
+const createStudentEndpoint = async (req, res) => {
   try {
-    const response = await creaAllieva(req.body);
-    const responseObject = { AllievaID: response };
+    const StudentID = await createStudent(req.body);
+
+    const responseObject = { StudentID };
     res.status(200).send(responseObject);
   } catch (e) {
  }
 }
 
-const modificaAllievaEndpoint = async (req, res) => {
+const updateStudentEndpoint = async (req, res) => {
   try {
-    const response = await modificaAllieva(req.body);
+    const response = await updateStudent(req.body);
+
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
  }
 }
 
-const eliminaAllievaEndpoint = async (req, res) => {
+const updateRegistrationDateEndpoint = async (req, res) => {
   try {
-    const AllievaID = req.body.AllievaID;
-    const response = await eliminaAllieva(AllievaID);
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
-  } catch (e) {
-    console.log(e);
- }
-}
+    const StudentID = req.body.StudentID;
+    const RegistrationDate = req.body.RegistrationDate;
 
-const aggiornaDataIscrizioneEndpoint = async (req, res) => {
-  try {
-    const AllievaID = req.body.AllievaID;
-    const DataIscrizione = req.body.DataIscrizione;
-
-    const response = await aggiornaDataIscrizione(DataIscrizione, AllievaID);
+    const response = await updateRegistrationDate(RegistrationDate, StudentID);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {
@@ -64,11 +56,23 @@ const aggiornaDataIscrizioneEndpoint = async (req, res) => {
  }
 }
 
-allievaRouter.get('/getAllieve', getAllieveEndpoint);
-allievaRouter.get('/getSingleAllieva/:CodiceFiscale', getSingleAllievaEndpoint);
-allievaRouter.put('/creaAllieva', creaAllievaEndpoint);
-allievaRouter.post('/modificaAllieva', modificaAllievaEndpoint);
-allievaRouter.post('/aggiornaDataIscrizione', aggiornaDataIscrizioneEndpoint);
-allievaRouter.delete('/eliminaAllieva', eliminaAllievaEndpoint);
+const deleteStudentEndpoint = async (req, res) => {
+  try {
+    const StudentID = req.body.StudentID;
+    const response = await deleteStudent(StudentID);
 
-module.exports = allievaRouter;
+    const responseObject = { message: response };
+    res.status(200).send(responseObject);
+  } catch (e) {
+    console.log(e);
+ }
+}
+
+studentRouter.get('/getStudents', getStudentsEndpoint);
+studentRouter.get('/getSingleStudent/:TaxCode', getSingleStudentEndpoint);
+studentRouter.put('/createStudent', createStudentEndpoint);
+studentRouter.post('/updateStudent', updateStudentEndpoint);
+studentRouter.post('/updateRegistrationDate', updateRegistrationDateEndpoint);
+studentRouter.delete('/deleteStudent', deleteStudentEndpoint);
+
+module.exports = studentRouter;

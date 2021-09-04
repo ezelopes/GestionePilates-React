@@ -2,9 +2,9 @@ import reverseDate from './reverseDateForInputDate';
 
 const createStudent = async (newStudent) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newStudent.CodiceFiscale || newStudent.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!newStudent.TaxCode || newStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
 
-  const response = await fetch('/api/allieva/creaAllieva', {
+  const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -15,8 +15,8 @@ const createStudent = async (newStudent) => {
 
   if (response.status === 200) {
     const responseParsed = await response.json();
-    const StudentID = responseParsed.AllievaID;
-    newStudent.AllievaID = StudentID;
+    const StudentID = responseParsed.StudentID;
+    newStudent.StudentID = StudentID;
     
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     studentListCached.push(newStudent);
@@ -29,9 +29,9 @@ const createStudent = async (newStudent) => {
 
 const createReceipt = async (newReceipt) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newReceipt.NumeroRicevuta || newReceipt.NumeroRicevuta === '') return alert('Numero Ricevuta non puo essere vuoto');
+  if (!newReceipt.ReceiptNumber || newReceipt.ReceiptNumber === '') return alert('Numero Ricevuta non puo essere vuoto');
 
-  const response = await fetch('/api/ricevuta/creaRicevuta', {
+  const response = await fetch('/api/receipt/createReceipt', {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -40,9 +40,9 @@ const createReceipt = async (newReceipt) => {
     body: JSON.stringify(newReceipt)
   });
 
-  if (newReceipt.TipoRicevuta === 'Quota Associativa') {
-    delete newReceipt.DataInizioCorso;
-    delete newReceipt.DataScadenzaCorso;
+  if (newReceipt.ReceiptType === 'Quota Associativa') {
+    delete newReceipt.CourseStartDate;
+    delete newReceipt.CourseEndDate;
   }
 
   if (response.status === 200) {
@@ -54,9 +54,9 @@ const createReceipt = async (newReceipt) => {
 
 const createTeacher = async (newTeacher) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newTeacher.CodiceFiscale || newTeacher.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!newTeacher.TaxCode || newTeacher.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
 
-  const response = await fetch('/api/insegnante/creaInsegnante', {
+  const response = await fetch('/api/teacher/createTeacher', {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -75,9 +75,9 @@ const createTeacher = async (newTeacher) => {
 };
 
 const updateStudent = async (updatedStudent) => {
-  if (!updatedStudent.CodiceFiscale || updatedStudent.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!updatedStudent.TaxCode || updatedStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
 
-  const response = await fetch('/api/allieva/modificaAllieva', {
+  const response = await fetch('/api/student/updateStudent', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -91,7 +91,7 @@ const updateStudent = async (updatedStudent) => {
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     
     for (let i = 0; i < studentListCached.length; i++) {
-      if(updatedStudent.AllievaID === studentListCached[i].AllievaID) {
+      if(updatedStudent.StudentID === studentListCached[i].StudentID) {
         studentListCached[i] = updatedStudent;
         break;
       }
@@ -99,7 +99,7 @@ const updateStudent = async (updatedStudent) => {
 
     sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
 
-    window.location.assign(`/paginaallieve/${updatedStudent.CodiceFiscale}`)
+    window.location.assign(`/paginaallieve/${updatedStudent.TaxCode}`)
     const responseParsed = await response.json();
     alert(responseParsed.message);
   }
@@ -107,9 +107,9 @@ const updateStudent = async (updatedStudent) => {
 }
 
 const updateTeacher = async (updatedTeacherInfo) => {
-  if (!updatedTeacherInfo.CodiceFiscale || updatedTeacherInfo.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!updatedTeacherInfo.TaxCode || updatedTeacherInfo.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
 
-  const response = await fetch('/api/insegnante/modificaInsegnante', {
+  const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -124,21 +124,21 @@ const updateTeacher = async (updatedTeacherInfo) => {
 }
 
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
-  const response = await fetch('/api/allieva/aggiornaDataIscrizione', {
+  const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ AllievaID: StudentID, DataIscrizione: RegistrationDate })
+    body: JSON.stringify({ StudentID, RegistrationDate })
   });
 
   if (response.status === 200) {
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     
     for (let i = 0; i < studentListCached.length; i++) {
-      if(StudentID === studentListCached[i].AllievaID) {
-        studentListCached[i].DataIscrizione = reverseDate(RegistrationDate) || '1900-01-01';
+      if(StudentID === studentListCached[i].StudentID) {
+        studentListCached[i].RegistrationDate = reverseDate(RegistrationDate) || '1900-01-01';
         break;
       }
     }
@@ -153,21 +153,21 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
 }
 
 const updateReceipt = async (updatedReceipt) => {
-  const response = await fetch('/api/ricevuta/modificaRicevuta', {
+  const response = await fetch('/api/receipt/updateReceipt', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      RicevutaID: updatedReceipt.RicevutaID,
-      NumeroRicevuta: updatedReceipt.NumeroRicevuta,
-      TipoRicevuta: updatedReceipt.TipoRicevuta,
-      DataRicevuta: updatedReceipt.DataRicevuta.split("-").reverse().join("-"),
-      DataInizioCorso: updatedReceipt.DataInizioCorso.split("-").reverse().join("-"),
-      DataScadenzaCorso: updatedReceipt.DataScadenzaCorso.split("-").reverse().join("-"),
-      SommaEuro: updatedReceipt.SommaEuro,
-      TipoPagamento: updatedReceipt.TipoPagamento,
+      ReceiptID: updatedReceipt.ReceiptID,
+      ReceiptNumber: updatedReceipt.ReceiptNumber,
+      ReceiptType: updatedReceipt.ReceiptType,
+      ReceiptDate: updatedReceipt.ReceiptDate.split("-").reverse().join("-"),
+      CourseStartDate: updatedReceipt.CourseStartDate.split("-").reverse().join("-"),
+      CourseEndDate: updatedReceipt.CourseEndDate.split("-").reverse().join("-"),
+      AmountPaid: updatedReceipt.AmountPaid,
+      PaymentType: updatedReceipt.PaymentType,
     })
   });
   const responseParsed = await response.json();
@@ -175,19 +175,19 @@ const updateReceipt = async (updatedReceipt) => {
 }
 
 const deleteStudent = async (StudentID) => {
-  const response = await fetch('/api/allieva/eliminaAllieva', {
+  const response = await fetch('/api/student/deleteStudent', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ AllievaID: StudentID })
+    body: JSON.stringify({ StudentID })
   });
 
   if (response.status === 200) {
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
 
-    const removeIndex = studentListCached.findIndex(student => student.AllievaID === StudentID);
+    const removeIndex = studentListCached.findIndex(student => student.StudentID === StudentID);
     studentListCached.splice(removeIndex, 1);
 
     sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
@@ -199,14 +199,14 @@ const deleteStudent = async (StudentID) => {
 }
 
 const deleteReceipt = async (ReceiptID) => {
-  const response = await fetch('/api/ricevuta/eliminaRicevuta', {
+  const response = await fetch('/api/receipt/deleteReceipt', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      RicevuteId: ReceiptID
+      ReceiptID
     })
   });
   const responseParsed = await response.json();
@@ -215,14 +215,14 @@ const deleteReceipt = async (ReceiptID) => {
 }
 
 const deleteTeacher = async (TeacherID) => {
-  const response = await fetch('/api/insegnante/eliminaInsegnante', {
+  const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      InsegnanteID: TeacherID
+      TeacherID
     })
   });
   const responseParsed = await response.json();

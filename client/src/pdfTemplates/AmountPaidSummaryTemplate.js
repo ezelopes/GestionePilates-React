@@ -22,7 +22,7 @@ const AmountPaidSummaryTemplate = async (
     ]
   ]
   receiptList.forEach(receipt => 
-    tableBody.push([receipt.NumeroRicevuta, receipt.DataRicevuta, receipt.SommaEuro])
+    tableBody.push([receipt.ReceiptNumber, receipt.ReceiptDate, receipt.AmountPaid])
   )
 
   const content = [

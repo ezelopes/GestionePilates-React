@@ -1,18 +1,18 @@
 const { Router } = require('express');
-const allieva = require('./allieva');
-const ricevuta = require('./ricevuta');
-const insegnante = require('./insegnante');
+const student = require('./allieva');
+const receipt = require('./ricevuta');
+const teacher = require('./insegnante');
 
 const router = new Router();
 
-router.use('/allieva', allieva);
-router.use('/ricevuta', ricevuta);
-router.use('/insegnante', insegnante);
+router.use('/student', student);
+router.use('/receipt', receipt);
+router.use('/teacher', teacher);
 
 // if path corresponds to none of the above
-router.use('/', (req, res, next) => {
+router.use('/', (req, res) => {
   res.render('404', {
-    url: 'HERE ARE THE AVAILABLE APIs: /getAllieve /getSingleAllieva/:CodiceFiscale'
+    url: 'HERE ARE THE AVAILABLE APIs: /getStudents /getSingleStudent/:TaxCode'
   });
 });
 

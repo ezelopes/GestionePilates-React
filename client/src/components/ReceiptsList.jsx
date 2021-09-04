@@ -29,13 +29,13 @@ const gridOptionsDefault = {
 };
 
 const columnsDefinition = [
-  { headerName: 'Numero Ricevuta', field: 'NumeroRicevuta', checkboxSelection: true, editable: true },
-  { headerName: 'Tipo Ricevuta', field: 'TipoRicevuta', editable: true },
-  { headerName: 'Data Ricevuta', field: 'DataRicevuta', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Inizio Corso', field: 'DataInizioCorso', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Scadenza Corso', field: 'DataScadenzaCorso', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Somma Euro', field: 'SommaEuro', editable: true },
-  { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true }
+  { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, editable: true },
+  { headerName: 'Tipo Ricevuta', field: 'ReceiptType', editable: true },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Somma Euro', field: 'AmountPaid', editable: true },
+  { headerName: 'Tipo Pagamento', field: 'PaymentType', editable: true }
 ];
 
 const ReceiptsList = ({ receipts, studentInfo }) => {
@@ -61,13 +61,13 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
       if (!selectedReceipt) return alert('Seleziona Ricevuta per Stamparla');
       let documentDefinition;
 
-      if (studentInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta === 'Quota') 
+      if (studentInfo.IsAdult === 'Maggiorenne' && selectedReceipt.ReceiptType === 'Quota') 
         documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-      else if (studentInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+      else if (studentInfo.IsAdult === 'Maggiorenne' && selectedReceipt.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
         documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-      else if (studentInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta === 'Quota')
+      else if (studentInfo.IsAdult === 'Minorenne' && selectedReceipt.ReceiptType === 'Quota')
         documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-      else if (studentInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+      else if (studentInfo.IsAdult === 'Minorenne' && selectedReceipt.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
         documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
 
       pdfMake.createPdf(documentDefinition).open();
@@ -122,7 +122,7 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={() => { 
-            deleteReceipt(selectedReceipt.RicevutaID);
+            deleteReceipt(selectedReceipt.ReceiptID);
             setShowDeleteReceiptModal(false); } 
           }>
             ELIMINA
