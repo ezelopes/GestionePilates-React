@@ -1,4 +1,4 @@
-const getBase64ImageFromURL = url => {
+const getBase64ImageFromURL = (url) => {
   return new Promise((resolve, reject) => {
     var img = new Image();
     img.setAttribute('crossOrigin', 'anonymous');

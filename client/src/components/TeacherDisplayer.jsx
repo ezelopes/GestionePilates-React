@@ -139,7 +139,24 @@ const TeacherDisplayer = ({ currentTeacher }) => {
           </Modal.Body>
           <Modal.Footer>
           <Button variant="success" onClick={async () => {
-              const updatedTeacherInfo = { InsegnanteID: teacherInfo.InsegnanteID, CodiceFiscale: newTaxCode, Nome: newName, Cognome: newSurname, Citta: newCity, Indirizzo: newAddress, Cellulare: newMobilePhone, Email: newEmail, LuogoNascita: newBirthPlace, Disciplina: newDiscipline, Corso: newCourse, Scuola: newSchool, DataIscrizione: newRegistrationDate, DataCertificato: newCertificateExpirationDate, DataNascita: newDOB, DataGreenPass: newGreenPassExpirationDate };
+              const updatedTeacherInfo = {
+                InsegnanteID: teacherInfo.InsegnanteID,
+                CodiceFiscale: newTaxCode,
+                Nome: newName,
+                Cognome: newSurname,
+                Citta: newCity,
+                Indirizzo: newAddress,
+                Cellulare: newMobilePhone,
+                Email: newEmail,
+                LuogoNascita: newBirthPlace,
+                Disciplina: newDiscipline,
+                Corso: newCourse,
+                Scuola: newSchool,
+                DataIscrizione: newRegistrationDate,
+                DataCertificato: newCertificateExpirationDate,
+                DataNascita: newDOB,
+                DataGreenPass: newGreenPassExpirationDate
+              };
               await updateTeacher(updatedTeacherInfo);
               handleUpdateTeacherModal()
           } }>

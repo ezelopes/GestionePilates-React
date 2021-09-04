@@ -97,7 +97,23 @@ const TeacherSubscriptionPage = () => {
           
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
             <Button variant="success" onClick={async () => {
-                const newTeacher = { CodiceFiscale: newTaxCode, Nome: newName, Cognome: newSurname, Citta: newCity, Indirizzo: newAddress, Cellulare: newMobilePhone, Email: newEmail, LuogoNascita: newBirthPlace, Disciplina: newDiscipline, Corso: newCourse, Scuola: newSchool, DataIscrizione: newRegistrationDate, DataCertificato: newCertificateExpirationDate, DataNascita: newDOB, DataGreenPass: newGreenPassExpirationDate };
+                const newTeacher = {
+                  CodiceFiscale: newTaxCode,
+                  Nome: newName,
+                  Cognome: newSurname,
+                  Citta: newCity,
+                  Indirizzo: newAddress,
+                  Cellulare: newMobilePhone,
+                  Email: newEmail,
+                  LuogoNascita: newBirthPlace,
+                  Disciplina: newDiscipline,
+                  Corso: newCourse,
+                  Scuola: newSchool,
+                  DataIscrizione: newRegistrationDate,
+                  DataCertificato: newCertificateExpirationDate,
+                  DataNascita: newDOB,
+                  DataGreenPass: newGreenPassExpirationDate
+                };
                 await createTeacher(newTeacher);
                 window.location.reload()
             }}>

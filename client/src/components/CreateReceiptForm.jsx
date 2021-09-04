@@ -88,7 +88,18 @@ const CreateReceiptForm = ({ CodiceFiscale, AllievaID }) => {
         </div>
 
         <Button variant='success' style={{ marginTop: '2em' }} onClick={() => {
-          const newReceipt = { NumeroRicevuta: newReceiptNumber, DataRicevuta: newReceiptDate, DataInizioCorso: newCourseStartDate, DataScadenzaCorso: newCourseEndDate, SommaEuro: newTotalAmount, TipoPagamento: newPaymentMethod, TipoRicevuta: newReceiptType, CodiceFiscale: CodiceFiscale, AllievaID: AllievaID, DataIscrizione: updateRegistrationDate }
+          const newReceipt = {
+            NumeroRicevuta: newReceiptNumber,
+            DataRicevuta: newReceiptDate,
+            DataInizioCorso: newCourseStartDate,
+            DataScadenzaCorso: newCourseEndDate,
+            SommaEuro: newTotalAmount,
+            TipoPagamento: newPaymentMethod,
+            TipoRicevuta: newReceiptType,
+            CodiceFiscale: CodiceFiscale,
+            AllievaID: AllievaID,
+            DataIscrizione: updateRegistrationDate
+          }
           createReceipt(newReceipt)
         }}>
           <span role='img' aria-label='create'>🆕</span> CREA RICEVUTA

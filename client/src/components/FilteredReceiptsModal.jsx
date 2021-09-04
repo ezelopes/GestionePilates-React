@@ -36,7 +36,15 @@ const reverseDate = date => {
     else return '1900-01-01';
   };
 
-const FilteredReceiptsModal = ({ filteredReceipts, filteredTotalAmount, showFilteredAmountModal, setShowFilteredAmountModal, filteredPaymentMethod, fromDate, toDate }) => {
+const FilteredReceiptsModal = ({ 
+    filteredReceipts,
+    filteredTotalAmount,
+    showFilteredAmountModal,
+    setShowFilteredAmountModal,
+    filteredPaymentMethod,
+    fromDate,
+    toDate
+}) => {
     
     const printDetails = async () => {
         const documentDefinition = await AmountPaidSummaryTemplate.default(

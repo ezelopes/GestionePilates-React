@@ -1,4 +1,4 @@
-const reverseDate = date => {
+const reverseDate = (date) => {
   // date dd-mm-yyyy to yyyy-mm-dd
   if (!date) { return '1900-01-01';}
 

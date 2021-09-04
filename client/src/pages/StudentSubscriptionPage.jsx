@@ -36,47 +36,46 @@ const StudentSubscriptionPage = () => {
     CognomeGenitore: ''
   }
 
-  const [newMaggiorenne, setNewMaggiorenne] = useState(ages[0].age);
-  const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
-  const [newNome, setNewNome] = useState('');
-  const [newCognome, setNewCognome] = useState('');
-  const [newCitta, setNewCitta] = useState('');
-  const [newIndirizzo, setNewIndirizzo] = useState('');
-  const [newCellulare, setNewCellulare] = useState('');
+  const [newIsAdult, setNewIsAdult] = useState(ages[0].age);
+  const [newTaxCode, setNewTaxCode] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newSurname, setNewSurname] = useState('');
+  const [newCity, setNewCity] = useState('');
+  const [newAddress, setNewAddress] = useState('');
+  const [newMobilePhone, setNewMobilePhone] = useState('');
   const [newEmail, setNewEmail] = useState('');
-  const [newLuogoNascita, setNewLuogoNascita] = useState('');
-  const [newDisciplina, setNewDisciplina] = useState(disciplines[0].discipline);
-  const [newCorso, setNewCorso] = useState(courses[0].course);
-  const [newScuola, setNewScuola] = useState(schools[0].school);
-  const [newDataIscrizione, setNewDataIscrizione] = useState(today);
-  const [newDataCertificato, setNewDataCertificato] = useState(today);
-  const [newDataNascita, setNewDataNascita] = useState(today);
-  const [newDataGreenPass, setNewDataGreenPass] = useState(today);
-  const [newCodiceFiscaleGenitore, setNewCodiceFiscaleGenitore] = useState('');
-  const [newNomeGenitore, setNewNomeGenitore] = useState('');
-  const [newCognomeGenitore, setNewCognomeGenitore] = useState('');
+  const [newBirthPlace, setNewBirthPlace] = useState('');
+  const [newDiscipline, setNewDiscipline] = useState(disciplines[0].discipline);
+  const [newCourse, setNewCourse] = useState(courses[0].course);
+  const [newSchool, setNewSchool] = useState(schools[0].school);
+  const [newRegistrationDate, setNewRegistrationDate] = useState(today);
+  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(today);
+  const [newDOB, setNewDOB] = useState(today);
+  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(today);
+  const [newParentTaxCode, setNewParentTaxCode] = useState('');
+  const [newParentName, setNewParentName] = useState('');
+  const [newParentSurname, setNewParentSurname] = useState('');
 
   const resetForm = () => {
-    setNewMaggiorenne(ages[0].age);
-    setNewCodiceFiscale('');
-    setNewNome('');
-    setNewCognome('');
-    setNewCitta('');
-    setNewIndirizzo('');
-    setNewCellulare('');
-    setNewEmail('');
-    setNewLuogoNascita('');
-    setNewDisciplina(disciplines[0].discipline);
-    setNewCorso(courses[0].course);
-    setNewScuola(schools[0].school);
-    setNewDataIscrizione(today);
-    setNewDataCertificato(today);
-    setNewDataNascita(today);
-    setNewCodiceFiscaleGenitore('');
-    setNewNomeGenitore('');
-    setNewCognomeGenitore('');
-
-    // Reset UI Values
+    setNewIsAdult(ages[0].age)
+    setNewTaxCode('')
+    setNewName('')
+    setNewSurname('')
+    setNewCity('')
+    setNewAddress('')
+    setNewMobilePhone('')
+    setNewEmail('')
+    setNewBirthPlace('')
+    setNewDiscipline(disciplines[0].discipline)
+    setNewCourse(courses[0].course)
+    setNewSchool(schools[0].school)
+    setNewRegistrationDate(today)
+    setNewCertificateExpirationDate(today)
+    setNewDOB(today)
+    setNewGreenPassExpirationDate(today)
+    setNewParentTaxCode('')
+    setNewParentName('')
+    setNewParentSurname('')
   }
 
   return (
@@ -86,30 +85,50 @@ const StudentSubscriptionPage = () => {
           <StudentForm 
             studentInfo={ studentInfoDefault }
             newIsAdult={newMaggiorenne}
-            setNewIsAdult={setNewMaggiorenne}
-            setNewTaxCode={setNewCodiceFiscale}
-            setNewName={setNewNome}
-            setNewSurname={setNewCognome}
-            setNewCity={setNewCitta}
-            setNewAddress={setNewIndirizzo}
-            setNewMobilePhone={setNewCellulare}
+            setNewIsAdult={setNewIsAdult}
+            setNewTaxCode={setNewTaxCode}
+            setNewName={setNewName}
+            setNewSurname={setNewSurname}
+            setNewCity={setNewCity}
+            setNewAddress={setNewAddress}
+            setNewMobilePhone={setNewMobilePhone}
             setNewEmail={setNewEmail}
-            setNewBirthPlace={setNewLuogoNascita}
-            setNewDiscipline={setNewDisciplina}
-            setNewCourse={setNewCorso}
-            setNewSchool={setNewScuola}
-            setNewRegistrationDate={setNewDataIscrizione}
-            setNewCertificateExpirationDate={setNewDataCertificato}
-            setNewDOB={setNewDataNascita}
-            setNewGreenPassExpirationDate={setNewDataGreenPass}
-            setNewParentTaxCode={setNewCodiceFiscaleGenitore}
-            setNewParentName={setNewNomeGenitore}
-            setNewParentSurname={setNewCognomeGenitore}
+            setNewBirthPlace={setNewBirthPlace}
+            setNewDiscipline={setNewDiscipline}
+            setNewCourse={setNewCourse}
+            setNewSchool={setNewSchool}
+            setNewRegistrationDate={setNewRegistrationDate}
+            setNewCertificateExpirationDate={setNewCertificateExpirationDate}
+            setNewDOB={setNewDOB}
+            setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
+            setNewParentTaxCode={setNewParentTaxCode}
+            setNewParentName={setNewParentName}
+            setNewParentSurname={setNewParentSurname}
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
           <Button variant="success" onClick={() => {
-            const newStudent = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
+            const newStudent = { 
+              Maggiorenne: newIsAdult,
+              CodiceFiscale: newTaxCode,
+              Nome: newName,
+              Cognome: newSurname,
+              Citta: newCity,
+              Indirizzo: newAddress,
+              Cellulare: newMobilePhone,
+              Email: newEmail,
+              LuogoNascita: newBirthPlace,
+              Disciplina: newDiscipline,
+              Corso: newCourse,
+              Scuola: newSchool,
+              DataIscrizione: newRegistrationDate,
+              DataCertificato: newCertificateExpirationDate,
+              DataNascita: newDOB,
+              DataGreenPass: newGreenPassExpirationDate,
+              CodiceFiscaleGenitore: newParentTaxCode,
+              NomeGenitore: newParentName,
+              CognomeGenitore: newParentSurname 
+            };
             createStudent(newStudent);
             // resetForm();
           }}>
