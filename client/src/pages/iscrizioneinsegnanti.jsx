@@ -5,18 +5,18 @@ import formatDate from '../helpers/format-date-for-input-date';
 import commondata from '../commondata/commondata'
 import reverseDate from '../helpers/reverse-date-for-input-date';
 
-import FormInsegnante from '../components/form_insegnante';
+import TeacherForm from '../components/form_insegnante';
 
 import { createTeacher } from '../helpers/api-calls';
 
 moment.locale('es');
 
-const IscrizioneInsegnanti = () => {
+const TeacherSubscription = () => {
   const today = formatDate(new Date(), true);
 
-  const { discipline, corsi, scuole } = commondata;
+  const { disciplines, courses, schools } = commondata;
 
-  const insegnanteInfoDefault = { 
+  const teacherInfoDefault = { 
     CodiceFiscale: '',
     Nome: '',
     Cognome: '',
@@ -25,47 +25,47 @@ const IscrizioneInsegnanti = () => {
     Cellulare: '',
     Email: '',
     LuogoNascita: '',
-    Disciplina: discipline[0].disciplina,
-    Corso: corsi[0].corso,
-    Scuola: scuole[0].scuola,
+    Disciplina: disciplines[0].discipline,
+    Corso: courses[0].course,
+    Scuola: schools[0].school,
     DataIscrizione: reverseDate(today),
     DataCertificato: reverseDate(today),
     DataNascita: reverseDate(today),
     DataGreenPass: reverseDate(today),
   }
 
-  const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
-  const [newNome, setNewNome] = useState('');
-  const [newCognome, setNewCognome] = useState('');
-  const [newCitta, setNewCitta] = useState('');
-  const [newIndirizzo, setNewIndirizzo] = useState('');
-  const [newCellulare, setNewCellulare] = useState('');
+  const [newTaxCode, setNewTaxCode] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newSurname, setNewSurname] = useState('');
+  const [newCity, setNewCity] = useState('');
+  const [newAddress, setNewAddress] = useState('');
+  const [newMobilePhone, setNewMobilePhone] = useState('');
   const [newEmail, setNewEmail] = useState('');
-  const [newLuogoNascita, setNewLuogoNascita] = useState('');
-  const [newDisciplina, setNewDisciplina] = useState(discipline[0].disciplina);
-  const [newCorso, setNewCorso] = useState(corsi[0].corso);
-  const [newScuola, setNewScuola] = useState(scuole[0].scuola);
-  const [newDataIscrizione, setNewDataIscrizione] = useState(today);
-  const [newDataCertificato, setNewDataCertificato] = useState(today);
-  const [newDataNascita, setNewDataNascita] = useState(today);
-  const [newDataGreenPass, setNewDataGreenPass] = useState(today);
+  const [newBirthPlace, setNewBirthPlace] = useState('');
+  const [newDiscipline, setNewDiscipline] = useState(disciplines[0].discipline);
+  const [newCourse, setNewCourse] = useState(courses[0].course);
+  const [newSchool, setNewSchool] = useState(schools[0].school);
+  const [newRegistrationDate, setNewRegistrationDate] = useState(today);
+  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(today);
+  const [newDOB, setNewDOB] = useState(today);
+  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(today);
 
   const resetForm = () => {
-    setNewCodiceFiscale('');
-    setNewNome('');
-    setNewCognome('');
-    setNewCitta('');
-    setNewIndirizzo('');
-    setNewCellulare('');
+    setNewTaxCode('');
+    setNewName('');
+    setNewSurname('');
+    setNewCity('');
+    setNewAddress('');
+    setNewMobilePhone('');
     setNewEmail('');
-    setNewLuogoNascita('');
-    setNewDisciplina(discipline[0].disciplina);
-    setNewCorso(corsi[0].corso);
-    setNewScuola(scuole[0].scuola);
-    setNewDataIscrizione(today);
-    setNewDataCertificato(today);
-    setNewDataNascita(today);
-    setNewDataGreenPass(today);
+    setNewBirthPlace('');
+    setNewDiscipline(disciplines[0].discipline);
+    setNewCourse(courses[0].course);
+    setNewSchool(schools[0].school);
+    setNewRegistrationDate(today);
+    setNewCertificateExpirationDate(today);
+    setNewDOB(today);
+    setNewGreenPassExpirationDate(today);
 
     // Reset UI Values
   }
@@ -73,31 +73,31 @@ const IscrizioneInsegnanti = () => {
   return (
     <>
       <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
-        <div className="formWrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
+        <div className="form-wrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
           <div className="create-student-teacher-form">
-            <FormInsegnante
-              insegnanteInfo={ insegnanteInfoDefault }
-              setNewCodiceFiscale={setNewCodiceFiscale}
-              setNewNome={setNewNome}
-              setNewCognome={setNewCognome}
-              setNewCitta={setNewCitta}
-              setNewIndirizzo={setNewIndirizzo}
-              setNewCellulare={setNewCellulare}
+            <TeacherForm
+              teacherInfo={teacherInfoDefault}
+              setNewTaxCode={setNewTaxCode}
+              setNewName={setNewName}
+              setNewSurname={setNewSurname}
+              setNewCity={setNewCity}
+              setNewAddress={setNewAddress}
+              setNewMobilePhone={setNewMobilePhone}
               setNewEmail={setNewEmail}
-              setNewLuogoNascita={setNewLuogoNascita}
-              setNewDisciplina={setNewDisciplina}
-              setNewCorso={setNewCorso}
-              setNewScuola={setNewScuola}
-              setNewDataIscrizione={setNewDataIscrizione}
-              setNewDataCertificato={setNewDataCertificato}
-              setNewDataNascita={setNewDataNascita}
-              setNewDataGreenPass={setNewDataGreenPass}
+              setNewBirthPlace={setNewBirthPlace}
+              setNewDiscipline={setNewDiscipline}
+              setNewCourse={setNewCourse}
+              setNewSchool={setNewSchool}
+              setNewRegistrationDate={setNewRegistrationDate}
+              setNewCertificateExpirationDate={setNewCertificateExpirationDate}
+              setNewDOB={setNewDOB}
+              setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
             />
           </div>
           
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
-            <Button variant="success" id="buttonCreaInsegnante" onClick={async () => {
-                const newTeacher = { CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass };
+            <Button variant="success" onClick={async () => {
+                const newTeacher = { CodiceFiscale: newTaxCode, Nome: newName, Cognome: newSurname, Citta: newCity, Indirizzo: newAddress, Cellulare: newMobilePhone, Email: newEmail, LuogoNascita: newBirthPlace, Disciplina: newDiscipline, Corso: newCourse, Scuola: newSchool, DataIscrizione: newRegistrationDate, DataCertificato: newCertificateExpirationDate, DataNascita: newDOB, DataGreenPass: newGreenPassExpirationDate };
                 await createTeacher(newTeacher);
                 window.location.reload()
             }}>
@@ -113,4 +113,4 @@ const IscrizioneInsegnanti = () => {
   );
 }
 
-export default IscrizioneInsegnanti;
+export default TeacherSubscription;

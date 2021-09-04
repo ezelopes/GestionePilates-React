@@ -5,53 +5,53 @@ import formatDate from '../helpers/format-date-for-input-date';
 
 import { createReceipt } from '../helpers/api-calls';
 
-let tipoRicevuta = [
+const receiptType = [
   { id: 0, tipo: 'Quota' },
   { id: 1, tipo: 'Quota Associativa' },
 ];
-let tipoPagamento = [
+const paymentMethod = [
   { id: 0, tipo: 'Contanti' },
   { id: 1, tipo: 'Assegno' },
   { id: 2, tipo: 'Bonifico Bancario' }
 ];
-let defaultAmounts = [
+const defaultAmounts = [
   { value: '90', label: '90' },
   { value: '120', label: '120' },
   { value: '150', label: '150' }
 ];
 
-const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
+const FormCreateReceipt = ({ CodiceFiscale, AllievaID }) => {
   const today = formatDate(new Date(), true);
 
-  const [newNumeroRicevuta, setNewNumeroRicevuta] = useState('');
-  const [newTipoRicevuta, setNewTipoRicevuta] = useState(tipoRicevuta[0].tipo);
-  const [newTipoPagamento, setNewTipoPagamento] = useState(tipoPagamento[0].tipo);
-  const [newSommaEuro, setNewSommaEuro] = useState(defaultAmounts[0].value);
-  const [newDataRicevuta, setNewDataRicevuta] = useState(today);
-  const [newDataInizioCorso, setNewDataInizioCorso] = useState(today);
-  const [newDataScadenzaCorso, setNewDataScadenzaCorso] = useState(today);
-  const [updateDataIscrizione, setUpdateDataIscrizione] = useState(false);
+  const [newReceiptNumber, setNewReceiptNumber] = useState('');
+  const [newReceiptType, setNewReceiptType] = useState(receiptType[0].tipo);
+  const [newPaymentMethod, setNewPaymentMethod] = useState(paymentMethod[0].tipo);
+  const [newTotalAmount, setNewTotalAmount] = useState(defaultAmounts[0].value);
+  const [newReceiptDate, setNewReceiptDate] = useState(today);
+  const [newCourseStartDate, setNewCourseStartDate] = useState(today);
+  const [newCourseEndDate, setNewCourseEndDate] = useState(today);
+  const [updateRegistrationDate, setUpdateRegistrationDate] = useState(false);
 
   return (
     <div style={{ marginTop: '2em' }}>
-      <div className="formWrapper" style={{ width: '80vw', marginLeft: '0vw' }}>
+      <div className="form-wrapper" style={{ width: '80vw', marginLeft: '0vw' }}>
         <div className="create-receipt-form">
           <div className="flex-element">
             <Form.Label> Numero Ricevuta </Form.Label>
-            <Form.Control type="text" placeholder="Inserisci Numero Ricevuta..." onChange={({ target }) => setNewNumeroRicevuta(target.value)} defaultValue={newNumeroRicevuta} />
+            <Form.Control type="text" placeholder="Inserisci Numero Ricevuta..." onChange={({ target }) => setNewReceiptNumber(target.value)} defaultValue={newReceiptNumber} />
           </div>
 
           <div className="flex-element">
             <Form.Label> Tipo Ricevuta </Form.Label>
-            <Form.Control as="select" onChange={({ target }) => setNewTipoRicevuta(target.value)} defaultValue={newTipoRicevuta}>
-              {tipoRicevuta.map(currentTipo =>  <option key={`select_${currentTipo.tipo}`} value={currentTipo.tipo}> {currentTipo.tipo} </option>)}
+            <Form.Control as="select" onChange={({ target }) => setNewReceiptType(target.value)} defaultValue={newReceiptType}>
+              {receiptType.map(currentTipo =>  <option key={`select_${currentTipo.tipo}`} value={currentTipo.tipo}> {currentTipo.tipo} </option>)}
             </Form.Control>
           </div>
 
           <div className="flex-element">
             <Form.Label> Tipo Pagamento </Form.Label>
-            <Form.Control as="select" onChange={({ target }) => setNewTipoPagamento(target.value)} defaultValue={newTipoPagamento}>
-              {tipoPagamento.map(currentTipo =>  <option key={`select_${currentTipo.tipo}`} value={currentTipo.tipo}> {currentTipo.tipo} </option>)}
+            <Form.Control as="select" onChange={({ target }) => setNewPaymentMethod(target.value)} defaultValue={newPaymentMethod}>
+              {paymentMethod.map(currentTipo =>  <option key={`select_${currentTipo.tipo}`} value={currentTipo.tipo}> {currentTipo.tipo} </option>)}
             </Form.Control>
           </div>
           
@@ -60,7 +60,7 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
             <CreatableSelect
               defaultValue={defaultAmounts[0]}
               onChange={(target) => {
-                setNewSommaEuro(target.value)
+                setNewTotalAmount(target.value)
                 console.log(target.value)
               }}
               options={defaultAmounts}
@@ -69,27 +69,26 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
 
           <div className="flex-element">
             <Form.Label> Data Ricevuta </Form.Label>
-            <input type="date" onChange={({ target }) => setNewDataRicevuta(target.value)} defaultValue={newDataRicevuta} />
+            <input type="date" onChange={({ target }) => setNewReceiptDate(target.value)} defaultValue={newReceiptDate} />
           </div>
 
           <div className="flex-element">
             <Form.Label> Data Inizio Corso </Form.Label>
-            <input type="date" onChange={({ target }) => setNewDataInizioCorso(target.value)} defaultValue={newDataInizioCorso} />
+            <input type="date" onChange={({ target }) => setNewCourseStartDate(target.value)} defaultValue={newCourseStartDate} />
           </div>
 
           <div className="flex-element">
             <Form.Label> Data Scadenza Corso </Form.Label>
-            <input type="date" onChange={({ target }) => setNewDataScadenzaCorso(target.value)} defaultValue={newDataScadenzaCorso} />
+            <input type="date" onChange={({ target }) => setNewCourseEndDate(target.value)} defaultValue={newCourseEndDate} />
           </div>
 
           <div className="flex-element">
-            <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' onChange={ ({ target }) =>  setUpdateDataIscrizione(target.checked) } />
+            <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' onChange={ ({ target }) =>  setUpdateRegistrationDate(target.checked) } />
           </div>
         </div>
 
         <Button variant='success' style={{ marginTop: '2em' }} onClick={() => {
-          // creaRicevuta
-          const newReceipt = { NumeroRicevuta: newNumeroRicevuta, DataRicevuta: newDataRicevuta, DataInizioCorso: newDataInizioCorso, DataScadenzaCorso: newDataScadenzaCorso, SommaEuro: newSommaEuro, TipoPagamento: newTipoPagamento, TipoRicevuta: newTipoRicevuta, CodiceFiscale: CodiceFiscale, AllievaID: AllievaID, DataIscrizione: updateDataIscrizione }
+          const newReceipt = { NumeroRicevuta: newReceiptNumber, DataRicevuta: newReceiptDate, DataInizioCorso: newCourseStartDate, DataScadenzaCorso: newCourseEndDate, SommaEuro: newTotalAmount, TipoPagamento: newPaymentMethod, TipoRicevuta: newReceiptType, CodiceFiscale: CodiceFiscale, AllievaID: AllievaID, DataIscrizione: updateRegistrationDate }
           createReceipt(newReceipt)
         }}>
           <span role='img' aria-label='create'>🆕</span> CREA RICEVUTA
@@ -99,4 +98,4 @@ const FormCreaRicevuta = ({ CodiceFiscale, AllievaID }) => {
   );
 };
 
-export default FormCreaRicevuta;
+export default FormCreateReceipt;

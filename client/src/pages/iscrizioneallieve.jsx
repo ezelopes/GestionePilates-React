@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { createStudent } from '../helpers/api-calls';
 
-import FormAllieva from '../components/form_allieva';
+import StudentForm from '../components/form_allieva';
 
 import formatDate from '../helpers/format-date-for-input-date';
 import reverseDate from '../helpers/reverse-date-for-input-date';
 import commondata from '../commondata/commondata'
 
 
-const IscrizioneAllieve = () => {
+const StudentSubscription = () => {
   const today = formatDate(new Date(), true);
 
-  const { eta, discipline, corsi, scuole } = commondata;
+  const { ages, disciplines, courses, schools } = commondata;
 
-  const allievaInfoDefault = { 
-    Maggiorenne: eta[0].eta,
+  const studentInfoDefault = { 
+    Maggiorenne: ages[0].age,
     CodiceFiscale: '',
     Nome: '',
     Cognome: '',
@@ -24,9 +24,9 @@ const IscrizioneAllieve = () => {
     Cellulare: '',
     Email: '',
     LuogoNascita: '',
-    Disciplina: discipline[0].disciplina,
-    Corso: corsi[0].corso,
-    Scuola: scuole[0].scuola,
+    Disciplina: disciplines[0].discipline,
+    Corso: courses[0].course,
+    Scuola: schools[0].school,
     DataIscrizione: reverseDate(today),
     DataCertificato: reverseDate(today),
     DataNascita: reverseDate(today),
@@ -36,7 +36,7 @@ const IscrizioneAllieve = () => {
     CognomeGenitore: ''
   }
 
-  const [newMaggiorenne, setNewMaggiorenne] = useState(eta[0].eta);
+  const [newMaggiorenne, setNewMaggiorenne] = useState(ages[0].age);
   const [newCodiceFiscale, setNewCodiceFiscale] = useState('');
   const [newNome, setNewNome] = useState('');
   const [newCognome, setNewCognome] = useState('');
@@ -45,9 +45,9 @@ const IscrizioneAllieve = () => {
   const [newCellulare, setNewCellulare] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newLuogoNascita, setNewLuogoNascita] = useState('');
-  const [newDisciplina, setNewDisciplina] = useState(discipline[0].disciplina);
-  const [newCorso, setNewCorso] = useState(corsi[0].corso);
-  const [newScuola, setNewScuola] = useState(scuole[0].scuola);
+  const [newDisciplina, setNewDisciplina] = useState(disciplines[0].discipline);
+  const [newCorso, setNewCorso] = useState(courses[0].course);
+  const [newScuola, setNewScuola] = useState(schools[0].school);
   const [newDataIscrizione, setNewDataIscrizione] = useState(today);
   const [newDataCertificato, setNewDataCertificato] = useState(today);
   const [newDataNascita, setNewDataNascita] = useState(today);
@@ -57,7 +57,7 @@ const IscrizioneAllieve = () => {
   const [newCognomeGenitore, setNewCognomeGenitore] = useState('');
 
   const resetForm = () => {
-    setNewMaggiorenne(eta[0].eta);
+    setNewMaggiorenne(ages[0].age);
     setNewCodiceFiscale('');
     setNewNome('');
     setNewCognome('');
@@ -66,9 +66,9 @@ const IscrizioneAllieve = () => {
     setNewCellulare('');
     setNewEmail('');
     setNewLuogoNascita('');
-    setNewDisciplina(discipline[0].disciplina);
-    setNewCorso(corsi[0].corso);
-    setNewScuola(scuole[0].scuola);
+    setNewDisciplina(disciplines[0].discipline);
+    setNewCorso(courses[0].course);
+    setNewScuola(schools[0].school);
     setNewDataIscrizione(today);
     setNewDataCertificato(today);
     setNewDataNascita(today);
@@ -81,36 +81,36 @@ const IscrizioneAllieve = () => {
 
   return (
     <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
-      <div className="formWrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
+      <div className="form-wrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
         <div className="create-student-teacher-form">
-          <FormAllieva 
-            allievaInfo={ allievaInfoDefault }
-            newMaggiorenne={newMaggiorenne}
-            setNewMaggiorenne={setNewMaggiorenne}
-            setNewCodiceFiscale={setNewCodiceFiscale}
-            setNewNome={setNewNome}
-            setNewCognome={setNewCognome}
-            setNewCitta={setNewCitta}
-            setNewIndirizzo={setNewIndirizzo}
-            setNewCellulare={setNewCellulare}
+          <StudentForm 
+            studentInfo={ studentInfoDefault }
+            newIsAdult={newMaggiorenne}
+            setNewIsAdult={setNewMaggiorenne}
+            setNewTaxCode={setNewCodiceFiscale}
+            setNewName={setNewNome}
+            setNewSurname={setNewCognome}
+            setNewCity={setNewCitta}
+            setNewAddress={setNewIndirizzo}
+            setNewMobilePhone={setNewCellulare}
             setNewEmail={setNewEmail}
-            setNewLuogoNascita={setNewLuogoNascita}
-            setNewDisciplina={setNewDisciplina}
-            setNewCorso={setNewCorso}
-            setNewScuola={setNewScuola}
-            setNewDataIscrizione={setNewDataIscrizione}
-            setNewDataCertificato={setNewDataCertificato}
-            setNewDataNascita={setNewDataNascita}
-            setNewDataGreenPass={setNewDataGreenPass}
-            setNewCodiceFiscaleGenitore={setNewCodiceFiscaleGenitore}
-            setNewNomeGenitore={setNewNomeGenitore}
-            setNewCognomeGenitore={setNewCognomeGenitore}
+            setNewBirthPlace={setNewLuogoNascita}
+            setNewDiscipline={setNewDisciplina}
+            setNewCourse={setNewCorso}
+            setNewSchool={setNewScuola}
+            setNewRegistrationDate={setNewDataIscrizione}
+            setNewCertificateExpirationDate={setNewDataCertificato}
+            setNewDOB={setNewDataNascita}
+            setNewGreenPassExpirationDate={setNewDataGreenPass}
+            setNewParentTaxCode={setNewCodiceFiscaleGenitore}
+            setNewParentName={setNewNomeGenitore}
+            setNewParentSurname={setNewCognomeGenitore}
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
-          <Button variant="success" id="buttonCreaAllieva" onClick={() => {
-            const newAllieva = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
-            createStudent(newAllieva);
+          <Button variant="success" onClick={() => {
+            const newStudent = { Maggiorenne: newMaggiorenne, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass, CodiceFiscaleGenitore: newCodiceFiscaleGenitore, NomeGenitore: newNomeGenitore, CognomeGenitore: newCognomeGenitore };
+            createStudent(newStudent);
             // resetForm();
           }}>
             Crea Allieva
@@ -125,4 +125,4 @@ const IscrizioneAllieve = () => {
   );
 }
 
-export default IscrizioneAllieve;
+export default StudentSubscription;

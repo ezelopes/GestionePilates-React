@@ -45,10 +45,10 @@ const gridOptionsDefault = {
   rowSelection: 'single'
 };
 
-const PaginaAllieve = () => {
+const StudentsPage = () => {
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
-  const [rowData, setRowData] = useState();
+  const [students, setStudents] = useState();
   
   const filterNameRef = useRef();
   const filterSurnameRef = useRef();
@@ -61,14 +61,14 @@ const PaginaAllieve = () => {
     const fetchData = async () => {
       const result = await fetch('/api/allieva/getAllieve');
       const body = await result.json();
-      setRowData(body);
-      sessionStorage.setItem('listaAllieve', JSON.stringify(body));
+      setStudents(body);
+      sessionStorage.setItem('studentsList', JSON.stringify(body));
     };
     
-    if (!sessionStorage.getItem('listaAllieve') || (sessionStorage.getItem('listaAllieve') === [])) fetchData();
+    if (!sessionStorage.getItem('studentsList') || (sessionStorage.getItem('studentsList') === [])) fetchData();
     else {
-      const listaAllieveCached = JSON.parse(sessionStorage.getItem('listaAllieve'));
-      setRowData(listaAllieveCached)
+      const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
+      setStudents(studentListCached)
     }
   }, []);
 
@@ -138,12 +138,12 @@ const PaginaAllieve = () => {
 
         <Form.Group>
           <Form.Label> Nome Allieva </Form.Label> 
-          <Form.Control ref={filterNameRef} type="text" placeholder="Nome Allieva..." onChange={(e) => { viewStudentName(e.target.value) }}/> 
+          <Form.Control ref={filterNameRef} type="text" placeholder="Inserisci Nome..." onChange={(e) => { viewStudentName(e.target.value) }}/> 
         </Form.Group>
         
         <Form.Group>
           <Form.Label> Cognome Allieva </Form.Label> 
-          <Form.Control ref={filterSurnameRef} type="text" placeholder="Cognome Allieva..." onChange={(e) => { viewStudentSurname(e.target.value) }}/> 
+          <Form.Control ref={filterSurnameRef} type="text" placeholder="Inserisci Cognome..." onChange={(e) => { viewStudentSurname(e.target.value) }}/> 
         </Form.Group>
         
         <Form.Group>
@@ -171,7 +171,7 @@ const PaginaAllieve = () => {
           rowHeight="45"
           gridOptions={gridOptions}
           columnDefs={columnDefs}
-          rowData={rowData}
+          rowData={students}
           // onGridReady={this.onGridReady}
         ></AgGridReact>
       </div>
@@ -179,4 +179,4 @@ const PaginaAllieve = () => {
   );
 }
 
-export default PaginaAllieve;
+export default StudentsPage;

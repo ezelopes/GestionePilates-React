@@ -45,7 +45,7 @@ const gridOptionsDefault = {
 
 const paymentMethods = [ null, 'Contanti', 'Bonifico', 'Assegno' ];
 
-const PaginaAllieve = () => {
+const ReceiptsPage = () => {
   const today = formatDate(new Date(), true);
 
   const [gridOptions] = useState(gridOptionsDefault);
@@ -180,15 +180,12 @@ const PaginaAllieve = () => {
   }
 
   const clearFilters = () => {
-    // const NumeroRicevutaFilterComponent = gridOptions.api.getFilterInstance('NumeroRicevuta');
     const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('TipoPagamento');
     
-    // NumeroRicevutaFilterComponent.setModel(null);
     PaymentMethodFilterComponent.setModel(null);
     gridOptions.api.onFilterChanged();
 
     // set default values in other components
-    // selectYearRef.current.value = null;
     selectPaymentMethodRef.current.value = null;
     fromDateRef.current.value = today
     toDateRef.current.value = today
@@ -249,7 +246,7 @@ const PaginaAllieve = () => {
             </Form.Group>
           </div>
           
-          <div className="buttonsContainer">
+          <div className="buttons-container">
             <Button variant="success" onClick={calculateAmountBetweenDates}>
               Calcola Importo Totale
             </Button>
@@ -280,7 +277,7 @@ const PaginaAllieve = () => {
           ></AgGridReact>
         </div>
         
-        <div className="buttonsContainer">
+        <div className="buttons-container">
           <Button variant="success" onClick={printReceipts}>
             Stampa Ricevute Selezionate
           </Button>
@@ -300,4 +297,4 @@ const PaginaAllieve = () => {
   );
 }
 
-export default PaginaAllieve;
+export default ReceiptsPage;

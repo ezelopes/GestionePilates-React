@@ -1,8 +1,8 @@
 import reverseDate from './reverse-date-for-input-date';
 
-const createStudent = async (newAllieva) => {
+const createStudent = async (newStudent) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newAllieva.CodiceFiscale || newAllieva.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!newStudent.CodiceFiscale || newStudent.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
 
   const response = await fetch('/api/allieva/creaAllieva', {
     method: 'PUT',
@@ -10,17 +10,17 @@ const createStudent = async (newAllieva) => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(newAllieva)
+    body: JSON.stringify(newStudent)
   });
 
   if (response.status === 200) {
     const responseParsed = await response.json();
-    const AllievaID = responseParsed.AllievaID;
-    newAllieva.AllievaID = AllievaID;
+    const StudentID = responseParsed.AllievaID;
+    newStudent.AllievaID = StudentID;
     
-    const listaAllieveCached = JSON.parse(sessionStorage.getItem('listaAllieve'));
-    listaAllieveCached.push(newAllieva);
-    sessionStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
+    studentListCached.push(newStudent);
+    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
     
     alert('Allieva Creata Correttamente');
   }
@@ -74,8 +74,8 @@ const createTeacher = async (newTeacher) => {
   // resetForm();
 };
 
-const updateStudent = async (allievaModificata) => {
-  if (!allievaModificata.CodiceFiscale || allievaModificata.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
+const updateStudent = async (updatedStudent) => {
+  if (!updatedStudent.CodiceFiscale || updatedStudent.CodiceFiscale === '') return alert('Codice Fiscale non puo essere vuoto');
 
   const response = await fetch('/api/allieva/modificaAllieva', {
     method: 'POST',
@@ -83,24 +83,23 @@ const updateStudent = async (allievaModificata) => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(allievaModificata)
+    body: JSON.stringify(updatedStudent)
   });
   
+  // update session storage
   if (response.status === 200) {
-    // update session storage
+    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     
-    const listaAllieveCached = JSON.parse(sessionStorage.getItem('listaAllieve'));
-    
-    for (let i = 0; i < listaAllieveCached.length; i++) {
-      if(allievaModificata.AllievaID === listaAllieveCached[i].AllievaID) {
-        listaAllieveCached[i] = allievaModificata;
+    for (let i = 0; i < studentListCached.length; i++) {
+      if(updatedStudent.AllievaID === studentListCached[i].AllievaID) {
+        studentListCached[i] = updatedStudent;
         break;
       }
     }
 
-    sessionStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
 
-    window.location.assign(`/paginaallieve/${allievaModificata.CodiceFiscale}`)
+    window.location.assign(`/paginaallieve/${updatedStudent.CodiceFiscale}`)
     const responseParsed = await response.json();
     alert(responseParsed.message);
   }
@@ -124,30 +123,31 @@ const updateTeacher = async (updatedTeacherInfo) => {
   return;
 }
 
-const updateRegistrationDate = async (AllievaID, DataIscrizione) => {
+const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   const response = await fetch('/api/allieva/aggiornaDataIscrizione', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ AllievaID, DataIscrizione })
+    body: JSON.stringify({ AllievaID: StudentID, DataIscrizione: RegistrationDate })
   });
 
   if (response.status === 200) {
-    const listaAllieveCached = JSON.parse(sessionStorage.getItem('listaAllieve'));
+    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     
-    for (let i = 0; i < listaAllieveCached.length; i++) {
-      if(AllievaID === listaAllieveCached[i].AllievaID) {
-        listaAllieveCached[i].DataIscrizione = reverseDate(DataIscrizione) || '1900-01-01';
+    for (let i = 0; i < studentListCached.length; i++) {
+      if(StudentID === studentListCached[i].AllievaID) {
+        studentListCached[i].DataIscrizione = reverseDate(RegistrationDate) || '1900-01-01';
         break;
       }
     }
 
-    sessionStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
 
     const responseParsed = await response.json();
-    return alert(responseParsed.message);
+    alert(responseParsed.message);
+    return window.location.reload();
   }
   return alert('Error');
 }
@@ -174,23 +174,23 @@ const updateReceipt = async (updatedReceipt) => {
   alert(responseParsed.message);
 }
 
-const deleteStudent = async (AllievaID) => {
+const deleteStudent = async (StudentID) => {
   const response = await fetch('/api/allieva/eliminaAllieva', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ AllievaID })
+    body: JSON.stringify({ AllievaID: StudentID })
   });
 
   if (response.status === 200) {
-    const listaAllieveCached = JSON.parse(sessionStorage.getItem('listaAllieve'));
+    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
 
-    const removeIndex = listaAllieveCached.findIndex(allieva => allieva.AllievaID === AllievaID);
-    listaAllieveCached.splice(removeIndex, 1);
+    const removeIndex = studentListCached.findIndex(student => student.AllievaID === StudentID);
+    studentListCached.splice(removeIndex, 1);
 
-    sessionStorage.setItem('listaAllieve', JSON.stringify(listaAllieveCached));
+    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
   }
 
   const responseParsed = await response.json();
@@ -198,7 +198,7 @@ const deleteStudent = async (AllievaID) => {
   window.location.assign('/paginaallieve');
 }
 
-const deleteReceipt = async (RicevutaID) => {
+const deleteReceipt = async (ReceiptID) => {
   const response = await fetch('/api/ricevuta/eliminaRicevuta', {
     method: 'DELETE',
     headers: {
@@ -206,7 +206,7 @@ const deleteReceipt = async (RicevutaID) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      RicevuteId: RicevutaID
+      RicevuteId: ReceiptID
     })
   });
   const responseParsed = await response.json();

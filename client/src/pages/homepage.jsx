@@ -1,8 +1,8 @@
 import React from 'react';
 import Logo from '../images/PILATES_LOGO.png'
 /**
-  semantic ui graphs per mostrare quante allieve e insegnanti
-  divise per corso (e disicplina). Eta media, 
+  semantic ui graphs pto show how many studdents and teachers
+  group by corso (e disicplina). Eta media, 
 */
 const HomePage = () => {
   return (

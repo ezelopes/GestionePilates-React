@@ -4,16 +4,16 @@ const getBase64ImageFromURL = require('../helpers/get-base64-image');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateModuloIscrizione = async allievaInfo => {
-  // print only if allievaInfo fields are not empty and DataCertificato does not expire any soon
+const pdfTemplateModuloIscrizione = async (studentInfo) => {
+  // print only if studentInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_SPACE = '________________________________________';
 
   const docDefinition = {
     info: {
-      title: `${allievaInfo.Nome}_${allievaInfo.Cognome}_Modulo_Iscrizione`,
+      title: `${studentInfo.Nome}_${studentInfo.Cognome}_Modulo_Iscrizione`,
       author: 'Roxana Carro',
-      subject: `Modulo Iscrizione di ${allievaInfo.Nome} ${allievaInfo.Cognome}`
+      subject: `Modulo Iscrizione di ${studentInfo.Nome} ${studentInfo.Cognome}`
     },
     pageMargins: [40, 20, 40, 0],
     content: [
@@ -39,25 +39,25 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
       {
         text: [
           'Il sottoscritto/a ',
-          { text: `${allievaInfo.Nome || BLANK_SPACE } ${allievaInfo.Cognome || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Nome || BLANK_SPACE } ${studentInfo.Cognome || BLANK_SPACE }`, bold: true },
           ' nato/a a ',
-          { text: `${allievaInfo.LuogoNascita || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.LuogoNascita || BLANK_SPACE }`, bold: true },
           ' il ',
           { text: `${ 
-            (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+            (studentInfo.DataNascita === 'Invalid date' || !studentInfo.DataNascita) 
               ? '______/______/________'
-              : allievaInfo.DataNascita
+              : studentInfo.DataNascita
           }`, bold: true },
           ' C.F. ',
-          { text: `${allievaInfo.CodiceFiscale || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.CodiceFiscale || BLANK_SPACE }`, bold: true },
           '. Residente in ',
-          { text: `${allievaInfo.Indirizzo || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Indirizzo || BLANK_SPACE }`, bold: true },
           ' a ',
-          { text: `${allievaInfo.Citta || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Citta || BLANK_SPACE }`, bold: true },
           '. Cellulare: ',
-          { text: `${allievaInfo.Cellulare || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Cellulare || BLANK_SPACE }`, bold: true },
           ' Email: ',
-          { text: `${allievaInfo.Email || BLANK_SPACE }`, bold: true }
+          { text: `${studentInfo.Email || BLANK_SPACE }`, bold: true }
         ],
         alignment: 'left',
         lineHeight: 1.5,
@@ -108,7 +108,7 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
       {
         text: [
           'La disciplina sportiva svolta nella ASD PIL ART è ',
-          { text: `${allievaInfo.Disciplina || BLANK_SPACE }`, bold: true },
+          { text: `${studentInfo.Disciplina || BLANK_SPACE }`, bold: true },
           ' per cui il socio ci consegna un certificato medico di idoneità sportiva con scadenza ',
           { text: `${ '______/______/________' }`, bold: true },
           ' del tipo:'
@@ -182,14 +182,14 @@ const pdfTemplateModuloIscrizione = async allievaInfo => {
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Figlio fiscalmente a carico del genitore: ${allievaInfo.NomeGenitore || BLANK_SPACE } ${allievaInfo.CognomeGenitore || '' }`,
+        text: `Figlio fiscalmente a carico del genitore: ${studentInfo.NomeGenitore || BLANK_SPACE } ${studentInfo.CognomeGenitore || '' }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Codice Fiscale di chi firma: ${allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE }`,
+        text: `Codice Fiscale di chi firma: ${studentInfo.CodiceFiscaleGenitore || BLANK_SPACE }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,

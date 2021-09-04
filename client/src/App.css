@@ -134,7 +134,7 @@ input[type='date'] {
   font-size: 1.3em;
 }
 
-.formWrapper {
+.form-wrapper {
   border: 2px solid #DCDCDC;
   border-radius: 5px;
   padding: 1.5em 1em 1.5em 1em;
@@ -142,39 +142,11 @@ input[type='date'] {
   background-color: #F3F4F6;
 }
 
-.cercaForm {
-  margin-top: 2em;
-  margin-left: 5em;
-}
-
-.cercaForm input[type='text'] {
-  width: 16em;
-  padding-left: 0.5em;
-  height: 2em;
-  margin-left: 1em;
-}
-
-.cercaForm Button {
-  margin-left: 1em;
-}
-
-#navbarCollapse ul {
-  margin-left: 2em;
-}
-
-#navbarCollapse li {
-  margin-left: 2em;
-}
-
-#navbarCollapse li a {
-  font-weight: bold;
-}
-
 .btn {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.updateRegistrationDate {
+.update-registration-date {
   max-height: calc(100vh - 150px);
   overflow-y: auto;
   display: flex;
@@ -182,20 +154,14 @@ input[type='date'] {
   justify-content: center;
 }
 
-.deleteStudentModalBody {
+.delete-student-teacher-modal-body {
   max-height: calc(100vh - 150px);
   overflow-y: auto;
 }
 
-.updateStudentModalBody {
+.update-student-teacher-modal-body {
   max-height: calc(100vh - 150px);
   overflow-y: auto;
-}
-
-.updateTeacherModalBody {
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-  width: 100%;
 }
 
 .update-teacher-modal {
@@ -207,15 +173,16 @@ input[type='date'] {
   margin-top: 1em;
 }
 
-.teacherCardWrapper {
+.teacher-card-wrapper {
   width: 25vw;
+  height: 100%;
   font-size: 14px;
   margin-right: 2.5em;
   margin-top: 1.5em;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.studentNameTitle {
+.student-name-title {
   background-color: #F3F4F6;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   display: flex;
@@ -230,7 +197,7 @@ input[type='date'] {
   margin-bottom: 0.5em;
 }
 
-.buttonsContainer .btn {
+.buttons-container .btn {
   margin-top: 1em;
   margin-right: 1em;
 }

@@ -3,7 +3,7 @@ import { Button, Card, Modal } from 'react-bootstrap'
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import FormInsegnante from './form_insegnante'
+import TeacherForm from './form_insegnante'
 
 import { updateTeacher, deleteTeacher } from '../helpers/api-calls';
 
@@ -13,41 +13,41 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const teachersDisplayer = ({ currentTeacher }) => {
     const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
-    const [teacherInfo, setTeacherInfo] = useState(currentTeacher);
+    const [teacherInfo] = useState(currentTeacher);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
 
-    const [newCodiceFiscale, setNewCodiceFiscale] = useState(teacherInfo.CodiceFiscale);
-    const [newNome, setNewNome] = useState(teacherInfo.Nome);
-    const [newCognome, setNewCognome] = useState(teacherInfo.Cognome);
-    const [newCitta, setNewCitta] = useState(teacherInfo.Citta);
-    const [newIndirizzo, setNewIndirizzo] = useState(teacherInfo.Indirizzo);
-    const [newCellulare, setNewCellulare] = useState(teacherInfo.Cellulare);
+    const [newTaxCode, setNewTaxCode] = useState(teacherInfo.CodiceFiscale);
+    const [newName, setNewName] = useState(teacherInfo.Nome);
+    const [newSurname, setNewSurname] = useState(teacherInfo.Cognome);
+    const [newCity, setNewCity] = useState(teacherInfo.Citta);
+    const [newAddress, setNewAddress] = useState(teacherInfo.Indirizzo);
+    const [newMobilePhone, setNewMobilePhone] = useState(teacherInfo.Cellulare);
     const [newEmail, setNewEmail] = useState(teacherInfo.Email);
-    const [newLuogoNascita, setNewLuogoNascita] = useState(teacherInfo.LuogoNascita);
-    const [newDisciplina, setNewDisciplina] = useState(teacherInfo.Disciplina);
-    const [newCorso, setNewCorso] = useState(teacherInfo.Corso);
-    const [newScuola, setNewScuola] = useState(teacherInfo.Scuola);
-    const [newDataIscrizione, setNewDataIscrizione] = useState(teacherInfo.DataIscrizione.split("-").reverse().join("-"));
-    const [newDataCertificato, setNewDataCertificato] = useState(teacherInfo.DataCertificato.split("-").reverse().join("-"));
-    const [newDataNascita, setNewDataNascita] = useState(teacherInfo.DataNascita.split("-").reverse().join("-"));
-    const [newDataGreenPass, setNewDataGreenPass] = useState(teacherInfo.DataGreenPass.split("-").reverse().join("-"));
+    const [newBirthPlace, setNewBirthPlace] = useState(teacherInfo.LuogoNascita);
+    const [newDiscipline, setNewDiscipline] = useState(teacherInfo.Disciplina);
+    const [newCourse, setNewCourse] = useState(teacherInfo.Corso);
+    const [newSchool, setNewSchool] = useState(teacherInfo.Scuola);
+    const [newRegistrationDate, setNewRegistrationDate] = useState(teacherInfo.DataIscrizione.split("-").reverse().join("-"));
+    const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(teacherInfo.DataCertificato.split("-").reverse().join("-"));
+    const [newDOB, setNewDOB] = useState(teacherInfo.DataNascita.split("-").reverse().join("-"));
+    const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(teacherInfo.DataGreenPass.split("-").reverse().join("-"));
 
     const setFormData = () => {
-      setNewCodiceFiscale(teacherInfo.CodiceFiscale)
-      setNewNome(teacherInfo.Nome)
-      setNewCognome(teacherInfo.Cognome)
-      setNewCitta(teacherInfo.Citta)
-      setNewIndirizzo(teacherInfo.Indirizzo)
-      setNewCellulare(teacherInfo.Cellulare)
+      setNewTaxCode(teacherInfo.CodiceFiscale)
+      setNewName(teacherInfo.Nome)
+      setNewSurname(teacherInfo.Cognome)
+      setNewCity(teacherInfo.Citta)
+      setNewAddress(teacherInfo.Indirizzo)
+      setNewMobilePhone(teacherInfo.Cellulare)
       setNewEmail(teacherInfo.Email)
-      setNewLuogoNascita(teacherInfo.LuogoNascita)
-      setNewDisciplina(teacherInfo.Disciplina)
-      setNewCorso(teacherInfo.Corso)
-      setNewScuola(teacherInfo.Scuola)
-      setNewDataIscrizione(teacherInfo.DataIscrizione.split("-").reverse().join("-"))
-      setNewDataCertificato(teacherInfo.DataCertificato.split("-").reverse().join("-"))
-      setNewDataNascita(teacherInfo.DataNascita.split("-").reverse().join("-"))
-      setNewDataGreenPass(teacherInfo.DataGreenPass.split("-").reverse().join("-"))
+      setNewBirthPlace(teacherInfo.LuogoNascita)
+      setNewDiscipline(teacherInfo.Disciplina)
+      setNewCourse(teacherInfo.Corso)
+      setNewSchool(teacherInfo.Scuola)
+      setNewRegistrationDate(teacherInfo.DataIscrizione.split("-").reverse().join("-"))
+      setNewCertificateExpirationDate(teacherInfo.DataCertificato.split("-").reverse().join("-"))
+      setNewDOB(teacherInfo.DataNascita.split("-").reverse().join("-"))
+      setNewGreenPassExpirationDate(teacherInfo.DataGreenPass.split("-").reverse().join("-"))
     }
 
     const handleUpdateTeacherModal = () => {
@@ -102,7 +102,7 @@ const teachersDisplayer = ({ currentTeacher }) => {
               <b>Data Scadenza Green Pass:</b> {teacherInfo.DataGreenPass === 'Invalid date' ? '01-01-1900' : teacherInfo.DataGreenPass}
             </Card.Text>
 
-            <div className="buttonsContainer">
+            <div className="buttons-container">
               <Button variant="success" onClick={ () => stampaModuloIscrizione()}> Scarica Modulo </Button>
               <Button variant="primary" onClick={ () => setShowUpdateTeacherModal(true) }> Aggiorna </Button>
               <Button variant="danger" onClick={() => setShowDeleteTeacherModal(true) }> Elimina </Button>
@@ -115,32 +115,31 @@ const teachersDisplayer = ({ currentTeacher }) => {
           <Modal.Header closeButton>
           <Modal.Title> Aggiorna Insegnante </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="updateTeacherModalBody">
-              {/* change class name */}
+          <Modal.Body className="update-student-teacher-modal-body">
               <div className="update-info-form">
-              <FormInsegnante 
-                  insegnanteInfo={teacherInfo}
-                  setNewCodiceFiscale={setNewCodiceFiscale}
-                  setNewNome={setNewNome}
-                  setNewCognome={setNewCognome}
-                  setNewCitta={setNewCitta}
-                  setNewIndirizzo={setNewIndirizzo}
-                  setNewCellulare={setNewCellulare}
+              <TeacherForm 
+                  teacherInfo={teacherInfo}
+                  setNewTaxCode={setNewTaxCode}
+                  setNewName={setNewName}
+                  setNewSurname={setNewSurname}
+                  setNewCity={setNewCity}
+                  setNewAddress={setNewAddress}
+                  setNewMobilePhone={setNewMobilePhone}
                   setNewEmail={setNewEmail}
-                  setNewLuogoNascita={setNewLuogoNascita}
-                  setNewDisciplina={setNewDisciplina}
-                  setNewCorso={setNewCorso}
-                  setNewScuola={setNewScuola}
-                  setNewDataIscrizione={setNewDataIscrizione}
-                  setNewDataCertificato={setNewDataCertificato}
-                  setNewDataNascita={setNewDataNascita}
-                  setNewDataGreenPass={setNewDataGreenPass}
+                  setNewBirthPlace={setNewBirthPlace}
+                  setNewDiscipline={setNewDiscipline}
+                  setNewCourse={setNewCourse}
+                  setNewSchool={setNewSchool}
+                  setNewRegistrationDate={setNewRegistrationDate}
+                  setNewCertificateExpirationDate={setNewCertificateExpirationDate}
+                  setNewDOB={setNewDOB}
+                  setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
               />
               </div>
           </Modal.Body>
           <Modal.Footer>
           <Button variant="success" onClick={async () => {
-              const updatedTeacherInfo = { InsegnanteID: teacherInfo.InsegnanteID, CodiceFiscale: newCodiceFiscale, Nome: newNome, Cognome: newCognome, Citta: newCitta, Indirizzo: newIndirizzo, Cellulare: newCellulare, Email: newEmail, LuogoNascita: newLuogoNascita, Disciplina: newDisciplina, Corso: newCorso, Scuola: newScuola, DataIscrizione: newDataIscrizione, DataCertificato: newDataCertificato, DataNascita: newDataNascita, DataGreenPass: newDataGreenPass };
+              const updatedTeacherInfo = { InsegnanteID: teacherInfo.InsegnanteID, CodiceFiscale: newTaxCode, Nome: newName, Cognome: newSurname, Citta: newCity, Indirizzo: newAddress, Cellulare: newMobilePhone, Email: newEmail, LuogoNascita: newBirthPlace, Disciplina: newDiscipline, Corso: newCourse, Scuola: newSchool, DataIscrizione: newRegistrationDate, DataCertificato: newCertificateExpirationDate, DataNascita: newDOB, DataGreenPass: newGreenPassExpirationDate };
               await updateTeacher(updatedTeacherInfo);
               handleUpdateTeacherModal()
           } }>
@@ -154,9 +153,9 @@ const teachersDisplayer = ({ currentTeacher }) => {
 
         <Modal show={showDeleteTeacherModal} onHide={ () => setShowDeleteTeacherModal(false) } centered>
           <Modal.Header closeButton>
-            <Modal.Title> Elimina Allieva </Modal.Title>
+            <Modal.Title> Elimina Insegnante </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="deleteStudentModalBody">
+          <Modal.Body className="delete-student-teacher-modal-body">
               Sei sicura di voler eliminare {teacherInfo.Nome} {teacherInfo.Cognome}?
           </Modal.Body>
           <Modal.Footer>

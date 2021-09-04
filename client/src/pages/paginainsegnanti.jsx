@@ -7,7 +7,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 
-const InsegnantiPage = () => {
+const TeachersPage = () => {
   const [teachersList, setTeachersList] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const InsegnantiPage = () => {
               ? <h2 className='center'> <div> Non ci sono insegnanti </div> </h2>  
               : teachersList.map((currentTeacher) => {
                 return (
-                    <div key={currentTeacher.CodiceFiscale} className="teacherCardWrapper">
+                    <div key={currentTeacher.CodiceFiscale} className="teacher-card-wrapper">
                       <TeacherDisplayer currentTeacher={currentTeacher} />
                     </div>
                   )
@@ -49,4 +49,4 @@ const InsegnantiPage = () => {
   );
 }
 
-export default InsegnantiPage;
+export default TeachersPage;

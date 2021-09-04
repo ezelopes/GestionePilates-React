@@ -38,9 +38,9 @@ const columnsDefinition = [
   { headerName: 'Tipo Pagamento', field: 'TipoPagamento', editable: true }
 ];
 
-const ListaRicevute = ({ ricevute, allievaInfo }) => {
-  const [gridOptions /*setGridOptions*/] = useState(gridOptionsDefault);
-  const [columnDefs /*setColumnDefs*/] = useState(columnsDefinition);
+const ReceiptsList = ({ receipts, studentInfo }) => {
+  const [gridOptions] = useState(gridOptionsDefault);
+  const [columnDefs] = useState(columnsDefinition);
 
   const [selectedReceipt, setSelectedReceipt] = useState();
   const [showDeleteReceiptModal, setShowDeleteReceiptModal] = useState(false);
@@ -56,19 +56,19 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
 
   }, [])
 
-  const stampaRicevute = async () => {    
+  const printReceipts = async () => {    
     try {
       if (!selectedReceipt) return alert('Seleziona Ricevuta per Stamparla');
       let documentDefinition;
 
-      if (allievaInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta === 'Quota') 
-        documentDefinition = await pdfTemplateMaggiorenni.default(allievaInfo, selectedReceipt);
-      else if (allievaInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-        documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(allievaInfo, selectedReceipt);
-      else if (allievaInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta === 'Quota')
-        documentDefinition = await pdfTemplateMinorenni.default(allievaInfo, selectedReceipt);
-      else if (allievaInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-        documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(allievaInfo, selectedReceipt);
+      if (studentInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta === 'Quota') 
+        documentDefinition = await pdfTemplateMaggiorenni.default(studentInfo, selectedReceipt);
+      else if (studentInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(studentInfo, selectedReceipt);
+      else if (studentInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta === 'Quota')
+        documentDefinition = await pdfTemplateMinorenni.default(studentInfo, selectedReceipt);
+      else if (studentInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(studentInfo, selectedReceipt);
 
       pdfMake.createPdf(documentDefinition).open();
     } catch (error) {
@@ -87,23 +87,21 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
     <>
       <div
         className="ag-theme-balham"
-        id="listaRicevute"
         style={{ marginTop: '2em', height: '20em', width: '90%', marginBottom: '2em', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}
       >
         <AgGridReact
-          // rowSelection="multiple"
           scrollbarWidth
           rowHeight="45"
           gridOptions={gridOptions}
           columnDefs={columnDefs}
-          rowData={ricevute}
+          rowData={receipts}
           onCellValueChanged={({ data }) => updateReceipt(data)}
           onSelectionChanged={onReceiptSelectionChanged}
         ></AgGridReact>
       </div>
 
-      <div className="buttonsContainer">
-        <Button onClick={stampaRicevute}>
+      <div className="buttons-container">
+        <Button onClick={printReceipts}>
           <span role='img' aria-label='receipt'>🧾</span> STAMPA RICEVUTA
         </Button>
 
@@ -139,4 +137,4 @@ const ListaRicevute = ({ ricevute, allievaInfo }) => {
   );
 };
 
-export default ListaRicevute;
+export default ReceiptsList;

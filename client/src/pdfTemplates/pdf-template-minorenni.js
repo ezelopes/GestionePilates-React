@@ -5,31 +5,27 @@ const convertNumberIntoWord = require('../helpers/convert-number-in-words');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
+const pdfTemplateMinorenni = async (studentInfo, receiptInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const signature = await getBase64ImageFromURL('../images/Signature.png');
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
 
-  let somma = ricevutaInfo.SommaEuro;
-  somma = somma.replace('.', ',')
-  const euro_and_centesimi = somma.split(',');
-  const euro = euro_and_centesimi[0];
-  const centesimi = euro_and_centesimi[1];
+  const totalAmount = receiptInfo.SommaEuro.replace('.', ',');
+  const euroAndCents = totalAmount.split(',');
+  const euro = euroAndCents[0];
+  const cents = euroAndCents[1];
 
-  const EuroInLettere = convertNumberIntoWord(euro);
-  let CentesimiInLettere = '';
-  if (centesimi !== '00' && centesimi !== '0' && centesimi !== undefined) {
-    CentesimiInLettere = ` e ${convertNumberIntoWord(centesimi)} Centesimi`;
-  }
-
-  const tipoPagamento = ricevutaInfo.TipoPagamento.toUpperCase();
+  const eurosInLetters = convertNumberIntoWord(euro);
+  const centsInLetters = (cents !== '00' && cents !== '0' && cents !== undefined) 
+    ? ` e ${convertNumberIntoWord(cents)} Centesimi`
+    : ''
 
   const docDefinition = {
     info: {
-      title: `${ricevutaInfo.NumeroRicevuta}_${allievaInfo.Nome}_${allievaInfo.Cognome}_Ricevuta`,
+      title: `${receiptInfo.NumeroRicevuta}_${studentInfo.Nome}_${studentInfo.Cognome}_Ricevuta`,
       author: 'Roxana Carro',
-      subject: `Ricevuta ${ricevutaInfo.NumeroRicevuta} di ${allievaInfo.Nome} ${allievaInfo.Cognome}`
+      subject: `Ricevuta ${receiptInfo.NumeroRicevuta} di ${studentInfo.Nome} ${studentInfo.Cognome}`
     },
     pageMargins: [40, 5, 40, 0],
     content: [
@@ -38,7 +34,7 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${ricevutaInfo.NumeroRicevuta || BLANK_SPACE }`,
+        text: `Ricevuta n° ${receiptInfo.NumeroRicevuta || BLANK_SPACE }`,
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
@@ -62,39 +58,39 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          allievaInfo.NomeGenitore || BLANK_SPACE 
+          studentInfo.NomeGenitore || BLANK_SPACE 
         } ${
-          allievaInfo.CognomeGenitore || BLANK_SPACE 
+          studentInfo.CognomeGenitore || BLANK_SPACE 
         }, C.F. ${
-          allievaInfo.CodiceFiscaleGenitore || BLANK_SPACE 
-        }, il pagamento effetuato${(tipoPagamento !== 'CONTANTI' ? ` tramite ${tipoPagamento}` : '' )} equilavente alla somma di ${
-          ricevutaInfo.SommaEuro || BLANK_SPACE 
-        }€ (${EuroInLettere.toUpperCase() || BLANK_SPACE } EURO${CentesimiInLettere.toUpperCase()}), per l'iscrizione di ${
-          allievaInfo.Nome || BLANK_SPACE 
+          studentInfo.CodiceFiscaleGenitore || BLANK_SPACE 
+        }, il pagamento effetuato${(receiptInfo.TipoPagamento.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.TipoPagamento.toUpperCase()}` : '' )} equilavente alla somma di ${
+          receiptInfo.SommaEuro || BLANK_SPACE 
+        }€ (${eurosInLetters.toUpperCase() || BLANK_SPACE } EURO${centsInLetters.toUpperCase()}), per l'iscrizione di ${
+          studentInfo.Nome || BLANK_SPACE 
         } ${
-          allievaInfo.Cognome || BLANK_SPACE 
+          studentInfo.Cognome || BLANK_SPACE 
         }, C.F. ${
-          allievaInfo.CodiceFiscale || BLANK_SPACE 
+          studentInfo.CodiceFiscale || BLANK_SPACE 
         } nato/a a ${
-          allievaInfo.LuogoNascita || BLANK_SPACE 
+          studentInfo.LuogoNascita || BLANK_SPACE 
         }, il ${ 
-          (allievaInfo.DataNascita === 'Invalid date' || !allievaInfo.DataNascita) 
+          (studentInfo.DataNascita === 'Invalid date' || !studentInfo.DataNascita) 
             ? '______/______/________'
-            : allievaInfo.DataNascita
+            : studentInfo.DataNascita
         } residente in ${
-          allievaInfo.Indirizzo || BLANK_SPACE 
+          studentInfo.Indirizzo || BLANK_SPACE 
         }, ${
-          allievaInfo.Citta || BLANK_SPACE 
+          studentInfo.Citta || BLANK_SPACE 
         } al corso di ${
-          allievaInfo.Disciplina || BLANK_SPACE 
+          studentInfo.Disciplina || BLANK_SPACE 
         } dal ${ 
-          (ricevutaInfo.DataInizioCorso === 'Invalid date' || !ricevutaInfo.DataInizioCorso) 
+          (receiptInfo.DataInizioCorso === 'Invalid date' || !receiptInfo.DataInizioCorso) 
             ? '______/______/________'
-            : ricevutaInfo.DataInizioCorso
+            : receiptInfo.DataInizioCorso
         } al ${ 
-          (ricevutaInfo.DataScadenzaCorso === 'Invalid date' || !ricevutaInfo.DataScadenzaCorso) 
+          (receiptInfo.DataScadenzaCorso === 'Invalid date' || !receiptInfo.DataScadenzaCorso) 
             ? '______/______/________'
-            : ricevutaInfo.DataScadenzaCorso
+            : receiptInfo.DataScadenzaCorso
         }`,
         alignment: 'center',
         lineHeight: 1.5,
@@ -111,9 +107,9 @@ const pdfTemplateMinorenni = async (allievaInfo, ricevutaInfo) => {
       },
       {
         text: `Stezzano, ${ 
-          (ricevutaInfo.DataRicevuta === 'Invalid date' || !ricevutaInfo.DataRicevuta) 
+          (receiptInfo.DataRicevuta === 'Invalid date' || !receiptInfo.DataRicevuta) 
             ? '______/______/________'
-            : ricevutaInfo.DataRicevuta
+            : receiptInfo.DataRicevuta
         }`,
         alignment: 'left',
         fontSize: 10,
