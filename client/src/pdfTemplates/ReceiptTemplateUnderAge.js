@@ -1,11 +1,11 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('../helpers/get-base64-image');
-const convertNumberIntoWord = require('../helpers/convert-number-in-words');
+const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
+const convertNumberIntoWord = require('../helpers/convertNumberIntoWord');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateQuotaAssociativaMinorenni = async (studentInfo, receiptInfo) => {
+const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const signature = await getBase64ImageFromURL('../images/Signature.png');
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
@@ -34,7 +34,7 @@ const pdfTemplateQuotaAssociativaMinorenni = async (studentInfo, receiptInfo) =>
         fit: [100, 100]
       },
       {
-        text: `Ricevuta n° ${receiptInfo.NumeroRicevuta || BLANK_SPACE}`,
+        text: `Ricevuta n° ${receiptInfo.NumeroRicevuta || BLANK_SPACE }`,
         alignment: 'right',
         lineHeight: 1.5,
         fontSize: 10,
@@ -58,34 +58,40 @@ const pdfTemplateQuotaAssociativaMinorenni = async (studentInfo, receiptInfo) =>
       },
       {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${
-          studentInfo.NomeGenitore || BLANK_SPACE
+          studentInfo.NomeGenitore || BLANK_SPACE 
         } ${
-          studentInfo.CognomeGenitore || BLANK_SPACE
+          studentInfo.CognomeGenitore || BLANK_SPACE 
         }, C.F. ${
-          studentInfo.CodiceFiscaleGenitore || BLANK_SPACE
+          studentInfo.CodiceFiscaleGenitore || BLANK_SPACE 
         }, il pagamento effetuato${(receiptInfo.TipoPagamento.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.TipoPagamento.toUpperCase()}` : '' )} equilavente alla somma di ${
-          receiptInfo.SommaEuro || BLANK_SPACE
-        }€ (${
-          eurosInLetters.toUpperCase() || BLANK_SPACE
-        } EURO${
-          centsInLetters.toUpperCase()
-        }), per il contributo relativo alla quota associativa di ${
-          studentInfo.Nome || BLANK_SPACE
+          receiptInfo.SommaEuro || BLANK_SPACE 
+        }€ (${eurosInLetters.toUpperCase() || BLANK_SPACE } EURO${centsInLetters.toUpperCase()}), per l'iscrizione di ${
+          studentInfo.Nome || BLANK_SPACE 
         } ${
-          studentInfo.Cognome || BLANK_SPACE
+          studentInfo.Cognome || BLANK_SPACE 
         }, C.F. ${
-          studentInfo.CodiceFiscale || BLANK_SPACE
+          studentInfo.CodiceFiscale || BLANK_SPACE 
         } nato/a a ${
-          studentInfo.LuogoNascita || BLANK_SPACE
+          studentInfo.LuogoNascita || BLANK_SPACE 
         }, il ${ 
-          (receiptInfo.DataNascita === 'Invalid date' || !receiptInfo.DataNascita) 
+          (studentInfo.DataNascita === 'Invalid date' || !studentInfo.DataNascita) 
             ? '______/______/________'
-            : receiptInfo.DataNascita
+            : studentInfo.DataNascita
         } residente in ${
-          studentInfo.Indirizzo || BLANK_SPACE
+          studentInfo.Indirizzo || BLANK_SPACE 
         }, ${
-          studentInfo.Citta || BLANK_SPACE
-        } della durata di un anno.`,
+          studentInfo.Citta || BLANK_SPACE 
+        } al corso di ${
+          studentInfo.Disciplina || BLANK_SPACE 
+        } dal ${ 
+          (receiptInfo.DataInizioCorso === 'Invalid date' || !receiptInfo.DataInizioCorso) 
+            ? '______/______/________'
+            : receiptInfo.DataInizioCorso
+        } al ${ 
+          (receiptInfo.DataScadenzaCorso === 'Invalid date' || !receiptInfo.DataScadenzaCorso) 
+            ? '______/______/________'
+            : receiptInfo.DataScadenzaCorso
+        }`,
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
@@ -160,4 +166,4 @@ const pdfTemplateQuotaAssociativaMinorenni = async (studentInfo, receiptInfo) =>
   return docDefinition;
 };
 
-export default pdfTemplateQuotaAssociativaMinorenni;
+export default ReceiptTemplateUnderAge;

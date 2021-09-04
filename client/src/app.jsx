@@ -1,16 +1,20 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import NavBar from './components/navbar';
 
-import HomePage from './pages/homepage';
-import StudentSubscription from './pages/iscrizioneallieve';
-import TeacherSubscription from './pages/iscrizioneinsegnanti';
-import Student from './pages/allieva';
-import StudentsPage from './pages/paginaallieve';
-import ReceiptsPage from './pages/paginaricevute';
-import TeachersPage from './pages/paginainsegnanti';
-import NotFoundPage from './pages/notfoundpage';
+import NavBar from './components/Navbar';
+
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+
+import Student from './pages/StudentPage';
+import StudentsPage from './pages/StudentsPage';
+import StudentSubscription from './pages/StudentSubscriptionPage';
+
+import TeacherSubscription from './pages/TeacherSubscriptionPage';
+import TeachersPage from './pages/TeachersPage';
+
+import ReceiptsPage from './pages/ReceiptsPage';
 
 const App = () => {
   return (

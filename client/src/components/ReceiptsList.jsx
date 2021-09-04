@@ -5,13 +5,13 @@ import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import { updateReceipt, deleteReceipt } from '../helpers/api-calls';
+import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
 
-const pdfTemplateMaggiorenni = require('../pdfTemplates/pdf-template-maggiorenni');
-const pdfTemplateMinorenni = require('../pdfTemplates/pdf-template-minorenni');
+const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
+const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
 
-const pdfTemplateQuotaAssociativaMaggiorenni = require('../pdfTemplates/pdf-template-quota-associativa-maggiorenni');
-const pdfTemplateQuotaAssociativaMinorenni = require('../pdfTemplates/pdf-template-quota-associativa-minorenni');
+const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
+const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -62,13 +62,13 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
       let documentDefinition;
 
       if (studentInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta === 'Quota') 
-        documentDefinition = await pdfTemplateMaggiorenni.default(studentInfo, selectedReceipt);
+        documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
       else if (studentInfo.Maggiorenne === 'Maggiorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-        documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(studentInfo, selectedReceipt);
+        documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
       else if (studentInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta === 'Quota')
-        documentDefinition = await pdfTemplateMinorenni.default(studentInfo, selectedReceipt);
+        documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
       else if (studentInfo.Maggiorenne === 'Minorenne' && selectedReceipt.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-        documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(studentInfo, selectedReceipt);
+        documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
 
       pdfMake.createPdf(documentDefinition).open();
     } catch (error) {

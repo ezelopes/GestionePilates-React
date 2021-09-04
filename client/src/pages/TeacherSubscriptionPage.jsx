@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
-import formatDate from '../helpers/format-date-for-input-date';
+import formatDate from '../helpers/formatDateForInputDate';
 import commondata from '../commondata/commondata'
-import reverseDate from '../helpers/reverse-date-for-input-date';
+import reverseDate from '../helpers/reverseDateForInputDate';
 
-import TeacherForm from '../components/form_insegnante';
+import TeacherForm from '../components/TeacherForm';
 
-import { createTeacher } from '../helpers/api-calls';
+import { createTeacher } from '../helpers/apiCalls';
 
 moment.locale('es');
 
-const TeacherSubscription = () => {
+const TeacherSubscriptionPage = () => {
   const today = formatDate(new Date(), true);
 
   const { disciplines, courses, schools } = commondata;
@@ -113,4 +113,4 @@ const TeacherSubscription = () => {
   );
 }
 
-export default TeacherSubscription;
+export default TeacherSubscriptionPage;

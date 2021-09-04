@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
-import formatDate from '../helpers/format-date-for-input-date';
+import formatDate from '../helpers/formatDateForInputDate';
 
-import { createReceipt } from '../helpers/api-calls';
+import { createReceipt } from '../helpers/apiCalls';
 
 const receiptType = [
   { id: 0, tipo: 'Quota' },
@@ -20,7 +20,7 @@ const defaultAmounts = [
   { value: '150', label: '150' }
 ];
 
-const FormCreateReceipt = ({ CodiceFiscale, AllievaID }) => {
+const CreateReceiptForm = ({ CodiceFiscale, AllievaID }) => {
   const today = formatDate(new Date(), true);
 
   const [newReceiptNumber, setNewReceiptNumber] = useState('');
@@ -98,4 +98,4 @@ const FormCreateReceipt = ({ CodiceFiscale, AllievaID }) => {
   );
 };
 
-export default FormCreateReceipt;
+export default CreateReceiptForm;

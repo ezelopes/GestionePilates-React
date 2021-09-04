@@ -1,10 +1,10 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('../helpers/get-base64-image');
+const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateModuloIscrizione = async (
+const AmountPaidSummaryTemplate = async (
     receiptList,
     filteredTotalAmount,
     filteredPaymentMethod,
@@ -124,4 +124,4 @@ const pdfTemplateModuloIscrizione = async (
   return docDefinition;
 };
 
-export default pdfTemplateModuloIscrizione;
+export default AmountPaidSummaryTemplate;

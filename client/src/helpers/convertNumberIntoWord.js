@@ -3,7 +3,7 @@
 /* http://www.sgart.it
  * converte i numeri da cifre a lettere
  */
-const convNumLett = (n, abbr, separator) => {
+const convertNumberIntoWord = (n, abbr, separator) => {
   if (isNaN(n) === true) {
     return '00';
   }
@@ -142,4 +142,4 @@ const convNumLett = (n, abbr, separator) => {
   return result + (abbrNum.length > 0 ? ' / ' + abbrNum : '');
 };
 
-module.exports = convNumLett;
+module.exports = convertNumberIntoWord;

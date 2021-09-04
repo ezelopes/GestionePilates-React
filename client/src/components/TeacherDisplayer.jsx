@@ -3,15 +3,15 @@ import { Button, Card, Modal } from 'react-bootstrap'
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import TeacherForm from './form_insegnante'
+import TeacherForm from './TeacherForm'
 
-import { updateTeacher, deleteTeacher } from '../helpers/api-calls';
+import { updateTeacher, deleteTeacher } from '../helpers/apiCalls';
 
-const pdfTemplateModuloIscrizione = require('../pdfTemplates/pdf-template-modulo-iscrizione');
+const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const teachersDisplayer = ({ currentTeacher }) => {
+const TeacherDisplayer = ({ currentTeacher }) => {
     const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
     const [teacherInfo] = useState(currentTeacher);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
@@ -57,7 +57,7 @@ const teachersDisplayer = ({ currentTeacher }) => {
 
     const stampaModuloIscrizione = async () => {
         try {
-            const documentDefinition = await pdfTemplateModuloIscrizione.default(teacherInfo);
+            const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
             pdfMake.createPdf(documentDefinition).open();
         } catch (error) {
             console.log(error);
@@ -172,4 +172,4 @@ const teachersDisplayer = ({ currentTeacher }) => {
 };
 
 
-export default teachersDisplayer;
+export default TeacherDisplayer;

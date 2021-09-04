@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form } from 'react-bootstrap'
 
-import reverseDate from '../helpers/reverse-date-for-input-date';
+import reverseDate from '../helpers/reverseDateForInputDate';
 import commondata from '../commondata/commondata'
-import Divider from './divider';
+import Divider from './Divider';
 
 const StudentForm = ({ 
   studentInfo,

@@ -1,10 +1,10 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-const getBase64ImageFromURL = require('../helpers/get-base64-image');
+const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const pdfTemplateModuloIscrizione = async (studentInfo) => {
+const RegistrationFormTemplate = async (studentInfo) => {
   // print only if studentInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_SPACE = '________________________________________';
@@ -208,4 +208,4 @@ const pdfTemplateModuloIscrizione = async (studentInfo) => {
   return docDefinition;
 };
 
-export default pdfTemplateModuloIscrizione;
+export default RegistrationFormTemplate;

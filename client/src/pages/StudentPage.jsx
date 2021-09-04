@@ -4,14 +4,14 @@ import { Modal, Button } from 'react-bootstrap';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import NotFoundPage from './notfoundpage';
-import StudentForm from '../components/form_allieva';
-import ReceiptsList from '../components/lista_ricevute';
-import FormCreateReceipt from '../components/form_ricevuta';
-import reverseDate from '../helpers/reverse-date-for-input-date';
-import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/api-calls';
+import NotFoundPage from './NotFoundPage';
+import StudentForm from '../components/StudentForm';
+import ReceiptsList from '../components/ReceiptsList';
+import CreateReceiptForm from '../components/CreateReceiptForm';
+import reverseDate from '../helpers/reverseDateForInputDate';
+import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
 
-const pdfTemplateModuloIscrizione = require('../pdfTemplates/pdf-template-modulo-iscrizione');
+const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -19,7 +19,7 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 
-const Student = ({ match }) => {
+const StudentPage = ({ match }) => {
 
   const [studentInfo, setStudentInfo] = useState({});
   const [studentReceipts, setStudentReceipts] = useState([]);
@@ -79,7 +79,7 @@ const Student = ({ match }) => {
 
   const stampaModuloIscrizione = async () => {
     try {
-      const documentDefinition = await pdfTemplateModuloIscrizione.default(studentInfo);
+      const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
       pdfMake.createPdf(documentDefinition).open();
     } catch (error) {
       console.log(error);
@@ -134,7 +134,7 @@ const Student = ({ match }) => {
         </div>
 
         <ReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
-        <FormCreateReceipt CodiceFiscale={match.params.codicefiscale} AllievaID={studentInfo.AllievaID} />
+        <CreateReceiptForm CodiceFiscale={match.params.codicefiscale} AllievaID={studentInfo.AllievaID} />
       </div>
 
       <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>
@@ -220,4 +220,4 @@ const Student = ({ match }) => {
   );
 }
 
-export default Student;
+export default StudentPage;

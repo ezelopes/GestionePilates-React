@@ -3,16 +3,16 @@ import { Button, Form } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
-import FilteredReceiptsModal from '../components/filtered_receipts_modal'
-import formatDate from '../helpers/format-date-for-input-date';
-import orderReceiptsBasedOnReceiptNumber from '../helpers/order-receipts';
-import reverseDate from '../helpers/reverse-date-for-input-date';
+import FilteredReceiptsModal from '../components/FilteredReceiptsModal'
+import formatDate from '../helpers/formatDateForInputDate';
+import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
+import reverseDate from '../helpers/reverseDateForInputDate';
 
-const pdfTemplateMaggiorenni = require('../pdfTemplates/pdf-template-maggiorenni');
-const pdfTemplateMinorenni = require('../pdfTemplates/pdf-template-minorenni');
+const ReceiptTemplateAdultd = require('../pdfTemplates/ReceiptTemplateAdult');
+const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
 
-const pdfTemplateQuotaAssociativaMaggiorenni = require('../pdfTemplates/pdf-template-quota-associativa-maggiorenni');
-const pdfTemplateQuotaAssociativaMinorenni = require('../pdfTemplates/pdf-template-quota-associativa-minorenni');
+const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
+const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -138,13 +138,13 @@ const ReceiptsPage = () => {
         }
 
         if (studentInfo.Maggiorenne === 'Maggiorenne' && receiptInfo.TipoRicevuta === 'Quota') 
-          documentDefinition = await pdfTemplateMaggiorenni.default(studentInfo, receiptInfo);
+          documentDefinition = await ReceiptTemplateAdultd.default(studentInfo, receiptInfo);
         else if (studentInfo.Maggiorenne === 'Maggiorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-          documentDefinition = await pdfTemplateQuotaAssociativaMaggiorenni.default(studentInfo, receiptInfo);
+          documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
         else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta === 'Quota')
-          documentDefinition = await pdfTemplateMinorenni.default(studentInfo, receiptInfo);
+          documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
         else if (studentInfo.Maggiorenne === 'Minorenne' && receiptInfo.TipoRicevuta.toUpperCase() === 'QUOTA ASSOCIATIVA')
-          documentDefinition = await pdfTemplateQuotaAssociativaMinorenni.default(studentInfo, receiptInfo);
+          documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
 
         if (index % 2 == 1) {
           documentDefinition.content[documentDefinition.content.length - 1].pageBreak = "after"

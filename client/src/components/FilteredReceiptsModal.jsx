@@ -1,9 +1,8 @@
 import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap'
-import orderReceiptsBasedOnReceiptNumber from '../helpers/order-receipts';
 
-const pdfTemplateImportoSummary = require('../pdfTemplates/pdf-template-importo-summary');
+const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
 
 const columnDefs = [
     { headerName: 'N° Ricevuta', field: 'NumeroRicevuta' },
@@ -40,7 +39,7 @@ const reverseDate = date => {
 const FilteredReceiptsModal = ({ filteredReceipts, filteredTotalAmount, showFilteredAmountModal, setShowFilteredAmountModal, filteredPaymentMethod, fromDate, toDate }) => {
     
     const printDetails = async () => {
-        const documentDefinition = await pdfTemplateImportoSummary.default(
+        const documentDefinition = await AmountPaidSummaryTemplate.default(
             filteredReceipts,
             filteredTotalAmount,
             filteredPaymentMethod,

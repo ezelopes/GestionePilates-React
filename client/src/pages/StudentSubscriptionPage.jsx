@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { createStudent } from '../helpers/api-calls';
+import { createStudent } from '../helpers/apiCalls';
 
-import StudentForm from '../components/form_allieva';
+import StudentForm from '../components/StudentForm';
 
-import formatDate from '../helpers/format-date-for-input-date';
-import reverseDate from '../helpers/reverse-date-for-input-date';
+import formatDate from '../helpers/formatDateForInputDate';
+import reverseDate from '../helpers/reverseDateForInputDate';
 import commondata from '../commondata/commondata'
 
 
-const StudentSubscription = () => {
+const StudentSubscriptionPage = () => {
   const today = formatDate(new Date(), true);
 
   const { ages, disciplines, courses, schools } = commondata;
@@ -125,4 +125,4 @@ const StudentSubscription = () => {
   );
 }
 
-export default StudentSubscription;
+export default StudentSubscriptionPage;

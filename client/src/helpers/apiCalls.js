@@ -1,4 +1,4 @@
-import reverseDate from './reverse-date-for-input-date';
+import reverseDate from './reverseDateForInputDate';
 
 const createStudent = async (newStudent) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
