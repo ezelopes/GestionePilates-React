@@ -6,7 +6,7 @@ const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemp
 
 const columnDefs = [
     { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
-    { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+    { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
     { headerName: 'Somma Euro', field: 'AmountPaid' }
 ]
 
@@ -23,7 +23,7 @@ const gridOptions = {
     rowSelection: 'single'
 };
 
-const reverseDate = date => {
+const formatDate = date => {
     // date yyyy-mm-dd to dd-mm-yyyy
     if (!date) { return '1900-01-01';}
   
@@ -38,7 +38,7 @@ const reverseDate = date => {
 
 const FilteredReceiptsModal = ({ 
     filteredReceipts,
-    filteredTotalAmount,
+    filteredAmountPaid,
     showFilteredAmountModal,
     setShowFilteredAmountModal,
     filteredPaymentMethod,
@@ -49,10 +49,10 @@ const FilteredReceiptsModal = ({
     const printDetails = async () => {
         const documentDefinition = await AmountPaidSummaryTemplate.default(
             filteredReceipts,
-            filteredTotalAmount,
+            filteredAmountPaid,
             filteredPaymentMethod,
-            reverseDate(fromDate),
-            reverseDate(toDate)
+            formatDate(fromDate),
+            formatDate(toDate)
         );
         pdfMake.createPdf(documentDefinition).open();
     }
@@ -61,11 +61,11 @@ const FilteredReceiptsModal = ({
         <>
             <Modal show={showFilteredAmountModal} onHide={ () => setShowFilteredAmountModal(false) } centered dialogClassName="modal-90vw">
                 <Modal.Header closeButton>
-                    <Modal.Title> Ricevute dal {reverseDate(fromDate)} al {reverseDate(toDate)} (tramite {filteredPaymentMethod}) </Modal.Title>
+                    <Modal.Title> Ricevute dal {formatDate(fromDate)} al {formatDate(toDate)} (tramite {filteredPaymentMethod}) </Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
                     <div>
-                        Importo Totale tra le date selezionte: <b> {filteredTotalAmount}€ </b>
+                        Importo Totale tra le date selezionte: <b> {filteredAmountPaid}€ </b>
                     </div>
                     <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
                         <AgGridReact

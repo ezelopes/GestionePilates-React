@@ -26,7 +26,7 @@ const CreateReceiptForm = ({ TaxCode, StudentID }) => {
   const [newReceiptNumber, setNewReceiptNumber] = useState('');
   const [newReceiptType, setNewReceiptType] = useState(receiptType[0].tipo);
   const [newPaymentMethod, setNewPaymentMethod] = useState(paymentMethod[0].tipo);
-  const [newTotalAmount, setNewTotalAmount] = useState(defaultAmounts[0].value);
+  const [newAmountPaid, setNewAmountPaid] = useState(defaultAmounts[0].value);
   const [newReceiptDate, setNewReceiptDate] = useState(today);
   const [newCourseStartDate, setNewCourseStartDate] = useState(today);
   const [newCourseEndDate, setNewCourseEndDate] = useState(today);
@@ -60,7 +60,7 @@ const CreateReceiptForm = ({ TaxCode, StudentID }) => {
             <CreatableSelect
               defaultValue={defaultAmounts[0]}
               onChange={(target) => {
-                setNewTotalAmount(target.value)
+                setNewAmountPaid(target.value)
                 console.log(target.value)
               }}
               options={defaultAmounts}
@@ -89,16 +89,16 @@ const CreateReceiptForm = ({ TaxCode, StudentID }) => {
 
         <Button variant='success' style={{ marginTop: '2em' }} onClick={async () => {
           const newReceipt = {
-            ReceiptNumber: newReceiptNumber,
-            ReceiptDate: newReceiptDate,
-            CourseStartDate: newCourseStartDate,
-            CourseEndDate: newCourseEndDate,
-            TotalAmount: newTotalAmount,
-            PaymentMethod: newPaymentMethod,
-            ReceiptType: newReceiptType,
-            TaxCode: TaxCode,
-            StudentID,
-            RegistrationDate: updateRegistrationDate
+            ReceiptNumber: newReceiptNumber || null,
+            ReceiptDate: newReceiptDate || null,
+            CourseStartDate: newCourseStartDate || null,
+            CourseEndDate: newCourseEndDate || null,
+            AmountPaid: newAmountPaid || null,
+            PaymentMethod: newPaymentMethod || null,
+            ReceiptType: newReceiptType || null,
+            TaxCode: TaxCode || null,
+            StudentID: StudentID || null,
+            RegistrationDate: updateRegistrationDate || false
           }
           await createReceipt(newReceipt)
         }}>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap'
 
-import reverseDate from '../helpers/reverseDateForInputDate';
 import commondata from '../commondata/commondata'
 import Divider from './Divider';
 
@@ -73,7 +72,7 @@ const CreateUpdateUserForm = ({
       <Form.Control type='text' placeholder='Inserisci Luogo Nascita...' onChange={({ target }) => setNewBirthPlace(target.value)} defaultValue={personInfo?.BirthPlace} />
 
       <Form.Label> Data Nascita </Form.Label>
-      <input type='date' onChange={({ target }) => setNewDOB(target.value)} defaultValue={ reverseDate(personInfo?.DOB) } />
+      <input type='date' onChange={({ target }) => setNewDOB(target.value)} defaultValue={ personInfo?.DOB } />
 
       <Divider />
 
@@ -93,15 +92,15 @@ const CreateUpdateUserForm = ({
       </Form.Control>
 
       <Form.Label> Data Iscrizione </Form.Label>
-      <input type='date' onChange={({ target }) => setNewRegistrationDate(target.value)} defaultValue={ reverseDate(personInfo?.RegistrationDate) } />
+      <input type='date' onChange={({ target }) => setNewRegistrationDate(target.value)} defaultValue={ personInfo?.RegistrationDate } />
 
       <Divider />
 
       <Form.Label> Data Scadenza Certificato </Form.Label>
-      <input type='date' onChange={({ target }) => setNewCertificateExpirationDate(target.value)} defaultValue={ reverseDate(personInfo?.CertificateExpirationDate) } />
+      <input type='date' onChange={({ target }) => setNewCertificateExpirationDate(target.value)} defaultValue={ personInfo?.CertificateExpirationDate } />
       
       <Form.Label> Data Scadenza Green Pass </Form.Label>
-      <input type='date' onChange={({ target }) => setNewGreenPassExpirationDate(target.value)} defaultValue={ reverseDate(personInfo?.GreenPassExpirationDate) } />
+      <input type='date' onChange={({ target }) => setNewGreenPassExpirationDate(target.value)} defaultValue={ personInfo?.GreenPassExpirationDate } />
 
       {personType === 'Student' && newIsAdult === 'Minorenne' && 
           <>

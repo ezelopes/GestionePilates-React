@@ -84,10 +84,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
               <b>Email:</b> {teacherInfo.Email}
             </Card.Text>
             <Card.Text>
-              <b>Luogo e Data Nascita:</b> {teacherInfo.BirthPlace} - {teacherInfo.DOB === 'Invalid date' ? '01-01-1900' : teacherInfo.DOB}
+              <b>Luogo e Data Nascita:</b> {teacherInfo.BirthPlace} - {teacherInfo.DOB === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.DOB).toLocaleDateString()}
             </Card.Text>
             <Card.Text>
-              <b>Data Iscrizione:</b> {teacherInfo.RegistrationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.RegistrationDate}
+              <b>Data Iscrizione:</b> {teacherInfo.RegistrationDate === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.RegistrationDate).toLocaleDateString()}
             </Card.Text>
             <Card.Text>
               <b>Disciplina:</b> {teacherInfo.Discipline}
@@ -96,10 +96,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
               <b>Corso:</b> {teacherInfo.Course}
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Certificato:</b> {teacherInfo.CertificateExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.CertificateExpirationDate}
+              <b>Data Scadenza Certificato:</b> {teacherInfo.CertificateExpirationDate === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()}
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Green Pass:</b> {teacherInfo.GreenPassExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.GreenPassExpirationDate}
+              <b>Data Scadenza Green Pass:</b> {teacherInfo.GreenPassExpirationDate === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()}
             </Card.Text>
 
             <div className="buttons-container">

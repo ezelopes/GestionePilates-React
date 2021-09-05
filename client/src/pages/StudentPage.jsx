@@ -8,7 +8,6 @@ import NotFoundPage from './NotFoundPage';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import ReceiptsList from '../components/ReceiptsList';
 import CreateReceiptForm from '../components/CreateReceiptForm';
-import reverseDate from '../helpers/reverseDateForInputDate';
 import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
@@ -61,10 +60,10 @@ const StudentPage = ({ match }) => {
     setNewDiscipline(studentInfo.Discipline);
     setNewCourse(studentInfo.Course);
     setNewSchool(studentInfo.School);
-    setNewRegistrationDate(reverseDate(studentInfo.RegistrationDate));
-    setNewCertificateExpirationDate(reverseDate(studentInfo.CertificateExpirationDate));
-    setNewDOB(reverseDate(studentInfo.DOB));
-    setNewGreenPassExpirationDate(reverseDate(studentInfo.GreenPassExpirationDate));
+    setNewRegistrationDate(studentInfo.RegistrationDate);
+    setNewCertificateExpirationDate(studentInfo.CertificateExpirationDate);
+    setNewDOB(studentInfo.DOB);
+    setNewGreenPassExpirationDate(studentInfo.GreenPassExpirationDate);
     setNewParentTaxCode(studentInfo.ParentTaxCode);
     setNewParentName(studentInfo.ParentName);
     setNewParentSurname(studentInfo.ParentSurname);
@@ -143,10 +142,10 @@ const StudentPage = ({ match }) => {
           <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-registration-date">
-            <input type="date" defaultValue={ reverseDate(studentInfo.RegistrationDate) } onChange={({ target }) => setNewRegistrationDate(target.value)} />
+            <input type="date" defaultValue={ studentInfo?.RegistrationDate } onChange={({ target }) => setNewRegistrationDate(target.value)} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={() => { updateRegistrationDate(studentInfo.StudenID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
+          <Button variant="success" onClick={async () => { console.log(studentInfo); await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
             AGGIORNA
           </Button>
           <Button variant="secondary" onClick={() => { setShowRegistrationDateModal(false) } }>
@@ -163,7 +162,7 @@ const StudentPage = ({ match }) => {
             Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => { deleteStudent(studentInfo.StudentID); setShowDeleteStudentModal(false); } }>
+          <Button variant="danger" onClick={async () => { await deleteStudent(studentInfo.StudentID); setShowDeleteStudentModal(false); } }>
             ELIMINA
           </Button>
           <Button variant="secondary" onClick={() => { setShowDeleteStudentModal(false) } }>
@@ -207,7 +206,7 @@ const StudentPage = ({ match }) => {
         <Modal.Footer>
           <Button variant="success" onClick={async () => {
             const updatedStudentInfo = { 
-              StudentID: studentInfo.StudenID,
+              StudentID: studentInfo.StudentID,
               IsAdult: newIsAdult,
               TaxCode: newTaxCode,
               Name: newName,

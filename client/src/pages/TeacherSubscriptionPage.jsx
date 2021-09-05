@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import moment from 'moment';
 import formatDate from '../helpers/formatDateForInputDate';
 import commondata from '../commondata/commondata'
-import reverseDate from '../helpers/reverseDateForInputDate';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
 import { createTeacher } from '../helpers/apiCalls';
-
-moment.locale('es');
 
 const TeacherSubscriptionPage = () => {
   const today = formatDate(new Date(), true);
@@ -28,10 +24,10 @@ const TeacherSubscriptionPage = () => {
     Discipline: disciplines[0].discipline,
     Course: courses[0].course,
     School: schools[0].school,
-    RegistrationDate: reverseDate(today),
-    CertificateExpirationDate: reverseDate(today),
-    DOB: reverseDate(today),
-    GreenPassExpirationDate: reverseDate(today),
+    RegistrationDate: today,
+    CertificateExpirationDate: today,
+    DOB: today,
+    GreenPassExpirationDate: today,
   }
 
   const [newTaxCode, setNewTaxCode] = useState('');

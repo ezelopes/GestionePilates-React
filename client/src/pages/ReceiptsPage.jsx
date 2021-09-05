@@ -6,7 +6,6 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import FilteredReceiptsModal from '../components/FilteredReceiptsModal'
 import formatDate from '../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
-import reverseDate from '../helpers/reverseDateForInputDate';
 
 const ReceiptTemplateAdultd = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -23,11 +22,11 @@ const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
   { headerName: 'Nome', field: 'Name' },
   { headerName: 'Cognome', field: 'Surname' },
-  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
+  { headerName: 'Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
+  { headerName: 'Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
-  { headerName: 'Tipo Pagamento', field: 'PaymentType' }
+  { headerName: 'Tipo Pagamento', field: 'PaymentMethod' }
 ];
 
 const gridOptionsDefault = {
@@ -54,7 +53,7 @@ const ReceiptsPage = () => {
   const [currentReceipts, setCurrentReceipts] = useState([]);
   const [filteredReceipts, setFilteredReceipts] = useState([]);
   const [selectedReceipts, setSelectedReceipts] = useState([]);
-  const [filteredTotalAmount, setFilteredTotalAmount] = useState(0);
+  const [filteredAmountPaid, setFilteredAmountPaid] = useState(0);
   const [showFilteredAmountModal, setShowFilteredAmountModal] = useState(false);
   const [filteredPaymentMethod, setFilteredPaymentMethod] = useState(null);
   const [fromDate, setFromDate] = useState(today);
@@ -130,7 +129,7 @@ const ReceiptsPage = () => {
         const receiptInfo = {
           ReceiptNumber: data.ReceiptNumber,
           AmountPaid: data.AmountPaid,
-          PaymentType: data.PaymentType,
+          PaymentMethod: data.PaymentMethod,
           ReceiptType: data.ReceiptType,
           ReceiptDate: data.ReceiptDate,
           CourseStartDate: data.CourseStartDate,
@@ -159,28 +158,26 @@ const ReceiptsPage = () => {
     }
   };
 
-  const filterReceipts = () => {
-    const fromDateFormatted = new Date(fromDate)
-    const toDateFormatted = new Date(toDate)
+  const validateDateBetweenTwoDates = (fromDate, toDate, givenDate) => {
+    return new Date(givenDate) <= new Date(toDate) && new Date(givenDate) >= new Date(fromDate);
+  }
 
-    const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate }) =>
-      fromDateFormatted <= new Date(reverseDate(ReceiptDate)) && 
-      toDateFormatted >= new Date(reverseDate(ReceiptDate))
-    )
+  const filterReceipts = () => {
+    const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate }) => validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate))
 
     if (!filteredPaymentMethod) {
       return setCurrentReceipts(receiptsWithDateFilter)
     }
 
-    const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ PaymentType }) =>
-       PaymentType.includes(filteredPaymentMethod)
+    const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ PaymentMethod }) =>
+       PaymentMethod.includes(filteredPaymentMethod)
     )    
 
     setCurrentReceipts(receiptsWithPaymentAndDateFilters)
   }
 
   const clearFilters = () => {
-    const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('PaymentType');
+    const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('PaymentMethod');
     
     PaymentMethodFilterComponent.setModel(null);
     gridOptions.api.onFilterChanged();
@@ -196,13 +193,9 @@ const ReceiptsPage = () => {
   const calculateAmountBetweenDates = () => {
     if (!filteredPaymentMethod) return alert("Seleziona Tipo di Pagamento!")
 
-    const fromDateFormatted = new Date(fromDate)
-    const toDateFormatted = new Date(toDate)
-
-    const receipts = allReceipts.filter(({ ReceiptDate, PaymentType }) =>
-      fromDateFormatted <= new Date(reverseDate(ReceiptDate)) && 
-      toDateFormatted >= new Date(reverseDate(ReceiptDate)) &&
-      PaymentType.includes(filteredPaymentMethod)
+    const receipts = allReceipts.filter(({ ReceiptDate, PaymentMethod }) =>
+      validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)  &&
+      PaymentMethod.includes(filteredPaymentMethod)
     )
 
     const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => {
@@ -213,7 +206,7 @@ const ReceiptsPage = () => {
     const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy)
 
     setFilteredReceipts(orderedReceipts)
-    setFilteredTotalAmount(filteredAmount)
+    setFilteredAmountPaid(filteredAmount)
     setShowFilteredAmountModal(true)
   }
 
@@ -287,7 +280,7 @@ const ReceiptsPage = () => {
       <FilteredReceiptsModal 
         showFilteredAmountModal={showFilteredAmountModal}
         setShowFilteredAmountModal={setShowFilteredAmountModal}
-        filteredTotalAmount={filteredTotalAmount}
+        filteredAmountPaid={filteredAmountPaid}
         filteredReceipts={filteredReceipts}
         fromDate={fromDate}
         toDate={toDate}

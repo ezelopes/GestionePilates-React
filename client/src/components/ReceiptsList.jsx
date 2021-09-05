@@ -31,11 +31,11 @@ const gridOptionsDefault = {
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, editable: true },
   { headerName: 'Tipo Ricevuta', field: 'ReceiptType', editable: true },
-  { headerName: 'Data Ricevuta', field: 'ReceiptDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? (new Date(params.value)).toLocaleDateString() : '' },
   { headerName: 'Somma Euro', field: 'AmountPaid', editable: true },
-  { headerName: 'Tipo Pagamento', field: 'PaymentType', editable: true }
+  { headerName: 'Tipo Pagamento', field: 'PaymentMethod', editable: true }
 ];
 
 const ReceiptsList = ({ receipts, studentInfo }) => {
@@ -83,6 +83,10 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
     setSelectedReceipt(selectedNode[0].data);
   }
 
+  const onCellChangedEntered = async (data) => {
+    await updateReceipt(data)
+  }
+
   return (
     <>
       <div
@@ -95,7 +99,7 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           rowData={receipts}
-          onCellValueChanged={({ data }) => updateReceipt(data)}
+          onCellValueChanged={({ data }) => onCellChangedEntered(data) } // Create function for this!
           onSelectionChanged={onReceiptSelectionChanged}
         ></AgGridReact>
       </div>

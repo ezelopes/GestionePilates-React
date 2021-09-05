@@ -11,8 +11,8 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
 
-  const totalAmount = receiptInfo.AmountPaid.replace('.', ',');
-  const euroAndCents = totalAmount.split(',');
+  const amountPaid = receiptInfo.AmountPaid.replace('.', ',');
+  const euroAndCents = amountPaid.split(',');
   const euro = euroAndCents[0];
   const cents = euroAndCents[1];
 
@@ -63,7 +63,7 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
           studentInfo.ParentSurname || BLANK_SPACE 
         }, C.F. ${
           studentInfo.ParentTaxCode || BLANK_SPACE 
-        }, il pagamento effetuato${(receiptInfo.PaymentType.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentType.toUpperCase()}` : '' )} equilavente alla somma di ${
+        }, il pagamento effetuato${(receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}` : '' )} equilavente alla somma di ${
           receiptInfo.AmountPaid || BLANK_SPACE 
         }€ (${eurosInLetters.toUpperCase() || BLANK_SPACE } EURO${centsInLetters.toUpperCase()}), per l'iscrizione di ${
           studentInfo.Name || BLANK_SPACE 

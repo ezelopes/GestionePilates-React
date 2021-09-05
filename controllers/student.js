@@ -45,10 +45,11 @@ const updateStudentEndpoint = async (req, res) => {
 
 const updateRegistrationDateEndpoint = async (req, res) => {
   try {
+    console.log(req.body)
     const StudentID = req.body.StudentID;
     const RegistrationDate = req.body.RegistrationDate;
 
-    const response = await updateRegistrationDate(RegistrationDate, StudentID);
+    const response = await updateRegistrationDate(StudentID, RegistrationDate);
     const responseObject = { message: response };
     res.status(200).send(responseObject);
   } catch (e) {

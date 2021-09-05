@@ -7,7 +7,7 @@ const reverseDate = (date) => {
   const month = dateSplit[1];
   const year = dateSplit[2];
 
-  if (day && month && year) return `${year}-${month}-${day}`;
+  if (day && month && year) return `${year}-${month - 1}-${day}`;
   else return '1900-01-01';
 };
 

@@ -5,7 +5,6 @@ import { createStudent } from '../helpers/apiCalls';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
 import formatDate from '../helpers/formatDateForInputDate';
-import reverseDate from '../helpers/reverseDateForInputDate';
 import commondata from '../commondata/commondata'
 
 
@@ -27,10 +26,10 @@ const StudentSubscriptionPage = () => {
     Discipline: disciplines[0].discipline,
     Course: courses[0].course,
     School: schools[0].school,
-    RegistrationDate: reverseDate(today),
-    CertificateExpirationDate: reverseDate(today),
-    DOB: reverseDate(today),
-    GreenPassExpirationDate: reverseDate(today),
+    RegistrationDate: today,
+    CertificateExpirationDate: today,
+    DOB: today,
+    GreenPassExpirationDate: today,
     ParentTaxCode: '',
     ParentName: '',
     ParentSurname: ''

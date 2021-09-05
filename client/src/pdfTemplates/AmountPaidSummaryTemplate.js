@@ -6,7 +6,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const AmountPaidSummaryTemplate = async (
     receiptList,
-    filteredTotalAmount,
+    filteredAmountPaid,
     filteredPaymentMethod,
     fromDate,
     toDate
@@ -82,7 +82,7 @@ const AmountPaidSummaryTemplate = async (
 
         },
         {
-          text: `${filteredTotalAmount}€`,
+          text: `${filteredAmountPaid}€`,
           bold: true
         },
       ],

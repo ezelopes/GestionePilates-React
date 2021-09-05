@@ -1,5 +1,3 @@
-import reverseDate from './reverseDateForInputDate';
-
 const createStudent = async (newStudent) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   if (!newStudent.TaxCode || newStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
@@ -28,6 +26,7 @@ const createStudent = async (newStudent) => {
 };
 
 const createReceipt = async (newReceipt) => {
+  console.log(newReceipt)
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   if (!newReceipt.ReceiptNumber || newReceipt.ReceiptNumber === '') return alert('Numero Ricevuta non puo essere vuoto');
 
@@ -124,6 +123,7 @@ const updateTeacher = async (updatedTeacherInfo) => {
 }
 
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
+  console.log(StudentID, RegistrationDate);
   const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
     headers: {
@@ -138,7 +138,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
     
     for (let i = 0; i < studentListCached.length; i++) {
       if(StudentID === studentListCached[i].StudentID) {
-        studentListCached[i].RegistrationDate = reverseDate(RegistrationDate) || '1900-01-01';
+        studentListCached[i].RegistrationDate = RegistrationDate || '1900-01-01';
         break;
       }
     }
@@ -167,7 +167,7 @@ const updateReceipt = async (updatedReceipt) => {
       CourseStartDate: updatedReceipt.CourseStartDate.split("-").reverse().join("-"),
       CourseEndDate: updatedReceipt.CourseEndDate.split("-").reverse().join("-"),
       AmountPaid: updatedReceipt.AmountPaid,
-      PaymentType: updatedReceipt.PaymentType,
+      PaymentMethod: updatedReceipt.PaymentMethod,
     })
   });
   const responseParsed = await response.json();

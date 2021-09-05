@@ -1,6 +1,8 @@
 const pool = require('./pool');
 const moment = require('moment');
 
+moment.locale('it');
+
 const mappingStudents = (rows) => {
   const students = rows.map(row => {
     return {
@@ -17,10 +19,10 @@ const mappingStudents = (rows) => {
       Discipline: row.Disciplina,
       Course: row.Corso,
       School: row.Scuola,
-      RegistrationDate: moment(row.DataIscrizione).format('DD-MM-YYYY'),
-      CertificateExpirationDate: moment(row.DataCertificato).format('DD-MM-YYYY'),
-      DOB: moment(row.DataNascita).format('DD-MM-YYYY'),
-      GreenPassExpirationDate: moment(row.DataGreenPass).format('DD-MM-YYYY'),
+      RegistrationDate: moment(row.DataIscrizione).format('YYYY-MM-DD'),
+      CertificateExpirationDate: moment(row.DataCertificato).format('YYYY-MM-DD'),
+      DOB: moment(row.DataNascita).format('YYYY-MM-DD'),
+      GreenPassExpirationDate: moment(row.DataGreenPass).format('YYYY-MM-DD'),
       ParentTaxCode: row.NomeGenitore,
       ParentName: row.CognomeGenitore,
       ParentSurname: row.CodiceFiscaleGenitore
@@ -70,10 +72,10 @@ const createStudent = async ({
   ParentSurname
 }) => {
   try {
-    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD');
-    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD');
-    const DOBFormatted = moment(DOB).format('YYYY-MM-DD');
-    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD');
+    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD') || null;
+    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD') || null;
+    const DOBFormatted = moment(DOB).format('YYYY-MM-DD') || null;
+    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD') || null;
 
     await pool.execute(
       'INSERT INTO Allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscaleGenitore, NomeGenitore, CognomeGenitore) \
@@ -111,13 +113,13 @@ const updateStudent = async ({
   GreenPassExpirationDate,
   ParentTaxCode,
   ParentName,
-  ParentSurname}) => {
+  ParentSurname
+}) => {
   try {
-
-    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD');
-    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD');
-    const DOBFormatted = moment(DOB).format('YYYY-MM-DD');
-    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD');
+    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD') || null;
+    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD') || null;
+    const DOBFormatted = moment(DOB).format('YYYY-MM-DD') || null;
+    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD') || null;
 
     const receiptsAmount = await countStudentReceiptsAmount(StudentID);
   
@@ -140,9 +142,9 @@ const updateStudent = async ({
   }
 }
 
-const updateRegistrationDate = async (RegistrationDate, StudentID) => {
+const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   try {    
-    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD');
+    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD') || null;
 
     await pool.execute(`UPDATE Allieva SET DataIscrizione = ? WHERE AllievaID = ?;`, [RegistrationDateFormatted, StudentID]);
     return 'Data Iscrizione Aggiornata Correttamente!';
