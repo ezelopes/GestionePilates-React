@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { createStudent } from '../helpers/apiCalls';
 
-import StudentForm from '../components/StudentForm';
+import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
 import formatDate from '../helpers/formatDateForInputDate';
 import reverseDate from '../helpers/reverseDateForInputDate';
@@ -81,9 +81,10 @@ const StudentSubscriptionPage = () => {
   return (
     <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
       <div className="form-wrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
-        <div className="create-student-teacher-form">
-          <StudentForm 
-            studentInfo={ studentInfoDefault }
+        <div className="user-form">
+          <CreateUpdateUserForm
+            personInfo={studentInfoDefault}
+            personType={'Student'}
             newIsAdult={newIsAdult}
             setNewIsAdult={setNewIsAdult}
             setNewTaxCode={setNewTaxCode}

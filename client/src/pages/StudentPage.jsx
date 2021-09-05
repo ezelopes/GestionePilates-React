@@ -5,7 +5,7 @@ import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import NotFoundPage from './NotFoundPage';
-import StudentForm from '../components/StudentForm';
+import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import ReceiptsList from '../components/ReceiptsList';
 import CreateReceiptForm from '../components/CreateReceiptForm';
 import reverseDate from '../helpers/reverseDateForInputDate';
@@ -177,9 +177,10 @@ const StudentPage = ({ match }) => {
           <Modal.Title> Aggiorna Allieva </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <div className="update-info-form">
-              <StudentForm 
-                studentInfo={studentInfo}
+            <div className="user-form">
+              <CreateUpdateUserForm 
+                personInfo={studentInfo}
+                personType={'Student'}
                 newIsAdult={newIsAdult}
                 setNewIsAdult={setNewIsAdult}
                 setNewTaxCode={setNewTaxCode}

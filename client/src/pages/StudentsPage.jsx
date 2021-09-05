@@ -22,7 +22,7 @@ const columnsDefinition = [
   { headerName: 'Cellulare', field: 'MobilePhone' },
   { headerName: 'Email', field: 'Email' },
   { headerName: 'Data Iscrizione', field: 'RegistrationDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
-  { headerName: 'Data Certificato', field: 'CertificateExpirationDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
+  { headerName: 'Data Scadenza Certificato', field: 'CertificateExpirationDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Data Nascita', field: 'DOB', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Data Green Pass', field: 'GreenPassExpirationDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? params.value : '' },
   { headerName: 'Luogo Nascita', field: 'BirthPlace' },

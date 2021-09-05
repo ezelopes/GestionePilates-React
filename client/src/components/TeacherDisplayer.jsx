@@ -3,7 +3,7 @@ import { Button, Card, Modal } from 'react-bootstrap'
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import TeacherForm from './TeacherForm'
+import CreateUpdateUserForm from './CreateUpdateUserForm'
 
 import { updateTeacher, deleteTeacher } from '../helpers/apiCalls';
 
@@ -13,7 +13,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const TeacherDisplayer = ({ currentTeacher }) => {
     const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
-    const [teacherInfo] = useState(currentTeacher);
+    const [teacherInfo, setTeacherInfo] = useState(currentTeacher);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
 
     const [newTaxCode, setNewTaxCode] = useState(teacherInfo.TaxCode);
@@ -33,21 +33,21 @@ const TeacherDisplayer = ({ currentTeacher }) => {
     const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-"));
 
     const setFormData = () => {
-      setNewTaxCode(teacherInfo.NewTaxCode)
-      setNewName(teacherInfo.NewName)
-      setNewSurname(teacherInfo.NewSurname)
-      setNewCity(teacherInfo.NewCity)
-      setNewAddress(teacherInfo.NewAddress)
-      setNewMobilePhone(teacherInfo.NewMobilePhone)
-      setNewEmail(teacherInfo.NewEmail)
-      setNewBirthPlace(teacherInfo.NewBirthPlace)
-      setNewDiscipline(teacherInfo.NewDiscipline)
-      setNewCourse(teacherInfo.NewCourse)
-      setNewSchool(teacherInfo.NewSchool)
-      setNewRegistrationDate(teacherInfo.NewRegistrationDate.split("-").reverse().join("-"))
-      setNewCertificateExpirationDate(teacherInfo.NewCertificateExpirationDate.split("-").reverse().join("-"))
-      setNewDOB(teacherInfo.NewDOB.split("-").reverse().join("-"))
-      setNewGreenPassExpirationDate(teacherInfo.NewGreenPassExpirationDate.split("-").reverse().join("-"))
+      setNewTaxCode(teacherInfo.TaxCode)
+      setNewName(teacherInfo.Name)
+      setNewSurname(teacherInfo.Surname)
+      setNewCity(teacherInfo.City)
+      setNewAddress(teacherInfo.Address)
+      setNewMobilePhone(teacherInfo.MobilePhone)
+      setNewEmail(teacherInfo.Email)
+      setNewBirthPlace(teacherInfo.BirthPlace)
+      setNewDiscipline(teacherInfo.Discipline)
+      setNewCourse(teacherInfo.Course)
+      setNewSchool(teacherInfo.School)
+      setNewRegistrationDate(teacherInfo.RegistrationDate.split("-").reverse().join("-"))
+      setNewCertificateExpirationDate(teacherInfo.CertificateExpirationDate.split("-").reverse().join("-"))
+      setNewDOB(teacherInfo.DOB.split("-").reverse().join("-"))
+      setNewGreenPassExpirationDate(teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-"))
     }
 
     const handleUpdateTeacherModal = () => {
@@ -96,7 +96,7 @@ const TeacherDisplayer = ({ currentTeacher }) => {
               <b>Corso:</b> {teacherInfo.Course}
             </Card.Text>
             <Card.Text>
-              <b>Data Certificato:</b> {teacherInfo.CertificateExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.CertificateExpirationDate}
+              <b>Data Scadenza Certificato:</b> {teacherInfo.CertificateExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.CertificateExpirationDate}
             </Card.Text>
             <Card.Text>
               <b>Data Scadenza Green Pass:</b> {teacherInfo.GreenPassExpirationDate === 'Invalid date' ? '01-01-1900' : teacherInfo.GreenPassExpirationDate}
@@ -116,9 +116,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
           <Modal.Title> Aggiorna Insegnante </Modal.Title>
           </Modal.Header>
           <Modal.Body className="update-student-teacher-modal-body">
-              <div className="update-info-form">
-              <TeacherForm 
-                  teacherInfo={teacherInfo}
+              <div className="user-form">
+              <CreateUpdateUserForm 
+                  personInfo={teacherInfo}
+                  personType={'Teacher'}
                   setNewTaxCode={setNewTaxCode}
                   setNewName={setNewName}
                   setNewSurname={setNewSurname}

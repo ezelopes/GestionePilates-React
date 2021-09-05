@@ -84,7 +84,7 @@ input[type='date'] {
   margin-top: 0.7vw;
 }
 
-.create-student-teacher-form {
+.user-form {
   display: grid;
   grid-template-columns: 20% 25% 20% 25%;
   align-items: center;
@@ -93,11 +93,11 @@ input[type='date'] {
   column-gap: 1vw;
 }
 
-.create-student-teacher-form > label {
+.user-form > label {
   margin-top: 0.7vw;
 }
 
-.create-student-teacher-form > input, select, option, form-control {
+.user-form > input, select, option, form-control {
   min-width: 0;
 }
 
@@ -106,7 +106,7 @@ input[type='date'] {
   max-width: 60vw;
 }
 
-.update-info-form {
+/* .user-form {
   display: grid;
   grid-template-columns: 20% 25% 20% 25%;
   align-items: center;
@@ -115,14 +115,14 @@ input[type='date'] {
   column-gap: 1vw;
 }
 
-.update-info-form > label {
+.user-form > label {
   margin-top: 0.3vw;
   margin-left: 0.7vw;
 }
 
-.update-info-form > input, select, option, form-control {
+.user-form > input, select, option, form-control {
   margin-top: 0.3vw;
-}
+} */
 
 .page-body {
   margin: 2em 5em;
@@ -165,8 +165,8 @@ input[type='date'] {
 }
 
 .update-teacher-modal {
-  width: 70vw;
-  max-width: 70vw;
+  width: 60vw;
+  max-width: 60vw;
 }
 
 .ag-theme-balham {

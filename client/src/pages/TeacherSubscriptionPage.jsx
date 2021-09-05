@@ -5,7 +5,7 @@ import formatDate from '../helpers/formatDateForInputDate';
 import commondata from '../commondata/commondata'
 import reverseDate from '../helpers/reverseDateForInputDate';
 
-import TeacherForm from '../components/TeacherForm';
+import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
 import { createTeacher } from '../helpers/apiCalls';
 
@@ -74,9 +74,10 @@ const TeacherSubscriptionPage = () => {
     <>
       <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
         <div className="form-wrapper" style={{ width: '60vw', marginLeft: '20vw' }}>
-          <div className="create-student-teacher-form">
-            <TeacherForm
-              teacherInfo={teacherInfoDefault}
+          <div className="user-form">
+            <CreateUpdateUserForm
+              personInfo={teacherInfoDefault}
+              personType={'Teacher'}
               setNewTaxCode={setNewTaxCode}
               setNewName={setNewName}
               setNewSurname={setNewSurname}
