@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { getStudentReceipts, getAllReceipts, createReceipt, updateReceipt, deleteReceipt } = require('../database/ricevutaQuery');
+const { getStudentReceipts, getAllReceipts, createReceipt, updateReceipt, deleteReceipt } = require('../database/receiptQuery');
 
 const receiptRouter = new Router();
 

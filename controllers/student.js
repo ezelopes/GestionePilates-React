@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { getStudents, getSingleStudent, createStudent, updateStudent, updateRegistrationDate, deleteStudent } = require('../database/allievaQuery');
+const { getStudents, getSingleStudent, createStudent, updateStudent, updateRegistrationDate, deleteStudent } = require('../database/studentQuery');
 
 const studentRouter = new Router();
 

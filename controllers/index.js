@@ -1,7 +1,7 @@
 const { Router } = require('express');
-const student = require('./allieva');
-const receipt = require('./ricevuta');
-const teacher = require('./insegnante');
+const student = require('./student');
+const receipt = require('./receipt');
+const teacher = require('./teacher');
 
 const router = new Router();
 
