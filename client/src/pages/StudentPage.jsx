@@ -87,7 +87,6 @@ const StudentPage = ({ match }) => {
   useEffect(() => {
     // TODO: Reduce this to one endpoint call!
     const fetchData = async () => {
-      console.log(match.params)
       const getSingleStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
       const singleStudent = await getSingleStudentResult.json();
       setStudentInfo(singleStudent);
@@ -145,7 +144,7 @@ const StudentPage = ({ match }) => {
             <input type="date" defaultValue={ studentInfo?.RegistrationDate } onChange={({ target }) => setNewRegistrationDate(target.value)} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={async () => { console.log(studentInfo); await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
+          <Button variant="success" onClick={async () => { await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
             AGGIORNA
           </Button>
           <Button variant="secondary" onClick={() => { setShowRegistrationDateModal(false) } }>
@@ -227,7 +226,7 @@ const StudentPage = ({ match }) => {
               ParentName: newParentName,
               ParentSurname: newParentSurname 
             };
-            await updateStudent(updatedStudentInfo); // refreshing the page
+            await updateStudent(updatedStudentInfo);
           } }>
             AGGIORNA
           </Button>

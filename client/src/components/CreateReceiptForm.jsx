@@ -59,10 +59,7 @@ const CreateReceiptForm = ({ TaxCode, StudentID }) => {
             <Form.Label> Somma Euro </Form.Label>
             <CreatableSelect
               defaultValue={defaultAmounts[0]}
-              onChange={(target) => {
-                setNewAmountPaid(target.value)
-                console.log(target.value)
-              }}
+              onChange={(target) => setNewAmountPaid(target.value) }
               options={defaultAmounts}
             />
           </div>

@@ -45,7 +45,6 @@ const updateStudentEndpoint = async (req, res) => {
 
 const updateRegistrationDateEndpoint = async (req, res) => {
   try {
-    console.log(req.body)
     const StudentID = req.body.StudentID;
     const RegistrationDate = req.body.RegistrationDate;
 

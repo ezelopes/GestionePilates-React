@@ -173,7 +173,6 @@ const RegistrationFormTemplate = async (studentInfo) => {
         margin: [0, 0, 0, 25]
       },
       {
-        // bold
         text: 'PER I MINORI',
         alignment: 'left',
         lineHeight: 1.5,

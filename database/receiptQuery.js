@@ -87,18 +87,6 @@ const createReceipt = async ({
   RegistrationDate
 }) => {
   try {
-    console.log({
-      ReceiptNumber,
-      PaymentMethod,
-      ReceiptType,
-      ReceiptDate,
-      CourseStartDate,
-      CourseEndDate,
-      AmountPaid,
-      TaxCode,
-      StudentID,
-      RegistrationDate
-    })
     const ReceiptDateFormatted = moment(ReceiptDate).format('YYYY-MM-DD HH:mm:ss') || null;
 
     if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
@@ -112,10 +100,6 @@ const createReceipt = async ({
   
     const CourseStartDateFormatted = moment(CourseStartDate).format('YYYY-MM-DD HH:mm:ss') || null;
     const CourseEndDateFormatted = moment(CourseEndDate).format('YYYY-MM-DD HH:mm:ss') || null;
-  
-    console.log(ReceiptDateFormatted)
-    console.log(CourseStartDateFormatted)
-    console.log(CourseEndDateFormatted)
 
     await pool.execute(
       'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
@@ -148,16 +132,6 @@ const updateReceipt = async({
   AmountPaid,
 }) => {
   try {
-    console.log({
-      ReceiptID,
-      ReceiptNumber,
-      PaymentMethod,
-      ReceiptType,
-      ReceiptDate,
-      CourseStartDate,
-      CourseEndDate,
-      AmountPaid,
-    })
     const ReceiptDateFormatted = moment(ReceiptDate, "DD-MM-YYYY").format('YYYY-MM-DD HH:mm:ss') || null;
 
     if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {

@@ -26,7 +26,6 @@ const createStudent = async (newStudent) => {
 };
 
 const createReceipt = async (newReceipt) => {
-  console.log(newReceipt)
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   if (!newReceipt.ReceiptNumber || newReceipt.ReceiptNumber === '') return alert('Numero Ricevuta non puo essere vuoto');
 
@@ -66,7 +65,6 @@ const createTeacher = async (newTeacher) => {
 
   if (response.status === 200) {
     const responseParsed = await response.json();
-    console.log(responseParsed)
     
     alert('Insegnante Creata Correttamente');
   }
@@ -123,7 +121,6 @@ const updateTeacher = async (updatedTeacherInfo) => {
 }
 
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
-  console.log(StudentID, RegistrationDate);
   const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
     headers: {

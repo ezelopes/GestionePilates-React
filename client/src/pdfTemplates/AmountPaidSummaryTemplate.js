@@ -106,9 +106,7 @@ const AmountPaidSummaryTemplate = async (
         body: tableBody
       }
     }
-  ]; 
-  
-  // Map through array and populate content
+  ];
 
   const docDefinition = {
     info: {

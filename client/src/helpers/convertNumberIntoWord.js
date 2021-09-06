@@ -1,8 +1,3 @@
-// var sgart = {};
-
-/* http://www.sgart.it
- * converte i numeri da cifre a lettere
- */
 const convertNumberIntoWord = (n, abbr, separator) => {
   if (isNaN(n) === true) {
     return '00';
