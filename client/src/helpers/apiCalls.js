@@ -171,6 +171,7 @@ const updateReceipt = async (updatedReceipt) => {
   });
   const responseParsed = await response.json();
   alert(responseParsed.message);
+  window.location.reload();
 }
 
 const deleteStudent = async (StudentID) => {

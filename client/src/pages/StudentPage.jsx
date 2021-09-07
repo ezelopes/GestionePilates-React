@@ -133,7 +133,11 @@ const StudentPage = ({ match }) => {
         </div>
 
         <ReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
-        <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} />
+        <div style={{ marginTop: '2em' }}>
+          <div className="form-wrapper" style={{ width: '80vw', marginLeft: '0vw' }}>
+              <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />
+          </div>
+        </div>
       </div>
 
       <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>

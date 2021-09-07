@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import formatDate from '../helpers/formatDateForInputDate';
 
-import { createReceipt } from '../helpers/apiCalls';
+import { createReceipt, updateReceipt } from '../helpers/apiCalls';
 
 const receiptType = [
   { id: 0, tipo: 'Quota' },
@@ -20,21 +20,20 @@ const defaultAmounts = [
   { value: '150', label: '150' }
 ];
 
-const CreateReceiptForm = ({ TaxCode, StudentID }) => {
+const CreateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, isForCreating = false, isForUpdating = false }) => {
   const today = formatDate(new Date(), true);
 
-  const [newReceiptNumber, setNewReceiptNumber] = useState('');
-  const [newReceiptType, setNewReceiptType] = useState(receiptType[0].tipo);
-  const [newPaymentMethod, setNewPaymentMethod] = useState(paymentMethod[0].tipo);
-  const [newAmountPaid, setNewAmountPaid] = useState(defaultAmounts[0].value);
-  const [newReceiptDate, setNewReceiptDate] = useState(today);
-  const [newCourseStartDate, setNewCourseStartDate] = useState(today);
-  const [newCourseEndDate, setNewCourseEndDate] = useState(today);
+  const [newReceiptNumber, setNewReceiptNumber] = useState(receiptInfo?.ReceiptNumber || '');
+  const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptType[0].tipo);
+  const [newPaymentMethod, setNewPaymentMethod] = useState(receiptInfo?.PaymentMethod || paymentMethod[0].tipo);
+  const [newAmountPaid, setNewAmountPaid] = useState(receiptInfo?.AmountPaid || defaultAmounts[0].value);
+  const [newReceiptDate, setNewReceiptDate] = useState(receiptInfo?.ReceiptDate || today);
+  const [newCourseStartDate, setNewCourseStartDate] = useState(receiptInfo?.CourseStartDate || today);
+  const [newCourseEndDate, setNewCourseEndDate] = useState(receiptInfo?.CourseEndDate || today);
   const [updateRegistrationDate, setUpdateRegistrationDate] = useState(false);
 
   return (
-    <div style={{ marginTop: '2em' }}>
-      <div className="form-wrapper" style={{ width: '80vw', marginLeft: '0vw' }}>
+      <>
         <div className="create-receipt-form">
           <div className="flex-element">
             <Form.Label> Numero Ricevuta </Form.Label>
@@ -75,17 +74,20 @@ const CreateReceiptForm = ({ TaxCode, StudentID }) => {
           </div>
 
           <div className="flex-element">
-            <Form.Label> Data Scadenza Corso </Form.Label>
+            <Form.Label> Data Scadenza Corso </Form.Label> <br />
             <input type="date" onChange={({ target }) => setNewCourseEndDate(target.value)} defaultValue={newCourseEndDate} />
           </div>
 
-          <div className="flex-element">
-            <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' onChange={ ({ target }) =>  setUpdateRegistrationDate(target.checked) } />
-          </div>
+          {isForCreating && (
+            <div className="flex-element">
+              <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' onChange={ ({ target }) =>  setUpdateRegistrationDate(target.checked) } />
+            </div>
+          )}
         </div>
 
         <Button variant='success' style={{ marginTop: '2em' }} onClick={async () => {
           const newReceipt = {
+            ReceiptID: receiptInfo?.ReceiptID || null,
             ReceiptNumber: newReceiptNumber || null,
             ReceiptDate: newReceiptDate || null,
             CourseStartDate: newCourseStartDate || null,
@@ -97,12 +99,18 @@ const CreateReceiptForm = ({ TaxCode, StudentID }) => {
             StudentID: StudentID || null,
             RegistrationDate: updateRegistrationDate || false
           }
-          await createReceipt(newReceipt)
+
+          if (isForCreating) {
+            return createReceipt(newReceipt)
+          }
+
+          if (isForUpdating) {
+            return updateReceipt(newReceipt)
+          }
         }}>
-          <span role='img' aria-label='create'>🆕</span> CREA RICEVUTA
+          <span role='img' aria-label='create'>🆕</span> {isForCreating ? 'CREA RICEVUTA' : 'AGGIORNA RICEVUTA' }
         </Button>
-      </div>
-    </div>
+      </>
   );
 };
 

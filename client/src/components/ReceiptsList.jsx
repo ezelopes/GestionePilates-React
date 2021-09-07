@@ -6,6 +6,7 @@ import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
+import CreateReceiptForm from './CreateReceiptForm';
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -44,19 +45,20 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
 
   const [selectedReceipt, setSelectedReceipt] = useState();
   const [showDeleteReceiptModal, setShowDeleteReceiptModal] = useState(false);
+  const [showUpdateReceiptModal, setShowUpdateReceiptModal] = useState(false);
 
 
   useEffect(() => {
     try{
       gridOptions.api.sizeColumnsToFit();
-      window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+      // window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
     } catch (err) {
       console.log(err);
     }
 
   }, [])
 
-  const printReceipts = async () => {    
+  const printReceipt = async () => {    
     try {
       if (!selectedReceipt) return alert('Seleziona Ricevuta per Stamparla');
       let documentDefinition;
@@ -87,6 +89,11 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
     await updateReceipt(data)
   }
 
+  const handleUpdateReceiptModal = () => {
+    // Reset Form
+    setShowUpdateReceiptModal(false)
+  }
+
   return (
     <>
       <div
@@ -105,8 +112,15 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
       </div>
 
       <div className="buttons-container">
-        <Button onClick={printReceipts}>
+        <Button onClick={ async () => await printReceipt() }>
           <span role='img' aria-label='receipt'>🧾</span> STAMPA RICEVUTA
+        </Button>
+        
+        <Button variant='warning' onClick={ () => { 
+          if (!selectedReceipt) return alert('Seleziona Ricevuta per Aggiornarla'); 
+          setShowUpdateReceiptModal(true)} 
+        }>
+          <span role='img' aria-label='update'>🔄</span> AGGIORNA RICEVUTA
         </Button>
 
         <Button variant='danger' onClick={ () => { 
@@ -117,6 +131,20 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
         </Button>
       </div>
 
+      <Modal show={showUpdateReceiptModal} onHide={() => handleUpdateReceiptModal()} dialogClassName="update-student-modal" centered>
+        <Modal.Header closeButton>
+          <Modal.Title> Aggiorna Ricevuta </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="update-student-modal-body">
+            <CreateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} isForUpdating />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => { handleUpdateReceiptModal() } }>
+            CHIUDI
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={showDeleteReceiptModal} onHide={ () => setShowDeleteReceiptModal(false) } centered>
         <Modal.Header closeButton>
           <Modal.Title> Elimina Ricevuta </Modal.Title>
@@ -125,8 +153,8 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
             Sei sicura di voler eliminare la ricevuta selezionata?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => { 
-            deleteReceipt(selectedReceipt.ReceiptID);
+          <Button variant="danger" onClick={async () => { 
+            await deleteReceipt(selectedReceipt.ReceiptID);
             setShowDeleteReceiptModal(false); } 
           }>
             ELIMINA
