@@ -5,8 +5,8 @@ const isValidDate = (d) => {
 }
   
 const getFormattedDate = (date) => {
-    const convertedDate = moment(date).format('YYYY-MM-DD')
-    const timestamp = moment(convertedDate, 'YYYY-MM-DD').unix()
+    const convertedDate = moment(date, moment.ISO_8601).format('YYYY-MM-DD')
+    const timestamp = moment(convertedDate, moment.ISO_8601).unix()
 
     if(!isNaN(timestamp)) 
         return convertedDate
