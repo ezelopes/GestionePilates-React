@@ -106,7 +106,7 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           rowData={receipts}
-          onCellValueChanged={({ data }) => onCellChangedEntered(data) } // Make it a modal instead to force values
+          onCellValueChanged={({ data }) => onCellChangedEntered(data) }
           onSelectionChanged={onReceiptSelectionChanged}
         ></AgGridReact>
       </div>
