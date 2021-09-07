@@ -51,7 +51,7 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
   useEffect(() => {
     try{
       gridOptions.api.sizeColumnsToFit();
-      // window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+      window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
     } catch (err) {
       console.log(err);
     }

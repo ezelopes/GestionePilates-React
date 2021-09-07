@@ -74,9 +74,13 @@ const ReceiptsPage = () => {
       setCurrentReceipts(orderedReceipts);
     };
     fetchData();
-    gridOptions.api.sizeColumnsToFit();
 
-    window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+    try {
+      gridOptions.api.sizeColumnsToFit();
+      window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+    } catch (err) {
+      console.log(err)
+    }
 
   }, []);
 
