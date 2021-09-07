@@ -1,16 +1,15 @@
 const pool = require('./pool');
-const moment = require('moment');
 
-moment.locale('it');
+import { getFormattedDate } from './helpers'
 
 const mappingReceipt = (rows) => {
   const receipts = rows.map(row => {
     return {
       ReceiptID: row.RicevutaID,
       ReceiptType: row.TipoRicevuta,
-      ReceiptDate: moment(row.DataRicevuta).format('YYYY-MM-DD'),
-      CourseStartDate: moment(row.DataInizioCorso).format('YYYY-MM-DD'),
-      CourseEndDate: moment(row.DataScadenzaCorso).format('YYYY-MM-DD'),
+      ReceiptDate: getFormattedDate(row.DataRicevuta),
+      CourseStartDate: getFormattedDate(row.DataInizioCorso),
+      CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
       ReceiptNumber: row.NumeroRicevuta,
       AmountPaid: row.SommaEuro,
       FK_StudentID: row.FK_AllievaID,
@@ -32,9 +31,9 @@ const mappingAllReceipts = (rows) => {
       Address: row.Indirizzo,
       MobilePhone: row.Cellulare,
       Email: row.Email,
-      RegistrationDate: moment(row.DataIscrizione).format('YYYY-MM-DD'),
-      CertificateExpirationDate: moment(row.DataCertificato).format('YYYY-MM-DD'),
-      DOB: moment(row.DataNascita).format('YYYY-MM-DD'),
+      RegistrationDate: getFormattedDate(row.DataIscrizione),
+      CertificateExpirationDate: getFormattedDate(row.DataCertificato),
+      DOB: getFormattedDate(row.DataNascita),
       BirthPlace: row.LuogoNascita,
       Discipline: row.Disciplina,
       Course: row.Corso,
@@ -47,9 +46,9 @@ const mappingAllReceipts = (rows) => {
       AmountPaid: row.SommaEuro,
       PaymentMethod: row.TipoPagamento,
       ReceiptType: row.TipoRicevuta,
-      ReceiptDate: moment(row.DataRicevuta).format('YYYY-MM-DD'),
-      CourseStartDate: moment(row.DataInizioCorso).format('YYYY-MM-DD'),
-      CourseEndDate: moment(row.DataScadenzaCorso).format('YYYY-MM-DD'),
+      ReceiptDate: getFormattedDate(row.DataRicevuta),
+      CourseStartDate: getFormattedDate(row.DataInizioCorso),
+      CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
     };
   });
   return receipts;
@@ -87,7 +86,7 @@ const createReceipt = async ({
   RegistrationDate
 }) => {
   try {
-    const ReceiptDateFormatted = moment(ReceiptDate).format('YYYY-MM-DD HH:mm:ss') || null;
+    const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
 
     if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
@@ -98,8 +97,8 @@ const createReceipt = async ({
       return 'Ricevuta Inserita Correttamente!';
     }
   
-    const CourseStartDateFormatted = moment(CourseStartDate).format('YYYY-MM-DD HH:mm:ss') || null;
-    const CourseEndDateFormatted = moment(CourseEndDate).format('YYYY-MM-DD HH:mm:ss') || null;
+    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
+    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
 
     await pool.execute(
       'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
@@ -132,7 +131,7 @@ const updateReceipt = async({
   AmountPaid,
 }) => {
   try {
-    const ReceiptDateFormatted = moment(ReceiptDate, "DD-MM-YYYY").format('YYYY-MM-DD HH:mm:ss') || null;
+    const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
 
     if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
@@ -142,8 +141,8 @@ const updateReceipt = async({
       return 'Ricevuta Aggiornata Correttamente!';
     }
   
-    const CourseStartDateFormatted = moment(CourseStartDate, "DD-MM-YYYY").format('YYYY-MM-DD HH:mm:ss') || null;
-    const CourseEndDateFormatted = moment(CourseEndDate, "DD-MM-YYYY").format('YYYY-MM-DD HH:mm:ss') || null;
+    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
+    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
       
     await pool.execute(
       `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;`,

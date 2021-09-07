@@ -1,4 +1,5 @@
 const createStudent = async (newStudent) => {
+  console.log(newStudent);
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   if (!newStudent.TaxCode || newStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
 
@@ -72,6 +73,7 @@ const createTeacher = async (newTeacher) => {
 };
 
 const updateStudent = async (updatedStudent) => {
+  console.log(updatedStudent);
   if (!updatedStudent.TaxCode || updatedStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
 
   const response = await fetch('/api/student/updateStudent', {
@@ -135,7 +137,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
     
     for (let i = 0; i < studentListCached.length; i++) {
       if(StudentID === studentListCached[i].StudentID) {
-        studentListCached[i].RegistrationDate = RegistrationDate || '1900-01-01';
+        studentListCached[i].RegistrationDate = RegistrationDate || null;
         break;
       }
     }

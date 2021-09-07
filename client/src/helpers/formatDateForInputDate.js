@@ -1,16 +1,17 @@
+const isValidDate = (d) => {
+  return d instanceof Date;
+}
+
 const formatDate = (date, reversed) => {
+  if (!isValidDate(date)) return null
+
   const day = ('0' + date.getDate()).slice(-2);
   const month = ('0' + (date.getMonth() + 1)).slice(-2);
   const year = date.getFullYear();
 
-  let dateFormatted = '';
-  if (reversed) {
-    dateFormatted = `${year}-${month}-${day}`;
-  } else {
-    dateFormatted = `${day}-${month}-${year}`;
-  }
+  if (reversed) return `${year}-${month}-${day}`;
 
-  return dateFormatted;
+  return `${day}-${month}-${year}`
 };
 
 module.exports = formatDate;

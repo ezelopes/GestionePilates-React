@@ -24,10 +24,10 @@ const TeacherSubscriptionPage = () => {
     Discipline: disciplines[0].discipline,
     Course: courses[0].course,
     School: schools[0].school,
-    RegistrationDate: today,
-    CertificateExpirationDate: today,
-    DOB: today,
-    GreenPassExpirationDate: today,
+    RegistrationDate: null,
+    CertificateExpirationDate: null,
+    DOB: null,
+    GreenPassExpirationDate: null,
   }
 
   const [newTaxCode, setNewTaxCode] = useState('');
@@ -41,10 +41,10 @@ const TeacherSubscriptionPage = () => {
   const [newDiscipline, setNewDiscipline] = useState(disciplines[0].discipline);
   const [newCourse, setNewCourse] = useState(courses[0].course);
   const [newSchool, setNewSchool] = useState(schools[0].school);
-  const [newRegistrationDate, setNewRegistrationDate] = useState(today);
-  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(today);
-  const [newDOB, setNewDOB] = useState(today);
-  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(today);
+  const [newRegistrationDate, setNewRegistrationDate] = useState(null);
+  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(null);
+  const [newDOB, setNewDOB] = useState(null);
+  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(null);
 
   const resetForm = () => {
     setNewTaxCode('');
@@ -58,10 +58,10 @@ const TeacherSubscriptionPage = () => {
     setNewDiscipline(disciplines[0].discipline);
     setNewCourse(courses[0].course);
     setNewSchool(schools[0].school);
-    setNewRegistrationDate(today);
-    setNewCertificateExpirationDate(today);
-    setNewDOB(today);
-    setNewGreenPassExpirationDate(today);
+    setNewRegistrationDate(null);
+    setNewCertificateExpirationDate(null);
+    setNewDOB(null);
+    setNewGreenPassExpirationDate(null);
 
     // Reset UI Values
   }

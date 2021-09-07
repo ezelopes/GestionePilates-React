@@ -13,6 +13,7 @@ const AmountPaidSummaryTemplate = async (
   ) => {
 
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const EMPTY_DATE = '____-____-________'
 
   const tableBody = [
     [
@@ -60,14 +61,14 @@ const AmountPaidSummaryTemplate = async (
           text: 'Periodo dal '
         },
         {
-          text: `${fromDate}`,
+          text: `${ fromDate || EMPTY_DATE }` ,
           bold: true
         },
         {
           text: ' al '
         },
         {
-          text: `${toDate}`,
+          text: `${ toDate || EMPTY_DATE }`,
           bold: true
         },
       ],

@@ -1,7 +1,6 @@
 const pool = require('./pool');
-const moment = require('moment');
 
-moment.locale('it');
+import { getFormattedDate } from './helpers'
 
 const mappingStudents = (rows) => {
   const students = rows.map(row => {
@@ -19,10 +18,10 @@ const mappingStudents = (rows) => {
       Discipline: row.Disciplina,
       Course: row.Corso,
       School: row.Scuola,
-      RegistrationDate: moment(row.DataIscrizione).format('YYYY-MM-DD'),
-      CertificateExpirationDate: moment(row.DataCertificato).format('YYYY-MM-DD'),
-      DOB: moment(row.DataNascita).format('YYYY-MM-DD'),
-      GreenPassExpirationDate: moment(row.DataGreenPass).format('YYYY-MM-DD'),
+      RegistrationDate: getFormattedDate(row.DataIscrizione),
+      CertificateExpirationDate: getFormattedDate(row.DataCertificato),
+      DOB: getFormattedDate(row.DataNascita),
+      GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
       ParentTaxCode: row.NomeGenitore,
       ParentName: row.CognomeGenitore,
       ParentSurname: row.CodiceFiscaleGenitore
@@ -72,10 +71,10 @@ const createStudent = async ({
   ParentSurname
 }) => {
   try {
-    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD') || null;
-    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD') || null;
-    const DOBFormatted = moment(DOB).format('YYYY-MM-DD') || null;
-    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD') || null;
+    const RegistrationDateFormatted = getFormattedDate(RegistrationDate)
+    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate)
+    const DOBFormatted = getFormattedDate(DOB)
+    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate)
 
     await pool.execute(
       'INSERT INTO Allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscaleGenitore, NomeGenitore, CognomeGenitore) \
@@ -116,17 +115,17 @@ const updateStudent = async ({
   ParentSurname
 }) => {
   try {
-    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD') || null;
-    const CertificateExpirationDateFormatted = moment(CertificateExpirationDate).format('YYYY-MM-DD') || null;
-    const DOBFormatted = moment(DOB).format('YYYY-MM-DD') || null;
-    const GreenPassExpirationDateFormatted = moment(GreenPassExpirationDate).format('YYYY-MM-DD') || null;
+    const RegistrationDateFormatted = getFormattedDate(RegistrationDate)
+    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate)
+    const DOBFormatted = getFormattedDate(DOB)
+    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate)
 
     const receiptsAmount = await countStudentReceiptsAmount(StudentID);
   
     if (receiptsAmount > 0) {
       await pool.execute(
         `UPDATE Allieva, Ricevuta SET Allieva.CodiceFiscale=?, Allieva.Maggiorenne=?, Allieva.Nome=?, Allieva.Cognome=?, Allieva.Citta=?, Allieva.Indirizzo=?, Allieva.Cellulare=?, Allieva.Email=?, Allieva.DataIscrizione=?, Allieva.DataCertificato=?, Allieva.DataNascita=?, Allieva.DataGreenPass=?, Allieva.LuogoNascita=?, Allieva.Disciplina=?, Allieva.CodiceFiscaleGenitore=?, Allieva.NomeGenitore=?, Allieva.CognomeGenitore=?, Allieva.Corso=?, Allieva.Scuola=?, Ricevuta.FK_CodiceFiscale=? WHERE Allieva.AllievaID=? AND Ricevuta.FK_AllievaID=?;`,
-        [TaxCode, IsAdult, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, ParentTaxCode, ParentName, ParentSurname, Course, School, TaxCode, StudentID, StudentID]
+        [TaxCode, IsAdult, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted , DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, ParentTaxCode, ParentName, ParentSurname, Course, School, TaxCode, StudentID, StudentID]
       );
     } else {
       await pool.execute(
@@ -144,7 +143,7 @@ const updateStudent = async ({
 
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   try {    
-    const RegistrationDateFormatted = moment(RegistrationDate).format('YYYY-MM-DD') || null;
+    const RegistrationDateFormatted = getFormattedDate(RegistrationDate)
 
     await pool.execute(`UPDATE Allieva SET DataIscrizione = ? WHERE AllievaID = ?;`, [RegistrationDateFormatted, StudentID]);
     return 'Data Iscrizione Aggiornata Correttamente!';

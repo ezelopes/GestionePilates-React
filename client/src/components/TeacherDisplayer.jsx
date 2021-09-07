@@ -27,10 +27,18 @@ const TeacherDisplayer = ({ currentTeacher }) => {
     const [newDiscipline, setNewDiscipline] = useState(teacherInfo.Discipline);
     const [newCourse, setNewCourse] = useState(teacherInfo.Course);
     const [newSchool, setNewSchool] = useState(teacherInfo.School);
-    const [newRegistrationDate, setNewRegistrationDate] = useState(teacherInfo.RegistrationDate.split("-").reverse().join("-"));
-    const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(teacherInfo.CertificateExpirationDate.split("-").reverse().join("-"));
-    const [newDOB, setNewDOB] = useState(teacherInfo.DOB.split("-").reverse().join("-"));
-    const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-"));
+    const [newRegistrationDate, setNewRegistrationDate] = useState(
+      teacherInfo.RegistrationDate ? teacherInfo.RegistrationDate.split("-").reverse().join("-") : null
+    );
+    const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(
+      teacherInfo.CertificateExpirationDate ? teacherInfo.CertificateExpirationDate.split("-").reverse().join("-") : null
+    );
+    const [newDOB, setNewDOB] = useState(
+      teacherInfo.DOB ? teacherInfo.DOB.split("-").reverse().join("-") : null
+    );
+    const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(
+      teacherInfo.GreenPassExpirationDate ? teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-") : null
+    );
 
     const setFormData = () => {
       setNewTaxCode(teacherInfo.TaxCode)
@@ -44,10 +52,18 @@ const TeacherDisplayer = ({ currentTeacher }) => {
       setNewDiscipline(teacherInfo.Discipline)
       setNewCourse(teacherInfo.Course)
       setNewSchool(teacherInfo.School)
-      setNewRegistrationDate(teacherInfo.RegistrationDate.split("-").reverse().join("-"))
-      setNewCertificateExpirationDate(teacherInfo.CertificateExpirationDate.split("-").reverse().join("-"))
-      setNewDOB(teacherInfo.DOB.split("-").reverse().join("-"))
-      setNewGreenPassExpirationDate(teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-"))
+      setNewRegistrationDate(
+        teacherInfo.RegistrationDate ? teacherInfo.RegistrationDate.split("-").reverse().join("-") : null
+      )
+      setNewCertificateExpirationDate(
+        teacherInfo.CertificateExpirationDate ? teacherInfo.CertificateExpirationDate.split("-").reverse().join("-") : null
+      )
+      setNewDOB(
+        teacherInfo.DOB ? teacherInfo.DOB.split("-").reverse().join("-") : null
+      )
+      setNewGreenPassExpirationDate(
+        teacherInfo.GreenPassExpirationDate ? teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-") : null
+      )
     }
 
     const handleUpdateTeacherModal = () => {
@@ -84,10 +100,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
               <b>Email:</b> {teacherInfo.Email}
             </Card.Text>
             <Card.Text>
-              <b>Luogo e Data Nascita:</b> {teacherInfo.BirthPlace} - {teacherInfo.DOB === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.DOB).toLocaleDateString()}
+              <b>Luogo e Data Nascita:</b> {teacherInfo.BirthPlace} - { teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString(): 'Non Definito' }
             </Card.Text>
             <Card.Text>
-              <b>Data Iscrizione:</b> {teacherInfo.RegistrationDate === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.RegistrationDate).toLocaleDateString()}
+              <b>Data Iscrizione:</b> { teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString(): 'Non Definito' }
             </Card.Text>
             <Card.Text>
               <b>Disciplina:</b> {teacherInfo.Discipline}
@@ -96,10 +112,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
               <b>Corso:</b> {teacherInfo.Course}
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Certificato:</b> {teacherInfo.CertificateExpirationDate === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()}
+              <b>Data Scadenza Certificato:</b> { teacherInfo.CertificateExpirationDate !== null ? new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString(): 'Non Definito' }
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Green Pass:</b> {teacherInfo.GreenPassExpirationDate === 'Invalid date' ? 'Non Definito' : new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()}
+              <b>Data Scadenza Green Pass:</b> { teacherInfo.GreenPassExpirationDate !== null ? new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString(): 'Non Definito' }
             </Card.Text>
 
             <div className="buttons-container">

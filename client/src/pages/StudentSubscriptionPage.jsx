@@ -4,13 +4,10 @@ import { createStudent } from '../helpers/apiCalls';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
-import formatDate from '../helpers/formatDateForInputDate';
 import commondata from '../commondata/commondata'
 
 
 const StudentSubscriptionPage = () => {
-  const today = formatDate(new Date(), true);
-
   const { ages, disciplines, courses, schools } = commondata;
 
   const studentInfoDefault = { 
@@ -26,10 +23,10 @@ const StudentSubscriptionPage = () => {
     Discipline: disciplines[0].discipline,
     Course: courses[0].course,
     School: schools[0].school,
-    RegistrationDate: today,
-    CertificateExpirationDate: today,
-    DOB: today,
-    GreenPassExpirationDate: today,
+    RegistrationDate: null,
+    CertificateExpirationDate: null,
+    DOB: null,
+    GreenPassExpirationDate: null,
     ParentTaxCode: '',
     ParentName: '',
     ParentSurname: ''
@@ -47,10 +44,10 @@ const StudentSubscriptionPage = () => {
   const [newDiscipline, setNewDiscipline] = useState(disciplines[0].discipline);
   const [newCourse, setNewCourse] = useState(courses[0].course);
   const [newSchool, setNewSchool] = useState(schools[0].school);
-  const [newRegistrationDate, setNewRegistrationDate] = useState(today);
-  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(today);
-  const [newDOB, setNewDOB] = useState(today);
-  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(today);
+  const [newRegistrationDate, setNewRegistrationDate] = useState(null);
+  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(null);
+  const [newDOB, setNewDOB] = useState(null);
+  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(null);
   const [newParentTaxCode, setNewParentTaxCode] = useState('');
   const [newParentName, setNewParentName] = useState('');
   const [newParentSurname, setNewParentSurname] = useState('');
@@ -68,10 +65,10 @@ const StudentSubscriptionPage = () => {
     setNewDiscipline(disciplines[0].discipline)
     setNewCourse(courses[0].course)
     setNewSchool(schools[0].school)
-    setNewRegistrationDate(today)
-    setNewCertificateExpirationDate(today)
-    setNewDOB(today)
-    setNewGreenPassExpirationDate(today)
+    setNewRegistrationDate(null)
+    setNewCertificateExpirationDate(null)
+    setNewDOB(null)
+    setNewGreenPassExpirationDate(null)
     setNewParentTaxCode('')
     setNewParentName('')
     setNewParentSurname('')
@@ -107,7 +104,7 @@ const StudentSubscriptionPage = () => {
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', gap: '2em'}}>
-          <Button variant="success" onClick={() => {
+          <Button variant="success" onClick={async () => {
             const newStudent = { 
               IsAdult: newIsAdult,
               TaxCode: newTaxCode,
@@ -129,7 +126,7 @@ const StudentSubscriptionPage = () => {
               ParentName: newParentName,
               ParentSurname: newParentSurname 
             };
-            createStudent(newStudent);
+            await createStudent(newStudent);
             // resetForm();
           }}>
             Crea Allieva

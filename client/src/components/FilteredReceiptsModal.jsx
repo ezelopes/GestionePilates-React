@@ -2,6 +2,8 @@ import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap'
 
+import formatDate from '../helpers/formatDateForInputDate';
+
 const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
 
 const columnDefs = [
@@ -23,19 +25,6 @@ const gridOptions = {
     rowSelection: 'single'
 };
 
-const formatDate = date => {
-    // date yyyy-mm-dd to dd-mm-yyyy
-    if (!date) { return '1900-01-01';}
-  
-    const dateSplit = date.split('-');
-    const year = dateSplit[0];
-    const month = dateSplit[1];
-    const day = dateSplit[2];
-  
-    if (day && month && year) return `${day}-${month}-${year}`;
-    else return '1900-01-01';
-  };
-
 const FilteredReceiptsModal = ({ 
     filteredReceipts,
     filteredAmountPaid,
@@ -51,8 +40,8 @@ const FilteredReceiptsModal = ({
             filteredReceipts,
             filteredAmountPaid,
             filteredPaymentMethod,
-            formatDate(fromDate),
-            formatDate(toDate)
+            formatDate(new Date(fromDate), false),
+            formatDate(new Date(toDate), false)
         );
         pdfMake.createPdf(documentDefinition).open();
     }
@@ -61,7 +50,11 @@ const FilteredReceiptsModal = ({
         <>
             <Modal show={showFilteredAmountModal} onHide={ () => setShowFilteredAmountModal(false) } centered dialogClassName="modal-90vw">
                 <Modal.Header closeButton>
-                    <Modal.Title> Ricevute dal {formatDate(fromDate)} al {formatDate(toDate)} (tramite {filteredPaymentMethod}) </Modal.Title>
+                    <Modal.Title> 
+                        Ricevute dal {formatDate(new Date(fromDate), false) || '____-____-________' } 
+                        {' '} al {formatDate(new Date(toDate), false) || '____-____-________'} 
+                        {' '} (tramite {filteredPaymentMethod})
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
                     <div>
