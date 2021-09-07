@@ -150,7 +150,7 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
         }]
       },
       {
-        text: 'Pil Art è affiliata all’ACSI e regolarmente iscritta sul registro del CONI',
+        text: 'Pil Art è affiliata all’ASI e regolarmente iscritta sul registro del CONI',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 8,

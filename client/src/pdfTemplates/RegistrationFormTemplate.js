@@ -78,7 +78,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
         text: [
           {
             text:
-              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti sul sito www.acsi.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione dichiara che, tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. La parte cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti saranno inseriti nella piattaforma nazionale di ACSI (ente di promozione sportiva).',
+              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti sul sito www.asinazionale.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione dichiara che, tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. La parte cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti saranno inseriti nella piattaforma nazionale di ASI (ente di promozione sportiva).',
             lineHeight: 1.5,
               fontSize: 10
           },
@@ -155,7 +155,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
         margin: [0, 0, 0, 10]
       },
       {
-        text: 'N. Tessera ACSI assegnato __________________',
+        text: 'N. Tessera ASI assegnato __________________',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
