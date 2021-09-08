@@ -56,19 +56,19 @@ const FilteredReceiptsModal = ({
                         {' '} (tramite {filteredPaymentMethod})
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
+                <Modal.Body className="filtered-receipt-modal">
                     <div>
                         Importo Totale tra le date selezionte: <b> {filteredAmountPaid}€ </b>
                     </div>
-                    <div className="ag-theme-balham" style={{ height: '40em', width: '100%' }}>
+                    <div className="ag-theme-balham filtered-receipt-grid">
                         <AgGridReact
-                        reactNext={true}
-                        scrollbarWidth
-                        rowHeight="45"
-                        gridOptions={gridOptions}
-                        columnDefs={columnDefs}
-                        rowData={filteredReceipts}
-                        ></AgGridReact>
+                            reactNext={true}
+                            scrollbarWidth
+                            rowHeight="45"
+                            gridOptions={gridOptions}
+                            columnDefs={columnDefs}
+                            rowData={filteredReceipts}
+                        />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

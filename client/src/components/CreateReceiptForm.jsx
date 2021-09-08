@@ -86,7 +86,7 @@ const CreateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, isForCreati
           )}
         </div>
         
-        <Divider />
+        <Divider double />
         
         <Button variant='success' onClick={async () => {
           const newReceipt = {

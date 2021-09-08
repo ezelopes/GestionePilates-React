@@ -97,10 +97,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
 
   return (
     <>
-      <div
-        className="ag-theme-balham"
-        style={{ marginTop: '2em', height: '20em', width: '90%', marginBottom: '2em', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}
-      >
+      <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
           scrollbarWidth
           rowHeight="45"
@@ -150,7 +147,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
         <Modal.Header closeButton>
           <Modal.Title> Elimina Ricevuta </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{'maxHeight': 'calc(100vh - 150px)', 'overflowY': 'auto'}}>
+        <Modal.Body className="filtered-receipt-modal">
             Sei sicura di voler eliminare la ricevuta selezionata?
         </Modal.Body>
         <Modal.Footer>

@@ -164,7 +164,7 @@ const StudentsPage = () => {
         </Button>
       </div>
 
-      <div className="ag-theme-balham" style={{ height: '60vh', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}>
+      <div className="ag-theme-balham student-list-grid">
         <AgGridReact
           reactNext={true}
           rowSelection="multiple"

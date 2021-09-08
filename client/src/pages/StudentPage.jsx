@@ -9,6 +9,7 @@ import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/StudentReceiptsList';
 import CreateReceiptForm from '../components/CreateReceiptForm';
 import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
+import Divider from '../components/Divider';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
@@ -133,10 +134,11 @@ const StudentPage = ({ match }) => {
         </div>
 
         <StudentReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
-        <div style={{ marginTop: '2em' }}>
-          <div className="form-wrapper" style={{ width: '80vw', marginLeft: '0vw' }}>
-              <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />
-          </div>
+
+        <Divider double />
+
+        <div className="form-wrapper create-receipt-form-wrapper">
+            <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />
         </div>
       </div>
 

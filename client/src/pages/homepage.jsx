@@ -7,8 +7,7 @@ import Logo from '../images/PILATES_LOGO.png'
 const HomePage = () => {
   return (
     <div className="homepage">
-      <img src={Logo} alt='Pilates Logo' style={{ maxWidth: '50%', marginTop: '3em' }}
-      />
+      <img src={Logo} alt='Pilates Logo' className="logoStyle" />
     </div>
   );
 }

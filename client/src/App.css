@@ -1,5 +1,3 @@
-/* NEW CSS */
-
 /* 
 Colors: 
  Purple: #422970
@@ -20,6 +18,11 @@ body {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.logoStyle {
+  max-width: 50%;
+  margin-top: 3em;
 }
 
 label {
@@ -72,6 +75,11 @@ input[type='date'] {
   margin-top: 1.5em;
 }
 
+.create-receipt-form-wrapper {
+  width: 80vw;
+  margin-left: 0vw;
+}
+
 .create-receipt-form {
   display: flex;
   align-items: center;
@@ -110,24 +118,6 @@ input[type='date'] {
   width: 60vw;
   max-width: 60vw;
 }
-
-/* .user-form {
-  display: grid;
-  grid-template-columns: 20% 25% 20% 25%;
-  align-items: center;
-  justify-content: center;
-  row-gap: 0.5vw;
-  column-gap: 1vw;
-}
-
-.user-form > label {
-  margin-top: 0.3vw;
-  margin-left: 0.7vw;
-}
-
-.user-form > input, select, option, form-control {
-  margin-top: 0.3vw;
-} */
 
 .page-body {
   margin: 2em 5em;
@@ -217,4 +207,47 @@ input[type='date'] {
 
 .modal-header {
   background-color: #E8E8E8;
+}
+
+.filtered-receipt-grid {
+  height: 40em;
+  width: 100%;
+}
+
+.filtered-receipt-modal {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.receipts-grid {
+  height: 40em; 
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  margin-top: 2em;
+}
+
+.student-receipt-list {
+  margin-top: 2em;
+  height: 20em;
+  width: 90%;
+  margin-bottom: 2em;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.student-list-grid {
+  height: 60vh; 
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.subscription-form {
+  width: 60vw; 
+  margin-left: 20vw;
+  margin-top: 2em; 
+  padding-bottom: 2em;
+}
+
+.subscription-form-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 2em; 
+  gap: 2em;
 }

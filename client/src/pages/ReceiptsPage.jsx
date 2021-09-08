@@ -263,7 +263,7 @@ const ReceiptsPage = () => {
             </Button>
           </div>
 
-        <div className="ag-theme-balham" style={{ height: '40em', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)', marginTop: '2em' }}>
+        <div className="ag-theme-balham receipts-grid">
           <AgGridReact
             reactNext={true}
             rowSelection="multiple"
