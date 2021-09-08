@@ -6,7 +6,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import NotFoundPage from './NotFoundPage';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
-import StudentReceiptsList from '../components/ReceiptsList';
+import StudentReceiptsList from '../components/StudentReceiptsList';
 import CreateReceiptForm from '../components/CreateReceiptForm';
 import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
 
