@@ -4,7 +4,7 @@ import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
 
 const NavBar = () => (
   <>
-    <Navbar bg="dark" variant="dark" expanded="false" style={{ fontSize: '1.2rem', height: '5rem' }}>
+    <Navbar bg="dark" variant="dark" expanded="false" className="navbar">
       <Navbar.Brand href="/"> PilArt </Navbar.Brand>
       <Nav className="mr-auto">
         <NavDropdown title="Allieve" id="navbarScrollingDropdown">

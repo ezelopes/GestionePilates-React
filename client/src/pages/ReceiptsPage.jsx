@@ -3,9 +3,11 @@ import { Button, Form } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+
 import FilteredReceiptsModal from '../components/FilteredReceiptsModal'
 import formatDate from '../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
+import { ages, receiptType } from '../commondata/commondata'
 
 const ReceiptTemplateAdultd = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -140,13 +142,13 @@ const ReceiptsPage = () => {
           CourseEndDate: data.CourseEndDate
         }
 
-        if (studentInfo.IsAdult === 'Maggiorenne' && receiptInfo.ReceiptType === 'Quota') 
+        if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[0].type) 
           documentDefinition = await ReceiptTemplateAdultd.default(studentInfo, receiptInfo);
-        else if (studentInfo.IsAdult === 'Maggiorenne' && receiptInfo.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        else if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[1].type)
           documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
-        else if (studentInfo.IsAdult === 'Minorenne' && receiptInfo.ReceiptType === 'Quota')
+        else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[0].type)
           documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
-        else if (studentInfo.IsAdult === 'Minorenne' && receiptInfo.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
+        else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[1].type)
           documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
 
         if (index % 2 == 1) {

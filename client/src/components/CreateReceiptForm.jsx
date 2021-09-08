@@ -4,6 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 import formatDate from '../helpers/formatDateForInputDate';
 
 import { createReceipt, updateReceipt } from '../helpers/apiCalls';
+import Divider from './Divider';
 
 const receiptType = [
   { id: 0, tipo: 'Quota' },
@@ -84,8 +85,10 @@ const CreateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, isForCreati
             </div>
           )}
         </div>
-
-        <Button variant='success' style={{ marginTop: '2em' }} onClick={async () => {
+        
+        <Divider />
+        
+        <Button variant='success' onClick={async () => {
           const newReceipt = {
             ReceiptID: receiptInfo?.ReceiptID || null,
             ReceiptNumber: newReceiptNumber || null,

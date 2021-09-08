@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
+import { ages } from '../commondata/commondata'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -14,7 +15,7 @@ const columnsDefinition = [
       return <Link to={`/paginaallieve/${params.data.TaxCode}`}>{params.value}</Link>;
     }
   },
-  { headerName: 'Maggiorenne', field: 'IsAdult' },
+  { headerName: 'Età', field: 'IsAdult' },
   { headerName: 'Nome', field: 'Name' },
   { headerName: 'Cognome', field: 'Surname' },
   { headerName: 'Citta', field: 'City' },
@@ -54,8 +55,8 @@ const StudentsPage = () => {
   const filterSurnameRef = useRef();
   const filterCityRef = useRef();
   const filterAgeRef = useRef();
-
-  const ages = [ null, 'Maggiorenne', 'Minorenne' ];
+  
+  const dropdownAges = [ null, ages[0].age, ages[1].age ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -154,7 +155,7 @@ const StudentsPage = () => {
         <Form.Group>
           <Form.Label> Età </Form.Label> 
           <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { viewAge(target.value) } }>
-              { ages.map(age => <option key={`select_${age}`} value={age}> {age} </option>) }
+              { dropdownAges.map(age => <option key={`select_${age}`} value={age}> {age} </option>) }
             </Form.Control>
         </Form.Group>
 

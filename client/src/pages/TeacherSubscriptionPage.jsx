@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import formatDate from '../helpers/formatDateForInputDate';
-import commondata from '../commondata/commondata'
+import { disciplines, schools, courses } from '../commondata/commondata'
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
 import { createTeacher } from '../helpers/apiCalls';
 
 const TeacherSubscriptionPage = () => {
-  const today = formatDate(new Date(), true);
-
-  const { disciplines, courses, schools } = commondata;
-
   const teacherInfoDefault = { 
     TaxCode: '',
     Name: '',

@@ -6,7 +6,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import NotFoundPage from './NotFoundPage';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
-import ReceiptsList from '../components/ReceiptsList';
+import StudentReceiptsList from '../components/ReceiptsList';
 import CreateReceiptForm from '../components/CreateReceiptForm';
 import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
 
@@ -132,7 +132,7 @@ const StudentPage = ({ match }) => {
           </Button>
         </div>
 
-        <ReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
+        <StudentReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
         <div style={{ marginTop: '2em' }}>
           <div className="form-wrapper" style={{ width: '80vw', marginLeft: '0vw' }}>
               <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />

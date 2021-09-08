@@ -4,12 +4,10 @@ import { createStudent } from '../helpers/apiCalls';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
-import commondata from '../commondata/commondata'
+import { ages, disciplines, schools, courses } from '../commondata/commondata'
 
 
 const StudentSubscriptionPage = () => {
-  const { ages, disciplines, courses, schools } = commondata;
-
   const studentInfoDefault = { 
     IsAdult: ages[0].age,
     TaxCode: '',

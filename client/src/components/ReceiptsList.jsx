@@ -5,8 +5,9 @@ import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
 import CreateReceiptForm from './CreateReceiptForm';
+import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
+import { ages, receiptType } from '../commondata/commondata'
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -39,7 +40,7 @@ const columnsDefinition = [
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod', editable: true }
 ];
 
-const ReceiptsList = ({ receipts, studentInfo }) => {
+const StudentReceiptsList = ({ receipts, studentInfo }) => {
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
 
@@ -63,13 +64,13 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
       if (!selectedReceipt) return alert('Seleziona Ricevuta per Stamparla');
       let documentDefinition;
 
-      if (studentInfo.IsAdult === 'Maggiorenne' && selectedReceipt.ReceiptType === 'Quota') 
+      if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) 
         documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-      else if (studentInfo.IsAdult === 'Maggiorenne' && selectedReceipt.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
+      else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type)
         documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-      else if (studentInfo.IsAdult === 'Minorenne' && selectedReceipt.ReceiptType === 'Quota')
+      else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type)
         documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-      else if (studentInfo.IsAdult === 'Minorenne' && selectedReceipt.ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA')
+      else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type)
         documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
 
       pdfMake.createPdf(documentDefinition).open();
@@ -169,4 +170,4 @@ const ReceiptsList = ({ receipts, studentInfo }) => {
   );
 };
 
-export default ReceiptsList;
+export default StudentReceiptsList;

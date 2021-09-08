@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap'
 
-import commondata from '../commondata/commondata'
+import { ages, disciplines, schools, courses } from '../commondata/commondata'
 import Divider from './Divider';
 
 // personInfo should be contained within a custom useState and useContext!
@@ -39,7 +39,7 @@ const CreateUpdateUserForm = ({
         <> 
           <Form.Label> Età </Form.Label>
           <Form.Control as='select' onChange={({ target }) => setNewIsAdult(target.value)} defaultValue={personInfo?.IsAdult}>
-            {commondata.ages.map(age =>  <option key={`select_${age.id}`} value={age.age}> {age.age} </option>)}
+            {ages.map(age =>  <option key={`select_${age.id}`} value={age.age}> {age.age} </option>)}
           </Form.Control>
         </>
       )}
@@ -78,17 +78,17 @@ const CreateUpdateUserForm = ({
 
       <Form.Label> Disciplina </Form.Label>
       <Form.Control as='select' onChange={({ target }) => setNewDiscipline(target.value)} defaultValue={personInfo?.Discipline}>
-        {commondata.disciplines.map(discipline =>  <option key={`select_${discipline.id}`} value={discipline.discipline}> {discipline.discipline} </option>)}
+        {disciplines.map(discipline =>  <option key={`select_${discipline.id}`} value={discipline.discipline}> {discipline.discipline} </option>)}
       </Form.Control>
 
       <Form.Label> Corso </Form.Label>
       <Form.Control as='select' onChange={({ target }) => setNewCourse(target.value)} defaultValue={personInfo?.Course}>
-        {commondata.courses.map(course =>  <option key={`select_${course.id}`} value={course.course}> {course.course} </option>)}
+        {courses.map(course =>  <option key={`select_${course.id}`} value={course.course}> {course.course} </option>)}
       </Form.Control>
 
       <Form.Label> Scuola </Form.Label>
       <Form.Control as='select' onChange={({ target }) => setNewSchool(target.value)} defaultValue={personInfo?.School}>
-        {commondata.schools.map(school =>  <option key={`select_${school.id}`} value={school.school}> {school.school} </option>)}
+        {schools.map(school =>  <option key={`select_${school.id}`} value={school.school}> {school.school} </option>)}
       </Form.Control>
 
       <Form.Label> Data Iscrizione </Form.Label>

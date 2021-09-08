@@ -1,3 +1,5 @@
+import { receiptType } from '../commondata/commondata'
+
 const createStudent = async (newStudent) => {
   console.log(newStudent);
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
@@ -39,7 +41,7 @@ const createReceipt = async (newReceipt) => {
     body: JSON.stringify(newReceipt)
   });
 
-  if (newReceipt.ReceiptType === 'Quota Associativa') {
+  if (newReceipt.ReceiptType === receiptType[1].type) {
     delete newReceipt.CourseStartDate;
     delete newReceipt.CourseEndDate;
   }

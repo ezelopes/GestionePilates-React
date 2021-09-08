@@ -10,6 +10,11 @@ body {
   background-color: #F4F4F4;
 }
 
+.navbar {
+  font-size: 1.2rem;
+  height: 5rem;
+}
+
 .homepage {
   display: flex;
   align-items: center;

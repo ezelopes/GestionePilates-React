@@ -2,6 +2,11 @@ const pool = require('./pool');
 
 import { getFormattedDate } from './helpers'
 
+const receiptType = [
+  { "type": "Quota" },
+  { "type": "Quota Associativa" }
+]
+
 const mappingReceipt = (rows) => {
   const receipts = rows.map(row => {
     return {
@@ -88,7 +93,7 @@ const createReceipt = async ({
   try {
     const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
 
-    if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
+    if (ReceiptType == receiptType[1].type) {
       await pool.execute(
         'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
