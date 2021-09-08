@@ -1,5 +1,6 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const formatDate = require('../helpers/formatDateForInputDate');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -8,7 +9,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
   // print only if studentInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_SPACE = '________________________________________';
-  const BLANK_DATE = '______/______/________';
+  const BLANK_DATE = '______-______-________';
 
   const docDefinition = {
     info: {
@@ -44,7 +45,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
           ' nato/a a ',
           { text: `${studentInfo.BirthPlace || BLANK_SPACE }`, bold: true },
           ' il ',
-          { text: `${ studentInfo.DOB ? studentInfo.DOB : BLANK_DATE }`, bold: true },
+          { text: `${ studentInfo.DOB ? formatDate(new Date(studentInfo.DOB)) : BLANK_DATE }`, bold: true },
           ' C.F. ',
           { text: `${studentInfo.TaxCode || BLANK_SPACE }`, bold: true },
           '. Residente in ',

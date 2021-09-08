@@ -51,8 +51,8 @@ const FilteredReceiptsModal = ({
             <Modal show={showFilteredAmountModal} onHide={ () => setShowFilteredAmountModal(false) } centered dialogClassName="modal-90vw">
                 <Modal.Header closeButton>
                     <Modal.Title> 
-                        Ricevute dal {formatDate(new Date(fromDate), false) || '____-____-________' } 
-                        {' '} al {formatDate(new Date(toDate), false) || '____-____-________'} 
+                        Ricevute dal {formatDate(new Date(fromDate), false) || '______-______-________' } 
+                        {' '} al {formatDate(new Date(toDate), false) || '______-______-________'} 
                         {' '} (tramite {filteredPaymentMethod})
                     </Modal.Title>
                 </Modal.Header>

@@ -1,6 +1,7 @@
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
+const formatDate = require('../helpers/formatDateForInputDate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -13,7 +14,7 @@ const AmountPaidSummaryTemplate = async (
   ) => {
 
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const EMPTY_DATE = '____-____-________'
+  const BLANK_DATE = '____-____-________'
 
   const tableBody = [
     [
@@ -23,7 +24,7 @@ const AmountPaidSummaryTemplate = async (
     ]
   ]
   receiptList.forEach(receipt => 
-    tableBody.push([receipt.ReceiptNumber, receipt.ReceiptDate, receipt.AmountPaid])
+    tableBody.push([receipt.ReceiptNumber, receipt.ReceiptDate ? formatDate(new Date(receipt.ReceiptDate)) : BLANK_DATE, receipt.AmountPaid])
   )
 
   const content = [
@@ -61,14 +62,14 @@ const AmountPaidSummaryTemplate = async (
           text: 'Periodo dal '
         },
         {
-          text: `${ fromDate || EMPTY_DATE }` ,
+          text: `${ fromDate ? formatDate(new Date(fromDate)) : BLANK_DATE }` ,
           bold: true
         },
         {
           text: ' al '
         },
         {
-          text: `${ toDate || EMPTY_DATE }`,
+          text: `${ toDate ? formatDate(new Date(toDate)) : BLANK_DATE }`,
           bold: true
         },
       ],
@@ -95,10 +96,10 @@ const AmountPaidSummaryTemplate = async (
       margin: [0, 20, 0, 20],
       layout: {
         defaultBorder: true,
-        paddingLeft: function (i, node) { return 5; },
-        paddingRight: function (i, node) { return 5; },
-        paddingTop: function (i, node) { return 5; },
-        paddingBottom: function (i, node) { return 5; },
+        paddingLeft: function () { return 5; },
+        paddingRight: function () { return 5; },
+        paddingTop: function () { return 5; },
+        paddingBottom: function () { return 5; },
       },
       table: {
         headerRows: 1,
@@ -111,8 +112,8 @@ const AmountPaidSummaryTemplate = async (
 
   const docDefinition = {
     info: {
-    filteredPaymentMethod,
-      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate} al ${toDate}`,
+    // filteredPaymentMethod,
+      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate ? formatDate(new Date(fromDate)) : BLANK_DATE} al ${toDate ? formatDate(new Date(toDate)) : BLANK_DATE}`,
       author: 'Roxana Carro',
       subject: `Riepilogo Importo`
     },

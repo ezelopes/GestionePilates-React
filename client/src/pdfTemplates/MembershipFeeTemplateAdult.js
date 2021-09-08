@@ -2,6 +2,7 @@ const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 const convertNumberIntoWord = require('../helpers/convertNumberIntoWord');
+const formatDate = require('../helpers/formatDateForInputDate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -10,7 +11,7 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
   const signature = await getBase64ImageFromURL('../images/Signature.png');
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
-  const BLANK_DATE = '______/______/________';
+  const BLANK_DATE = '______-______-________';
 
   const amountPaid = receiptInfo.AmountPaid.replace('.', ',');
   const euroAndCents = amountPaid.split(',');
@@ -66,7 +67,7 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
             studentInfo.TaxCode || BLANK_SPACE
         }, nato/a a ${
             studentInfo.BirthPlace || BLANK_SPACE
-        }, il ${ studentInfo.DOB ? studentInfo.DOB : BLANK_DATE
+        }, il ${ studentInfo.DOB ? formatDate(new Date(studentInfo.DOB)) : BLANK_DATE
         } residente in ${
             studentInfo.Address || BLANK_SPACE
         }, ${
@@ -84,7 +85,7 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Stezzano, ${ receiptInfo.ReceiptDate ? receiptInfo.ReceiptDate : BLANK_DATE }`,
+        text: `Stezzano, ${ receiptInfo.ReceiptDate ? formatDate(new Date(receiptInfo.ReceiptDate)) : BLANK_DATE }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 2]

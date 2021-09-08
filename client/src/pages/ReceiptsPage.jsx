@@ -9,7 +9,7 @@ import formatDate from '../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import { ages, receiptType } from '../commondata/commondata'
 
-const ReceiptTemplateAdultd = require('../pdfTemplates/ReceiptTemplateAdult');
+const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
 
 const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
@@ -143,7 +143,7 @@ const ReceiptsPage = () => {
         }
 
         if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[0].type) 
-          documentDefinition = await ReceiptTemplateAdultd.default(studentInfo, receiptInfo);
+          documentDefinition = await ReceiptTemplateAdult.default(studentInfo, receiptInfo);
         else if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[1].type)
           documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
         else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[0].type)
