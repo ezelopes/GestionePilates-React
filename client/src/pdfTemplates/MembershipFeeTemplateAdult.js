@@ -10,6 +10,7 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
   const signature = await getBase64ImageFromURL('../images/Signature.png');
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
+  const BLANK_DATE = '______/______/________';
 
   const amountPaid = receiptInfo.AmountPaid.replace('.', ',');
   const euroAndCents = amountPaid.split(',');
@@ -65,10 +66,7 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
             studentInfo.TaxCode || BLANK_SPACE
         }, nato/a a ${
             studentInfo.BirthPlace || BLANK_SPACE
-        }, il ${ 
-          (studentInfo.DOB === 'Invalid date' || !studentInfo.DOB) 
-            ? '______/______/________'
-            : studentInfo.DOB
+        }, il ${ studentInfo.DOB ? studentInfo.DOB : BLANK_DATE
         } residente in ${
             studentInfo.Address || BLANK_SPACE
         }, ${
@@ -86,11 +84,7 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Stezzano, ${ 
-          (receiptInfo.ReceiptDate === 'Invalid date' || !receiptInfo.ReceiptDate) 
-            ? '______/______/________'
-            : receiptInfo.ReceiptDate
-        }`,
+        text: `Stezzano, ${ receiptInfo.ReceiptDate ? receiptInfo.ReceiptDate : BLANK_DATE }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 2]

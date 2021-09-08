@@ -32,9 +32,9 @@ const gridOptionsDefault = {
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, editable: true },
   { headerName: 'Tipo Ricevuta', field: 'ReceiptType', editable: true },
-  { headerName: 'Data Ricevuta', field: 'ReceiptDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', editable: true, cellRenderer: (params) => (params.value !== 'Invalid date') ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', editable: true, cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', editable: true, cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', editable: true, cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
   { headerName: 'Somma Euro', field: 'AmountPaid', editable: true },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod', editable: true }
 ];

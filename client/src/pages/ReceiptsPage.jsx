@@ -22,9 +22,9 @@ const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
   { headerName: 'Nome', field: 'Name' },
   { headerName: 'Cognome', field: 'Surname' },
-  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
-  { headerName: 'Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
-  { headerName: 'Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
+  { headerName: 'Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
+  { headerName: 'Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' }
 ];

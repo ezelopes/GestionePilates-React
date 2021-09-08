@@ -8,6 +8,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
   // print only if studentInfo fields are not empty and DataCertificato does not expire any soon
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_SPACE = '________________________________________';
+  const BLANK_DATE = '______/______/________';
 
   const docDefinition = {
     info: {
@@ -43,11 +44,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
           ' nato/a a ',
           { text: `${studentInfo.BirthPlace || BLANK_SPACE }`, bold: true },
           ' il ',
-          { text: `${ 
-            (studentInfo.DOB === 'Invalid date' || !studentInfo.DOB) 
-              ? '______/______/________'
-              : studentInfo.DOB
-          }`, bold: true },
+          { text: `${ studentInfo.DOB ? studentInfo.DOB : BLANK_DATE }`, bold: true },
           ' C.F. ',
           { text: `${studentInfo.TaxCode || BLANK_SPACE }`, bold: true },
           '. Residente in ',
@@ -110,7 +107,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
           'La disciplina sportiva svolta nella ASD PIL ART è ',
           { text: `${studentInfo.Discipline || BLANK_SPACE }`, bold: true },
           ' per cui il socio ci consegna un certificato medico di idoneità sportiva con scadenza ',
-          { text: `${ '______/______/________' }`, bold: true },
+          { text: `${ BLANK_DATE }`, bold: true },
           ' del tipo:'
         ],
         alignment: 'left',

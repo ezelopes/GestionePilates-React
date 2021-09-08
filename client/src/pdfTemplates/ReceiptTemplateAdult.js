@@ -10,6 +10,7 @@ const ReceiptTemplateAdult = async (studentInfo, receiptInfo) => {
   const signature = await getBase64ImageFromURL('../images/Signature.png');
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
+  const BLANK_DATE = '______/______/________';
 
   const amountPaid = receiptInfo.AmountPaid.replace('.', ',');
   const euroAndCents = amountPaid.split(',');
@@ -65,10 +66,7 @@ const ReceiptTemplateAdult = async (studentInfo, receiptInfo) => {
           studentInfo.TaxCode || BLANK_SPACE 
         }, nato/a a ${
           studentInfo.BirthPlace || BLANK_SPACE 
-        }, il ${ 
-          (studentInfo.DOB === 'Invalid date' || !studentInfo.DOB) 
-            ? '______/______/________'
-            : studentInfo.DOB
+        }, il ${ studentInfo.DOB ? studentInfo.DOB : BLANK_DATE
         } residente in ${
           studentInfo.Address || BLANK_SPACE 
         }, ${
@@ -81,26 +79,15 @@ const ReceiptTemplateAdult = async (studentInfo, receiptInfo) => {
           centsInLetters.toUpperCase()
         }) per l'iscrizione al corso di ${
           studentInfo.Discipline || BLANK_SPACE 
-        } dal ${ 
-          (receiptInfo.CourseStartDate === 'Invalid date' || !receiptInfo.CourseStartDate) 
-            ? '______/______/________'
-            : receiptInfo.CourseStartDate
-        } al ${ 
-          (receiptInfo.CourseEndDate === 'Invalid date' || !receiptInfo.CourseEndDate) 
-            ? '______/______/________'
-            : receiptInfo.CourseEndDate
-        }`,
+        } dal ${ receiptInfo.CourseStartDate ? receiptInfo.CourseStartDate : BLANK_DATE
+        } al ${ receiptInfo.CourseEndDate ? receiptInfo.CourseEndDate : BLANK_DATE }`,
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Stezzano, ${ 
-          (receiptInfo.ReceiptDate === 'Invalid date' || !receiptInfo.ReceiptDate) 
-            ? '______/______/________'
-            : receiptInfo.ReceiptDate
-        }`,
+        text: `Stezzano, ${ receiptInfo.ReceiptDate ? receiptInfo.ReceiptDate : BLANK_DATE }`,
         alignment: 'left',
         fontSize: 10,
         margin: [0, 0, 0, 2]

@@ -8,7 +8,7 @@ const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemp
 
 const columnDefs = [
     { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
-    { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => (params.value !== 'Invalid date') ? new Date(params.value).toLocaleDateString() : '' },
+    { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
     { headerName: 'Somma Euro', field: 'AmountPaid' }
 ]
 
