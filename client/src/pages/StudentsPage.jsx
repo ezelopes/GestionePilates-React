@@ -2,12 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
+
+const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
+
 import { ages } from '../commondata/commondata'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 const columnsDefinition = [
+  {
+    headerName: '',
+    checkboxSelection: true,
+    // select all ?
+  },
   {
     headerName: 'Codice Fiscale',
     field: 'TaxCode',
@@ -50,6 +58,7 @@ const StudentsPage = () => {
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
   const [students, setStudents] = useState();
+  const [selectedStudents, setSelectedStudents] = useState([]);
   
   const filterNameRef = useRef();
   const filterSurnameRef = useRef();
@@ -72,6 +81,18 @@ const StudentsPage = () => {
       setStudents(studentListCached)
     }
   }, []);
+
+  const onStudentSelectionChanged = () => {
+    const selectedNodes = gridOptions.api.getSelectedNodes();
+    if (selectedNodes.length === 0) return setSelectedStudents([]);
+
+    const students = []
+    selectedNodes.forEach(node => {
+      students.push(node.data)
+    });
+
+    setSelectedStudents(students);
+  }
 
   const clearFilters = () => {
     const filterColumns = ['IsAdult', 'Name', 'Surname', 'City']
@@ -133,6 +154,17 @@ const StudentsPage = () => {
     gridOptions.api.onFilterChanged();
   }
 
+  const printStudents = async () => {
+    try {
+      if (selectedStudents.length === 0) return alert('Seleziona Allieve per Stamparle');
+      const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
+
+      pdfMake.createPdf(documentDefinition).open();
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className="page-body">
       <div className="filter-form">
@@ -173,8 +205,15 @@ const StudentsPage = () => {
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           rowData={students}
+          onSelectionChanged={onStudentSelectionChanged}
           // onGridReady={this.onGridReady}
         ></AgGridReact>
+      </div>
+
+      <div className="buttons-container">
+        <Button variant="success" onClick={printStudents}>
+          Stampa Allieve Selezionate
+        </Button>
       </div>
     </div>
   );

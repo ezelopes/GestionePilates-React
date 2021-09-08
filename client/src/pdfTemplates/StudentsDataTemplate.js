@@ -31,7 +31,7 @@ const StudentsDataTemplate = async (
       margin: [0, 0, 0, 10]
     },
     {
-      text: `DATI ALLIEVE PER COMUNE`,
+      text: `INFORMAZIONI ALLIEVE`,
       lineHeight: 1.5,
       fontSize: 16,
       margin: [0, 0, 0, 10],
@@ -57,7 +57,7 @@ const StudentsDataTemplate = async (
 
   const docDefinition = {
     info: {
-      title: `Dati Allieve per Comune`,
+      title: `Informazioni Allieve per Comune`,
       author: 'Roxana Carro',
       subject: `Dati Allieve`
     },
