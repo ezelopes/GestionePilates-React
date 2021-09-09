@@ -25,6 +25,8 @@ const gridOptions = {
     rowSelection: 'single'
 };
 
+const BLANK_DATE = '______-______-________';
+
 const FilteredReceiptsModal = ({ 
     filteredReceipts,
     filteredAmountPaid,
@@ -40,8 +42,8 @@ const FilteredReceiptsModal = ({
             filteredReceipts,
             filteredAmountPaid,
             filteredPaymentMethod,
-            formatDate(new Date(fromDate), false),
-            formatDate(new Date(toDate), false)
+            formatDate(new Date(fromDate)),
+            formatDate(new Date(toDate))
         );
         pdfMake.createPdf(documentDefinition).open();
     }
@@ -51,8 +53,8 @@ const FilteredReceiptsModal = ({
             <Modal show={showFilteredAmountModal} onHide={ () => setShowFilteredAmountModal(false) } centered dialogClassName="modal-90vw">
                 <Modal.Header closeButton>
                     <Modal.Title> 
-                        Ricevute dal {formatDate(new Date(fromDate), false) || '______-______-________' } 
-                        {' '} al {formatDate(new Date(toDate), false) || '______-______-________'} 
+                        Ricevute dal {formatDate(new Date(fromDate)) || BLANK_DATE } 
+                        {' '} al {formatDate(new Date(toDate)) || BLANK_DATE} 
                         {' '} (tramite {filteredPaymentMethod})
                     </Modal.Title>
                 </Modal.Header>
