@@ -38,7 +38,7 @@ const StudentsDataTemplate = async (
       bold: true
     },
     {
-      margin: [0, 20, 0, 20],
+      margin: [0, 0, 0, 0],
       layout: {
         defaultBorder: true,
         paddingLeft: function () { return 5; },
