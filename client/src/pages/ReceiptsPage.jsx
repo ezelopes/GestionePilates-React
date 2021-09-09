@@ -3,11 +3,15 @@ import { Button, Form } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import { ToastContainer, toast } from 'react-toastify';
 
 import FilteredReceiptsModal from '../components/FilteredReceiptsModal'
 import formatDate from '../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
+import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata'
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -100,7 +104,7 @@ const ReceiptsPage = () => {
 
   const printReceipts = async () => {    
     try {
-      if (selectedReceipts.length === 0) return alert('Seleziona Ricevute per Stamparle');
+      if (selectedReceipts.length === 0) return toast.error('Seleziona Ricevute per Stamparle', toastConfig);
 
       const finalDocumentDefinition = { 
         info: { author: "Roxana Carro", subject: "Ricevute", title: "Ricevute Multiple" }, 
@@ -197,7 +201,7 @@ const ReceiptsPage = () => {
   }
 
   const calculateAmountBetweenDates = () => {
-    if (!filteredPaymentMethod) return alert("Seleziona Tipo di Pagamento!")
+    if (!filteredPaymentMethod) return toast.error('Seleziona Tipo di Pagamento!', toastConfig);
 
     const receipts = allReceipts.filter(({ ReceiptDate, PaymentMethod }) =>
       validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)  &&
@@ -225,6 +229,8 @@ const ReceiptsPage = () => {
 
   return (
     <>
+      <ToastContainer />
+
       <div className="page-body">
           <div className="filter-form">
             <Form.Group>

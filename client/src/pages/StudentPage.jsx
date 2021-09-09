@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
@@ -106,6 +107,7 @@ const StudentPage = ({ match }) => {
 
   return (
     <>
+      <ToastContainer />
       <div className="page-body">
         <div className="student-name-title">
           {studentInfo.Name} {studentInfo.Surname}

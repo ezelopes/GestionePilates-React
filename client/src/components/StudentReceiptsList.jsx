@@ -4,10 +4,14 @@ import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import { ToastContainer, toast } from 'react-toastify';
 
 import CreateReceiptForm from './CreateReceiptForm';
-import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
+import { deleteReceipt } from '../helpers/apiCalls';
+import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata'
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -61,7 +65,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
 
   const printReceipt = async () => {    
     try {
-      if (!selectedReceipt) return alert('Seleziona Ricevuta per Stamparla');
+      if (!selectedReceipt) return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
       let documentDefinition;
 
       if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) 
@@ -93,6 +97,8 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
 
   return (
     <>
+      <ToastContainer />
+
       <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
           scrollbarWidth
@@ -111,14 +117,14 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
         </Button>
         
         <Button variant='warning' onClick={ () => { 
-          if (!selectedReceipt) return alert('Seleziona Ricevuta per Aggiornarla'); 
+          if (!selectedReceipt) return toast.error('Seleziona Ricevuta per Aggiornarla', toastConfig);
           setShowUpdateReceiptModal(true)} 
         }>
           <span role='img' aria-label='update'>🔄</span> AGGIORNA RICEVUTA
         </Button>
 
         <Button variant='danger' onClick={ () => { 
-          if (!selectedReceipt) return alert('Seleziona Ricevuta per Eliminarla'); 
+          if (!selectedReceipt) return toast.error('Seleziona Ricevuta per Eliminarla', toastConfig); 
           setShowDeleteReceiptModal(true)} 
         }>
           <span role='img' aria-label='bin'>🗑️</span> ELIMINA RICEVUTA

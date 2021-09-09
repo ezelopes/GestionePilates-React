@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
 import { createStudent } from '../helpers/apiCalls';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
@@ -73,66 +74,69 @@ const StudentSubscriptionPage = () => {
   }
 
   return (
-    <div className="form-wrapper subscription-form">
-      <div className="user-form">
-        <CreateUpdateUserForm
-          personInfo={studentInfoDefault}
-          personType={'Student'}
-          newIsAdult={newIsAdult}
-          setNewIsAdult={setNewIsAdult}
-          setNewTaxCode={setNewTaxCode}
-          setNewName={setNewName}
-          setNewSurname={setNewSurname}
-          setNewCity={setNewCity}
-          setNewAddress={setNewAddress}
-          setNewMobilePhone={setNewMobilePhone}
-          setNewEmail={setNewEmail}
-          setNewBirthPlace={setNewBirthPlace}
-          setNewDiscipline={setNewDiscipline}
-          setNewCourse={setNewCourse}
-          setNewSchool={setNewSchool}
-          setNewRegistrationDate={setNewRegistrationDate}
-          setNewCertificateExpirationDate={setNewCertificateExpirationDate}
-          setNewDOB={setNewDOB}
-          setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
-          setNewParentTaxCode={setNewParentTaxCode}
-          setNewParentName={setNewParentName}
-          setNewParentSurname={setNewParentSurname}
-        />
+    <>
+      <ToastContainer />
+      <div className="form-wrapper subscription-form">
+        <div className="user-form">
+          <CreateUpdateUserForm
+            personInfo={studentInfoDefault}
+            personType={'Student'}
+            newIsAdult={newIsAdult}
+            setNewIsAdult={setNewIsAdult}
+            setNewTaxCode={setNewTaxCode}
+            setNewName={setNewName}
+            setNewSurname={setNewSurname}
+            setNewCity={setNewCity}
+            setNewAddress={setNewAddress}
+            setNewMobilePhone={setNewMobilePhone}
+            setNewEmail={setNewEmail}
+            setNewBirthPlace={setNewBirthPlace}
+            setNewDiscipline={setNewDiscipline}
+            setNewCourse={setNewCourse}
+            setNewSchool={setNewSchool}
+            setNewRegistrationDate={setNewRegistrationDate}
+            setNewCertificateExpirationDate={setNewCertificateExpirationDate}
+            setNewDOB={setNewDOB}
+            setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
+            setNewParentTaxCode={setNewParentTaxCode}
+            setNewParentName={setNewParentName}
+            setNewParentSurname={setNewParentSurname}
+          />
+        </div>
+        <div className="subscription-form-buttons">
+          <Button variant="success" onClick={async () => {
+            const newStudent = { 
+              IsAdult: newIsAdult,
+              TaxCode: newTaxCode,
+              Name: newName,
+              Surname: newSurname,
+              City: newCity,
+              Address: newAddress,
+              MobilePhone: newMobilePhone,
+              Email: newEmail,
+              BirthPlace: newBirthPlace,
+              Discipline: newDiscipline,
+              Course: newCourse,
+              School: newSchool,
+              RegistrationDate: newRegistrationDate,
+              CertificateExpirationDate: newCertificateExpirationDate,
+              DOB: newDOB,
+              GreenPassExpirationDate: newGreenPassExpirationDate,
+              ParentTaxCode: newParentTaxCode,
+              ParentName: newParentName,
+              ParentSurname: newParentSurname 
+            };
+            await createStudent(newStudent);
+            // resetForm();
+          }}>
+            Crea Allieva
+          </Button>
+          <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
+            Reset Form
+          </Button>
+        </div>
       </div>
-      <div className="subscription-form-buttons">
-        <Button variant="success" onClick={async () => {
-          const newStudent = { 
-            IsAdult: newIsAdult,
-            TaxCode: newTaxCode,
-            Name: newName,
-            Surname: newSurname,
-            City: newCity,
-            Address: newAddress,
-            MobilePhone: newMobilePhone,
-            Email: newEmail,
-            BirthPlace: newBirthPlace,
-            Discipline: newDiscipline,
-            Course: newCourse,
-            School: newSchool,
-            RegistrationDate: newRegistrationDate,
-            CertificateExpirationDate: newCertificateExpirationDate,
-            DOB: newDOB,
-            GreenPassExpirationDate: newGreenPassExpirationDate,
-            ParentTaxCode: newParentTaxCode,
-            ParentName: newParentName,
-            ParentSurname: newParentSurname 
-          };
-          await createStudent(newStudent);
-          // resetForm();
-        }}>
-          Crea Allieva
-        </Button>
-        <Button variant="secondary" id="buttonResetForm" onClick={resetForm}>
-          Reset Form
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }
 

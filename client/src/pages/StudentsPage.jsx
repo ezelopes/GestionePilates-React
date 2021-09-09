@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+
+import toastConfig from '../helpers/toast.config';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
 const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
@@ -173,7 +178,7 @@ const StudentsPage = () => {
 
   const printSelectedStudents = async () => {
     try {
-      if (selectedStudents.length === 0) return alert('Seleziona Allieve per Stamparle');
+      if (selectedStudents.length === 0) return toast.error('Seleziona Allieve per Stamparle', toastConfig);
       const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
 
       pdfMake.createPdf(documentDefinition).open();
@@ -203,7 +208,7 @@ const StudentsPage = () => {
 
         pdfMake.createPdf(documentDefinition).open();
       } else {
-        alert(`Nessuna allieva iscritta nel ${month} ${selectedYearGreenPass}`)
+        toast.error(`Nessuna allieva iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
       }
 
     } catch (err) {
@@ -231,7 +236,7 @@ const StudentsPage = () => {
 
         pdfMake.createPdf(documentDefinition).open();
       } else {
-        alert(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`)
+        toast.error(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`, toastConfig);
       }
 
     } catch (err) {
@@ -242,83 +247,87 @@ const StudentsPage = () => {
   // Stampa in base a data iscrizione (solo maggiorenni)
 
   return (
-    <div className="page-body">
-      <div className="filter-form">
+    <>    
+      <ToastContainer />
 
-        <Form.Group>
-          <Form.Label> Nome Allieva </Form.Label> 
-          <Form.Control ref={filterNameRef} type="text" placeholder="Inserisci Nome..." onChange={(e) => { viewStudentName(e.target.value) }}/> 
-        </Form.Group>
-        
-        <Form.Group>
-          <Form.Label> Cognome Allieva </Form.Label> 
-          <Form.Control ref={filterSurnameRef} type="text" placeholder="Inserisci Cognome..." onChange={(e) => { viewStudentSurname(e.target.value) }}/> 
-        </Form.Group>
-        
-        <Form.Group>
-          <Form.Label> Città </Form.Label> 
-          <Form.Control ref={filterCityRef} type="text" placeholder="Città..." onChange={(e) => { viewStudentCity(e.target.value) }}/> 
-        </Form.Group>
+      <div className="page-body">
+        <div className="filter-form">
 
-        <Form.Group>
-          <Form.Label> Età </Form.Label> 
-          <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { viewAge(target.value) } }>
-              { dropdownAges.map(age => <option key={`select_${age}`} value={age}> {age} </option>) }
-            </Form.Control>
-        </Form.Group>
+          <Form.Group>
+            <Form.Label> Nome Allieva </Form.Label> 
+            <Form.Control ref={filterNameRef} type="text" placeholder="Inserisci Nome..." onChange={(e) => { viewStudentName(e.target.value) }}/> 
+          </Form.Group>
+          
+          <Form.Group>
+            <Form.Label> Cognome Allieva </Form.Label> 
+            <Form.Control ref={filterSurnameRef} type="text" placeholder="Inserisci Cognome..." onChange={(e) => { viewStudentSurname(e.target.value) }}/> 
+          </Form.Group>
+          
+          <Form.Group>
+            <Form.Label> Città </Form.Label> 
+            <Form.Control ref={filterCityRef} type="text" placeholder="Città..." onChange={(e) => { viewStudentCity(e.target.value) }}/> 
+          </Form.Group>
 
-        <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
-          Rimuovi Filtri
-        </Button>
+          <Form.Group>
+            <Form.Label> Età </Form.Label> 
+            <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { viewAge(target.value) } }>
+                { dropdownAges.map(age => <option key={`select_${age}`} value={age}> {age} </option>) }
+              </Form.Control>
+          </Form.Group>
+
+          <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
+            Rimuovi Filtri
+          </Button>
+        </div>
+
+        <div className="ag-theme-balham student-list-grid">
+          <AgGridReact
+            reactNext={true}
+            rowMultiSelectWithClick={true}
+            rowSelection="multiple"
+            scrollbarWidth
+            rowHeight="45"
+            gridOptions={gridOptions}
+            columnDefs={columnDefs}
+            rowData={students}
+            onSelectionChanged={onStudentSelectionChanged}
+            // onGridReady={this.onGridReady}
+          ></AgGridReact>
+        </div>
+
+        <Divider />
+
+        <div className="buttons-container">
+          <Button variant="success" onClick={printSelectedStudents}>
+            Stampa Allieve Selezionate
+          </Button>
+        </div>
+
+        <div className="form-wrapper green-pass-form">
+          <Form.Group>
+            <Form.Label> Mese </Form.Label> 
+            <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { setselectedMonth(parseInt(target.value)) } }>
+                { months.map(month => <option key={`select_${month.id}`} value={month.id}> {month.month} </option>) }
+              </Form.Control>
+          </Form.Group>
+          
+          <Form.Group>
+            <Form.Label> Anno </Form.Label> 
+            <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { setSelectedYearGreenPass(parseInt(target.value)) } }>
+                { years.map(year => <option key={`select_${year.id}`} value={year.id}> {year.year} </option>) }
+              </Form.Control>
+          </Form.Group>
+
+          <Button variant="success" onClick={printStudentsWithExpiringGreenPass} style={{ marginTop: '1em' }}>
+            Stampa Allieve (Green Pass)
+          </Button>
+          
+          <Button variant="success" onClick={printStudentsBasedOnRegistrationDate} style={{ marginTop: '1em' }}>
+            Stampa Allieve (Data Iscrizione)
+          </Button>
+        </div>
       </div>
-
-      <div className="ag-theme-balham student-list-grid">
-        <AgGridReact
-          reactNext={true}
-          rowMultiSelectWithClick={true}
-          rowSelection="multiple"
-          scrollbarWidth
-          rowHeight="45"
-          gridOptions={gridOptions}
-          columnDefs={columnDefs}
-          rowData={students}
-          onSelectionChanged={onStudentSelectionChanged}
-          // onGridReady={this.onGridReady}
-        ></AgGridReact>
-      </div>
-
-      <Divider />
-
-      <div className="buttons-container">
-        <Button variant="success" onClick={printSelectedStudents}>
-          Stampa Allieve Selezionate
-        </Button>
-      </div>
-
-      <div className="form-wrapper green-pass-form">
-        <Form.Group>
-          <Form.Label> Mese </Form.Label> 
-          <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { setselectedMonth(parseInt(target.value)) } }>
-              { months.map(month => <option key={`select_${month.id}`} value={month.id}> {month.month} </option>) }
-            </Form.Control>
-        </Form.Group>
-        
-        <Form.Group>
-          <Form.Label> Anno </Form.Label> 
-          <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { setSelectedYearGreenPass(parseInt(target.value)) } }>
-              { years.map(year => <option key={`select_${year.id}`} value={year.id}> {year.year} </option>) }
-            </Form.Control>
-        </Form.Group>
-
-        <Button variant="success" onClick={printStudentsWithExpiringGreenPass} style={{ marginTop: '1em' }}>
-          Stampa Allieve (Green Pass)
-        </Button>
-        
-        <Button variant="success" onClick={printStudentsBasedOnRegistrationDate} style={{ marginTop: '1em' }}>
-          Stampa Allieve (Data Iscrizione)
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }
 

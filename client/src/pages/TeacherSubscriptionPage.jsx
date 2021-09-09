@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
 import { disciplines, schools, courses } from '../commondata/commondata'
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
@@ -63,6 +64,7 @@ const TeacherSubscriptionPage = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="form-wrapper subscription-form">
         <div className="user-form">
           <CreateUpdateUserForm

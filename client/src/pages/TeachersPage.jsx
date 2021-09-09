@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row,  Spinner } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
 
 import TeacherDisplayer from '../components/TeacherDisplayer'
 
@@ -24,6 +25,8 @@ const TeachersPage = () => {
 
   return (
     <>
+    <ToastContainer />
+
     { loading
       ? <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>

@@ -1,9 +1,13 @@
+import { toast } from 'react-toastify';
 import { receiptType } from '../commondata/commondata'
+import toastConfig from '../helpers/toast.config';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const createStudent = async (newStudent) => {
   console.log(newStudent);
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newStudent.TaxCode || newStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!newStudent.TaxCode || newStudent.TaxCode === '') return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
 
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
@@ -30,7 +34,7 @@ const createStudent = async (newStudent) => {
 
 const createReceipt = async (newReceipt) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newReceipt.ReceiptNumber || newReceipt.ReceiptNumber === '') return alert('Numero Ricevuta non puo essere vuoto');
+  if (!newReceipt.ReceiptNumber || newReceipt.ReceiptNumber === '') return toast.error('Numero Ricevuta non puo essere vuoto', toastConfig);
 
   const response = await fetch('/api/receipt/createReceipt', {
     method: 'PUT',
@@ -76,7 +80,7 @@ const createTeacher = async (newTeacher) => {
 
 const updateStudent = async (updatedStudent) => {
   console.log(updatedStudent);
-  if (!updatedStudent.TaxCode || updatedStudent.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!updatedStudent.TaxCode || updatedStudent.TaxCode === '') return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
 
   const response = await fetch('/api/student/updateStudent', {
     method: 'POST',
@@ -108,7 +112,7 @@ const updateStudent = async (updatedStudent) => {
 }
 
 const updateTeacher = async (updatedTeacherInfo) => {
-  if (!updatedTeacherInfo.TaxCode || updatedTeacherInfo.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
+  if (!updatedTeacherInfo.TaxCode || updatedTeacherInfo.TaxCode === '') return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
 
   const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',
