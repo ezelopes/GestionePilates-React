@@ -75,6 +75,22 @@ input[type='date'] {
   margin-top: 1.5em;
 }
 
+.green-pass-form {
+  display: flex;
+  justify-content: left; 
+  align-items: center;
+  margin-top: 2em;
+  width: fit-content;
+}
+
+.green-pass-form > * {
+  margin-right: 1em;
+}
+
+.green-pass-form > form-control {
+  width: auto;
+}
+
 .create-receipt-form-wrapper {
   width: 80vw;
   margin-left: 0vw;
@@ -234,7 +250,7 @@ input[type='date'] {
 }
 
 .student-list-grid {
-  height: 60vh; 
+  height: 45vh; 
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 

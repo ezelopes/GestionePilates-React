@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 
 const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
+const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
 
-import { ages } from '../commondata/commondata'
+import { ages, months, years } from '../commondata/commondata'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Divider from '../components/Divider';
 
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
@@ -53,8 +55,11 @@ const gridOptionsDefault = {
 const StudentsPage = () => {
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
+
   const [students, setStudents] = useState();
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [selectedMonth, setselectedMonth] = useState(months[0].id)
+  const [selectedYearGreenPass, setSelectedYearGreenPass] = useState(years[0].id)
   
   const filterNameRef = useRef();
   const filterSurnameRef = useRef();
@@ -166,7 +171,7 @@ const StudentsPage = () => {
     gridOptions.api.onFilterChanged();
   }
 
-  const printStudents = async () => {
+  const printSelectedStudents = async () => {
     try {
       if (selectedStudents.length === 0) return alert('Seleziona Allieve per Stamparle');
       const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
@@ -176,6 +181,65 @@ const StudentsPage = () => {
       console.log(err)
     }
   }
+
+  const printStudentsBasedOnRegistrationDate = async () => {
+    try {
+      const studentsWithExpiringGreenPass =  students.filter(({ RegistrationDate, GreenPassExpirationDate, IsAdult }) => {
+        if (RegistrationDate) {
+          const RegistrationDateFormatted = new Date(RegistrationDate)
+          console.log(!!GreenPassExpirationDate)
+          return RegistrationDateFormatted.getMonth() === selectedMonth && RegistrationDateFormatted.getFullYear() === selectedYearGreenPass && IsAdult === ages[0].age && !!GreenPassExpirationDate
+        }
+      })
+
+      const month = months.find(({ id }) => id == selectedMonth).month
+
+      if (studentsWithExpiringGreenPass.length > 0) {
+        const documentDefinition = await StudentsDataTemplate.default(
+          studentsWithExpiringGreenPass, 
+          month.toUpperCase(),
+          selectedYearGreenPass
+        );
+
+        pdfMake.createPdf(documentDefinition).open();
+      } else {
+        alert(`Nessuna allieva iscritta nel ${month} ${selectedYearGreenPass}`)
+      }
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const printStudentsWithExpiringGreenPass = async () => {
+    try {
+      const studentsWithExpiringGreenPass =  students.filter(({ GreenPassExpirationDate }) => {
+        if (GreenPassExpirationDate) {
+          const GreenPassExpirationDateFormatted = new Date(GreenPassExpirationDate)
+          return GreenPassExpirationDateFormatted.getMonth() === selectedMonth && GreenPassExpirationDateFormatted.getFullYear() === selectedYearGreenPass
+        }
+      })
+
+      const month = months.find(({ id }) => id == selectedMonth).month
+
+      if (studentsWithExpiringGreenPass.length > 0) {
+        const documentDefinition = await StudentsDataGreenPassTemplate.default(
+          studentsWithExpiringGreenPass, 
+          month.toUpperCase(),
+          selectedYearGreenPass
+        );
+
+        pdfMake.createPdf(documentDefinition).open();
+      } else {
+        alert(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`)
+      }
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // Stampa in base a data iscrizione (solo maggiorenni)
 
   return (
     <div className="page-body">
@@ -223,9 +287,35 @@ const StudentsPage = () => {
         ></AgGridReact>
       </div>
 
+      <Divider />
+
       <div className="buttons-container">
-        <Button variant="success" onClick={printStudents}>
+        <Button variant="success" onClick={printSelectedStudents}>
           Stampa Allieve Selezionate
+        </Button>
+      </div>
+
+      <div className="form-wrapper green-pass-form">
+        <Form.Group>
+          <Form.Label> Mese </Form.Label> 
+          <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { setselectedMonth(parseInt(target.value)) } }>
+              { months.map(month => <option key={`select_${month.id}`} value={month.id}> {month.month} </option>) }
+            </Form.Control>
+        </Form.Group>
+        
+        <Form.Group>
+          <Form.Label> Anno </Form.Label> 
+          <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { setSelectedYearGreenPass(parseInt(target.value)) } }>
+              { years.map(year => <option key={`select_${year.id}`} value={year.id}> {year.year} </option>) }
+            </Form.Control>
+        </Form.Group>
+
+        <Button variant="success" onClick={printStudentsWithExpiringGreenPass} style={{ marginTop: '1em' }}>
+          Stampa Allieve (Green Pass)
+        </Button>
+        
+        <Button variant="success" onClick={printStudentsBasedOnRegistrationDate} style={{ marginTop: '1em' }}>
+          Stampa Allieve (Data Iscrizione)
         </Button>
       </div>
     </div>

@@ -43,4 +43,26 @@ const receiptType = [
     { "id": 1, "type": "Quota Associativa" }
 ]
 
-export { ages, disciplines, schools, courses, receiptType };
+const months = [
+    { "id": 0, "month": "Gennaio" },
+    { "id": 1, "month": "Febbraio" },
+    { "id": 2, "month": "Marzo" },
+    { "id": 3, "month": "Aprile" },
+    { "id": 4, "month": "Maggio" },
+    { "id": 5, "month": "Giugno" },
+    { "id": 6, "month": "Luglio" },
+    { "id": 7, "month": "Agosto" },
+    { "id": 8, "month": "Settembre" },
+    { "id": 9, "month": "Ottobre" },
+    { "id": 10, "month": "Novembre" },
+    { "id": 11, "month": "Dicembre" },
+]
+
+const years = [
+    { "id": 2021, "year": 2021 },
+    { "id": 2022, "year": 2022 },
+    { "id": 2023, "year": 2023 },
+    { "id": 2024, "year": 2024 },
+]
+
+export { ages, disciplines, schools, courses, receiptType, months, years };

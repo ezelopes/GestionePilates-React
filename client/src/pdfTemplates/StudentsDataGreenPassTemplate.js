@@ -5,10 +5,10 @@ const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const StudentsDataTemplate = async (
+const StudentsDataGreenPassTemplate = async (
     studentsList,
-    registrationMonth,
-    registrationYear,
+    expiryMonth,
+    expiryYear,
   ) => {
 
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
@@ -17,12 +17,11 @@ const StudentsDataTemplate = async (
   const tableBody = [
     [
       { text: 'Allieva', bold: true },
-      { text: 'Data Nascita', bold: true },
-      { text: 'Numero Cellulare', bold: true }
+      { text: 'Data Scadenza Green Pass', bold: true },
     ]
   ]
   studentsList.forEach(student => 
-    tableBody.push([`${student.Name} ${student.Surname}` , student.DOB ? formatDate(new Date(student.DOB)) : BLANK_DATE, student.MobilePhone])
+    tableBody.push([`${student.Name} ${student.Surname}` , student.GreenPassExpirationDate ? formatDate(new Date(student.GreenPassExpirationDate)) : BLANK_DATE])
   )
 
   const content = [
@@ -33,7 +32,7 @@ const StudentsDataTemplate = async (
       margin: [0, 0, 0, 10]
     },
     {
-      text: `INFORMAZIONI ALLIEVE ISCRITTE NEL ${registrationMonth} ${registrationYear}`,
+      text: `GREEN PASS CON SCADENZA ${expiryMonth} ${expiryYear}`,
       lineHeight: 1.5,
       fontSize: 16,
       margin: [0, 0, 0, 10],
@@ -50,7 +49,7 @@ const StudentsDataTemplate = async (
       },
       table: {
         headerRows: 1,
-        widths: [ '40%', '30%', '30%' ],
+        widths: [ '50%', '50%' ],
 
         body: tableBody
       }
@@ -59,7 +58,7 @@ const StudentsDataTemplate = async (
 
   const docDefinition = {
     info: {
-      title: `Informazioni Allieve per Comune Iscritte nel ${registrationMonth} ${registrationYear}`,
+      title: `Informazioni Allieve Green Pass ${expiryMonth} ${expiryYear}`,
       author: 'Roxana Carro',
       subject: `Dati Allieve`
     },
@@ -70,4 +69,4 @@ const StudentsDataTemplate = async (
   return docDefinition;
 };
 
-export default StudentsDataTemplate;
+export default StudentsDataGreenPassTemplate;
