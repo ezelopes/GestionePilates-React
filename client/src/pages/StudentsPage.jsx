@@ -11,11 +11,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 const columnsDefinition = [
-  {
-    headerName: '',
-    checkboxSelection: true,
-    // select all ?
-  },
+  { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
   {
     headerName: 'Codice Fiscale',
     field: 'TaxCode',
@@ -81,6 +77,22 @@ const StudentsPage = () => {
       setStudents(studentListCached)
     }
   }, []);
+
+  
+  /*
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+
+    const updateData = (data) => {
+      setRowData(data);
+    };
+
+    fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
+      .then((resp) => resp.json())
+      .then((data) => updateData(data));
+    }; 
+  */
 
   const onStudentSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
@@ -199,6 +211,7 @@ const StudentsPage = () => {
       <div className="ag-theme-balham student-list-grid">
         <AgGridReact
           reactNext={true}
+          rowMultiSelectWithClick={true}
           rowSelection="multiple"
           scrollbarWidth
           rowHeight="45"

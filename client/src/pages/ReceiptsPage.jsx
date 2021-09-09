@@ -21,7 +21,7 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const columnsDefinition = [
-  { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
+  { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true, },
   { headerName: 'Nome', field: 'Name' },
   { headerName: 'Cognome', field: 'Surname' },
   { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
@@ -266,6 +266,7 @@ const ReceiptsPage = () => {
         <div className="ag-theme-balham receipts-grid">
           <AgGridReact
             reactNext={true}
+            rowMultiSelectWithClick={true}
             rowSelection="multiple"
             scrollbarWidth
             rowHeight="45"
