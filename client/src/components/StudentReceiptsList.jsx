@@ -86,10 +86,6 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
     setSelectedReceipt(selectedNode[0].data);
   }
 
-  const onCellChangedEntered = async (data) => {
-    await updateReceipt(data)
-  }
-
   const handleUpdateReceiptModal = () => {
     // Reset Form
     setShowUpdateReceiptModal(false)
@@ -101,10 +97,10 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
         <AgGridReact
           scrollbarWidth
           rowHeight="45"
+          rowSelection="single"
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           rowData={receipts}
-          onCellValueChanged={({ data }) => onCellChangedEntered(data) }
           onSelectionChanged={onReceiptSelectionChanged}
         ></AgGridReact>
       </div>
