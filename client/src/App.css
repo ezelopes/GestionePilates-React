@@ -267,3 +267,8 @@ input[type='date'] {
   margin-top: 2em; 
   gap: 2em;
 }
+
+/* Creatable Dropdown */
+.css-2b097c-container {
+  max-width: 16em;
+}

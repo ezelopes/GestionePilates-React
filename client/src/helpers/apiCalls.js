@@ -168,9 +168,9 @@ const updateReceipt = async (updatedReceipt) => {
       ReceiptID: updatedReceipt.ReceiptID,
       ReceiptNumber: updatedReceipt.ReceiptNumber,
       ReceiptType: updatedReceipt.ReceiptType,
-      ReceiptDate: updatedReceipt.ReceiptDate.split("-").reverse().join("-"),
-      CourseStartDate: updatedReceipt.CourseStartDate.split("-").reverse().join("-"),
-      CourseEndDate: updatedReceipt.CourseEndDate.split("-").reverse().join("-"),
+      ReceiptDate: updatedReceipt.ReceiptDate,
+      CourseStartDate: updatedReceipt.CourseStartDate,
+      CourseEndDate: updatedReceipt.CourseEndDate,
       AmountPaid: updatedReceipt.AmountPaid,
       PaymentMethod: updatedReceipt.PaymentMethod,
     })
