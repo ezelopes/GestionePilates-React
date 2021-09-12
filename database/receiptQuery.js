@@ -1,6 +1,5 @@
 const pool = require('./pool');
-
-import { getFormattedDate } from './helpers'
+const { getFormattedDate } = require('./helpers/index')
 
 const receiptType = [
   { "type": "Quota" },
@@ -137,18 +136,17 @@ const updateReceipt = async({
 }) => {
   try {
     const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
+    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
+    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
 
     if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
-        'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, SommaEuro=? WHERE RicevutaID=?;', 
-        [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, AmountPaid, ReceiptID]
+        'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;', 
+        [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, null, null, AmountPaid, ReceiptID]
       );
       return 'Ricevuta Aggiornata Correttamente!';
     }
   
-    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
-    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
-      
     await pool.execute(
       `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;`,
       [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, ReceiptID]

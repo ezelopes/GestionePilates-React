@@ -1,6 +1,5 @@
 const pool = require('./pool');
-
-import { getFormattedDate } from './helpers'
+const { getFormattedDate } = require('./helpers/index')
 
 const mappingTeachers = (rows) => {
   const teachers = rows.map(row => {
