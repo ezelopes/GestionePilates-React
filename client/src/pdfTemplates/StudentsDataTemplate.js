@@ -11,6 +11,12 @@ const StudentsDataTemplate = async (
     registrationYear,
   ) => {
 
+  let docTitle =  'INFORMAZIONI ALLIEVE'
+
+  if (registrationMonth && registrationYear) {
+    docTitle += ` ISCRITTE NEL ${registrationMonth} ${registrationYear}`
+  }
+
   const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_DATE = '____-____-________'
 
@@ -33,7 +39,7 @@ const StudentsDataTemplate = async (
       margin: [0, 0, 0, 10]
     },
     {
-      text: `INFORMAZIONI ALLIEVE ISCRITTE NEL ${registrationMonth} ${registrationYear}`,
+      text: docTitle,
       lineHeight: 1.5,
       fontSize: 16,
       margin: [0, 0, 0, 10],
@@ -59,7 +65,7 @@ const StudentsDataTemplate = async (
 
   const docDefinition = {
     info: {
-      title: `Informazioni Allieve per Comune Iscritte nel ${registrationMonth} ${registrationYear}`,
+      title: docTitle,
       author: 'Roxana Carro',
       subject: `Dati Allieve`
     },
