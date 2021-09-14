@@ -7,8 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const createStudent = async (newStudent) => {
   console.log(newStudent);
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newStudent.TaxCode || newStudent.TaxCode === '') return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
-
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
     headers: {
@@ -59,8 +57,6 @@ const createReceipt = async (newReceipt) => {
 
 const createTeacher = async (newTeacher) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newTeacher.TaxCode || newTeacher.TaxCode === '') return alert('Codice Fiscale non puo essere vuoto');
-
   const response = await fetch('/api/teacher/createTeacher', {
     method: 'PUT',
     headers: {
@@ -79,9 +75,6 @@ const createTeacher = async (newTeacher) => {
 };
 
 const updateStudent = async (updatedStudent) => {
-  console.log(updatedStudent);
-  if (!updatedStudent.TaxCode || updatedStudent.TaxCode === '') return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
-
   const response = await fetch('/api/student/updateStudent', {
     method: 'POST',
     headers: {
@@ -112,7 +105,6 @@ const updateStudent = async (updatedStudent) => {
 }
 
 const updateTeacher = async (updatedTeacherInfo) => {
-  if (!updatedTeacherInfo.TaxCode || updatedTeacherInfo.TaxCode === '') return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
 
   const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',

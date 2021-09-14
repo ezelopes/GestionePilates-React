@@ -25,54 +25,13 @@ const StudentPage = ({ match }) => {
   const [studentInfo, setStudentInfo] = useState({});
   const [studentReceipts, setStudentReceipts] = useState([]);
 
-  const [newIsAdult, setNewIsAdult] = useState('');
-  const [newTaxCode, setNewTaxCode] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newSurname, setNewSurname] = useState('');
-  const [newCity, setNewCity] = useState('');
-  const [newAddress, setNewAddress] = useState('');
-  const [newMobilePhone, setNewMobilePhone] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-  const [newBirthPlace, setNewBirthPlace] = useState('');
-  const [newDiscipline, setNewDiscipline] = useState('');
-  const [newCourse, setNewCourse] = useState('');
-  const [newSchool, setNewSchool] = useState('');
-  const [newRegistrationDate, setNewRegistrationDate] = useState('');
-  const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState('');
-  const [newDOB, setNewDOB] = useState('');
-  const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState('');
-  const [newParentTaxCode, setNewParentTaxCode] = useState('');
-  const [newParentName, setNewParentName] = useState('');
-  const [newParentSurname, setNewParentSurname] = useState('');
+  const [newRegistrationDate, setNewRegistrationDate] = useState(null);
   
   const [showUpdateStudentModal, setShowUpdateStudentModal] = useState(false);
   const [showRegistrationDateModal, setShowRegistrationDateModal] = useState(false);
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
 
-  const setFormData = (studentInfo) => {
-    setNewIsAdult(studentInfo.IsAdult);
-    setNewTaxCode(studentInfo.TaxCode);
-    setNewName(studentInfo.Name);
-    setNewSurname(studentInfo.Surname);
-    setNewCity(studentInfo.City);
-    setNewAddress(studentInfo.Address);
-    setNewMobilePhone(studentInfo.MobilePhone);
-    setNewEmail(studentInfo.Email);
-    setNewBirthPlace(studentInfo.BirthPlace);
-    setNewDiscipline(studentInfo.Discipline);
-    setNewCourse(studentInfo.Course);
-    setNewSchool(studentInfo.School);
-    setNewRegistrationDate(studentInfo.RegistrationDate);
-    setNewCertificateExpirationDate(studentInfo.CertificateExpirationDate);
-    setNewDOB(studentInfo.DOB);
-    setNewGreenPassExpirationDate(studentInfo.GreenPassExpirationDate);
-    setNewParentTaxCode(studentInfo.ParentTaxCode);
-    setNewParentName(studentInfo.ParentName);
-    setNewParentSurname(studentInfo.ParentSurname);
-  }
-
   const handleUpdateStudentModal = () => {
-    setFormData(studentInfo); // if closed without saving
     setShowUpdateStudentModal(false);
   }
 
@@ -92,7 +51,6 @@ const StudentPage = ({ match }) => {
       const getSingleStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
       const singleStudent = await getSingleStudentResult.json();
       setStudentInfo(singleStudent);
-      setFormData(singleStudent);
       setNewRegistrationDate(singleStudent.RegistrationDate)
 
       const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${match.params.TaxCode}`);
@@ -183,65 +141,13 @@ const StudentPage = ({ match }) => {
           <Modal.Title> Aggiorna Allieva </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <div className="user-form">
-              <CreateUpdateUserForm 
-                personInfo={studentInfo}
-                personType={'Student'}
-                newIsAdult={newIsAdult}
-                setNewIsAdult={setNewIsAdult}
-                setNewTaxCode={setNewTaxCode}
-                setNewName={setNewName}
-                setNewSurname={setNewSurname}
-                setNewCity={setNewCity}
-                setNewAddress={setNewAddress}
-                setNewMobilePhone={setNewMobilePhone}
-                setNewEmail={setNewEmail}
-                setNewBirthPlace={setNewBirthPlace}
-                setNewDiscipline={setNewDiscipline}
-                setNewCourse={setNewCourse}
-                setNewSchool={setNewSchool}
-                setNewRegistrationDate={setNewRegistrationDate}
-                setNewCertificateExpirationDate={setNewCertificateExpirationDate}
-                setNewDOB={setNewDOB}
-                setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
-                setNewParentTaxCode={setNewParentTaxCode}
-                setNewParentName={setNewParentName}
-                setNewParentSurname={setNewParentSurname}
-              />
-            </div>
+            <CreateUpdateUserForm 
+              personInfo={studentInfo}
+              personType={'Student'}
+              callback={updateStudent}
+            />
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={async () => {
-            const updatedStudentInfo = { 
-              StudentID: studentInfo.StudentID,
-              IsAdult: newIsAdult,
-              TaxCode: newTaxCode,
-              Name: newName,
-              Surname: newSurname,
-              City: newCity,
-              Address: newAddress,
-              MobilePhone: newMobilePhone,
-              Email: newEmail,
-              BirthPlace: newBirthPlace,
-              Discipline: newDiscipline,
-              Course: newCourse,
-              School: newSchool,
-              RegistrationDate: newRegistrationDate,
-              CertificateExpirationDate: newCertificateExpirationDate,
-              DOB: newDOB,
-              GreenPassExpirationDate: newGreenPassExpirationDate,
-              ParentTaxCode: newParentTaxCode,
-              ParentName: newParentName,
-              ParentSurname: newParentSurname 
-            };
-            await updateStudent(updatedStudentInfo);
-          } }>
-            AGGIORNA
-          </Button>
-          <Button variant="secondary" onClick={() => { handleUpdateStudentModal() } }>
-            CHIUDI
-          </Button>
-        </Modal.Footer>
+        <Modal.Footer />
       </Modal>
       
 

@@ -39,7 +39,7 @@ const TeachersPage = () => {
               : teachersList.map((currentTeacher) => {
                 return (
                     <div key={currentTeacher.TaxCode} className="teacher-card-wrapper">
-                      <TeacherDisplayer currentTeacher={currentTeacher} />
+                      <TeacherDisplayer teacherInfo={currentTeacher} />
                     </div>
                   )
                 })

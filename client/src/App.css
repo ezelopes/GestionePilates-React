@@ -30,22 +30,6 @@ label {
   font-weight: bold;
 }
 
-form {
-  padding: 1.5em 1.5em 1.5em 1.5em;
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  grid-gap: 1em;
-
-  align-items: center;
-  justify-content: center;
-}
-
-form input[type='text'] {
-  width: 16em;
-  padding-left: 0.5em;
-  height: 2em;
-}
-
 input[type='text']:focus {
   outline: none;
   border-color: #6eb3ea;
@@ -118,7 +102,7 @@ input[type='date'] {
   grid-template-columns: 20% 25% 20% 25%;
   align-items: center;
   justify-content: center;
-  row-gap: 0.5vw;
+  row-gap: 0.5em;
   column-gap: 1vw;
 }
 
@@ -264,6 +248,7 @@ input[type='date'] {
 .subscription-form-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 2em; 
   gap: 2em;
 }

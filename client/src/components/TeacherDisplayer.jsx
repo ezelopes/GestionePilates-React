@@ -11,63 +11,11 @@ const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTempla
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const TeacherDisplayer = ({ currentTeacher }) => {
+const TeacherDisplayer = ({ teacherInfo }) => {
     const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
-    const [teacherInfo, setTeacherInfo] = useState(currentTeacher);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
 
-    const [newTaxCode, setNewTaxCode] = useState(teacherInfo.TaxCode);
-    const [newName, setNewName] = useState(teacherInfo.Name);
-    const [newSurname, setNewSurname] = useState(teacherInfo.Surname);
-    const [newCity, setNewCity] = useState(teacherInfo.City);
-    const [newAddress, setNewAddress] = useState(teacherInfo.Address);
-    const [newMobilePhone, setNewMobilePhone] = useState(teacherInfo.MobilePhone);
-    const [newEmail, setNewEmail] = useState(teacherInfo.Email);
-    const [newBirthPlace, setNewBirthPlace] = useState(teacherInfo.BirthPlace);
-    const [newDiscipline, setNewDiscipline] = useState(teacherInfo.Discipline);
-    const [newCourse, setNewCourse] = useState(teacherInfo.Course);
-    const [newSchool, setNewSchool] = useState(teacherInfo.School);
-    const [newRegistrationDate, setNewRegistrationDate] = useState(
-      teacherInfo.RegistrationDate ? teacherInfo.RegistrationDate.split("-").reverse().join("-") : null
-    );
-    const [newCertificateExpirationDate, setNewCertificateExpirationDate] = useState(
-      teacherInfo.CertificateExpirationDate ? teacherInfo.CertificateExpirationDate.split("-").reverse().join("-") : null
-    );
-    const [newDOB, setNewDOB] = useState(
-      teacherInfo.DOB ? teacherInfo.DOB.split("-").reverse().join("-") : null
-    );
-    const [newGreenPassExpirationDate, setNewGreenPassExpirationDate] = useState(
-      teacherInfo.GreenPassExpirationDate ? teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-") : null
-    );
-
-    const setFormData = () => {
-      setNewTaxCode(teacherInfo.TaxCode)
-      setNewName(teacherInfo.Name)
-      setNewSurname(teacherInfo.Surname)
-      setNewCity(teacherInfo.City)
-      setNewAddress(teacherInfo.Address)
-      setNewMobilePhone(teacherInfo.MobilePhone)
-      setNewEmail(teacherInfo.Email)
-      setNewBirthPlace(teacherInfo.BirthPlace)
-      setNewDiscipline(teacherInfo.Discipline)
-      setNewCourse(teacherInfo.Course)
-      setNewSchool(teacherInfo.School)
-      setNewRegistrationDate(
-        teacherInfo.RegistrationDate ? teacherInfo.RegistrationDate.split("-").reverse().join("-") : null
-      )
-      setNewCertificateExpirationDate(
-        teacherInfo.CertificateExpirationDate ? teacherInfo.CertificateExpirationDate.split("-").reverse().join("-") : null
-      )
-      setNewDOB(
-        teacherInfo.DOB ? teacherInfo.DOB.split("-").reverse().join("-") : null
-      )
-      setNewGreenPassExpirationDate(
-        teacherInfo.GreenPassExpirationDate ? teacherInfo.GreenPassExpirationDate.split("-").reverse().join("-") : null
-      )
-    }
-
     const handleUpdateTeacherModal = () => {
-        setFormData(); // if closed without saving
         setShowUpdateTeacherModal(false);
     }
 
@@ -132,57 +80,13 @@ const TeacherDisplayer = ({ currentTeacher }) => {
           <Modal.Title> Aggiorna Insegnante </Modal.Title>
           </Modal.Header>
           <Modal.Body className="update-student-teacher-modal-body">
-              <div className="user-form">
-              <CreateUpdateUserForm 
-                  personInfo={teacherInfo}
-                  personType={'Teacher'}
-                  setNewTaxCode={setNewTaxCode}
-                  setNewName={setNewName}
-                  setNewSurname={setNewSurname}
-                  setNewCity={setNewCity}
-                  setNewAddress={setNewAddress}
-                  setNewMobilePhone={setNewMobilePhone}
-                  setNewEmail={setNewEmail}
-                  setNewBirthPlace={setNewBirthPlace}
-                  setNewDiscipline={setNewDiscipline}
-                  setNewCourse={setNewCourse}
-                  setNewSchool={setNewSchool}
-                  setNewRegistrationDate={setNewRegistrationDate}
-                  setNewCertificateExpirationDate={setNewCertificateExpirationDate}
-                  setNewDOB={setNewDOB}
-                  setNewGreenPassExpirationDate={setNewGreenPassExpirationDate}
-              />
-              </div>
+            <CreateUpdateUserForm 
+                personInfo={teacherInfo}
+                personType={'Teacher'}
+                callback={updateTeacher}
+            />
           </Modal.Body>
-          <Modal.Footer>
-          <Button variant="success" onClick={async () => {
-              const updatedTeacherInfo = {
-                TeacherID: teacherInfo.InsegnanteID,
-                TaxCode: newTaxCode,
-                Name: newName,
-                Surname: newSurname,
-                City: newCity,
-                Address: newAddress,
-                MobilePhone: newMobilePhone,
-                Email: newEmail,
-                BirthPlace: newBirthPlace,
-                Discipline: newDiscipline,
-                Course: newCourse,
-                School: newSchool,
-                RegistrationDate: newRegistrationDate,
-                CertificateExpirationDate: newCertificateExpirationDate,
-                DOB: newDOB,
-                GreenPassExpirationDate: newGreenPassExpirationDate
-              };
-              await updateTeacher(updatedTeacherInfo);
-              handleUpdateTeacherModal()
-          } }>
-              AGGIORNA
-          </Button>
-          <Button variant="secondary" onClick={() => { handleUpdateTeacherModal() } }>
-              CHIUDI
-          </Button>
-          </Modal.Footer>
+          <Modal.Footer />
         </Modal>
 
         <Modal show={showDeleteTeacherModal} onHide={ () => setShowDeleteTeacherModal(false) } centered>
@@ -193,7 +97,10 @@ const TeacherDisplayer = ({ currentTeacher }) => {
               Sei sicura di voler eliminare {teacherInfo.Name} {teacherInfo.Surname}?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={() => { deleteTeacher(teacherInfo.TeacherID); setShowDeleteTeacherModal(false); } }>
+            <Button variant="danger" onClick={async () => {
+              await deleteTeacher(teacherInfo.TeacherID);
+              setShowDeleteTeacherModal(false); 
+            }}>
               ELIMINA
             </Button>
             <Button variant="secondary" onClick={() => { setShowDeleteTeacherModal(false) } }>
