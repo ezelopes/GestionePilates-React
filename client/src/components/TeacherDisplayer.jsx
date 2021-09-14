@@ -15,10 +15,6 @@ const TeacherDisplayer = ({ teacherInfo }) => {
     const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
 
-    const handleUpdateTeacherModal = () => {
-        setShowUpdateTeacherModal(false);
-    }
-
     const stampaModuloIscrizione = async () => {
         try {
             const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
@@ -75,7 +71,7 @@ const TeacherDisplayer = ({ teacherInfo }) => {
           </Card.Body>
         </Card>
 
-        <Modal show={showUpdateTeacherModal} onHide={() => handleUpdateTeacherModal()} dialogClassName="update-teacher-modal" centered>
+        <Modal show={showUpdateTeacherModal} onHide={() => setShowUpdateTeacherModal(false)} dialogClassName="update-teacher-modal" centered>
           <Modal.Header closeButton>
           <Modal.Title> Aggiorna Insegnante </Modal.Title>
           </Modal.Header>

@@ -7,7 +7,6 @@ import TeacherDisplayer from '../components/TeacherDisplayer'
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-
 const TeachersPage = () => {
   const [teachersList, setTeachersList] = useState();
   const [loading, setLoading] = useState(true);
@@ -26,7 +25,6 @@ const TeachersPage = () => {
   return (
     <>
     <ToastContainer />
-
     { loading
       ? <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>

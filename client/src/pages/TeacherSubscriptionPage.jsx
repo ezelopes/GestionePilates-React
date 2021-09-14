@@ -1,9 +1,8 @@
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
+import { createTeacher } from '../helpers/apiCalls';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
-
-import { createTeacher } from '../helpers/apiCalls';
 
 const TeacherSubscriptionPage = () => {
   return (

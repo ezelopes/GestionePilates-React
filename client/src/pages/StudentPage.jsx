@@ -19,9 +19,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
-
 const StudentPage = ({ match }) => {
-
   const [studentInfo, setStudentInfo] = useState({});
   const [studentReceipts, setStudentReceipts] = useState([]);
 
@@ -30,11 +28,6 @@ const StudentPage = ({ match }) => {
   const [showUpdateStudentModal, setShowUpdateStudentModal] = useState(false);
   const [showRegistrationDateModal, setShowRegistrationDateModal] = useState(false);
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
-
-  const handleUpdateStudentModal = () => {
-    setShowUpdateStudentModal(false);
-  }
-
 
   const printRegistrationForm = async () => {
     try {
@@ -136,7 +129,7 @@ const StudentPage = ({ match }) => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showUpdateStudentModal} onHide={() => handleUpdateStudentModal()} dialogClassName="update-student-modal" centered>
+      <Modal show={showUpdateStudentModal} onHide={() => setShowUpdateStudentModal(false)} dialogClassName="update-student-modal" centered>
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Allieva </Modal.Title>
         </Modal.Header>
@@ -149,8 +142,6 @@ const StudentPage = ({ match }) => {
         </Modal.Body>
         <Modal.Footer />
       </Modal>
-      
-
     </>
   );
 }

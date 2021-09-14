@@ -4,8 +4,6 @@ import { createStudent } from '../helpers/apiCalls';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 
-
-
 const StudentSubscriptionPage = () => {
   return (
     <>
