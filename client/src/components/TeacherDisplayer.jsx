@@ -50,6 +50,9 @@ const TeacherDisplayer = ({ teacherInfo }) => {
               <b>Data Iscrizione:</b> { teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString(): 'Non Definito' }
             </Card.Text>
             <Card.Text>
+              <b>Scuola:</b> {teacherInfo.School}
+            </Card.Text>
+            <Card.Text>
               <b>Disciplina:</b> {teacherInfo.Discipline}
             </Card.Text>
             <Card.Text>
