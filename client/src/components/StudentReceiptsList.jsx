@@ -6,7 +6,7 @@ import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import { ToastContainer, toast } from 'react-toastify';
 
-import CreateReceiptForm from './CreateReceiptForm';
+import CreateUpdateReceiptForm from './CreateUpdateReceiptForm';
 import { deleteReceipt } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata'
@@ -136,7 +136,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
           <Modal.Title> Aggiorna Ricevuta </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <CreateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} isForUpdating />
+            <CreateUpdateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} isForUpdating />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => { handleUpdateReceiptModal() } }>

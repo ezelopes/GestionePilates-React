@@ -8,7 +8,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import NotFoundPage from './NotFoundPage';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/StudentReceiptsList';
-import CreateReceiptForm from '../components/CreateReceiptForm';
+import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
 import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
 import Divider from '../components/Divider';
 
@@ -91,7 +91,7 @@ const StudentPage = ({ match }) => {
         <Divider double />
 
         <div className="form-wrapper create-receipt-form-wrapper">
-            <CreateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />
+            <CreateUpdateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />
         </div>
       </div>
 
