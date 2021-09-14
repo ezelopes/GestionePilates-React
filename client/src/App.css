@@ -5,7 +5,7 @@ Colors:
  White: #000
 */
 body {
-  background-color: #F4F4F4;
+  background-color: #DCDCDC;
 }
 
 .navbar {
@@ -168,7 +168,17 @@ input[type='date'] {
   margin-top: 1em;
 }
 
+.card {
+  border-radius: 1em;
+}
+
+.card-body {
+  border-radius: inherit;
+  background-color: #F3F4F6;
+}
+
 .teacher-card-wrapper {
+  border-radius: 2em;
   width: 25vw;
   height: 100%;
   font-size: 14px;
