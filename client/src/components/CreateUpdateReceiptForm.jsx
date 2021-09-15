@@ -1,113 +1,140 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
-import formatDate from '../helpers/formatDateForInputDate';
+import { useForm, Controller } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+import { toast } from 'react-toastify';
 
-import { createReceipt, updateReceipt } from '../helpers/apiCalls';
 import Divider from './Divider';
+
+import toastConfig from '../helpers/toast.config';
+import formatDate from '../helpers/formatDateForInputDate';
 
 import { receiptType, paymentMethod, defaultAmounts } from '../commondata/commondata'
 
-const CreateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, isForCreating = false, isForUpdating = false }) => {
+import 'react-toastify/dist/ReactToastify.css';
+
+const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callback, isForCreating = false }) => {
   const today = formatDate(new Date(), true);
 
-  const [newReceiptNumber, setNewReceiptNumber] = useState(receiptInfo?.ReceiptNumber || '');
   const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptType[0].type);
-  const [newPaymentMethod, setNewPaymentMethod] = useState(receiptInfo?.PaymentMethod || paymentMethod[0].tipo);
-  const [newAmountPaid, setNewAmountPaid] = useState(receiptInfo?.AmountPaid || defaultAmounts[0].value);
-  const [newReceiptDate, setNewReceiptDate] = useState(receiptInfo?.ReceiptDate || today);
-  const [newCourseStartDate, setNewCourseStartDate] = useState(receiptInfo?.CourseStartDate || today);
-  const [newCourseEndDate, setNewCourseEndDate] = useState(receiptInfo?.CourseEndDate || today);
-  const [updateRegistrationDate, setUpdateRegistrationDate] = useState(false);
+  
+  const defaultValues = {
+    TaxCode,
+    StudentID,
+    ReceiptID: receiptInfo?.ReceiptID,
+    AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
+  }
+  
+  if (newReceiptType === receiptType[1].type) {
+    defaultValues['CourseStartDate'] = today
+    defaultValues['CourseEndDate'] = today
+  }
+
+  const { register, watch, handleSubmit, control, formState: { errors } } = useForm({ defaultValues })
+
+  const onSubmit = async (data) => {
+    await callback(data)
+  }
+  
+  watch((data) => { setNewReceiptType(data.ReceiptType) })
 
   return (
       <>
-        <div className="create-receipt-form">
-          <div className="flex-element">
-            <Form.Label> Numero Ricevuta </Form.Label>
-            <Form.Control type="text" placeholder="Inserisci Numero Ricevuta..." onChange={({ target }) => setNewReceiptNumber(target.value)} defaultValue={newReceiptNumber} />
-          </div>
-
-          <div className="flex-element">
-            <Form.Label> Tipo Ricevuta </Form.Label>
-            <Form.Control as="select" onChange={({ target }) => setNewReceiptType(target.value)} defaultValue={newReceiptType}>
-              {receiptType.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
-            </Form.Control>
-          </div>
-
-          <div className="flex-element">
-            <Form.Label> Tipo Pagamento </Form.Label>
-            <Form.Control as="select" onChange={({ target }) => setNewPaymentMethod(target.value)} defaultValue={newPaymentMethod}>
-              {paymentMethod.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
-            </Form.Control>
-          </div>
-          
-          <div className="flex-element">
-            <Form.Label> Somma Euro </Form.Label>
-            <CreatableSelect
-              defaultValue={defaultAmounts[0]}
-              onChange={(target) => setNewAmountPaid(target.value) }
-              options={defaultAmounts}
-            />
-          </div>
-
-          <div className="flex-element">
-            <Form.Label> Data Ricevuta </Form.Label>  <br />
-            <input type="date" onChange={({ target }) => setNewReceiptDate(target.value)} defaultValue={newReceiptDate} />
-          </div>
-
-          {
-            newReceiptType === receiptType[0].type && (
-              <>
-                <div className="flex-element">
-                  <Form.Label> Data Inizio Corso </Form.Label>  <br />
-                  <input type="date" onChange={({ target }) => setNewCourseStartDate(target.value)} defaultValue={newCourseStartDate} />
-                </div>
-
-                <div className="flex-element">
-                  <Form.Label> Data Scadenza Corso </Form.Label> <br />
-                  <input type="date" onChange={({ target }) => setNewCourseEndDate(target.value)} defaultValue={newCourseEndDate} />
-                </div>
-              </>
-            )
-          }
-
-          {isForCreating && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="create-receipt-form">
             <div className="flex-element">
-              <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' onChange={ ({ target }) =>  setUpdateRegistrationDate(target.checked) } />
+              <Form.Label> Numero Ricevuta </Form.Label>
+              <Form.Control 
+                type="text"
+                placeholder="Inserisci Numero Ricevuta..."
+                defaultValue={receiptInfo?.ReceiptNumber}
+                {...register('ReceiptNumber', { required: 'Numero Ricevuta non puo essere vuoto!' })} />
+              <div style={{ display: 'none' }}> 
+                <ErrorMessage
+                    errors={errors}
+                    name='ReceiptNumber'
+                    render={({ message }) => {
+                      if (errors?.ReceiptNumber?.type === "required") return toast.error(message, toastConfig)
+                    }}
+                />
+              </div>
             </div>
-          )}
-        </div>
-        
-        <Divider double />
-        
-        <Button variant='success' onClick={async () => {
-          const newReceipt = {
-            ReceiptID: receiptInfo?.ReceiptID || null,
-            ReceiptNumber: newReceiptNumber || null,
-            ReceiptDate: newReceiptDate || null,
-            CourseStartDate: newCourseStartDate || null,
-            CourseEndDate: newCourseEndDate || null,
-            AmountPaid: newAmountPaid || null,
-            PaymentMethod: newPaymentMethod || null,
-            ReceiptType: newReceiptType || null,
-            TaxCode: TaxCode || null,
-            StudentID: StudentID || null,
-            RegistrationDate: updateRegistrationDate || false
-          }
 
-          if (isForCreating) {
-            return createReceipt(newReceipt)
-          }
+            <div className="flex-element">
+              <Form.Label> Tipo Ricevuta </Form.Label>
+              <Form.Control as="select" defaultValue={receiptInfo?.ReceiptType} {...register('ReceiptType')}>
+                {receiptType.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
+              </Form.Control>
+            </div>
 
-          if (isForUpdating) {
-            return updateReceipt(newReceipt)
-          }
-        }}>
-          <span role='img' aria-label='create'>🆕</span> {isForCreating ? 'CREA RICEVUTA' : 'AGGIORNA RICEVUTA' }
-        </Button>
+            <div className="flex-element">
+              <Form.Label> Tipo Pagamento </Form.Label>
+              <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
+                {paymentMethod.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
+              </Form.Control>
+            </div>
+            
+            <div className="flex-element">
+              <Form.Label> Importo </Form.Label>
+              <Controller
+                name="AmountPaid"
+                control={control}
+                defaultValue={{
+                  value: receiptInfo?.AmountPaid || defaultAmounts[0].value,
+                  label: receiptInfo?.AmountPaid || defaultAmounts[0].label,
+                }}
+                render={({ field }) => {
+                  return (<CreatableSelect
+                    {...field}
+                    options={defaultAmounts}
+                    value={{ value: field.value, label: field.value }}
+                    defaultValue={field.value}
+                    onChange={(e) => { field.onChange(e.value) }}
+                  />)
+                }}
+              />
+            </div>
+
+            <div className="flex-element">
+              <Form.Label> Data Ricevuta </Form.Label>  <br />
+              <input type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
+            </div>
+
+            {
+              newReceiptType === receiptType[0].type && (
+                <>
+                  <div className="flex-element">
+                    <Form.Label> Data Inizio Corso </Form.Label>  <br />
+                    <input type="date" defaultValue={receiptInfo?.CourseStartDate || today} {...register('CourseStartDate')} />
+                  </div>
+
+                  <div className="flex-element">
+                    <Form.Label> Data Scadenza Corso </Form.Label> <br />
+                    <input type="date" defaultValue={receiptInfo?.CourseEndDate || today} {...register('CourseEndDate')} />
+                  </div>
+                </>
+              )
+            }
+
+            {isForCreating && (
+              <div className="flex-element">
+                <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' {...register('RegistrationDate')} />
+                
+                { newReceiptType === receiptType[0].type && (<Form.Check label="Contiene Quota Associativa" type='checkbox' style={{ marginTop: '1em' }} />) }
+              </div>
+            )}
+          </div>
+
+          <Divider double />
+          
+          <Button type='submit' variant='success'>
+            <span role='img' aria-label='create'>🆕</span> {isForCreating ? 'CREA RICEVUTA' : 'AGGIORNA RICEVUTA' }
+          </Button>
+        </form>
+        
       </>
   );
 };
 
-export default CreateReceiptForm;
+export default CreateUpdateReceiptForm;

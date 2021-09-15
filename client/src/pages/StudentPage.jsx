@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Spinner } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
@@ -9,7 +9,7 @@ import NotFoundPage from './NotFoundPage';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/StudentReceiptsList';
 import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
-import { updateStudent, updateRegistrationDate, deleteStudent } from '../helpers/apiCalls';
+import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } from '../helpers/apiCalls';
 import Divider from '../components/Divider';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
@@ -20,6 +20,7 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const StudentPage = ({ match }) => {
+  const [loading, setLoading] = useState(true);
   const [studentInfo, setStudentInfo] = useState({});
   const [studentReceipts, setStudentReceipts] = useState([]);
 
@@ -49,6 +50,8 @@ const StudentPage = ({ match }) => {
       const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${match.params.TaxCode}`);
       const receipts = await getReceiptsOfStudentResult.json();
       setStudentReceipts(receipts);
+
+      setLoading(false)
     };
     fetchData();
 
@@ -59,41 +62,48 @@ const StudentPage = ({ match }) => {
   return (
     <>
       <ToastContainer />
-      <div className="page-body">
-        <div className="student-name-title">
-          {studentInfo.Name} {studentInfo.Surname}
-        </div>
+      { loading 
+        ? <div className="spinnerWrapper">
+            <Spinner animation="border" role="status">
+              <span className="sr-only">Loading...</span>
+            </Spinner> 
+          </div> 
+        : <div className="page-body">
+            <div className="student-name-title">
+              {studentInfo.Name} {studentInfo.Surname}
+            </div>
 
-        <div className="buttons-container">
-          <Button onClick={printRegistrationForm}>
-            <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
-          </Button>
-          
-          <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) }>
-            <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
-          </Button>
+            <div className="buttons-container">
+              <Button onClick={printRegistrationForm}>
+                <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
+              </Button>
+              
+              <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) }>
+                <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
+              </Button>
 
-          <Button variant="warning" onClick={ () => setShowRegistrationDateModal(true) }>
-            <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
-          </Button>
+              <Button variant="warning" onClick={ () => setShowRegistrationDateModal(true) }>
+                <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
+              </Button>
 
-          <Button variant='danger' onClick={ () => setShowDeleteStudentModal(true) }>
-            <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
-          </Button>
+              <Button variant='danger' onClick={ () => setShowDeleteStudentModal(true) }>
+                <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
+              </Button>
 
-          <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') }>
-            <span role='img' aria-label='back'>🔙</span> INDIETRO
-          </Button>
-        </div>
+              <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') }>
+                <span role='img' aria-label='back'>🔙</span> INDIETRO
+              </Button>
+            </div>
 
-        <StudentReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
+            <StudentReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
 
-        <Divider double />
+            <Divider double />
 
-        <div className="form-wrapper create-receipt-form-wrapper">
-            <CreateUpdateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} />
-        </div>
-      </div>
+            <div className="form-wrapper create-receipt-form-wrapper">
+                <CreateUpdateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} callback={createReceipt} />
+            </div>
+          </div>
+      }
 
       <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>
         <Modal.Header closeButton>

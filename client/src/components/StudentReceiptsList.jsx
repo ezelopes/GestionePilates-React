@@ -7,7 +7,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import { ToastContainer, toast } from 'react-toastify';
 
 import CreateUpdateReceiptForm from './CreateUpdateReceiptForm';
-import { deleteReceipt } from '../helpers/apiCalls';
+import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata'
 
@@ -35,13 +35,13 @@ const gridOptionsDefault = {
 };
 
 const columnsDefinition = [
-  { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, editable: true },
-  { headerName: 'Tipo Ricevuta', field: 'ReceiptType', editable: true },
-  { headerName: 'Data Ricevuta', field: 'ReceiptDate', editable: true, cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', editable: true, cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', editable: true, cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Somma Euro', field: 'AmountPaid', editable: true },
-  { headerName: 'Tipo Pagamento', field: 'PaymentMethod', editable: true }
+  { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
+  { headerName: 'Tipo Ricevuta', field: 'ReceiptType' },
+  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
+  { headerName: 'Somma Euro', field: 'AmountPaid' },
+  { headerName: 'Tipo Pagamento', field: 'PaymentMethod' }
 ];
 
 const StudentReceiptsList = ({ receipts, studentInfo }) => {
@@ -136,7 +136,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
           <Modal.Title> Aggiorna Ricevuta </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <CreateUpdateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} isForUpdating />
+            <CreateUpdateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} callback={updateReceipt} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => { handleUpdateReceiptModal() } }>
