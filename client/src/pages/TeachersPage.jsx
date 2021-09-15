@@ -26,9 +26,11 @@ const TeachersPage = () => {
     <>
     <ToastContainer />
     { loading
-      ? <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner> 
+      ? <div className="spinnerWrapper">
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner> 
+      </div> 
       : <>
           <div className="page-body">
             <Row>
