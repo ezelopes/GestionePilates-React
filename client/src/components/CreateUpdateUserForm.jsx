@@ -23,7 +23,7 @@ const CreateUpdateUserForm = ({
   if (personType === 'Student') defaultValues['StudentID'] = personInfo?.StudentID
   else defaultValues['TeacherID'] = personInfo?.TeacherID
 
-  if (newIsAdult === ages[0].age) {
+  if (newIsAdult === ages[0].age && personType === 'Student') {
     defaultValues['ParentTaxCode'] = null
     defaultValues['ParentName'] = null
     defaultValues['ParentSurname'] = null
@@ -151,10 +151,8 @@ const CreateUpdateUserForm = ({
         <Button type='submit' variant='success'>
           {isForCreating ? 'Crea' : 'Aggiorna'} {personType === 'Student' ? 'Allieva' : 'Insegnante' }
         </Button>
-        {/* onClick={resetForm} */}
         {isForCreating && (
-          // onClick={() => reset()}
-          <Button variant='secondary'>
+          <Button variant='secondary' onClick={() => reset()}>
             Reset Form
           </Button>
         )}
