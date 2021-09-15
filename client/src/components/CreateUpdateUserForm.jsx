@@ -29,7 +29,7 @@ const CreateUpdateUserForm = ({
     defaultValues['ParentSurname'] = null
   }
   
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({ defaultValues })
+  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({ defaultValues })
 
   const onSubmit = async (data) => {
     await callback(data)
@@ -50,14 +50,19 @@ const CreateUpdateUserForm = ({
         )}
 
         <Form.Label> Codice Fiscale </Form.Label>
-        <Form.Control type='text' placeholder='Inserisci Codice Fiscale...' defaultValue={personInfo?.TaxCode} {...register('TaxCode', { required: true, minLength: 16, maxLength: 16 })} />
+        <Form.Control
+          type='text'
+          placeholder='Inserisci Codice Fiscale...'
+          defaultValue={personInfo?.TaxCode}
+          {...register('TaxCode', { required: true, pattern: { value: /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i } })}
+        />
         <div style={{ display: 'none' }}> 
           <ErrorMessage
               errors={errors}
               name='TaxCode'
               render={() => {
                 if (errors?.TaxCode?.type === "required") return toast.error('Codice Fiscale non puo essere vuoto', toastConfig)
-                else if (errors?.TaxCode?.type === "maxLength" || errors?.TaxCode?.type === "minLength") return toast.error('Codice Fiscale deve essere esattamente 16 caratteri', toastConfig)
+                else if (errors?.TaxCode?.type === "pattern") return toast.error('Assicurati che il codice fiscale sia nel formato corretto!', toastConfig)
               }}
           />
         </div>
@@ -122,8 +127,17 @@ const CreateUpdateUserForm = ({
               <Divider />
 
               <Form.Label> Codice Fiscale Genitore </Form.Label>
-              <Form.Control type='text' placeholder='Inserisci Codice Fiscale Genitore...' defaultValue={personInfo?.ParentTaxCode} {...register('ParentTaxCode')} />
-        
+              <Form.Control type='text' placeholder='Inserisci Codice Fiscale Genitore...' defaultValue={personInfo?.ParentTaxCode} {...register('ParentTaxCode', { required: false, pattern: { value: /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i } } )} />
+              <div style={{ display: 'none' }}> 
+                <ErrorMessage
+                    errors={errors}
+                    name='ParentTaxCode'
+                    render={() => {
+                      if (errors?.ParentTaxCode?.type === "pattern") return toast.error('Assicurati che il codice fiscale del genitore sia nel formato corretto!', toastConfig)
+                    }}
+                />
+              </div>
+
               <Form.Label> Nome Genitore </Form.Label>
               <Form.Control type='text' placeholder='Inserisci Nome Genitore...' defaultValue={personInfo?.ParentName} {...register('ParentName')} />
         
@@ -139,7 +153,8 @@ const CreateUpdateUserForm = ({
         </Button>
         {/* onClick={resetForm} */}
         {isForCreating && (
-          <Button variant='secondary' id='buttonResetForm'>
+          // onClick={() => reset()}
+          <Button variant='secondary'>
             Reset Form
           </Button>
         )}
