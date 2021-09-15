@@ -32,8 +32,6 @@ const createStudent = async (newStudent) => {
 
 const createReceipt = async (newReceipt) => {
   // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
-  if (!newReceipt.ReceiptNumber || newReceipt.ReceiptNumber === '') return toast.error('Numero Ricevuta non puo essere vuoto', toastConfig);
-
   const response = await fetch('/api/receipt/createReceipt', {
     method: 'PUT',
     headers: {
@@ -101,11 +99,9 @@ const updateStudent = async (updatedStudent) => {
     const responseParsed = await response.json();
     alert(responseParsed.message);
   }
-  
 }
 
 const updateTeacher = async (updatedTeacherInfo) => {
-
   const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',
     headers: {
