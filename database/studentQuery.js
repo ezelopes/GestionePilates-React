@@ -75,19 +75,21 @@ const createStudent = async ({
     const DOBFormatted = getFormattedDate(DOB)
     const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate)
 
-    await pool.execute(
+    const [rows, fields] = await pool.execute(
       'INSERT INTO Allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscaleGenitore, NomeGenitore, CognomeGenitore) \
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [TaxCode, IsAdult, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School, ParentTaxCode, ParentName, ParentSurname]
     );
+
+    // console.log({ rows, fields })
   
     const [rowsSelect] = await pool.execute('SELECT AllievaID FROM Allieva WHERE CodiceFiscale = ?', [TaxCode])
     const StudentID = rowsSelect[0].AllievaID;
   
-    return StudentID;
+    return { StudentID, message: 'Allieva creata correttamente' };
   } catch (error) {
     console.log(error);
-    return 'Errore nel creare Allieva!';
+    return { message: 'Errore nel creare Allieva!' };
   }
 }
 
@@ -133,10 +135,10 @@ const updateStudent = async ({
       );
     }
   
-    return 'Allieva Aggiornata Correttamente!';
+    return { message: 'Allieva Aggiornata Correttamente!'};
   } catch (error) {
     console.log(error);
-    return `Errore nell'aggiornare Allieva!`;
+    return { message: `Errore nell'aggiornare Allieva!` };
   }
 }
 

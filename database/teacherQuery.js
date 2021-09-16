@@ -67,10 +67,10 @@ const createTeacher = async ({
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [TaxCode, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School]
     );
-    return 'Insegnante Inserita Correttamente!';
+    return { message: 'Insegnante Inserita Correttamente!' };
   } catch (error) {
     console.log(error);
-    return 'Errore nel creare Insegnante!';
+    return { message: 'Errore nel creare Insegnante!' };
   }
 }
 
@@ -102,10 +102,10 @@ const updateTeacher = async ({
       `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
       [TaxCode, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School, TeacherID]
     );
-    return 'Insegnante Aggiornata Correttamente!';
+    return { message: 'Insegnante Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
-    return `Errore nell'aggiornare Insegnante!`;
+    return { message: `Errore nell'aggiornare Insegnante!` };
   }
 }
 

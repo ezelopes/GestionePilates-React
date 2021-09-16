@@ -83,6 +83,7 @@ const TeacherDisplayer = ({ teacherInfo }) => {
                 personInfo={teacherInfo}
                 personType={'Teacher'}
                 callback={updateTeacher}
+                handleModal={setShowUpdateTeacherModal}
             />
           </Modal.Body>
           <Modal.Footer />

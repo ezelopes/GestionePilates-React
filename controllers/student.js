@@ -6,10 +6,12 @@ const studentRouter = new Router();
 const getStudentsEndpoint = async (req, res) => {
   try {
     const students = await getStudents();
+  
     res.status(200).send(students);
   } catch (e) {
     console.log(e);
- }
+    res.status(500).send({ message: e.message })
+  }
 }
 
 const getSingleStudentEndpoint = async (req, res) => {
@@ -20,27 +22,34 @@ const getSingleStudentEndpoint = async (req, res) => {
     res.status(200).send(student);
   } catch (e) {
     console.log(e);
- }
+    res.status(500).send({ message: e.message })
+  }
 }
 
 const createStudentEndpoint = async (req, res) => {
   try {
-    const StudentID = await createStudent(req.body);
+    const { StudentID, message } = await createStudent(req.body);
 
-    const responseObject = { StudentID };
-    res.status(200).send(responseObject);
+    if (!StudentID) {
+      return res.status(400).send({ message })
+    }
+
+    return res.status(200).send({ StudentID, message });
   } catch (e) {
- }
+    console.log(e);
+    res.status(500).send({ message: e.message })
+  }
 }
 
 const updateStudentEndpoint = async (req, res) => {
   try {
-    const response = await updateStudent(req.body);
+    const { message } = await updateStudent(req.body);
 
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
+    res.status(200).send({ message });
   } catch (e) {
- }
+    console.log(e);
+    res.status(500).send({ message: e.message })
+  }
 }
 
 const updateRegistrationDateEndpoint = async (req, res) => {
@@ -49,11 +58,12 @@ const updateRegistrationDateEndpoint = async (req, res) => {
     const RegistrationDate = req.body.RegistrationDate;
 
     const response = await updateRegistrationDate(StudentID, RegistrationDate);
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
+
+    res.status(200).send({ message: response });
   } catch (e) {
     console.log(e);
- }
+    res.status(500).send({ message: e.message })
+  }
 }
 
 const deleteStudentEndpoint = async (req, res) => {
@@ -61,11 +71,11 @@ const deleteStudentEndpoint = async (req, res) => {
     const StudentID = req.body.StudentID;
     const response = await deleteStudent(StudentID);
 
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
+    res.status(200).send({ message: response });
   } catch (e) {
     console.log(e);
- }
+    res.status(500).send({ message: e.message })
+  }
 }
 
 studentRouter.get('/getStudents', getStudentsEndpoint);

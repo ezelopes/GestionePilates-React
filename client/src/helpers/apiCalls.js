@@ -1,12 +1,8 @@
-import { toast } from 'react-toastify';
 import { receiptType } from '../commondata/commondata'
-import toastConfig from '../helpers/toast.config';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 const createStudent = async (newStudent) => {
-  console.log(newStudent);
-  // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
     headers: {
@@ -16,22 +12,22 @@ const createStudent = async (newStudent) => {
     body: JSON.stringify(newStudent)
   });
 
+  const responseParsed = await response.json();
+
   if (response.status === 200) {
-    const responseParsed = await response.json();
-    const StudentID = responseParsed.StudentID;
+    const { StudentID } = responseParsed;
+
     newStudent.StudentID = StudentID;
     
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     studentListCached.push(newStudent);
     sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
-    
-    alert('Allieva Creata Correttamente');
   }
-  // resetForm();
+
+  return { status: response.status, message: responseParsed.message }
 };
 
 const createReceipt = async (newReceipt) => {
-  // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   const response = await fetch('/api/receipt/createReceipt', {
     method: 'PUT',
     headers: {
@@ -54,7 +50,6 @@ const createReceipt = async (newReceipt) => {
 };
 
 const createTeacher = async (newTeacher) => {
-  // AGGIUNGI CONTROLLI SU DATA, SOMMA, TIPO.
   const response = await fetch('/api/teacher/createTeacher', {
     method: 'PUT',
     headers: {
@@ -63,13 +58,9 @@ const createTeacher = async (newTeacher) => {
     },
     body: JSON.stringify(newTeacher)
   });
-
-  if (response.status === 200) {
-    const responseParsed = await response.json();
-    
-    alert('Insegnante Creata Correttamente');
-  }
-  // resetForm();
+  
+  const responseParsed = await response.json();
+  return { status: response.status, message: responseParsed.message }
 };
 
 const updateStudent = async (updatedStudent) => {
@@ -82,23 +73,26 @@ const updateStudent = async (updatedStudent) => {
     body: JSON.stringify(updatedStudent)
   });
   
+  const responseParsed = await response.json();
+
   // update session storage
   if (response.status === 200) {
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
+    const studentsListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     
-    for (let i = 0; i < studentListCached.length; i++) {
-      if(updatedStudent.StudentID === studentListCached[i].StudentID) {
-        studentListCached[i] = updatedStudent;
+    for (let i = 0; i < studentsListCached.length; i++) {
+      if(updatedStudent.StudentID === studentsListCached[i].StudentID) {
+        studentsListCached[i] = updatedStudent;
         break;
       }
     }
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
+    sessionStorage.setItem('studentsList', JSON.stringify(studentsListCached));
 
-    window.location.assign(`/paginaallieve/${updatedStudent.TaxCode}`)
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
+    // TODO: UPDATE HERE
+    // window.location.assign(`/paginaallieve/${updatedStudent.TaxCode}`)
   }
+
+  return { status: response.status, message: responseParsed.message }
 }
 
 const updateTeacher = async (updatedTeacherInfo) => {
@@ -111,11 +105,13 @@ const updateTeacher = async (updatedTeacherInfo) => {
     body: JSON.stringify(updatedTeacherInfo)
   });
   const responseParsed = await response.json();
-  alert(responseParsed.message);
-  window.location.reload();
-  return;
+  // TODO: UPDATE HERE
+  // window.reload()
+
+  return { status: response.status, message: responseParsed.message }
 }
 
+// TODO: UPDATE HERE
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
@@ -145,6 +141,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   return alert('Error');
 }
 
+// TODO: UPDATE HERE
 const updateReceipt = async (updatedReceipt) => {
   const response = await fetch('/api/receipt/updateReceipt', {
     method: 'POST',
@@ -168,6 +165,7 @@ const updateReceipt = async (updatedReceipt) => {
   window.location.reload();
 }
 
+// TODO: UPDATE HERE
 const deleteStudent = async (StudentID) => {
   const response = await fetch('/api/student/deleteStudent', {
     method: 'DELETE',
@@ -192,6 +190,7 @@ const deleteStudent = async (StudentID) => {
   window.location.assign('/paginaallieve');
 }
 
+// TODO: UPDATE HERE
 const deleteReceipt = async (ReceiptID) => {
   const response = await fetch('/api/receipt/deleteReceipt', {
     method: 'DELETE',
@@ -208,6 +207,7 @@ const deleteReceipt = async (ReceiptID) => {
   window.location.reload();
 }
 
+// TODO: UPDATE HERE
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',

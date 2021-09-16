@@ -14,7 +14,8 @@ const CreateUpdateUserForm = ({
   personInfo,
   personType,
   callback,
-  isForCreating
+  isForCreating,
+  handleModal = () => {}
 }) => {
   const [newIsAdult, setNewIsAdult] = useState(personInfo?.IsAdult || ages[0].age)
 
@@ -32,7 +33,16 @@ const CreateUpdateUserForm = ({
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({ defaultValues })
 
   const onSubmit = async (data) => {
-    await callback(data)
+    const response = await callback(data)
+
+    if (response.status === 200) {
+      if (!isForCreating) handleModal(false)
+
+      reset()
+      return toast.success(response.message, toastConfig)
+    }
+
+    return toast.error(response.message, toastConfig)
   }
 
   watch((data) => { setNewIsAdult(data.IsAdult) })

@@ -148,6 +148,7 @@ const StudentPage = ({ match }) => {
               personInfo={studentInfo}
               personType={'Student'}
               callback={updateStudent}
+              handleModal={setShowUpdateStudentModal}
             />
         </Modal.Body>
         <Modal.Footer />
