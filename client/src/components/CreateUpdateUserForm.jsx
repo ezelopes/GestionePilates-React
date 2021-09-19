@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
 import Divider from './Divider';
-import { useStudent } from './StudentContext';
-import { useTeacher } from './TeacherContext';
 
 import toastConfig from '../helpers/toast.config';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,8 +18,6 @@ const CreateUpdateUserForm = ({
   setUserInfo = () => {},
   handleModal = () => {}
 }) => {
-  // const { setUserInfo } = personType === 'Student' ? useStudent() : useTeacher()
-
   const [newIsAdult, setNewIsAdult] = useState(personInfo?.IsAdult || ages[0].age)
 
   const defaultValues = {}

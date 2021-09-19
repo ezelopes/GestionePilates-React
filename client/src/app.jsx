@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import NavBar from './components/Navbar';
 
@@ -16,25 +17,30 @@ import TeachersPage from './pages/TeachersPage';
 
 import ReceiptsPage from './pages/ReceiptsPage';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
   return (
-    <Router>
-      <div className="App">
-        <NavBar />
-        <div>
-          <Switch>
-            <Route path="/" component={HomePage} exact />
-            <Route path="/paginaallieve" component={StudentsPage} exact />
-            <Route path="/paginaricevute" component={ReceiptsPage} exact />
-            <Route path="/paginaallieve/:TaxCode" component={Student} exact />
-            <Route path="/iscrizioneallieve" component={StudentSubscription} exact />
-            <Route path="/iscrizioneinsegnanti" component={TeacherSubscription} exact />
-            <Route path="/paginainsegnanti" component={TeachersPage} exact />
-            <Route component={NotFoundPage} />
-          </Switch>
+    <>
+      <ToastContainer />
+      <Router>
+        <div className="App">
+          <NavBar />
+          <div>
+            <Switch>
+              <Route path="/" component={HomePage} exact />
+              <Route path="/paginaallieve" component={StudentsPage} exact />
+              <Route path="/paginaricevute" component={ReceiptsPage} exact />
+              <Route path="/paginaallieve/:TaxCode" component={Student} exact />
+              <Route path="/iscrizioneallieve" component={StudentSubscription} exact />
+              <Route path="/iscrizioneinsegnanti" component={TeacherSubscription} exact />
+              <Route path="/paginainsegnanti" component={TeachersPage} exact />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </>
   );
 }
 

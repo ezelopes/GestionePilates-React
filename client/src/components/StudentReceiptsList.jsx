@@ -4,14 +4,13 @@ import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import CreateUpdateReceiptForm from './CreateUpdateReceiptForm';
 import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata'
 
-import 'react-toastify/dist/ReactToastify.css';
 import { useStudent } from './StudentContext';
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
@@ -117,8 +116,6 @@ const StudentReceiptsList = () => {
 
   return (
     <>
-      <ToastContainer />
-
       <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
           scrollbarWidth

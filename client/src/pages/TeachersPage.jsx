@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Row,  Spinner } from 'react-bootstrap';
-import { ToastContainer } from 'react-toastify';
 
 import TeacherDisplayer from '../components/TeacherDisplayer'
 
@@ -24,7 +23,6 @@ const TeachersPage = () => {
 
   return (
     <>
-    <ToastContainer />
     { loading
       ? <div className="spinnerWrapper">
         <Spinner animation="border" role="status">

@@ -2,11 +2,9 @@ import React, { useState, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import toastConfig from '../helpers/toast.config';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
 const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
@@ -196,9 +194,7 @@ const StudentsPage = () => {
   }
 
   return (
-    <>    
-      <ToastContainer />
-
+    <>
       <div className="page-body">
         <div className="filter-form">
 

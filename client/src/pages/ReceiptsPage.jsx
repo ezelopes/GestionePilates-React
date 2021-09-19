@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import FilteredReceiptsModal from '../components/FilteredReceiptsModal'
 import formatDate from '../helpers/formatDateForInputDate';
@@ -228,8 +228,6 @@ const ReceiptsPage = () => {
 
   return (
     <>
-      <ToastContainer />
-
       <div className="page-body">
           <div className="filter-form">
             <Form.Group>
