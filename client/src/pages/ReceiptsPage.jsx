@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
@@ -69,26 +69,25 @@ const ReceiptsPage = () => {
   const fromDateRef = useRef();
   const toDateRef = useRef();
 
-  useEffect(() => {
+  const onGridReady = (params) => {
     const fetchData = async () => {
       const result = await fetch('/api/receipt/getAllReceipts');
       const body = await result.json();
       
       const orderedReceipts = orderReceiptsBasedOnReceiptNumber(body)
-
+  
       setAllReceipts(orderedReceipts);
       setCurrentReceipts(orderedReceipts);
     };
     fetchData();
 
-    try {
-      gridOptions.api.sizeColumnsToFit();
-      window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+    try{
+      params.api.sizeColumnsToFit();
+      window.addEventListener('resize', () => { params.api.sizeColumnsToFit(); })
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-
-  }, []);
+  }
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
@@ -280,6 +279,7 @@ const ReceiptsPage = () => {
             columnDefs={columnDefs}
             rowData={currentReceipts}
             onSelectionChanged={onReceiptSelectionChanged}
+            onGridReady={onGridReady}
           ></AgGridReact>
         </div>
         

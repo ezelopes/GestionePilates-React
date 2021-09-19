@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
@@ -73,36 +73,20 @@ const StudentsPage = () => {
   
   const dropdownAges = [ null, ages[0].age, ages[1].age ];
 
-  useEffect(() => {
+  const onGridReady = () => {    
     const fetchData = async () => {
       const result = await fetch('/api/student/getStudents');
       const body = await result.json();
       setStudents(body);
       sessionStorage.setItem('studentsList', JSON.stringify(body));
     };
-    
+
     if (!sessionStorage.getItem('studentsList') || (sessionStorage.getItem('studentsList') === [])) fetchData();
     else {
       const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
       setStudents(studentListCached)
     }
-  }, []);
-
-  
-  /*
-  const onGridReady = (params) => {
-    setGridApi(params.api);
-    setGridColumnApi(params.columnApi);
-
-    const updateData = (data) => {
-      setRowData(data);
-    };
-
-    fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
-      .then((resp) => resp.json())
-      .then((data) => updateData(data));
-    }; 
-  */
+  };
 
   const onStudentSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
@@ -132,47 +116,14 @@ const StudentsPage = () => {
     gridOptions.api.onFilterChanged();
   }
 
-  const viewAge = (age) => {
-    const filterInstance = gridOptions.api.getFilterInstance('IsAdult');
-
-    filterInstance.setModel({
-        type: 'contains',
-        filter: age
-    });
-
-    gridOptions.api.onFilterChanged();
-  }
-
-  const viewStudentName = (studentName) => {
-    const studentNameFilterComponent = gridOptions.api.getFilterInstance('Name');
-
-    studentNameFilterComponent.setModel({
-        type: 'contains',
-        filter: studentName
-    });
-
-    gridOptions.api.onFilterChanged();
-  }
+  const filterColumn = (columnName, value) => {
+    const columnFilterComponent = gridOptions.api.getFilterInstance(columnName);
   
-  const viewStudentSurname = (studentSurname) => {
-    const studentSurnameFilterComponent = gridOptions.api.getFilterInstance('Surname');
-
-    studentSurnameFilterComponent.setModel({
+    columnFilterComponent.setModel({
         type: 'contains',
-        filter: studentSurname
+        filter: value
     });
-
-    gridOptions.api.onFilterChanged();
-  }
   
-  const viewStudentCity = (studentCity) => {
-    const studentCityFilterComponent = gridOptions.api.getFilterInstance('City');
-
-    studentCityFilterComponent.setModel({
-        type: 'contains',
-        filter: studentCity
-    });
-
     gridOptions.api.onFilterChanged();
   }
 
@@ -244,8 +195,6 @@ const StudentsPage = () => {
     }
   }
 
-  // Stampa in base a data iscrizione (solo maggiorenni)
-
   return (
     <>    
       <ToastContainer />
@@ -255,22 +204,22 @@ const StudentsPage = () => {
 
           <Form.Group>
             <Form.Label> Nome Allieva </Form.Label> 
-            <Form.Control ref={filterNameRef} type="text" placeholder="Inserisci Nome..." onChange={(e) => { viewStudentName(e.target.value) }}/> 
+            <Form.Control ref={filterNameRef} type="text" placeholder="Inserisci Nome..." onChange={(e) => { filterColumn('Name', e.target.value) }}/> 
           </Form.Group>
           
           <Form.Group>
             <Form.Label> Cognome Allieva </Form.Label> 
-            <Form.Control ref={filterSurnameRef} type="text" placeholder="Inserisci Cognome..." onChange={(e) => { viewStudentSurname(e.target.value) }}/> 
+            <Form.Control ref={filterSurnameRef} type="text" placeholder="Inserisci Cognome..." onChange={(e) => { filterColumn('Surname', e.target.value) }}/> 
           </Form.Group>
           
           <Form.Group>
             <Form.Label> Città </Form.Label> 
-            <Form.Control ref={filterCityRef} type="text" placeholder="Città..." onChange={(e) => { viewStudentCity(e.target.value) }}/> 
+            <Form.Control ref={filterCityRef} type="text" placeholder="Città..." onChange={(e) => { filterColumn('City', e.target.value) }}/> 
           </Form.Group>
 
           <Form.Group>
             <Form.Label> Età </Form.Label> 
-            <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { viewAge(target.value) } }>
+            <Form.Control ref={filterAgeRef} as="select" onChange={({ target }) => { filterColumn('IsAdult', target.value) } }>
                 { dropdownAges.map(age => <option key={`select_${age}`} value={age}> {age} </option>) }
               </Form.Control>
           </Form.Group>
@@ -291,7 +240,7 @@ const StudentsPage = () => {
             columnDefs={columnDefs}
             rowData={students}
             onSelectionChanged={onStudentSelectionChanged}
-            // onGridReady={this.onGridReady}
+            onGridReady={onGridReady}
           ></AgGridReact>
         </div>
 

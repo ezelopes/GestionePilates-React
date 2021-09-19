@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import pdfMake from 'pdfmake/build/pdfmake.js';
@@ -53,15 +53,14 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
   const [showUpdateReceiptModal, setShowUpdateReceiptModal] = useState(false);
 
 
-  useEffect(() => {
+  const onGridReady = (params) => {
     try{
-      gridOptions.api.sizeColumnsToFit();
-      window.addEventListener('resize', () => { gridOptions.api.sizeColumnsToFit(); })
+      params.api.sizeColumnsToFit();
+      window.addEventListener('resize', () => { params.api.sizeColumnsToFit(); })
     } catch (err) {
       console.log(err);
     }
-
-  }, [])
+  }
 
   const printReceipt = async () => {    
     try {
@@ -108,6 +107,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
           columnDefs={columnDefs}
           rowData={receipts}
           onSelectionChanged={onReceiptSelectionChanged}
+          onGridReady={onGridReady}
         ></AgGridReact>
       </div>
 
