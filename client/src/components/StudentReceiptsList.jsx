@@ -94,6 +94,16 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
     setShowUpdateReceiptModal(false)
   }
 
+  const handleDeleteReceipt = async () => {
+    const response = await deleteReceipt(selectedReceipt.ReceiptID);
+
+    response.status === 200 
+      ? toast.success(response.message, toastConfig)
+      : toast.success(response.message, toastConfig)
+
+    setShowDeleteReceiptModal(false); 
+  } 
+
   return (
     <>
       <ToastContainer />
@@ -136,7 +146,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
           <Modal.Title> Aggiorna Ricevuta </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <CreateUpdateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} callback={updateReceipt} />
+            <CreateUpdateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => { handleUpdateReceiptModal() } }>
@@ -153,10 +163,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
             Sei sicura di voler eliminare la ricevuta selezionata?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={async () => { 
-            await deleteReceipt(selectedReceipt.ReceiptID);
-            setShowDeleteReceiptModal(false); } 
-          }>
+          <Button variant="danger" onClick={handleDeleteReceipt}>
             ELIMINA
           </Button>
           <Button variant="secondary" onClick={() => { setShowDeleteReceiptModal(false) } }>

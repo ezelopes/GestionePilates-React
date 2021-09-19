@@ -14,7 +14,7 @@ import { receiptType, paymentMethod, defaultAmounts } from '../commondata/common
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callback, isForCreating = false }) => {
+const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
   const today = formatDate(new Date(), true);
 
   const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptType[0].type);
@@ -31,10 +31,19 @@ const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callb
     defaultValues['CourseEndDate'] = today
   }
 
-  const { register, watch, handleSubmit, control, formState: { errors } } = useForm({ defaultValues })
+  const { register, watch, handleSubmit, reset, control, formState: { errors } } = useForm({ defaultValues })
 
   const onSubmit = async (data) => {
-    await callback(data)
+    const response = await callback(data)
+
+    if (response.status === 200) {
+      if (!isForCreating) handleModal(false)
+
+      reset()
+      return toast.success(response.message, toastConfig)
+    }
+
+    return toast.error(response.message, toastConfig)
   }
   
   watch((data) => { setNewReceiptType(data.ReceiptType) })

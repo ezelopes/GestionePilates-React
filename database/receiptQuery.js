@@ -98,7 +98,7 @@ const createReceipt = async ({
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
         [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, AmountPaid, TaxCode, StudentID, false]
       );
-      return 'Ricevuta Inserita Correttamente!';
+      return { message: 'Ricevuta Inserita Correttamente!' };
     }
   
     const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
@@ -117,10 +117,10 @@ const createReceipt = async ({
       );
     }
 
-    return 'Ricevuta Inserita Correttamente!';
+    return { message: 'Ricevuta Inserita Correttamente!' };
   } catch (error) {
     console.log(error);
-    return 'Errore nel creare la Ricevuta!';
+    return { message: 'Errore nel creare la Ricevuta!' };
   }
 }
   
@@ -144,17 +144,17 @@ const updateReceipt = async({
         'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;', 
         [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, null, null, AmountPaid, ReceiptID]
       );
-      return 'Ricevuta Aggiornata Correttamente!';
+      return { message: 'Ricevuta Aggiornata Correttamente!' };
     }
   
     await pool.execute(
       `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;`,
       [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, ReceiptID]
     );
-    return 'Ricevuta Aggiornata Correttamente!';
+    return { message: 'Ricevuta Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
-    return `Errore nell'aggiornare Ricevuta!`;
+    return { message: `Errore nell'aggiornare Ricevuta!` };
   }
 } 
 
@@ -162,10 +162,10 @@ const deleteReceipt = async (ReceiptID) => {
   try {
     await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [ReceiptID])
 
-    return 'Ricevuta Eliminata Correttamente!';
+    return { message: 'Ricevuta Eliminata Correttamente!' };
   } catch (error) {
     console.log(error);
-    return `Errore nell'eliminare Ricevute!`;
+    return { message: `Errore nell'eliminare Ricevute!` };
   }
 }
 

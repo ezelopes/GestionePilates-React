@@ -37,16 +37,19 @@ const createReceipt = async (newReceipt) => {
     body: JSON.stringify(newReceipt)
   });
 
+  // TODO: Double Check this if statement
   if (newReceipt.ReceiptType === receiptType[1].type) {
     delete newReceipt.CourseStartDate;
     delete newReceipt.CourseEndDate;
   }
 
-  if (response.status === 200) {
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
-    window.location.reload();
-  }
+  const responseParsed = await response.json();
+  
+  return { status: response.status, message: responseParsed.message }
+  // if (response.status === 200) {
+  //   alert(responseParsed.message);
+  //   window.location.reload();
+  // }
 };
 
 const createTeacher = async (newTeacher) => {
@@ -161,8 +164,10 @@ const updateReceipt = async (updatedReceipt) => {
     })
   });
   const responseParsed = await response.json();
-  alert(responseParsed.message);
-  window.location.reload();
+  
+  return { status: response.status, message: responseParsed.message }
+  // alert(responseParsed.message);
+  // window.location.reload();
 }
 
 // TODO: UPDATE HERE
@@ -203,8 +208,10 @@ const deleteReceipt = async (ReceiptID) => {
     })
   });
   const responseParsed = await response.json();
-  alert(responseParsed.message);
-  window.location.reload();
+
+  return { status: response.status, message: responseParsed.message }
+  // alert(responseParsed.message);
+  // window.location.reload();
 }
 
 // TODO: UPDATE HERE

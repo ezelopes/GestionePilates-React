@@ -24,30 +24,35 @@ const getAllReceiptsEndpoint = async (req, res) => {
 
 const createReceiptEndpoint = async (req, res) => {
   try {
-    const response = await createReceipt(req.body);
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
+    const { message } = await createReceipt(req.body);
+
+    res.status(200).send({ message });
   } catch (e) {
+    console.log(e);
+    res.status(500).send({ message: e.message })
   }
 }
 
 const updateReceiptEndpoint = async (req, res) => {
   try {
-    const response = await updateReceipt(req.body);
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
+    const { message } = await updateReceipt(req.body);
+
+    res.status(200).send({ message });
   } catch (e) {
+    console.log(e);
+    res.status(500).send({ message: e.message })
   }
 }
 
 const deleteReceiptEndpoint = async (req, res) => {
   try {
     const ReceiptID = req.body.ReceiptID;
-    const response = await deleteReceipt(ReceiptID);
-    const responseObject = { message: response };
-    res.status(200).send(responseObject);
+    const { message } = await deleteReceipt(ReceiptID);
+
+    res.status(200).send({ message });
   } catch (e) {
     console.log(e);
+    res.status(500).send({ message: e.message })
   }
 }
 
