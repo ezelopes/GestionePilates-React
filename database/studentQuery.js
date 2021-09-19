@@ -80,8 +80,6 @@ const createStudent = async ({
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [TaxCode, IsAdult, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School, ParentTaxCode, ParentName, ParentSurname]
     );
-
-    // console.log({ rows, fields })
   
     const [rowsSelect] = await pool.execute('SELECT AllievaID FROM Allieva WHERE CodiceFiscale = ?', [TaxCode])
     const StudentID = rowsSelect[0].AllievaID;
