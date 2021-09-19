@@ -1,19 +1,25 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Modal, Button, Spinner } from 'react-bootstrap';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import NotFoundPage from './NotFoundPage';
+
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/StudentReceiptsList';
 import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
 import { StudentProvider } from '../components/StudentContext'
-import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } from '../helpers/apiCalls';
 import Divider from '../components/Divider';
 
+import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } from '../helpers/apiCalls';
+import toastConfig from '../helpers/toast.config';
+
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
+
+import 'react-toastify/dist/ReactToastify.css';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -31,6 +37,8 @@ const StudentPage = ({ match }) => {
   const [showRegistrationDateModal, setShowRegistrationDateModal] = useState(false);
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
 
+  const history = useHistory();
+
   const printRegistrationForm = async () => {
     try {
       const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
@@ -43,10 +51,10 @@ const StudentPage = ({ match }) => {
   useEffect(() => {
     // TODO: Reduce this to one endpoint call!
     const fetchData = async () => {
-      const getSingleStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
-      const singleStudent = await getSingleStudentResult.json();
-      setStudentInfo(singleStudent);
-      setNewRegistrationDate(singleStudent.RegistrationDate)
+      const getStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
+      const student = await getStudentResult.json();
+      setStudentInfo(student);
+      setNewRegistrationDate(student.RegistrationDate)
 
       const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${match.params.TaxCode}`);
       const receipts = await getReceiptsOfStudentResult.json();
@@ -57,6 +65,19 @@ const StudentPage = ({ match }) => {
     fetchData();
 
   }, []);
+
+  const handleRegistrationDateUpdate = async () => {
+    const response = await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate);
+    
+    if (response.status === 200) {
+      setStudentInfo(response.updatedStudent)
+
+      toast.success(response.message, toastConfig)
+    } else {
+      toast.error(response.message, toastConfig)
+    }
+    setShowRegistrationDateModal(false); 
+  }
 
   if (!studentInfo) return <NotFoundPage />;
 
@@ -92,7 +113,7 @@ const StudentPage = ({ match }) => {
                   <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
                 </Button>
 
-                <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') }>
+                <Button variant="secondary" onClick={history.goBack}>
                   <span role='img' aria-label='back'>🔙</span> INDIETRO
                 </Button>
               </div>
@@ -105,57 +126,59 @@ const StudentPage = ({ match }) => {
                   <CreateUpdateReceiptForm isForCreating={true} callback={createReceipt} />
               </div>
             </div>
+
+            <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>
+              <Modal.Header closeButton>
+                <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="update-registration-date">
+                  <input type="date" defaultValue={ studentInfo?.RegistrationDate } onChange={({ target }) => setNewRegistrationDate(target.value)} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="success" onClick={handleRegistrationDateUpdate}>
+                  AGGIORNA
+                </Button>
+                <Button variant="secondary" onClick={() => { setShowRegistrationDateModal(false) } }>
+                  CHIUDI
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            
+            <Modal show={showDeleteStudentModal} onHide={ () => setShowDeleteStudentModal(false) } centered>
+              <Modal.Header closeButton>
+                <Modal.Title> Elimina Allieva </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="delete-student-teacher-modal-body">
+                  Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={async () => { await deleteStudent(studentInfo.StudentID); setShowDeleteStudentModal(false); } }>
+                  ELIMINA
+                </Button>
+                <Button variant="secondary" onClick={() => { setShowDeleteStudentModal(false) } }>
+                  CHIUDI
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal show={showUpdateStudentModal} onHide={() => setShowUpdateStudentModal(false)} dialogClassName="update-student-modal" centered>
+              <Modal.Header closeButton>
+                <Modal.Title> Aggiorna Allieva </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="update-student-modal-body">
+                  <CreateUpdateUserForm 
+                    personInfo={studentInfo}
+                    personType={'Student'}
+                    callback={updateStudent}
+                    handleModal={setShowUpdateStudentModal}
+                    setUserInfo={setStudentInfo}
+                  />
+              </Modal.Body>
+              <Modal.Footer />
+            </Modal>
         </StudentProvider>
       }
 
-      <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>
-        <Modal.Header closeButton>
-          <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="update-registration-date">
-            <input type="date" defaultValue={ studentInfo?.RegistrationDate } onChange={({ target }) => setNewRegistrationDate(target.value)} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={async () => { await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate); setShowRegistrationDateModal(false); } }>
-            AGGIORNA
-          </Button>
-          <Button variant="secondary" onClick={() => { setShowRegistrationDateModal(false) } }>
-            CHIUDI
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      
-      <Modal show={showDeleteStudentModal} onHide={ () => setShowDeleteStudentModal(false) } centered>
-        <Modal.Header closeButton>
-          <Modal.Title> Elimina Allieva </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="delete-student-teacher-modal-body">
-            Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={async () => { await deleteStudent(studentInfo.StudentID); setShowDeleteStudentModal(false); } }>
-            ELIMINA
-          </Button>
-          <Button variant="secondary" onClick={() => { setShowDeleteStudentModal(false) } }>
-            CHIUDI
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={showUpdateStudentModal} onHide={() => setShowUpdateStudentModal(false)} dialogClassName="update-student-modal" centered>
-        <Modal.Header closeButton>
-          <Modal.Title> Aggiorna Allieva </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="update-student-modal-body">
-            <CreateUpdateUserForm 
-              personInfo={studentInfo}
-              personType={'Student'}
-              callback={updateStudent}
-              handleModal={setShowUpdateStudentModal}
-            />
-        </Modal.Body>
-        <Modal.Footer />
-      </Modal>
     </>
   );
 }

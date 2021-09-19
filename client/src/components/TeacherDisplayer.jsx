@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
 import { Button, Card, Modal } from 'react-bootstrap'
+import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import CreateUpdateUserForm from './CreateUpdateUserForm'
+import { TeacherProvider } from './TeacherContext';
 
 import { updateTeacher, deleteTeacher } from '../helpers/apiCalls';
+import toastConfig from '../helpers/toast.config';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const TeacherDisplayer = ({ teacherInfo }) => {
+import 'react-toastify/dist/ReactToastify.css';
+
+const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
+    const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo)
     const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
     const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
 
-    const stampaModuloIscrizione = async () => {
+    const printRegistrationForm = async () => {
         try {
             const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
             pdfMake.createPdf(documentDefinition).open();
@@ -24,8 +30,26 @@ const TeacherDisplayer = ({ teacherInfo }) => {
         }
     };
 
+    const handleTeacherDeletion = async () => {
+      const response = await deleteTeacher(teacherInfo.TeacherID);
+
+      if (response.status === 200) {
+        const updatedTeacherList = [...teachersList]
+        const receiptIndex = teachersList.findIndex((teacher => teacher.TeacherID == teacherInfo.TeacherID))
+  
+        updatedTeacherList.splice(receiptIndex, 1);
+
+        toast.success(response.message, toastConfig)
+        setTeachersList(updatedTeacherList)
+      } else {
+        toast.error(response.message, toastConfig)
+      }
+      
+      setShowDeleteTeacherModal(false);
+    }
+
     return (
-      <>
+      <TeacherProvider teacherInfo={teacherInfo} >
         <Card>
           <Card.Body>
             <Card.Title>
@@ -66,7 +90,7 @@ const TeacherDisplayer = ({ teacherInfo }) => {
             </Card.Text>
 
             <div className="buttons-container">
-              <Button variant="success" onClick={ () => stampaModuloIscrizione()}> Scarica Modulo </Button>
+              <Button variant="success" onClick={ () => printRegistrationForm()}> Scarica Modulo </Button>
               <Button variant="primary" onClick={ () => setShowUpdateTeacherModal(true) }> Aggiorna </Button>
               <Button variant="danger" onClick={() => setShowDeleteTeacherModal(true) }> Elimina </Button>
             </div>
@@ -84,6 +108,7 @@ const TeacherDisplayer = ({ teacherInfo }) => {
                 personType={'Teacher'}
                 callback={updateTeacher}
                 handleModal={setShowUpdateTeacherModal}
+                setUserInfo={setTeacherInfo}
             />
           </Modal.Body>
           <Modal.Footer />
@@ -97,10 +122,7 @@ const TeacherDisplayer = ({ teacherInfo }) => {
               Sei sicura di voler eliminare {teacherInfo.Name} {teacherInfo.Surname}?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={async () => {
-              await deleteTeacher(teacherInfo.TeacherID);
-              setShowDeleteTeacherModal(false); 
-            }}>
+            <Button variant="danger" onClick={handleTeacherDeletion}>
               ELIMINA
             </Button>
             <Button variant="secondary" onClick={() => { setShowDeleteTeacherModal(false) } }>
@@ -108,7 +130,7 @@ const TeacherDisplayer = ({ teacherInfo }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-      </>
+      </TeacherProvider>
     )
 };
 

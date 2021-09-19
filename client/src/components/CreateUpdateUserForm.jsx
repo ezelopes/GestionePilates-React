@@ -3,26 +3,32 @@ import { Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
-import toastConfig from '../helpers/toast.config';
+import Divider from './Divider';
+import { useStudent } from './StudentContext';
+import { useTeacher } from './TeacherContext';
 
+import toastConfig from '../helpers/toast.config';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ages, disciplines, schools, courses } from '../commondata/commondata'
-import Divider from './Divider';
 
 const CreateUpdateUserForm = ({ 
   personInfo,
   personType,
   callback,
   isForCreating,
+  setUserInfo = () => {},
   handleModal = () => {}
 }) => {
+  // const { setUserInfo } = personType === 'Student' ? useStudent() : useTeacher()
+
   const [newIsAdult, setNewIsAdult] = useState(personInfo?.IsAdult || ages[0].age)
 
   const defaultValues = {}
 
-  if (personType === 'Student') defaultValues['StudentID'] = personInfo?.StudentID
-  else defaultValues['TeacherID'] = personInfo?.TeacherID
+  personType === 'Student' 
+    ? defaultValues['StudentID'] = personInfo?.StudentID
+    : defaultValues['TeacherID'] = personInfo?.TeacherID
 
   if (newIsAdult === ages[0].age && personType === 'Student') {
     defaultValues['ParentTaxCode'] = null
@@ -37,6 +43,7 @@ const CreateUpdateUserForm = ({
 
     if (response.status === 200) {
       if (!isForCreating) handleModal(false)
+      setUserInfo(data)
 
       reset()
       return toast.success(response.message, toastConfig)

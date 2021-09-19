@@ -59,7 +59,6 @@ const createTeacher = async (newTeacher) => {
   return { status: response.status, message: responseParsed.message }
 };
 
-// TODO: UPDATE HERE
 const updateStudent = async (updatedStudent) => {
   const response = await fetch('/api/student/updateStudent', {
     method: 'POST',
@@ -72,7 +71,6 @@ const updateStudent = async (updatedStudent) => {
   
   const responseParsed = await response.json();
 
-  // update session storage
   if (response.status === 200) {
     const studentsListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     
@@ -84,14 +82,11 @@ const updateStudent = async (updatedStudent) => {
     }
 
     sessionStorage.setItem('studentsList', JSON.stringify(studentsListCached));
-
-    // window.location.assign(`/paginaallieve/${updatedStudent.TaxCode}`)
   }
 
   return { status: response.status, message: responseParsed.message }
 }
 
-  // TODO: UPDATE HERE
 const updateTeacher = async (updatedTeacherInfo) => {
   const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',
@@ -101,13 +96,12 @@ const updateTeacher = async (updatedTeacherInfo) => {
     },
     body: JSON.stringify(updatedTeacherInfo)
   });
+
   const responseParsed = await response.json();
-  // window.reload()
 
   return { status: response.status, message: responseParsed.message }
 }
 
-// TODO: UPDATE HERE
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
@@ -118,23 +112,24 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
     body: JSON.stringify({ StudentID, RegistrationDate })
   });
 
+  const responseParsed = await response.json();
+
   if (response.status === 200) {
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-    
+    let updatedStudent = null
+
     for (let i = 0; i < studentListCached.length; i++) {
-      if(StudentID === studentListCached[i].StudentID) {
+      if (StudentID === studentListCached[i].StudentID) {
         studentListCached[i].RegistrationDate = RegistrationDate || null;
+        updatedStudent = studentListCached[i]
         break;
       }
     }
 
     sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
-
-    const responseParsed = await response.json();
-    alert(responseParsed.message);
-    return window.location.reload();
+    return { status: response.status, message: responseParsed.message, updatedStudent }
   }
-  return alert('Error');
+  return { status: response.status, message: responseParsed.message }
 }
 
 const updateReceipt = async (updatedReceipt) => {
@@ -185,12 +180,12 @@ const deleteReceipt = async (ReceiptID) => {
     },
     body: JSON.stringify({ ReceiptID })
   });
+
   const responseParsed = await response.json();
 
   return { status: response.status, message: responseParsed.message }
 }
 
-// TODO: UPDATE HERE
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
@@ -202,9 +197,10 @@ const deleteTeacher = async (TeacherID) => {
       TeacherID
     })
   });
+
   const responseParsed = await response.json();
-  alert(responseParsed.message);
-  window.location.reload();
+
+  return { status: response.status, message: responseParsed.message }
 }
 
 export {

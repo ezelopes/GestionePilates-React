@@ -100,16 +100,18 @@ const StudentReceiptsList = () => {
   const handleDeleteReceipt = async () => {
     const response = await deleteReceipt(selectedReceipt.ReceiptID);
 
-    const updatedStudentReceipts = [...studentReceipts]
-    const receiptIndex = studentReceipts.findIndex((receipt => receipt.ReceiptID == selectedReceipt.ReceiptID))
+    if (response.status === 200) {
+      const updatedStudentReceipts = [...studentReceipts]
+      const receiptIndex = studentReceipts.findIndex((receipt => receipt.ReceiptID == selectedReceipt.ReceiptID))
+  
+      updatedStudentReceipts.splice(receiptIndex, 1);
+      
+      toast.success(response.message, toastConfig)
+      setStudentReceipts(updatedStudentReceipts)
+    } else {
+      toast.error(response.message, toastConfig)
+    }
 
-    updatedStudentReceipts.splice(receiptIndex, 1);
-
-    response.status === 200 
-      ? toast.success(response.message, toastConfig)
-      : toast.error(response.message, toastConfig)
-
-    setStudentReceipts(updatedStudentReceipts)
     setShowDeleteReceiptModal(false); 
   } 
 
