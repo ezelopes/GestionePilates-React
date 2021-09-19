@@ -1,5 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css';
-
 const createStudent = async (newStudent) => {
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
@@ -16,7 +14,7 @@ const createStudent = async (newStudent) => {
     const { StudentID } = responseParsed;
 
     newStudent.StudentID = StudentID;
-    
+
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     studentListCached.push(newStudent);
     sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
@@ -146,7 +144,6 @@ const updateReceipt = async (updatedReceipt) => {
   return { status: response.status, message: responseParsed.message, receipt: updatedReceipt }
 }
 
-// TODO: UPDATE HERE
 const deleteStudent = async (StudentID) => {
   const response = await fetch('/api/student/deleteStudent', {
     method: 'DELETE',
@@ -167,8 +164,8 @@ const deleteStudent = async (StudentID) => {
   }
 
   const responseParsed = await response.json();
-  alert(responseParsed.message);
-  window.location.assign('/paginaallieve');
+
+  return { status: response.status, message: responseParsed.message }
 }
 
 const deleteReceipt = async (ReceiptID) => {

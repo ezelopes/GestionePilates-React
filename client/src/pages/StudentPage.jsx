@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Modal, Button, Spinner } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
@@ -18,8 +18,6 @@ import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } f
 import toastConfig from '../helpers/toast.config';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
-
-import 'react-toastify/dist/ReactToastify.css';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -79,11 +77,22 @@ const StudentPage = ({ match }) => {
     setShowRegistrationDateModal(false); 
   }
 
+  const handleStudentDeletion = async () => {
+    const response = await deleteStudent(studentInfo.StudentID)
+
+    if (response.status === 200) {
+      setShowDeleteStudentModal(false)
+      toast.success(response.message, toastConfig)
+      return history.push('/paginaallieve')
+    }
+    
+    toast.error(response.message, toastConfig)
+  }
+
   if (!studentInfo) return <NotFoundPage />;
 
   return (
     <>
-      <ToastContainer />
       { loading 
         ? <div className="spinnerWrapper">
             <Spinner animation="border" role="status">
@@ -152,7 +161,7 @@ const StudentPage = ({ match }) => {
                   Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="danger" onClick={async () => { await deleteStudent(studentInfo.StudentID); setShowDeleteStudentModal(false); } }>
+                <Button variant="danger" onClick={handleStudentDeletion}>
                   ELIMINA
                 </Button>
                 <Button variant="secondary" onClick={() => { setShowDeleteStudentModal(false) } }>
