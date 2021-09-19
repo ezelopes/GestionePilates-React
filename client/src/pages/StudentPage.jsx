@@ -9,6 +9,7 @@ import NotFoundPage from './NotFoundPage';
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/StudentReceiptsList';
 import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
+import { StudentProvider } from '../components/StudentContext'
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } from '../helpers/apiCalls';
 import Divider from '../components/Divider';
 
@@ -68,41 +69,43 @@ const StudentPage = ({ match }) => {
               <span className="sr-only">Loading...</span>
             </Spinner> 
           </div> 
-        : <div className="page-body">
-            <div className="student-name-title">
-              {studentInfo.Name} {studentInfo.Surname}
+        : <StudentProvider studentInfo={studentInfo} studentReceipts={studentReceipts} setStudentReceipts={setStudentReceipts}>
+            <div className="page-body">
+              <div className="student-name-title">
+                {studentInfo.Name} {studentInfo.Surname}
+              </div>
+
+              <div className="buttons-container">
+                <Button onClick={printRegistrationForm}>
+                  <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
+                </Button>
+                
+                <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) }>
+                  <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
+                </Button>
+
+                <Button variant="warning" onClick={ () => setShowRegistrationDateModal(true) }>
+                  <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
+                </Button>
+
+                <Button variant='danger' onClick={ () => setShowDeleteStudentModal(true) }>
+                  <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
+                </Button>
+
+                <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') }>
+                  <span role='img' aria-label='back'>🔙</span> INDIETRO
+                </Button>
+              </div>
+
+              <StudentReceiptsList />
+
+              <Divider double />
+
+              <div className="form-wrapper create-receipt-form-wrapper">
+                  <CreateUpdateReceiptForm isForCreating={true} callback={createReceipt} />
+              </div>
             </div>
-
-            <div className="buttons-container">
-              <Button onClick={printRegistrationForm}>
-                <span role='img' aria-label='module'>💾</span> MODULO ISCRIZIONE
-              </Button>
-              
-              <Button variant="warning" onClick={ () => setShowUpdateStudentModal(true) }>
-                <span role='img' aria-label='update'>🔄</span> AGGIORNA ALLIEVA
-              </Button>
-
-              <Button variant="warning" onClick={ () => setShowRegistrationDateModal(true) }>
-                <span role='img' aria-label='update'>🔄</span> AGGIORNA DATA ISCRIZIONE
-              </Button>
-
-              <Button variant='danger' onClick={ () => setShowDeleteStudentModal(true) }>
-                <span role='img' aria-label='bin'>🗑️</span> ELIMINA ALLIEVA
-              </Button>
-
-              <Button variant="secondary" onClick={ () => window.location.assign('/paginaallieve') }>
-                <span role='img' aria-label='back'>🔙</span> INDIETRO
-              </Button>
-            </div>
-
-            <StudentReceiptsList receipts={studentReceipts} studentInfo={studentInfo} />
-
-            <Divider double />
-
-            <div className="form-wrapper create-receipt-form-wrapper">
-                <CreateUpdateReceiptForm TaxCode={match.params.TaxCode} StudentID={studentInfo.StudentID} isForCreating={true} callback={createReceipt} />
-            </div>
-          </div>
+        </StudentProvider>
       }
 
       <Modal show={showRegistrationDateModal} onHide={ () => setShowRegistrationDateModal(false) } centered>

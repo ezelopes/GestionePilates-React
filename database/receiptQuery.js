@@ -90,21 +90,21 @@ const createReceipt = async ({
   RegistrationDate
 }) => {
   try {
+    // TODO: Reduce this code
     const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
+    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
+    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
 
     if (ReceiptType == receiptType[1].type) {
-      await pool.execute(
+      const [rows] = await pool.execute(
         'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
         [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, AmountPaid, TaxCode, StudentID, false]
       );
-      return { message: 'Ricevuta Inserita Correttamente!' };
+      return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
     }
   
-    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
-    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
-
-    await pool.execute(
+    const [rows] = await pool.execute(
       'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, TaxCode, StudentID, false]
@@ -117,7 +117,7 @@ const createReceipt = async ({
       );
     }
 
-    return { message: 'Ricevuta Inserita Correttamente!' };
+    return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: 'Errore nel creare la Ricevuta!' };
@@ -135,6 +135,7 @@ const updateReceipt = async({
   AmountPaid,
 }) => {
   try {
+    // TODO: Reduce this code
     const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
     const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
     const CourseEndDateFormatted = getFormattedDate(CourseEndDate);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
@@ -12,6 +12,7 @@ import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata'
 
 import 'react-toastify/dist/ReactToastify.css';
+import { useStudent } from './StudentContext';
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -44,13 +45,20 @@ const columnsDefinition = [
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' }
 ];
 
-const StudentReceiptsList = ({ receipts, studentInfo }) => {
+const StudentReceiptsList = () => {
+  const { studentInfo, studentReceipts, setStudentReceipts } = useStudent()
+
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
+  const [rowData, setRowData] = useState(studentReceipts)
 
   const [selectedReceipt, setSelectedReceipt] = useState();
   const [showDeleteReceiptModal, setShowDeleteReceiptModal] = useState(false);
   const [showUpdateReceiptModal, setShowUpdateReceiptModal] = useState(false);
+
+  useEffect(() => {
+    setRowData(studentReceipts)
+  }, [studentReceipts])
 
 
   const onGridReady = (params) => {
@@ -89,18 +97,19 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
     setSelectedReceipt(selectedNode[0].data);
   }
 
-  const handleUpdateReceiptModal = () => {
-    // Reset Form
-    setShowUpdateReceiptModal(false)
-  }
-
   const handleDeleteReceipt = async () => {
     const response = await deleteReceipt(selectedReceipt.ReceiptID);
 
+    const updatedStudentReceipts = [...studentReceipts]
+    const receiptIndex = studentReceipts.findIndex((receipt => receipt.ReceiptID == selectedReceipt.ReceiptID))
+
+    updatedStudentReceipts.splice(receiptIndex, 1);
+
     response.status === 200 
       ? toast.success(response.message, toastConfig)
-      : toast.success(response.message, toastConfig)
+      : toast.error(response.message, toastConfig)
 
+    setStudentReceipts(updatedStudentReceipts)
     setShowDeleteReceiptModal(false); 
   } 
 
@@ -115,7 +124,7 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
           rowSelection="single"
           gridOptions={gridOptions}
           columnDefs={columnDefs}
-          rowData={receipts}
+          rowData={rowData}
           onSelectionChanged={onReceiptSelectionChanged}
           onGridReady={onGridReady}
         ></AgGridReact>
@@ -141,15 +150,15 @@ const StudentReceiptsList = ({ receipts, studentInfo }) => {
         </Button>
       </div>
 
-      <Modal show={showUpdateReceiptModal} onHide={() => handleUpdateReceiptModal()} dialogClassName="update-student-modal" centered>
+      <Modal show={showUpdateReceiptModal} onHide={() => setShowUpdateReceiptModal(false) } dialogClassName="update-student-modal" centered>
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Ricevuta </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <CreateUpdateReceiptForm TaxCode={studentInfo.TaxCode} StudentID={studentInfo.StudentID} receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
+            <CreateUpdateReceiptForm receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => { handleUpdateReceiptModal() } }>
+          <Button variant="secondary" onClick={() => { setShowUpdateReceiptModal(false) } }>
             CHIUDI
           </Button>
         </Modal.Footer>

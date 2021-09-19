@@ -24,9 +24,9 @@ const getAllReceiptsEndpoint = async (req, res) => {
 
 const createReceiptEndpoint = async (req, res) => {
   try {
-    const { message } = await createReceipt(req.body);
+    const { ReceiptID, message } = await createReceipt(req.body);
 
-    res.status(200).send({ message });
+    res.status(200).send({ ReceiptID, message });
   } catch (e) {
     console.log(e);
     res.status(500).send({ message: e.message })

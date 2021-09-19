@@ -75,16 +75,13 @@ const createStudent = async ({
     const DOBFormatted = getFormattedDate(DOB)
     const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate)
 
-    const [rows, fields] = await pool.execute(
+    const [rows] = await pool.execute(
       'INSERT INTO Allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscaleGenitore, NomeGenitore, CognomeGenitore) \
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [TaxCode, IsAdult, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School, ParentTaxCode, ParentName, ParentSurname]
     );
   
-    const [rowsSelect] = await pool.execute('SELECT AllievaID FROM Allieva WHERE CodiceFiscale = ?', [TaxCode])
-    const StudentID = rowsSelect[0].AllievaID;
-  
-    return { StudentID, message: 'Allieva creata correttamente' };
+    return { StudentID: rows.insertId, message: 'Allieva creata correttamente' };
   } catch (error) {
     console.log(error);
     return { message: 'Errore nel creare Allieva!' };

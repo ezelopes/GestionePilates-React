@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 
 import Divider from './Divider';
 
+import { useStudent } from './StudentContext';
+
 import toastConfig from '../helpers/toast.config';
 import formatDate from '../helpers/formatDateForInputDate';
 
@@ -14,30 +16,46 @@ import { receiptType, paymentMethod, defaultAmounts } from '../commondata/common
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
+const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
   const today = formatDate(new Date(), true);
 
+  const { studentInfo, studentReceipts, setStudentReceipts } = useStudent()
+
   const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptType[0].type);
-  
+
   const defaultValues = {
-    TaxCode,
-    StudentID,
+    TaxCode: studentInfo.TaxCode,
+    StudentID: studentInfo.StudentID,
     ReceiptID: receiptInfo?.ReceiptID,
     AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
   }
   
   if (newReceiptType === receiptType[1].type) {
-    defaultValues['CourseStartDate'] = today
-    defaultValues['CourseEndDate'] = today
+    defaultValues['CourseStartDate'] = null
+    defaultValues['CourseEndDate'] = null
   }
 
-  const { register, watch, handleSubmit, reset, control, formState: { errors } } = useForm({ defaultValues })
+  const { register, watch, handleSubmit, reset, setValue, control, formState: { errors } } = useForm({ defaultValues })
 
-  const onSubmit = async (data) => {
-    const response = await callback(data)
+  const receiptTypeField = register('ReceiptType')
+
+  const onSubmit = async (receiptData) => {
+    console.log(receiptData);
+    const response = await callback(receiptData)
 
     if (response.status === 200) {
-      if (!isForCreating) handleModal(false)
+      if (!isForCreating) {
+        const updatedStudentReceipts = [...studentReceipts]
+
+        const receiptIndex = updatedStudentReceipts.findIndex((receipt => receipt.ReceiptID == defaultValues.ReceiptID))
+        updatedStudentReceipts[receiptIndex] = response.receipt
+
+        setStudentReceipts(updatedStudentReceipts)
+
+        handleModal(false)
+      } else {
+        setStudentReceipts([...studentReceipts, response.receipt])
+      }
 
       reset()
       return toast.success(response.message, toastConfig)
@@ -45,8 +63,20 @@ const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callb
 
     return toast.error(response.message, toastConfig)
   }
-  
-  watch((data) => { setNewReceiptType(data.ReceiptType) })
+
+  const onReceiptTypeChange = (value) => {
+    if (value === receiptType[1].type) {
+      setValue('CourseStartDate', null)
+      setValue('CourseEndDate', null)
+    } else {
+      setValue('CourseStartDate', receiptInfo?.CourseStartDate || today)
+      setValue('CourseEndDate', receiptInfo?.CourseEndDate || today)
+    }
+  }
+
+  watch((data) => { 
+    setNewReceiptType(data.ReceiptType)
+  })
 
   return (
       <>
@@ -72,7 +102,10 @@ const CreateUpdateReceiptForm = ({ TaxCode, StudentID, receiptInfo = null, callb
 
             <div className="flex-element">
               <Form.Label> Tipo Ricevuta </Form.Label>
-              <Form.Control as="select" defaultValue={receiptInfo?.ReceiptType} {...register('ReceiptType')}>
+              <Form.Control as="select" defaultValue={receiptInfo?.ReceiptType} {...receiptTypeField} onChange={(e) => {
+                receiptTypeField.onChange(e);
+                onReceiptTypeChange(e.target.value)
+              }}>
                 {receiptType.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
               </Form.Control>
             </div>
