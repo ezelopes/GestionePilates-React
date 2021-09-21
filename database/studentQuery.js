@@ -41,6 +41,7 @@ const getStudents = async () => {
   return students;
 }
 
+// SELECT * FROM allieva INNER JOIN ricevuta ON ricevuta.FK_CodiceFiscale = allieva.CodiceFiscale where allieva.CodiceFiscale = ?;
 const getSingleStudent = async (TaxCode) => {
   const [rows] = await pool.execute('SELECT * FROM allieva WHERE CodiceFiscale= ?;', [TaxCode]);
   const student = mappingStudents(rows);

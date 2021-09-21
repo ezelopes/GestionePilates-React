@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": false 
+  },
+  "globals": {
+    "Atomics": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "rules": {
+    "prettier/prettier": "warn",
+    "no-unused-vars": "warn",
+    "func-names": "off"
+  }
+}
