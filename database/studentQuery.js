@@ -21,9 +21,9 @@ const mappingStudents = (rows) => {
       CertificateExpirationDate: getFormattedDate(row.DataCertificato),
       DOB: getFormattedDate(row.DataNascita),
       GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
-      ParentTaxCode: row.NomeGenitore,
-      ParentName: row.CognomeGenitore,
-      ParentSurname: row.CodiceFiscaleGenitore
+      ParentTaxCode: row.CodiceFiscaleGenitore,
+      ParentName: row.NomeGenitore,
+      ParentSurname: row.CognomeGenitore
     };
   });
   return students;
