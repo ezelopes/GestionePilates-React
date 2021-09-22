@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { useForm, Controller } from 'react-hook-form';
@@ -29,10 +30,10 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
     ReceiptID: receiptInfo?.ReceiptID,
     AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
   }
-  
+
   if (newReceiptType === receiptType[1].type) {
-    defaultValues['CourseStartDate'] = null
-    defaultValues['CourseEndDate'] = null
+    defaultValues.CourseStartDate = null
+    defaultValues.CourseEndDate = null
   }
 
   const { register, watch, handleSubmit, reset, setValue, control, formState: { errors } } = useForm({ defaultValues })
@@ -40,14 +41,13 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
   const receiptTypeField = register('ReceiptType')
 
   const onSubmit = async (receiptData) => {
-    console.log(receiptData);
     const response = await callback(receiptData)
 
     if (response.status === 200) {
       if (!isForCreating) {
         const updatedStudentReceipts = [...studentReceipts]
 
-        const receiptIndex = updatedStudentReceipts.findIndex((receipt => receipt.ReceiptID == defaultValues.ReceiptID))
+        const receiptIndex = updatedStudentReceipts.findIndex(receipt => receipt.ReceiptID === defaultValues.ReceiptID)
         updatedStudentReceipts[receiptIndex] = response.receipt
 
         setStudentReceipts(updatedStudentReceipts)
@@ -74,7 +74,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
     }
   }
 
-  watch((data) => { 
+  watch((data) => {
     setNewReceiptType(data.ReceiptType)
   })
 
@@ -84,17 +84,20 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
           <div className="create-receipt-form">
             <div className="flex-element">
               <Form.Label> Numero Ricevuta </Form.Label>
-              <Form.Control 
+              <Form.Control
                 type="text"
                 placeholder="Inserisci Numero Ricevuta..."
                 defaultValue={receiptInfo?.ReceiptNumber}
                 {...register('ReceiptNumber', { required: 'Numero Ricevuta non puo essere vuoto!' })} />
-              <div style={{ display: 'none' }}> 
+              <div style={{ display: 'none' }}>
                 <ErrorMessage
                     errors={errors}
                     name='ReceiptNumber'
                     render={({ message }) => {
-                      if (errors?.ReceiptNumber?.type === "required") return toast.error(message, toastConfig)
+                      if (errors?.ReceiptNumber?.type === "required") {
+                        return toast.error(message, toastConfig)
+                      }
+                      return null
                     }}
                 />
               </div>
@@ -106,17 +109,21 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
                 receiptTypeField.onChange(e);
                 onReceiptTypeChange(e.target.value)
               }}>
-                {receiptType.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
+                {receiptType.map((currentType) =>
+                  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>
+                )}
               </Form.Control>
             </div>
 
             <div className="flex-element">
               <Form.Label> Tipo Pagamento </Form.Label>
               <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
-                {paymentMethod.map(currentType =>  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>)}
+                {paymentMethod.map((currentType) =>
+                  <option key={`select_${currentType.type}`} value={currentType.type}> {currentType.type} </option>
+                )}
               </Form.Control>
             </div>
-            
+
             <div className="flex-element">
               <Form.Label> Importo </Form.Label>
               <Controller
@@ -126,15 +133,14 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
                   value: receiptInfo?.AmountPaid || defaultAmounts[0].value,
                   label: receiptInfo?.AmountPaid || defaultAmounts[0].label,
                 }}
-                render={({ field }) => {
-                  return (<CreatableSelect
+                render={({ field }) => (
+                  <CreatableSelect
                     {...field}
                     options={defaultAmounts}
                     value={{ value: field.value, label: field.value }}
                     defaultValue={field.value}
                     onChange={(e) => { field.onChange(e.value) }}
-                  />)
-                }}
+                  />)}
               />
             </div>
 
@@ -148,12 +154,20 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
                 <>
                   <div className="flex-element">
                     <Form.Label> Data Inizio Corso </Form.Label>  <br />
-                    <input type="date" defaultValue={receiptInfo?.CourseStartDate || today} {...register('CourseStartDate')} />
+                    <input
+                      type="date"
+                      defaultValue={receiptInfo?.CourseStartDate || today}
+                      {...register('CourseStartDate')}
+                    />
                   </div>
 
                   <div className="flex-element">
                     <Form.Label> Data Scadenza Corso </Form.Label> <br />
-                    <input type="date" defaultValue={receiptInfo?.CourseEndDate || today} {...register('CourseEndDate')} />
+                    <input
+                      type="date"
+                      defaultValue={receiptInfo?.CourseEndDate || today}
+                      {...register('CourseEndDate')}
+                    />
                   </div>
                 </>
               )
@@ -161,22 +175,54 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
 
             {isForCreating && (
               <div className="flex-element">
-                <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type='checkbox' {...register('RegistrationDate')} />
-                
-                { newReceiptType === receiptType[0].type && (<Form.Check label="Contiene Quota Associativa" type='checkbox' style={{ marginTop: '1em' }} />) }
+                <Form.Check
+                  label="Usa Data Ricevuta come Data Iscrizione"
+                  type='checkbox'
+                  {...register('RegistrationDate')}
+                />
+
+                {newReceiptType === receiptType[0].type && (
+                  <Form.Check label="Contiene Quota Associativa" type='checkbox' style={{ marginTop: '1em' }} />
+                )}
               </div>
             )}
           </div>
 
           <Divider double />
-          
+
           <Button type='submit' variant='success'>
             <span role='img' aria-label='create'>🆕</span> {isForCreating ? 'CREA RICEVUTA' : 'AGGIORNA RICEVUTA' }
           </Button>
         </form>
-        
+
       </>
   );
 };
+
+CreateUpdateReceiptForm.propTypes  = {
+    receiptInfo: PropTypes.shape({
+      ReceiptID: PropTypes.number,
+      StudentID: PropTypes.number,
+      TaxCode: PropTypes.string,
+      AmountPaid: PropTypes.string,
+      ReceiptType: PropTypes.string,
+      ReceiptNumber: PropTypes.string,
+      PaymentMethod: PropTypes.string,
+      ReceiptDate: PropTypes.string,
+      CourseStartDate: PropTypes.string,
+      CourseEndDate: PropTypes.string,
+    }),
+    callback: PropTypes.func.isRequired,
+    isForCreating: PropTypes.bool,
+    setUserInfo: PropTypes.func,
+    handleModal: PropTypes.func,
+}
+
+CreateUpdateReceiptForm.defaultProps = {
+  receiptInfo: {},
+  isForCreating: false,
+  setUserInfo: () => {},
+  handleModal: () => {},
+}
 
 export default CreateUpdateReceiptForm;

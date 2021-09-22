@@ -1,14 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap'
+import { toast } from 'react-toastify';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import formatDate from '../helpers/formatDateForInputDate';
 
+import toastConfig from '../helpers/toast.config';
+
 const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const columnDefs = [
     { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
-    { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
+    {
+        headerName: 'Data Ricevuta',
+        field: 'ReceiptDate',
+        cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : ''
+    },
     { headerName: 'Somma Euro', field: 'AmountPaid' }
 ]
 
@@ -27,7 +39,7 @@ const gridOptions = {
 
 const BLANK_DATE = '______-______-________';
 
-const FilteredReceiptsModal = ({ 
+const FilteredReceiptsModal = ({
     filteredReceipts,
     filteredAmountPaid,
     showFilteredAmountModal,
@@ -36,8 +48,9 @@ const FilteredReceiptsModal = ({
     fromDate,
     toDate
 }) => {
-    
+
     const printDetails = async () => {
+			try {
         const documentDefinition = await AmountPaidSummaryTemplate.default(
             filteredReceipts,
             filteredAmountPaid,
@@ -46,15 +59,25 @@ const FilteredReceiptsModal = ({
             formatDate(new Date(toDate))
         );
         pdfMake.createPdf(documentDefinition).open();
+
+				return toast.success('PDF Riepilogo Ricevute Creato Correttamente', toastConfig);
+			} catch (error) {
+				console.error(error);
+				return toast.error(`Un errore se e' verificato nello stampare il riepilogo ricevute`, toastConfig);
+			}
     }
-    
+
     return (
         <>
-            <Modal show={showFilteredAmountModal} onHide={ () => setShowFilteredAmountModal(false) } centered dialogClassName="modal-90vw">
+            <Modal
+                show={showFilteredAmountModal}
+                onHide={ () => setShowFilteredAmountModal(false) }
+                centered dialogClassName="modal-90vw"
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title> 
-                        Ricevute dal {formatDate(new Date(fromDate)) || BLANK_DATE } 
-                        {' '} al {formatDate(new Date(toDate)) || BLANK_DATE} 
+                    <Modal.Title>
+                        Ricevute dal {formatDate(new Date(fromDate)) || BLANK_DATE }
+                        {' '} al {formatDate(new Date(toDate)) || BLANK_DATE}
                         {' '} (tramite {filteredPaymentMethod})
                     </Modal.Title>
                 </Modal.Header>
@@ -64,7 +87,7 @@ const FilteredReceiptsModal = ({
                     </div>
                     <div className="ag-theme-balham filtered-receipt-grid">
                         <AgGridReact
-                            reactNext={true}
+                            reactNext
                             scrollbarWidth
                             rowHeight="45"
                             gridOptions={gridOptions}
@@ -85,5 +108,19 @@ const FilteredReceiptsModal = ({
         </>
     );
 };
+
+FilteredReceiptsModal.propTypes = {
+	filteredReceipts: PropTypes.array.isRequired,
+	filteredAmountPaid: PropTypes.number.isRequired,
+	showFilteredAmountModal: PropTypes.bool.isRequired,
+	setShowFilteredAmountModal: PropTypes.func.isRequired,
+	filteredPaymentMethod: PropTypes.string,
+	fromDate: PropTypes.string.isRequired,
+	toDate: PropTypes.string.isRequired,
+}
+
+FilteredReceiptsModal.defaultProps = {
+	filteredPaymentMethod: '',
+}
 
 export default FilteredReceiptsModal;

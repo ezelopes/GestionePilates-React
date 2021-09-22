@@ -1,3 +1,8 @@
+const userType = [
+  { id: 0, user: 'Student' },
+  { id: 1, user: 'Teacher' },
+]
+
 const ages = [
   { id: 0, age: 'Maggiorenne' },
   { id: 1, age: 'Minorenne' },
@@ -78,6 +83,7 @@ const years = [
 ];
 
 export {
+	userType,
   ages,
   disciplines,
   schools,

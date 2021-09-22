@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom';
 import { Modal, Button, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -20,6 +21,8 @@ import {
   createReceipt,
 } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
+
+import { userType } from '../commondata/commondata'
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
@@ -44,13 +47,14 @@ const StudentPage = ({ match }) => {
 
   const printRegistrationForm = async () => {
     try {
-      const documentDefinition = await RegistrationFormTemplate.default(
-        studentInfo,
-      );
+      const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
+
       pdfMake.createPdf(documentDefinition).open();
+
+			return toast.success('PDF Creato Correttamente', toastConfig);
     } catch (error) {
-      toast.error(
-        `Un un errore se e' verificato nello stampare il modulo d'iscrizione`,
+      return toast.error(
+        `Un errore se e' verificato nello stampare il modulo d'iscrizione`,
         toastConfig,
       );
     }
@@ -75,6 +79,7 @@ const StudentPage = ({ match }) => {
       setLoading(false);
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRegistrationDateUpdate = async () => {
@@ -105,7 +110,9 @@ const StudentPage = ({ match }) => {
     return toast.error(response.message, toastConfig);
   };
 
-  if (!studentInfo) return <NotFoundPage />;
+  if (!studentInfo) {
+		return <NotFoundPage />;
+	}
 
   return (
     <>
@@ -249,7 +256,7 @@ const StudentPage = ({ match }) => {
             <Modal.Body className="update-student-modal-body">
               <CreateUpdateUserForm
                 personInfo={studentInfo}
-                personType="Student"
+                personType={userType[0].user}
                 callback={updateStudent}
                 handleModal={setShowUpdateStudentModal}
                 setUserInfo={setStudentInfo}
@@ -262,5 +269,21 @@ const StudentPage = ({ match }) => {
     </>
   );
 };
+
+StudentPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      TaxCode: PropTypes.string,
+    }).isRequired
+  }).isRequired
+}
+
+StudentPage.defaultValue = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      TaxCode: '',
+    })
+  })
+}
 
 export default StudentPage;

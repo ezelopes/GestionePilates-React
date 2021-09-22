@@ -1,5 +1,5 @@
-const pdfMake = require('pdfmake/build/pdfmake.js');
-const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const pdfMake = require('pdfmake/build/pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 const formatDate = require('../helpers/formatDateForInputDate');
 
@@ -12,8 +12,7 @@ const AmountPaidSummaryTemplate = async (
     fromDate,
     toDate
   ) => {
-
-  const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_DATE = '____-____-________'
 
   const tableBody = [
@@ -23,13 +22,19 @@ const AmountPaidSummaryTemplate = async (
       { text: 'Importo in €', bold: true }
     ]
   ]
-  receiptList.forEach(receipt => 
-    tableBody.push([receipt.ReceiptNumber, receipt.ReceiptDate ? formatDate(new Date(receipt.ReceiptDate)) : BLANK_DATE, receipt.AmountPaid])
+  receiptList.forEach(receipt =>
+    tableBody.push(
+			[
+				receipt.ReceiptNumber,
+				receipt.ReceiptDate ? formatDate(new Date(receipt.ReceiptDate)) : BLANK_DATE,
+				receipt.AmountPaid
+			]
+		)
   )
 
   const content = [
     {
-      image: label_logo,
+      image: labelLogo,
       alignment: 'right',
       fit: [100, 100],
       margin: [0, 0, 0, 10]
@@ -62,14 +67,14 @@ const AmountPaidSummaryTemplate = async (
           text: 'Periodo dal '
         },
         {
-          text: `${ fromDate ? formatDate(new Date(fromDate)) : BLANK_DATE }` ,
+          text: `${ fromDate || BLANK_DATE }` ,
           bold: true
         },
         {
           text: ' al '
         },
         {
-          text: `${ toDate ? formatDate(new Date(toDate)) : BLANK_DATE }`,
+          text: `${ toDate || BLANK_DATE }`,
           bold: true
         },
       ],
@@ -96,10 +101,10 @@ const AmountPaidSummaryTemplate = async (
       margin: [0, 20, 0, 20],
       layout: {
         defaultBorder: true,
-        paddingLeft: function () { return 5; },
-        paddingRight: function () { return 5; },
-        paddingTop: function () { return 5; },
-        paddingBottom: function () { return 5; },
+        paddingLeft () { return 5; },
+        paddingRight () { return 5; },
+        paddingTop () { return 5; },
+        paddingBottom () { return 5; },
       },
       table: {
         headerRows: 1,
@@ -112,13 +117,14 @@ const AmountPaidSummaryTemplate = async (
 
   const docDefinition = {
     info: {
-    // filteredPaymentMethod,
-      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate ? formatDate(new Date(fromDate)) : BLANK_DATE} al ${toDate ? formatDate(new Date(toDate)) : BLANK_DATE}`,
+      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${
+					fromDate || BLANK_DATE
+					} al ${toDate || BLANK_DATE}`,
       author: 'Roxana Carro',
       subject: `Riepilogo Importo`
     },
     pageMargins: [40, 40, 40, 40],
-    content: content
+    content
   };
 
   return docDefinition;

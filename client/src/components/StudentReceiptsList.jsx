@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
-import pdfMake from 'pdfmake/build/pdfmake.js';
-import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
 import CreateUpdateReceiptForm from './CreateUpdateReceiptForm';
@@ -37,9 +36,21 @@ const gridOptionsDefault = {
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
   { headerName: 'Tipo Ricevuta', field: 'ReceiptType' },
-  { headerName: 'Data Ricevuta', field: 'ReceiptDate', cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Data Inizio Corso', field: 'CourseStartDate', cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
-  { headerName: 'Data Scadenza Corso', field: 'CourseEndDate', cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : '' },
+  {
+    headerName: 'Data Ricevuta',
+    field: 'ReceiptDate',
+    cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : ''
+  },
+  {
+    headerName: 'Data Inizio Corso',
+    field: 'CourseStartDate',
+    cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : ''
+  },
+  {
+    headerName: 'Data Scadenza Corso',
+    field: 'CourseEndDate',
+    cellRenderer: (params) => params.value ? (new Date(params.value)).toLocaleDateString() : ''
+  },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' }
 ];
@@ -65,35 +76,47 @@ const StudentReceiptsList = () => {
       params.api.sizeColumnsToFit();
       window.addEventListener('resize', () => { params.api.sizeColumnsToFit(); })
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
-  const printReceipt = async () => {    
+  const printReceipt = async () => {
     try {
-      if (!selectedReceipt) return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
+      if (!selectedReceipt) {
+        return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
+      }
+
       let documentDefinition;
 
-      if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) 
+      if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) {
         documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-      else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type)
+      }
+      else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type) {
         documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-      else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type)
+      }
+      else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type) {
         documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-      else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type)
+      }
+      else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type) {
         documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
+      }
 
       pdfMake.createPdf(documentDefinition).open();
+
+    	return toast.success('PDF Ricevuta Creato Correttamente', toastConfig);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+			return toast.error(`Un errore se e' verificato nello stampare la ricevuta`, toastConfig);
     }
   };
 
   const onReceiptSelectionChanged = () => {
     const selectedNode = gridOptions.api.getSelectedNodes();
-    if (selectedNode.length === 0) return setSelectedReceipt(null);
+    if (selectedNode.length === 0) {
+      return setSelectedReceipt(null);
+    }
 
-    setSelectedReceipt(selectedNode[0].data);
+    return setSelectedReceipt(selectedNode[0].data);
   }
 
   const handleDeleteReceipt = async () => {
@@ -101,18 +124,18 @@ const StudentReceiptsList = () => {
 
     if (response.status === 200) {
       const updatedStudentReceipts = [...studentReceipts]
-      const receiptIndex = studentReceipts.findIndex((receipt => receipt.ReceiptID == selectedReceipt.ReceiptID))
-  
+      const receiptIndex = studentReceipts.findIndex((receipt => receipt.ReceiptID === selectedReceipt.ReceiptID))
+
       updatedStudentReceipts.splice(receiptIndex, 1);
-      
+
       toast.success(response.message, toastConfig)
       setStudentReceipts(updatedStudentReceipts)
     } else {
       toast.error(response.message, toastConfig)
     }
 
-    setShowDeleteReceiptModal(false); 
-  } 
+    setShowDeleteReceiptModal(false);
+  }
 
   return (
     <>
@@ -126,35 +149,48 @@ const StudentReceiptsList = () => {
           rowData={rowData}
           onSelectionChanged={onReceiptSelectionChanged}
           onGridReady={onGridReady}
-        ></AgGridReact>
+        />
       </div>
 
       <div className="buttons-container">
-        <Button onClick={ async () => await printReceipt() }>
+        <Button onClick={ async () => printReceipt() }>
           <span role='img' aria-label='receipt'>🧾</span> STAMPA RICEVUTA
         </Button>
-        
-        <Button variant='warning' onClick={ () => { 
-          if (!selectedReceipt) return toast.error('Seleziona Ricevuta per Aggiornarla', toastConfig);
-          setShowUpdateReceiptModal(true)} 
+
+        <Button variant='warning' onClick={ () => {
+          if (!selectedReceipt) {
+            return toast.error('Seleziona Ricevuta per Aggiornarla', toastConfig);
+          }
+          return setShowUpdateReceiptModal(true)}
         }>
           <span role='img' aria-label='update'>🔄</span> AGGIORNA RICEVUTA
         </Button>
 
-        <Button variant='danger' onClick={ () => { 
-          if (!selectedReceipt) return toast.error('Seleziona Ricevuta per Eliminarla', toastConfig); 
-          setShowDeleteReceiptModal(true)} 
+        <Button variant='danger' onClick={ () => {
+          if (!selectedReceipt) {
+            return toast.error('Seleziona Ricevuta per Eliminarla', toastConfig);
+          }
+          return setShowDeleteReceiptModal(true)}
         }>
           <span role='img' aria-label='bin'>🗑️</span> ELIMINA RICEVUTA
         </Button>
       </div>
 
-      <Modal show={showUpdateReceiptModal} onHide={() => setShowUpdateReceiptModal(false) } dialogClassName="update-student-modal" centered>
+      <Modal
+        show={showUpdateReceiptModal}
+        onHide={() => setShowUpdateReceiptModal(false) }
+        dialogClassName="update-student-modal"
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title> Aggiorna Ricevuta </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-            <CreateUpdateReceiptForm receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
+            <CreateUpdateReceiptForm
+              receiptInfo={selectedReceipt}
+              callback={updateReceipt}
+              handleModal={setShowUpdateReceiptModal}
+            />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => { setShowUpdateReceiptModal(false) } }>
@@ -179,7 +215,7 @@ const StudentReceiptsList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
     </>
   );
 };

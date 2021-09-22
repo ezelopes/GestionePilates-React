@@ -34,13 +34,15 @@ const TeachersPage = () => {
             <Row>
             { teachersList.length === 0 
               ? <h2 className='center'> <div> Non ci sono insegnanti </div> </h2>  
-              : teachersList.map((currentTeacher) => {
-                return (
+              : teachersList.map((currentTeacher) => (
                     <div key={currentTeacher.TaxCode} className="teacher-card-wrapper">
-                      <TeacherDisplayer teacherInitialInfo={currentTeacher} teachersList={teachersList} setTeachersList={setTeachersList} />
+                      <TeacherDisplayer 
+                        teacherInitialInfo={currentTeacher}
+                        teachersList={teachersList}
+                        setTeachersList={setTeachersList}
+                      />
                     </div>
-                  )
-                })
+                  ))
             }
             </Row>
           </div>

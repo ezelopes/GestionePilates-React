@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types'
 import { Button, Card, Modal } from 'react-bootstrap'
 import { toast } from 'react-toastify';
-import pdfMake from 'pdfmake/build/pdfmake.js';
-import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import CreateUpdateUserForm from './CreateUpdateUserForm'
 import { TeacherProvider } from './TeacherContext';
@@ -10,11 +11,13 @@ import { TeacherProvider } from './TeacherContext';
 import { updateTeacher, deleteTeacher } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 
+import { userType } from '../commondata/commondata'
+
+import 'react-toastify/dist/ReactToastify.css';
+
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-import 'react-toastify/dist/ReactToastify.css';
 
 const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
     const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo)
@@ -25,8 +28,12 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
         try {
             const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
             pdfMake.createPdf(documentDefinition).open();
+
+						return toast.success('Modulo Iscrizione Creato Correttamente', toastConfig);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+						return toast.error(
+							`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
         }
     };
 
@@ -35,8 +42,8 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
 
       if (response.status === 200) {
         const updatedTeacherList = [...teachersList]
-        const receiptIndex = teachersList.findIndex((teacher => teacher.TeacherID == teacherInfo.TeacherID))
-  
+        const receiptIndex = teachersList.findIndex((teacher => teacher.TeacherID === teacherInfo.TeacherID))
+
         updatedTeacherList.splice(receiptIndex, 1);
 
         toast.success(response.message, toastConfig)
@@ -44,7 +51,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
       } else {
         toast.error(response.message, toastConfig)
       }
-      
+
       setShowDeleteTeacherModal(false);
     }
 
@@ -68,10 +75,19 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
               <b>Email:</b> {teacherInfo.Email}
             </Card.Text>
             <Card.Text>
-              <b>Luogo e Data Nascita:</b> {teacherInfo.BirthPlace} - { teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString(): 'Non Definito' }
+              <b>Luogo e Data Nascita:</b>
+              {teacherInfo.BirthPlace} -
+              { teacherInfo.DOB !== null
+                ? new Date(teacherInfo.DOB).toLocaleDateString()
+                : 'Non Definito'
+              }
             </Card.Text>
             <Card.Text>
-              <b>Data Iscrizione:</b> { teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString(): 'Non Definito' }
+              <b>Data Iscrizione:</b>
+              { teacherInfo.RegistrationDate !== null
+                ? new Date(teacherInfo.RegistrationDate).toLocaleDateString()
+                : 'Non Definito'
+              }
             </Card.Text>
             <Card.Text>
               <b>Scuola:</b> {teacherInfo.School}
@@ -83,10 +99,18 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
               <b>Corso:</b> {teacherInfo.Course}
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Certificato:</b> { teacherInfo.CertificateExpirationDate !== null ? new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString(): 'Non Definito' }
+              <b>Data Scadenza Certificato:</b>
+              { teacherInfo.CertificateExpirationDate !== null
+                ? new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()
+                : 'Non Definito'
+              }
             </Card.Text>
             <Card.Text>
-              <b>Data Scadenza Green Pass:</b> { teacherInfo.GreenPassExpirationDate !== null ? new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString(): 'Non Definito' }
+              <b>Data Scadenza Green Pass:</b>
+              { teacherInfo.GreenPassExpirationDate !== null
+                ? new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()
+                : 'Non Definito'
+              }
             </Card.Text>
 
             <div className="buttons-container">
@@ -98,14 +122,19 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
           </Card.Body>
         </Card>
 
-        <Modal show={showUpdateTeacherModal} onHide={() => setShowUpdateTeacherModal(false)} dialogClassName="update-teacher-modal" centered>
+        <Modal
+          show={showUpdateTeacherModal}
+          onHide={() => setShowUpdateTeacherModal(false)}
+          dialogClassName="update-teacher-modal"
+          centered
+        >
           <Modal.Header closeButton>
           <Modal.Title> Aggiorna Insegnante </Modal.Title>
           </Modal.Header>
           <Modal.Body className="update-student-teacher-modal-body">
-            <CreateUpdateUserForm 
+            <CreateUpdateUserForm
                 personInfo={teacherInfo}
-                personType={'Teacher'}
+                personType={userType[1].user}
                 callback={updateTeacher}
                 handleModal={setShowUpdateTeacherModal}
                 setUserInfo={setTeacherInfo}
@@ -134,5 +163,10 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
     )
 };
 
+TeacherDisplayer.propTypes = {
+	teacherInitialInfo: PropTypes.object.isRequired,
+	teachersList: PropTypes.array.isRequired,
+	setTeachersList: PropTypes.func.isRequired,
+}
 
 export default TeacherDisplayer;

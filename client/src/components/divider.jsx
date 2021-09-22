@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Divider = ({ half = false, single = false, double = false }) => {
 
@@ -24,6 +25,18 @@ const Divider = ({ half = false, single = false, double = false }) => {
             }
         </>
     );
+}
+
+Divider.propTypes  = {
+    half: PropTypes.bool,
+    single: PropTypes.bool,
+    double: PropTypes.bool,
+}
+
+Divider.defaultProps = {
+  half: false,
+  single: false,
+  double: false,
 }
 
 export default Divider;

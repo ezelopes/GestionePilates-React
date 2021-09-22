@@ -19,8 +19,7 @@ import ReceiptsPage from './pages/ReceiptsPage';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const App = () => {
-  return (
+const App = () => (
     <>
       <ToastContainer />
       <Router>
@@ -41,7 +40,6 @@ const App = () => {
         </div>
       </Router>
     </>
-  );
-}
+  )
 
 export default App;

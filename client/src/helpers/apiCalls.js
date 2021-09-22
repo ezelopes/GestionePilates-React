@@ -1,3 +1,5 @@
+import produce from "immer"
+
 const createStudent = async (newStudent) => {
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
@@ -13,10 +15,12 @@ const createStudent = async (newStudent) => {
   if (response.status === 200) {
     const { StudentID } = responseParsed;
 
-    newStudent.StudentID = StudentID;
+		const newStudentWithID = produce(newStudent, draft => {
+				draft.StudentID = StudentID;
+		})
 
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-    studentListCached.push(newStudent);
+    studentListCached.push(newStudentWithID);
     sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
   }
 
@@ -36,10 +40,13 @@ const createReceipt = async (newReceipt) => {
   const responseParsed = await response.json();
 
   if (response.status === 200) {
-    newReceipt.ReceiptID = responseParsed.ReceiptID
-    return { status: response.status, message: responseParsed.message, receipt: newReceipt }
+		const receiptWithID = produce(newReceipt, draft => {
+			draft.ReceiptID = responseParsed.ReceiptID;
+		})
+
+		return { status: response.status, message: responseParsed.message, receipt: receiptWithID }
   }
-  
+
   return { status: response.status, message: responseParsed.message }
 };
 
@@ -52,7 +59,7 @@ const createTeacher = async (newTeacher) => {
     },
     body: JSON.stringify(newTeacher)
   });
-  
+
   const responseParsed = await response.json();
   return { status: response.status, message: responseParsed.message }
 };
@@ -66,13 +73,13 @@ const updateStudent = async (updatedStudent) => {
     },
     body: JSON.stringify(updatedStudent)
   });
-  
+
   const responseParsed = await response.json();
 
   if (response.status === 200) {
     const studentsListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-    
-    for (let i = 0; i < studentsListCached.length; i++) {
+
+    for (let i = 0; i < studentsListCached.length; i += 1) {
       if(updatedStudent.StudentID === studentsListCached[i].StudentID) {
         studentsListCached[i] = updatedStudent;
         break;
@@ -116,7 +123,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
     const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     let updatedStudent = null
 
-    for (let i = 0; i < studentListCached.length; i++) {
+    for (let i = 0; i < studentListCached.length; i += 1) {
       if (StudentID === studentListCached[i].StudentID) {
         studentListCached[i].RegistrationDate = RegistrationDate || null;
         updatedStudent = studentListCached[i]
@@ -140,7 +147,7 @@ const updateReceipt = async (updatedReceipt) => {
     body: JSON.stringify(updatedReceipt)
   });
   const responseParsed = await response.json();
-  
+
   return { status: response.status, message: responseParsed.message, receipt: updatedReceipt }
 }
 

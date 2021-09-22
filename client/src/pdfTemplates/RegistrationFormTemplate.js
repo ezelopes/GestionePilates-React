@@ -1,13 +1,14 @@
-const pdfMake = require('pdfmake/build/pdfmake.js');
-const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const pdfMake = require('pdfmake/build/pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
 const formatDate = require('../helpers/formatDateForInputDate');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const RegistrationFormTemplate = async (studentInfo) => {
-  // print only if studentInfo fields are not empty and DataCertificato does not expire any soon
-  const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  // Print only if Certificate Expiry Date does not expire soon
+
+  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_SPACE = '________________________________________';
   const BLANK_DATE = '______-______-________';
 
@@ -20,7 +21,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
     pageMargins: [40, 20, 40, 0],
     content: [
       {
-        image: label_logo,
+        image: labelLogo,
         fit: [100, 100]
       },
       {
@@ -76,19 +77,28 @@ const RegistrationFormTemplate = async (studentInfo) => {
         text: [
           {
             text:
-              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti sul sito www.asinazionale.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione dichiara che, tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. La parte cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti saranno inseriti nella piattaforma nazionale di ASI (ente di promozione sportiva).',
+              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue ' +
+							'possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni ' +
+							'degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti ' +
+							'sul sito www.asinazionale.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione ' +
+							'dichiara tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. ' +
+							'La parte che, cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o' +
+							' presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà ' +
+							'custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti ' +
+							'saranno inseriti nella piattaforma nazionale di ASI (ente di promozione sportiva).',
             lineHeight: 1.5,
               fontSize: 10
           },
           {
             text:
-              ' 3-Autorizzo ad effettuare ed utilizzare riprese fotografiche e video per poter propagandare le attività sociali sui canali ufficiali dell’Associazione (sitoweb/facebook/ecc...), ',
+              ' 3-Autorizzo ad effettuare ed utilizzare riprese fotografiche e video per poter propagandare ' +
+							'le attività sociali sui canali ufficiali dell’Associazione (sitoweb/facebook/ecc...), ',
             bold: true,
             lineHeight: 1.5,
             fontSize: 10
           },
-          { 
-            text: ' delle voci 1, 2, 3 ', 
+          {
+            text: ' delle voci 1, 2, 3 ',
             fontSize: 10
           },
           {
@@ -179,7 +189,10 @@ const RegistrationFormTemplate = async (studentInfo) => {
         margin: [0, 0, 0, 10]
       },
       {
-        text: `Figlio fiscalmente a carico del genitore: ${studentInfo.ParentName || BLANK_SPACE } ${studentInfo.ParentSurname || '' }`,
+        text: `Figlio fiscalmente a carico del genitore: ${
+					studentInfo.ParentName || BLANK_SPACE }
+					${studentInfo.ParentSurname || ''
+				}`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,

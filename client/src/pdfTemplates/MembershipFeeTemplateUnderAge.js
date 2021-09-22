@@ -1,5 +1,5 @@
-const pdfMake = require('pdfmake/build/pdfmake.js');
-const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const pdfMake = require('pdfmake/build/pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 const convertNumberIntoWord = require('../helpers/convertNumberIntoWord');
 const formatDate = require('../helpers/formatDateForInputDate');
@@ -7,7 +7,7 @@ const formatDate = require('../helpers/formatDateForInputDate');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
-  const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const signature = await getBase64ImageFromURL('../images/Signature.png');
   const stamp = await getBase64ImageFromURL('../images/Stamp.png');
   const BLANK_SPACE = '___________________________';
@@ -19,7 +19,7 @@ const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
   const cents = euroAndCents[1];
 
   const eurosInLetters = convertNumberIntoWord(euro);
-  const centsInLetters = (cents !== '00' && cents !== '0' && cents !== undefined) 
+  const centsInLetters = (cents !== '00' && cents !== '0' && cents !== undefined)
     ? ` e ${convertNumberIntoWord(cents)} Centesimi`
     : ''
 
@@ -32,7 +32,7 @@ const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
     pageMargins: [40, 5, 40, 0],
     content: [
       {
-        image: label_logo,
+        image: labelLogo,
         fit: [100, 100]
       },
       {
@@ -44,7 +44,8 @@ const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
       },
       {
         text:
-          'L’associazione sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
+          'L’associazione sportiva dilettantistica PIL-ART ' +
+					'con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
@@ -65,7 +66,11 @@ const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
           studentInfo.ParentSurname || BLANK_SPACE
         }, C.F. ${
           studentInfo.ParentTaxCode || BLANK_SPACE
-        }, il pagamento effetuato${(receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}` : '' )} equilavente alla somma di ${
+        }, il pagamento effetuato${
+						receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI'
+							? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}`
+							: ''
+						} equilavente alla somma di ${
           receiptInfo.AmountPaid || BLANK_SPACE
         }€ (${
           eurosInLetters.toUpperCase() || BLANK_SPACE
@@ -92,7 +97,11 @@ const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
       },
       {
         text:
-          'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti a tal fine richiesti',
+					'Si comunica che ai sensi dell-art. 15, comma 1°, lett. I-quinquies del TUIR, le spese, per un ' +
+					'importo non superiore a 210 euro all’anno, sostenute per l’iscrizione annuale e l’abbonamento, ' +
+					'per i ragazzi di età compresa tra 5 e 18 anni, ad associazioni sportive dilettantistiche sono ' +
+					'detraibili nella misura del 19% e che l’associazione risulta in possesso dei requisiti ' +
+					'a tal fine richiesti',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,

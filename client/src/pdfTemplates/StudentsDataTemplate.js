@@ -1,5 +1,5 @@
-const pdfMake = require('pdfmake/build/pdfmake.js');
-const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+const pdfMake = require('pdfmake/build/pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
 const formatDate = require('../helpers/formatDateForInputDate');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
@@ -17,7 +17,7 @@ const StudentsDataTemplate = async (
     docTitle += ` ISCRITTE NEL ${registrationMonth} ${registrationYear}`
   }
 
-  const label_logo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_DATE = '____-____-________'
 
   const tableBody = [
@@ -27,13 +27,18 @@ const StudentsDataTemplate = async (
       { text: 'Numero Cellulare', bold: true }
     ]
   ]
-  studentsList.forEach(student => 
-    tableBody.push([`${student.Name} ${student.Surname}` , student.DOB ? formatDate(new Date(student.DOB)) : BLANK_DATE, student.MobilePhone])
+  studentsList.forEach(student =>
+    tableBody.push(
+			[
+				`${student.Name} ${student.Surname}`,
+				student.DOB ? formatDate(new Date(student.DOB)) : BLANK_DATE, student.MobilePhone
+			]
+		)
   )
 
   const content = [
     {
-      image: label_logo,
+      image: labelLogo,
       alignment: 'right',
       fit: [100, 100],
       margin: [0, 0, 0, 10]
@@ -49,10 +54,10 @@ const StudentsDataTemplate = async (
       margin: [0, 0, 0, 0],
       layout: {
         defaultBorder: true,
-        paddingLeft: function () { return 5; },
-        paddingRight: function () { return 5; },
-        paddingTop: function () { return 5; },
-        paddingBottom: function () { return 5; },
+        paddingLeft () { return 5; },
+        paddingRight () { return 5; },
+        paddingTop () { return 5; },
+        paddingBottom () { return 5; },
       },
       table: {
         headerRows: 1,
@@ -70,7 +75,7 @@ const StudentsDataTemplate = async (
       subject: `Dati Allieve`
     },
     pageMargins: [40, 40, 40, 40],
-    content: content
+    content
   };
 
   return docDefinition;
