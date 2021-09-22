@@ -1,6 +1,6 @@
 {
   "name": "gestionepilates-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Management tool to create/update/delete students of a Pilates organization",
   "main": "index.js",
   "proxy": "http://localhost:8000/",
@@ -55,6 +55,7 @@
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsdoc": "^36.1.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react-hooks": "^4.2.0",
