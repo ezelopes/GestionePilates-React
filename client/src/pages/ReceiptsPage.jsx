@@ -5,11 +5,11 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
-import FilteredReceiptsModal from '../components/FilteredReceiptsModal'
+import FilteredReceiptsModal from '../components/FilteredReceiptsModal';
 import formatDate from '../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import toastConfig from '../helpers/toast.config';
-import { ages, receiptType } from '../commondata/commondata'
+import { ages, receiptType } from '../commondata/commondata';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,26 +25,26 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const columnsDefinition = [
-  { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true, },
+  { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
   { headerName: 'Nome', field: 'Name' },
   { headerName: 'Cognome', field: 'Surname' },
   {
     headerName: 'Data Ricevuta',
     field: 'ReceiptDate',
-    cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : ''
+    cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   {
     headerName: 'Inizio Corso',
     field: 'CourseStartDate',
-    cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : ''
+    cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   {
     headerName: 'Scadenza Corso',
     field: 'CourseEndDate',
-    cellRenderer: (params) => params.value ? new Date(params.value).toLocaleDateString() : ''
+    cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
-  { headerName: 'Tipo Pagamento', field: 'PaymentMethod' }
+  { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
 ];
 
 const gridOptionsDefault = {
@@ -55,12 +55,12 @@ const gridOptionsDefault = {
     filter: true,
     floatingFilter: true,
     cellStyle: { fontSize: '1.5em' },
-    flex: 10
+    flex: 10,
   },
-  rowSelection: 'single'
+  rowSelection: 'single',
 };
 
-const paymentMethods = [ null, 'Contanti', 'Bonifico', 'Assegno' ];
+const paymentMethods = [null, 'Contanti', 'Bonifico', 'Assegno'];
 
 const ReceiptsPage = () => {
   const today = formatDate(new Date(), true);
@@ -86,34 +86,36 @@ const ReceiptsPage = () => {
       const result = await fetch('/api/receipt/getAllReceipts');
       const body = await result.json();
 
-      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(body)
+      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(body);
 
       setAllReceipts(orderedReceipts);
       setCurrentReceipts(orderedReceipts);
     };
     fetchData();
 
-    try{
+    try {
       params.api.sizeColumnsToFit();
-      window.addEventListener('resize', () => { params.api.sizeColumnsToFit(); })
+      window.addEventListener('resize', () => {
+        params.api.sizeColumnsToFit();
+      });
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
     if (selectedNodes.length === 0) {
-      return setSelectedReceipts([])
+      return setSelectedReceipts([]);
     }
 
-    const receipts = []
-    selectedNodes.forEach(node => {
-      receipts.push(node.data)
+    const receipts = [];
+    selectedNodes.forEach((node) => {
+      receipts.push(node.data);
     });
 
     return setSelectedReceipts(receipts);
-  }
+  };
 
   const printReceipts = async () => {
     try {
@@ -122,10 +124,10 @@ const ReceiptsPage = () => {
       }
 
       const finalDocumentDefinition = {
-        info: { author: "Roxana Carro", subject: "Ricevute", title: "Ricevute Multiple" },
+        info: { author: 'Roxana Carro', subject: 'Ricevute', title: 'Ricevute Multiple' },
         pageMargins: [40, 5, 40, 0],
         content: [],
-      }
+      };
 
       // eslint-disable-next-line no-restricted-syntax
       for (const [index, data] of selectedReceipts.entries()) {
@@ -149,8 +151,8 @@ const ReceiptsPage = () => {
           School: data.School,
           ParentName: data.ParentName,
           ParentSurname: data.ParentSurname,
-          ParentTaxCode: data.ParentTaxCode
-        }
+          ParentTaxCode: data.ParentTaxCode,
+        };
 
         const receiptInfo = {
           ReceiptNumber: data.ReceiptNumber,
@@ -159,60 +161,57 @@ const ReceiptsPage = () => {
           ReceiptType: data.ReceiptType,
           ReceiptDate: data.ReceiptDate,
           CourseStartDate: data.CourseStartDate,
-          CourseEndDate: data.CourseEndDate
-        }
+          CourseEndDate: data.CourseEndDate,
+        };
 
         if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[0].type) {
           // eslint-disable-next-line no-await-in-loop
           documentDefinition = await ReceiptTemplateAdult.default(studentInfo, receiptInfo);
-        }
-        else if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[1].type){
+        } else if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[1].type) {
           // eslint-disable-next-line no-await-in-loop
           documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
-        }
-        else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[0].type){
+        } else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[0].type) {
           // eslint-disable-next-line no-await-in-loop
           documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
-        }
-        else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[1].type){
+        } else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[1].type) {
           // eslint-disable-next-line no-await-in-loop
           documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
         }
 
         if (index % 2 === 1) {
-          documentDefinition.content[documentDefinition.content.length - 1].pageBreak = "after"
-          documentDefinition.content[documentDefinition.content.length - 1].canvas = []
+          documentDefinition.content[documentDefinition.content.length - 1].pageBreak = 'after';
+          documentDefinition.content[documentDefinition.content.length - 1].canvas = [];
         }
         Array.prototype.push.apply(finalDocumentDefinition.content, documentDefinition.content);
       }
 
       pdfMake.createPdf(finalDocumentDefinition).open();
 
-			return toast.success('PDF Ricevute Creato Correttamente', toastConfig);
+      return toast.success('PDF Ricevute Creato Correttamente', toastConfig);
     } catch (error) {
       console.error(error);
-			return toast.error(`Un errore se e' verificato nello stampare le ricevute`, toastConfig);
+      return toast.error(`Un errore se e' verificato nello stampare le ricevute`, toastConfig);
     }
   };
 
   const validateDateBetweenTwoDates = (fromDateValidation, toDateValidation, givenDate) =>
-    new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation)
+    new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation);
 
   const filterReceipts = () => {
     const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate }) =>
       validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
-    )
+    );
 
     if (!filteredPaymentMethod) {
-      return setCurrentReceipts(receiptsWithDateFilter)
+      return setCurrentReceipts(receiptsWithDateFilter);
     }
 
     const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ PaymentMethod }) =>
-       PaymentMethod.includes(filteredPaymentMethod)
-    )
+      PaymentMethod.includes(filteredPaymentMethod)
+    );
 
-    return setCurrentReceipts(receiptsWithPaymentAndDateFilters)
-  }
+    return setCurrentReceipts(receiptsWithPaymentAndDateFilters);
+  };
 
   const clearFilters = () => {
     const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('PaymentMethod');
@@ -222,92 +221,97 @@ const ReceiptsPage = () => {
 
     // Set default values in other components
     selectPaymentMethodRef.current.value = null;
-    fromDateRef.current.value = today
-    toDateRef.current.value = today
+    fromDateRef.current.value = today;
+    toDateRef.current.value = today;
 
-    setCurrentReceipts(allReceipts)
-  }
+    setCurrentReceipts(allReceipts);
+  };
 
   const calculateAmountBetweenDates = () => {
     if (!filteredPaymentMethod) {
       return toast.error('Seleziona Tipo di Pagamento!', toastConfig);
     }
 
-    const receipts = allReceipts.filter(({ ReceiptDate, PaymentMethod }) =>
-      validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)  &&
-      PaymentMethod.includes(filteredPaymentMethod)
-    )
+    const receipts = allReceipts.filter(
+      ({ ReceiptDate, PaymentMethod }) =>
+        validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate) && PaymentMethod.includes(filteredPaymentMethod)
+    );
 
-    const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator +  parseFloat(AmountPaid), 0);
+    const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
 
-    const copy = [...receipts]
-    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy)
+    const copy = [...receipts];
+    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy);
 
-    setFilteredReceipts(orderedReceipts)
-    setFilteredAmountPaid(filteredAmount)
-    return setShowFilteredAmountModal(true)
-  }
+    setFilteredReceipts(orderedReceipts);
+    setFilteredAmountPaid(filteredAmount);
+    return setShowFilteredAmountModal(true);
+  };
 
   const orderReceipts = () => {
-    const copy = [...currentReceipts]
-    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy)
+    const copy = [...currentReceipts];
+    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy);
 
-    setCurrentReceipts(orderedReceipts)
-  }
+    setCurrentReceipts(orderedReceipts);
+  };
 
   return (
     <>
       <div className="page-body">
-          <div className="filter-form">
-            <Form.Group>
-              <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
-              <Form.Control
-                ref={selectPaymentMethodRef}
-                as="select"
-                onChange={({ target }) => setFilteredPaymentMethod(target.value)}
-              >
-                { paymentMethods.map(method => <option key={`select_${method}`} value={method}> {method} </option>) }
-              </Form.Control>
-            </Form.Group>
+        <div className="filter-form">
+          <Form.Group>
+            <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
+            <Form.Control
+              ref={selectPaymentMethodRef}
+              as="select"
+              onChange={({ target }) => setFilteredPaymentMethod(target.value)}
+            >
+              {paymentMethods.map((method) => (
+                <option key={`select_${method}`} value={method}>
+                  {' '}
+                  {method}{' '}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
 
-            <Form.Group>
-              <Form.Label> Da: </Form.Label> <br />
-              <input
-                ref={fromDateRef}
-                type="date"
-                defaultValue={today}
-                onChange={({ target }) => setFromDate(target.value)}
-              />
-            </Form.Group>
+          <Form.Group>
+            <Form.Label> Da: </Form.Label> <br />
+            <input
+              ref={fromDateRef}
+              type="date"
+              defaultValue={today}
+              onChange={({ target }) => setFromDate(target.value)}
+            />
+          </Form.Group>
 
-            <Form.Group>
-              <Form.Label> A: </Form.Label> <br />
-              <input
-                ref={toDateRef}
-                type="date"
-                defaultValue={today}
-                onChange={({ target }) => setToDate(target.value)}
-              />
-            </Form.Group>
-          </div>
+          <Form.Group>
+            <Form.Label> A: </Form.Label> <br />
+            <input
+              ref={toDateRef}
+              type="date"
+              defaultValue={today}
+              onChange={({ target }) => setToDate(target.value)}
+            />
+          </Form.Group>
+        </div>
 
-          <div className="buttons-container">
-            <Button variant="success" onClick={calculateAmountBetweenDates}>
-              Calcola Importo Totale
-            </Button>
+        <div className="buttons-container">
+          <Button variant="success" onClick={calculateAmountBetweenDates}>
+            Calcola Importo Totale
+          </Button>
 
-            <Button variant="primary" onClick={filterReceipts}>
-              Filtra
-            </Button>
+          <Button variant="primary" onClick={filterReceipts}>
+            Filtra
+          </Button>
 
-            <Button variant="primary" onClick={orderReceipts}>
-              Ordina per Numero Ricevuta
-            </Button>
+          <Button variant="primary" onClick={orderReceipts}>
+            Ordina per Numero Ricevuta
+          </Button>
 
-            <Button variant="danger" onClick={clearFilters}>
-              Rimuovi Filtri
-            </Button>
-          </div>
+          <Button variant="danger" onClick={clearFilters}>
+            Rimuovi Filtri
+          </Button>
+        </div>
 
         <div className="ag-theme-balham receipts-grid">
           <AgGridReact
@@ -342,6 +346,6 @@ const ReceiptsPage = () => {
       />
     </>
   );
-}
+};
 
 export default ReceiptsPage;

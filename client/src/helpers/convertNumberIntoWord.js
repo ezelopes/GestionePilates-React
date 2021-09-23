@@ -30,20 +30,9 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       'Sedici',
       'Diciassette',
       'Diciotto',
-      'Diciannove'
+      'Diciannove',
     ],
-    decine: [
-      null,
-      null,
-      'Venti',
-      'Trenta',
-      'Quaranta',
-      'Cinquanta',
-      'Sessanta',
-      'Settanta',
-      'Ottanta',
-      'Novanta'
-    ],
+    decine: [null, null, 'Venti', 'Trenta', 'Quaranta', 'Cinquanta', 'Sessanta', 'Settanta', 'Ottanta', 'Novanta'],
     decine1: [null, null, 'Vent', 'Trent', 'Quarant', 'Cinquant', 'Sessant', 'Settant', 'Ottant', 'Novant'],
     cento: 'Cento',
     multipli: [
@@ -56,7 +45,7 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       'Trilioni',
       'Triliardi',
       'Quadrilioni',
-      'Quadriliardi'
+      'Quadriliardi',
     ],
     multipli1: [
       null,
@@ -68,9 +57,9 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       'Trilione',
       'Triliardo',
       'Quadrilione',
-      'Quadriliardo'
+      'Quadriliardo',
     ],
-    un: 'Un'
+    un: 'Un',
   };
 
   let numero = n.replace(/^\s+|\s+$/g, '');
@@ -81,17 +70,16 @@ const convertNumberIntoWord = (n, abbr, separator) => {
   if (abbr === true) {
     if (numero.length > 2) {
       abbrNum = numero.substr(numero.length - 2, 2);
-      numero = `${numero.substr(0, numero.length - 2)  }00`;
+      numero = `${numero.substr(0, numero.length - 2)}00`;
     }
   }
 
   const padding3 = numero.length % 3;
   if (padding3 === 1) {
-		numero = `00${  numero}`;
-	}
-  else if (padding3 === 2) {
-		numero = `0${  numero}`;
-	}
+    numero = `00${numero}`;
+  } else if (padding3 === 2) {
+    numero = `0${numero}`;
+  }
   const len = numero.length;
 
   let mult3 = numero.length / 3 - 1;
@@ -127,18 +115,17 @@ const convertNumberIntoWord = (n, abbr, separator) => {
     }
     if (v > 0 && mult3 > 0) {
       if (v === 1) {
-				result += (mult3 === 1 ? '' : lettere.un + sep) + lettere.multipli1[mult3];
-			}
-      else {
-				result += r + sep + lettere.multipli[mult3];
-			}
+        result += (mult3 === 1 ? '' : lettere.un + sep) + lettere.multipli1[mult3];
+      } else {
+        result += r + sep + lettere.multipli[mult3];
+      }
     } else {
       result += r;
     }
     i += 3;
     mult3 -= 1;
   }
-  return result + (abbrNum.length > 0 ? ` / ${  abbrNum}` : '');
+  return result + (abbrNum.length > 0 ? ` / ${abbrNum}` : '');
 };
 
 module.exports = convertNumberIntoWord;

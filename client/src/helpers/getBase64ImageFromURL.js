@@ -1,4 +1,5 @@
-const getBase64ImageFromURL = (url) => new Promise((resolve, reject) => {
+const getBase64ImageFromURL = (url) =>
+  new Promise((resolve, reject) => {
     const img = new Image();
     img.setAttribute('crossOrigin', 'anonymous');
     img.onload = () => {
@@ -10,7 +11,7 @@ const getBase64ImageFromURL = (url) => new Promise((resolve, reject) => {
       const dataURL = canvas.toDataURL('image/png');
       resolve(dataURL);
     };
-    img.onerror = error => {
+    img.onerror = (error) => {
       reject(error);
     };
     img.src = url;

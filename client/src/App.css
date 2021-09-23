@@ -1,11 +1,11 @@
-/* 
-Colors: 
+/*
+Colors:
  Purple: #422970
  Blue: #009ED5
  White: #000
 */
 body {
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
 }
 
 .navbar {
@@ -39,15 +39,15 @@ input[type='date'] {
   font-size: 1em;
   height: 2.5em;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-  padding: .375rem .75rem;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  padding: 0.375rem 0.75rem;
   color: #495057;
 }
 
 .filter-form {
   display: flex;
-  justify-content: left; 
+  justify-content: left;
   align-items: center;
 }
 
@@ -61,7 +61,7 @@ input[type='date'] {
 
 .green-pass-form {
   display: flex;
-  justify-content: left; 
+  justify-content: left;
   align-items: center;
   margin-top: 2em;
   width: fit-content;
@@ -110,7 +110,10 @@ input[type='date'] {
   margin-top: 0.7vw;
 }
 
-.user-form > input, select, option, form-control {
+.user-form > input,
+select,
+option,
+form-control {
   min-width: 0;
 }
 
@@ -130,15 +133,15 @@ input[type='date'] {
 }
 
 .form-wrapper {
-  border: 2px solid #DCDCDC;
+  border: 2px solid #dcdcdc;
   border-radius: 5px;
   padding: 1.5em 1em 1.5em 1em;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  background-color: #F3F4F6;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  background-color: #f3f4f6;
 }
 
 .btn {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .update-registration-date {
@@ -174,7 +177,7 @@ input[type='date'] {
 
 .card-body {
   border-radius: inherit;
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
 }
 
 .teacher-card-wrapper {
@@ -184,12 +187,12 @@ input[type='date'] {
   font-size: 14px;
   margin-right: 2.5em;
   margin-top: 1.5em;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .student-name-title {
-  background-color: #F3F4F6;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  background-color: #f3f4f6;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   display: flex;
   margin: auto;
   line-height: 1.2;
@@ -197,7 +200,7 @@ input[type='date'] {
   width: fit-content;
   font-size: 2em;
   font-weight: 600;
-  border: 2px solid #DCDCDC;
+  border: 2px solid #dcdcdc;
   border-radius: 15px;
   margin-bottom: 0.5em;
 }
@@ -208,15 +211,15 @@ input[type='date'] {
 }
 
 .modal-body {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
 }
 
 .modal-footer {
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
 }
 
 .modal-header {
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
 }
 
 .filtered-receipt-grid {
@@ -230,8 +233,8 @@ input[type='date'] {
 }
 
 .receipts-grid {
-  height: 40em; 
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  height: 40em;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   margin-top: 2em;
 }
 
@@ -240,18 +243,18 @@ input[type='date'] {
   height: 20em;
   width: 90%;
   margin-bottom: 2em;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .student-list-grid {
-  height: 45vh; 
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  height: 45vh;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .subscription-form {
-  width: 60vw; 
+  width: 60vw;
   margin-left: 20vw;
-  margin-top: 2em; 
+  margin-top: 2em;
   padding-bottom: 2em;
 }
 
@@ -259,7 +262,7 @@ input[type='date'] {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2em; 
+  margin-top: 2em;
   gap: 2em;
 }
 

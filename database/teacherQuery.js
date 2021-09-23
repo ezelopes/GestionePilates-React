@@ -1,8 +1,8 @@
 const pool = require('./pool');
-const { getFormattedDate } = require('./helpers/index')
+const { getFormattedDate } = require('./helpers/index');
 
 const mappingTeachers = (rows) => {
-  const teachers = rows.map(row => {
+  const teachers = rows.map((row) => {
     return {
       TeacherID: row.InsegnanteID,
       TaxCode: row.CodiceFiscale,
@@ -23,21 +23,21 @@ const mappingTeachers = (rows) => {
     };
   });
   return teachers;
-}
+};
 
 const getTeachers = async () => {
   const [rows] = await pool.execute('SELECT * FROM insegnante');
   const teachers = mappingTeachers(rows);
 
   return teachers;
-}
+};
 
 const getSingleTeacher = async (CodiceFiscale) => {
   const [rows] = await pool.execute('SELECT * FROM insegnante WHERE CodiceFiscale= ?;', [CodiceFiscale]);
   const teacher = mappingTeachers(rows);
 
   return teacher;
-}
+};
 
 const createTeacher = async ({
   TaxCode,
@@ -65,14 +65,30 @@ const createTeacher = async ({
     await pool.execute(
       'INSERT INTO Insegnante (CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola) \
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [TaxCode, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School]
+      [
+        TaxCode,
+        Name,
+        Surname,
+        City,
+        Address,
+        MobilePhone,
+        Email,
+        RegistrationDateFormatted,
+        CertificateExpirationDateFormatted,
+        DOBFormatted,
+        GreenPassExpirationDateFormatted,
+        BirthPlace,
+        Discipline,
+        Course,
+        School,
+      ]
     );
     return { message: 'Insegnante Inserita Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: 'Errore nel creare Insegnante!' };
   }
-}
+};
 
 const updateTeacher = async ({
   TeacherID,
@@ -100,14 +116,31 @@ const updateTeacher = async ({
 
     await pool.execute(
       `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
-      [TaxCode, Name, Surname, City, Address, MobilePhone, Email, RegistrationDateFormatted, CertificateExpirationDateFormatted, DOBFormatted, GreenPassExpirationDateFormatted, BirthPlace, Discipline, Course, School, TeacherID]
+      [
+        TaxCode,
+        Name,
+        Surname,
+        City,
+        Address,
+        MobilePhone,
+        Email,
+        RegistrationDateFormatted,
+        CertificateExpirationDateFormatted,
+        DOBFormatted,
+        GreenPassExpirationDateFormatted,
+        BirthPlace,
+        Discipline,
+        Course,
+        School,
+        TeacherID,
+      ]
     );
     return { message: 'Insegnante Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: `Errore nell'aggiornare Insegnante!` };
   }
-}
+};
 
 const deleteTeacher = async (TeacherID) => {
   try {
@@ -117,12 +150,12 @@ const deleteTeacher = async (TeacherID) => {
     console.log(error);
     return `Errore nell'eliminare Insegnante!`;
   }
-}
+};
 
 module.exports = {
   getTeachers,
   getSingleTeacher,
   createTeacher,
   updateTeacher,
-  deleteTeacher
+  deleteTeacher,
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Modal, Button, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -14,15 +14,10 @@ import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
 import { StudentProvider } from '../components/StudentContext';
 import Divider from '../components/Divider';
 
-import {
-  updateStudent,
-  updateRegistrationDate,
-  deleteStudent,
-  createReceipt,
-} from '../helpers/apiCalls';
+import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 
-import { userType } from '../commondata/commondata'
+import { userType } from '../commondata/commondata';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
@@ -39,8 +34,7 @@ const StudentPage = ({ match }) => {
   const [newRegistrationDate, setNewRegistrationDate] = useState(null);
 
   const [showUpdateStudentModal, setShowUpdateStudentModal] = useState(false);
-  const [showRegistrationDateModal, setShowRegistrationDateModal] =
-    useState(false);
+  const [showRegistrationDateModal, setShowRegistrationDateModal] = useState(false);
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
 
   const history = useHistory();
@@ -51,42 +45,32 @@ const StudentPage = ({ match }) => {
 
       pdfMake.createPdf(documentDefinition).open();
 
-			return toast.success('PDF Creato Correttamente', toastConfig);
+      return toast.success('PDF Creato Correttamente', toastConfig);
     } catch (error) {
-      return toast.error(
-        `Un errore se e' verificato nello stampare il modulo d'iscrizione`,
-        toastConfig,
-      );
+      return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
     }
   };
 
   useEffect(() => {
     // TODO: Reduce this to one endpoint call!
     const fetchData = async () => {
-      const getStudentResult = await fetch(
-        `/api/student/getSingleStudent/${match.params.TaxCode}`,
-      );
+      const getStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
       const student = await getStudentResult.json();
       setStudentInfo(student);
       setNewRegistrationDate(student.RegistrationDate);
 
-      const getReceiptsOfStudentResult = await fetch(
-        `/api/receipt/getStudentReceipts/${match.params.TaxCode}`,
-      );
+      const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${match.params.TaxCode}`);
       const receipts = await getReceiptsOfStudentResult.json();
       setStudentReceipts(receipts);
 
       setLoading(false);
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRegistrationDateUpdate = async () => {
-    const response = await updateRegistrationDate(
-      studentInfo.StudentID,
-      newRegistrationDate,
-    );
+    const response = await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate);
 
     if (response.status === 200) {
       setStudentInfo(response.updatedStudent);
@@ -111,8 +95,8 @@ const StudentPage = ({ match }) => {
   };
 
   if (!studentInfo) {
-		return <NotFoundPage />;
-	}
+    return <NotFoundPage />;
+  }
 
   return (
     <>
@@ -141,30 +125,21 @@ const StudentPage = ({ match }) => {
                 MODULO ISCRIZIONE
               </Button>
 
-              <Button
-                variant="warning"
-                onClick={() => setShowUpdateStudentModal(true)}
-              >
+              <Button variant="warning" onClick={() => setShowUpdateStudentModal(true)}>
                 <span role="img" aria-label="update">
                   🔄
                 </span>{' '}
                 AGGIORNA ALLIEVA
               </Button>
 
-              <Button
-                variant="warning"
-                onClick={() => setShowRegistrationDateModal(true)}
-              >
+              <Button variant="warning" onClick={() => setShowRegistrationDateModal(true)}>
                 <span role="img" aria-label="update">
                   🔄
                 </span>{' '}
                 AGGIORNA DATA ISCRIZIONE
               </Button>
 
-              <Button
-                variant="danger"
-                onClick={() => setShowDeleteStudentModal(true)}
-              >
+              <Button variant="danger" onClick={() => setShowDeleteStudentModal(true)}>
                 <span role="img" aria-label="bin">
                   🗑️
                 </span>{' '}
@@ -187,11 +162,7 @@ const StudentPage = ({ match }) => {
               <CreateUpdateReceiptForm isForCreating callback={createReceipt} />
             </div>
           </div>
-          <Modal
-            show={showRegistrationDateModal}
-            onHide={() => setShowRegistrationDateModal(false)}
-            centered
-          >
+          <Modal show={showRegistrationDateModal} onHide={() => setShowRegistrationDateModal(false)} centered>
             <Modal.Header closeButton>
               <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
             </Modal.Header>
@@ -217,17 +188,12 @@ const StudentPage = ({ match }) => {
             </Modal.Footer>
           </Modal>
 
-          <Modal
-            show={showDeleteStudentModal}
-            onHide={() => setShowDeleteStudentModal(false)}
-            centered
-          >
+          <Modal show={showDeleteStudentModal} onHide={() => setShowDeleteStudentModal(false)} centered>
             <Modal.Header closeButton>
               <Modal.Title> Elimina Allieva </Modal.Title>
             </Modal.Header>
             <Modal.Body className="delete-student-teacher-modal-body">
-              Sei sicura di voler eliminare {studentInfo.Name}{' '}
-              {studentInfo.Surname}?
+              Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
             </Modal.Body>
             <Modal.Footer>
               <Button variant="danger" onClick={handleStudentDeletion}>
@@ -274,16 +240,16 @@ StudentPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       TaxCode: PropTypes.string,
-    }).isRequired
-  }).isRequired
-}
+    }).isRequired,
+  }).isRequired,
+};
 
 StudentPage.defaultValue = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       TaxCode: '',
-    })
-  })
-}
+    }),
+  }),
+};
 
 export default StudentPage;

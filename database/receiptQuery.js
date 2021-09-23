@@ -1,13 +1,10 @@
 const pool = require('./pool');
-const { getFormattedDate } = require('./helpers/index')
+const { getFormattedDate } = require('./helpers/index');
 
-const receiptType = [
-  { "type": "Quota" },
-  { "type": "Quota Associativa" }
-]
+const receiptType = [{ type: 'Quota' }, { type: 'Quota Associativa' }];
 
 const mappingReceipt = (rows) => {
-  const receipts = rows.map(row => {
+  const receipts = rows.map((row) => {
     return {
       ReceiptID: row.RicevutaID,
       ReceiptType: row.TipoRicevuta,
@@ -18,14 +15,14 @@ const mappingReceipt = (rows) => {
       AmountPaid: row.SommaEuro,
       FK_StudentID: row.FK_AllievaID,
       PaymentMethod: row.TipoPagamento,
-      Archived: row.Archiviata
+      Archived: row.Archiviata,
     };
   });
   return receipts;
-}
-  
+};
+
 const mappingAllReceipts = (rows) => {
-  const receipts = rows.map(row => {
+  const receipts = rows.map((row) => {
     return {
       IsAdult: row.Maggiorenne,
       TaxCode: row.CodiceFiscale,
@@ -56,14 +53,14 @@ const mappingAllReceipts = (rows) => {
     };
   });
   return receipts;
-}
+};
 
 const getStudentReceipts = async (TaxCode) => {
   const [rows] = await pool.execute('SELECT * FROM Ricevuta WHERE FK_CodiceFiscale = ?', [TaxCode]);
   const receipts = mappingReceipt(rows);
-  
+
   return receipts;
-}
+};
 
 const getAllReceipts = async () => {
   const [rows] = await pool.execute(
@@ -73,9 +70,9 @@ const getAllReceipts = async () => {
     ON ricevuta.FK_AllievaID = allieva.AllievaID;'
   );
   const receipts = mappingAllReceipts(rows);
-  
+
   return receipts;
-}
+};
 
 const createReceipt = async ({
   ReceiptNumber,
@@ -87,7 +84,7 @@ const createReceipt = async ({
   ReceiptType,
   TaxCode,
   StudentID,
-  RegistrationDate
+  RegistrationDate,
 }) => {
   try {
     // TODO: Reduce this code
@@ -103,18 +100,29 @@ const createReceipt = async ({
       );
       return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
     }
-  
+
     const [rows] = await pool.execute(
       'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, TaxCode, StudentID, false]
+      [
+        ReceiptNumber,
+        PaymentMethod,
+        ReceiptType,
+        ReceiptDateFormatted,
+        CourseStartDateFormatted,
+        CourseEndDateFormatted,
+        AmountPaid,
+        TaxCode,
+        StudentID,
+        false,
+      ]
     );
 
     if (RegistrationDate === true) {
-      await pool.execute(
-        `UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`,
-        [CourseStartDateFormatted, StudentID]
-      );
+      await pool.execute(`UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`, [
+        CourseStartDateFormatted,
+        StudentID,
+      ]);
     }
 
     return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
@@ -122,9 +130,9 @@ const createReceipt = async ({
     console.log(error);
     return { message: 'Errore nel creare la Ricevuta!' };
   }
-}
-  
-const updateReceipt = async({
+};
+
+const updateReceipt = async ({
   ReceiptID,
   ReceiptNumber,
   PaymentMethod,
@@ -142,38 +150,47 @@ const updateReceipt = async({
 
     if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
       await pool.execute(
-        'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;', 
+        'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;',
         [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, null, null, AmountPaid, ReceiptID]
       );
       return { message: 'Ricevuta Aggiornata Correttamente!' };
     }
-  
+
     await pool.execute(
       `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;`,
-      [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, CourseStartDateFormatted, CourseEndDateFormatted, AmountPaid, ReceiptID]
+      [
+        ReceiptNumber,
+        PaymentMethod,
+        ReceiptType,
+        ReceiptDateFormatted,
+        CourseStartDateFormatted,
+        CourseEndDateFormatted,
+        AmountPaid,
+        ReceiptID,
+      ]
     );
     return { message: 'Ricevuta Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: `Errore nell'aggiornare Ricevuta!` };
   }
-} 
+};
 
 const deleteReceipt = async (ReceiptID) => {
   try {
-    await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [ReceiptID])
+    await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [ReceiptID]);
 
     return { message: 'Ricevuta Eliminata Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: `Errore nell'eliminare Ricevute!` };
   }
-}
+};
 
 module.exports = {
   getStudentReceipts,
   getAllReceipts,
   createReceipt,
   updateReceipt,
-  deleteReceipt
+  deleteReceipt,
 };

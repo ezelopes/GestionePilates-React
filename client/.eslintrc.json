@@ -16,23 +16,23 @@
   },
   "rules": {
     "no-unused-vars": "warn",
-		"no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsForRegex": ["^draft"] }],
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsForRegex": ["^draft"] }],
     "func-names": "off",
-    "max-len": ["error", 120],
+    "max-len": ["error", 130],
     "curly": ["warn", "all"],
     "react/jsx-props-no-spreading": "off",
-		"react/forbid-prop-types": 0,
+    "react/forbid-prop-types": 0,
     "no-console": [
       "error",
       {
-          "allow": ["warn", "error"]
+        "allow": ["warn", "error"]
       }
     ],
     "capitalized-comments": [
       "error",
       "always",
       {
-          "ignoreConsecutiveComments": true
+        "ignoreConsecutiveComments": true
       }
     ]
   }

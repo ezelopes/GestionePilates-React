@@ -1,7 +1,7 @@
 const userType = [
   { id: 0, user: 'Student' },
   { id: 1, user: 'Teacher' },
-]
+];
 
 const ages = [
   { id: 0, age: 'Maggiorenne' },
@@ -82,15 +82,4 @@ const years = [
   { id: 2024, year: 2024 },
 ];
 
-export {
-	userType,
-  ages,
-  disciplines,
-  schools,
-  courses,
-  receiptType,
-  paymentMethod,
-  defaultAmounts,
-  months,
-  years,
-};
+export { userType, ages, disciplines, schools, courses, receiptType, paymentMethod, defaultAmounts, months, years };

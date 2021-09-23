@@ -1,7 +1,7 @@
 // Date dd-mm-yyyy to yyyy-mm-dd
 const reverseDate = (date) => {
   if (!date) {
-    return null
+    return null;
   }
 
   const dateSplit = date.split('-');
@@ -10,10 +10,10 @@ const reverseDate = (date) => {
   const year = dateSplit[2];
 
   if (day && month && year) {
-    return `${year}-${month - 1}-${day}`
+    return `${year}-${month - 1}-${day}`;
   }
-  
-  return null
+
+  return null;
 };
 
 module.exports = reverseDate;
