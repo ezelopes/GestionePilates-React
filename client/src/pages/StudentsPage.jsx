@@ -7,6 +7,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import toastConfig from '../helpers/toast.config';
+import { getAllStudents } from '../helpers/apiCalls';
 
 import Divider from '../components/Divider';
 
@@ -93,10 +94,8 @@ const StudentsPage = () => {
 
   const onGridReady = () => {
     const fetchData = async () => {
-      const result = await fetch('/api/student/getStudents');
-      const body = await result.json();
-      setStudents(body);
-      sessionStorage.setItem('studentsList', JSON.stringify(body));
+      const { allStudents } = await getAllStudents();
+      setStudents(allStudents);
     };
 
     if (!sessionStorage.getItem('studentsList') || sessionStorage.getItem('studentsList') === []) {
@@ -164,22 +163,20 @@ const StudentsPage = () => {
 
   const printStudentsBasedOnRegistrationDate = async () => {
     try {
-      const studentsWithExpiringGreenPass = students.filter(
-        ({ RegistrationDate, GreenPassExpirationDate, IsAdult }) => {
-          if (RegistrationDate) {
-            const RegistrationDateFormatted = new Date(RegistrationDate);
+      const studentsWithExpiringGreenPass = students.filter(({ RegistrationDate, GreenPassExpirationDate, IsAdult }) => {
+        if (RegistrationDate) {
+          const RegistrationDateFormatted = new Date(RegistrationDate);
 
-            return (
-              RegistrationDateFormatted.getMonth() === selectedMonth &&
-              RegistrationDateFormatted.getFullYear() === selectedYearGreenPass &&
-              IsAdult === ages[0].age &&
-              !!GreenPassExpirationDate
-            );
-          }
-
-          return false;
+          return (
+            RegistrationDateFormatted.getMonth() === selectedMonth &&
+            RegistrationDateFormatted.getFullYear() === selectedYearGreenPass &&
+            IsAdult === ages[0].age &&
+            !!GreenPassExpirationDate
+          );
         }
-      );
+
+        return false;
+      });
 
       const { month } = months.find(({ id }) => id === selectedMonth);
 

@@ -1,12 +1,16 @@
 import produce from 'immer';
 
+const STUDENT_LIST_KEY = 'studentsList';
+const studentListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+};
+
 const createStudent = async (newStudent) => {
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(newStudent),
   });
 
@@ -19,9 +23,8 @@ const createStudent = async (newStudent) => {
       draft.StudentID = StudentID;
     });
 
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     studentListCached.push(newStudentWithID);
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
   }
 
   return { status: response.status, message: responseParsed.message };
@@ -30,10 +33,7 @@ const createStudent = async (newStudent) => {
 const createReceipt = async (newReceipt) => {
   const response = await fetch('/api/receipt/createReceipt', {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(newReceipt),
   });
 
@@ -53,10 +53,7 @@ const createReceipt = async (newReceipt) => {
 const createTeacher = async (newTeacher) => {
   const response = await fetch('/api/teacher/createTeacher', {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(newTeacher),
   });
 
@@ -67,17 +64,14 @@ const createTeacher = async (newTeacher) => {
 const updateStudent = async (updatedStudent) => {
   const response = await fetch('/api/student/updateStudent', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(updatedStudent),
   });
 
   const responseParsed = await response.json();
 
   if (response.status === 200) {
-    const studentsListCached = JSON.parse(sessionStorage.getItem('studentsList'));
+    const studentsListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
 
     for (let i = 0; i < studentsListCached.length; i += 1) {
       if (updatedStudent.StudentID === studentsListCached[i].StudentID) {
@@ -86,7 +80,7 @@ const updateStudent = async (updatedStudent) => {
       }
     }
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentsListCached));
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentsListCached));
   }
 
   return { status: response.status, message: responseParsed.message };
@@ -95,10 +89,7 @@ const updateStudent = async (updatedStudent) => {
 const updateTeacher = async (updatedTeacherInfo) => {
   const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(updatedTeacherInfo),
   });
 
@@ -110,17 +101,13 @@ const updateTeacher = async (updatedTeacherInfo) => {
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ StudentID, RegistrationDate }),
   });
 
   const responseParsed = await response.json();
 
   if (response.status === 200) {
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
     let updatedStudent = null;
 
     for (let i = 0; i < studentListCached.length; i += 1) {
@@ -131,7 +118,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
       }
     }
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
     return { status: response.status, message: responseParsed.message, updatedStudent };
   }
   return { status: response.status, message: responseParsed.message };
@@ -140,10 +127,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
 const updateReceipt = async (updatedReceipt) => {
   const response = await fetch('/api/receipt/updateReceipt', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(updatedReceipt),
   });
   const responseParsed = await response.json();
@@ -154,20 +138,15 @@ const updateReceipt = async (updatedReceipt) => {
 const deleteStudent = async (StudentID) => {
   const response = await fetch('/api/student/deleteStudent', {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ StudentID }),
   });
 
   if (response.status === 200) {
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-
     const removeIndex = studentListCached.findIndex((student) => student.StudentID === StudentID);
     studentListCached.splice(removeIndex, 1);
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
   }
 
   const responseParsed = await response.json();
@@ -178,10 +157,7 @@ const deleteStudent = async (StudentID) => {
 const deleteReceipt = async (ReceiptID) => {
   const response = await fetch('/api/receipt/deleteReceipt', {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ ReceiptID }),
   });
 
@@ -193,10 +169,7 @@ const deleteReceipt = async (ReceiptID) => {
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({
       TeacherID,
     }),
@@ -205,6 +178,40 @@ const deleteTeacher = async (TeacherID) => {
   const responseParsed = await response.json();
 
   return { status: response.status, message: responseParsed.message };
+};
+
+const getAllStudents = async () => {
+  const result = await fetch('/api/student/getStudents');
+  const body = await result.json();
+
+  sessionStorage.setItem('studentsList', JSON.stringify(body));
+
+  return { allStudents: body };
+};
+
+const getAllTeachers = async () => {
+  const result = await fetch('/api/teacher/getTeachers');
+  const body = await result.json();
+
+  return { teachers: body };
+};
+
+const getAllReceipts = async () => {
+  const result = await fetch('/api/receipt/getAllReceipts');
+  const body = await result.json();
+
+  return { receipts: body };
+};
+
+// TODO: Reduce this to one endpoint call!
+const getStudentWithReceipts = async (TaxCode) => {
+  const getStudentResult = await fetch(`/api/student/getSingleStudent/${TaxCode}`);
+  const student = await getStudentResult.json();
+
+  const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${TaxCode}`);
+  const receipts = await getReceiptsOfStudentResult.json();
+
+  return { student, receipts };
 };
 
 export {
@@ -218,4 +225,8 @@ export {
   deleteStudent,
   deleteReceipt,
   deleteTeacher,
+  getAllStudents,
+  getAllTeachers,
+  getAllReceipts,
+  getStudentWithReceipts,
 };

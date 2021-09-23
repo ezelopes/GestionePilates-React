@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
 
 import TeacherDisplayer from '../components/TeacherDisplayer';
+import { getAllTeachers } from '../helpers/apiCalls';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -12,9 +13,8 @@ const TeachersPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('/api/teacher/getTeachers');
-      const body = await result.json();
-      setTeachersList(body);
+      const { teachers } = await getAllTeachers();
+      setTeachersList(teachers);
       setLoading(false);
     };
     fetchData();

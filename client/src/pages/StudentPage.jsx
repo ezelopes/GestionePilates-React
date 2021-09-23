@@ -14,7 +14,7 @@ import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
 import { StudentProvider } from '../components/StudentContext';
 import Divider from '../components/Divider';
 
-import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt } from '../helpers/apiCalls';
+import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 
 import { userType } from '../commondata/commondata';
@@ -52,15 +52,11 @@ const StudentPage = ({ match }) => {
   };
 
   useEffect(() => {
-    // TODO: Reduce this to one endpoint call!
     const fetchData = async () => {
-      const getStudentResult = await fetch(`/api/student/getSingleStudent/${match.params.TaxCode}`);
-      const student = await getStudentResult.json();
+      const { student, receipts } = await getStudentWithReceipts(match.params.TaxCode);
+
       setStudentInfo(student);
       setNewRegistrationDate(student.RegistrationDate);
-
-      const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${match.params.TaxCode}`);
-      const receipts = await getReceiptsOfStudentResult.json();
       setStudentReceipts(receipts);
 
       setLoading(false);
@@ -107,11 +103,7 @@ const StudentPage = ({ match }) => {
           </Spinner>
         </div>
       ) : (
-        <StudentProvider
-          studentInfo={studentInfo}
-          studentReceipts={studentReceipts}
-          setStudentReceipts={setStudentReceipts}
-        >
+        <StudentProvider studentInfo={studentInfo} studentReceipts={studentReceipts} setStudentReceipts={setStudentReceipts}>
           <div className="page-body">
             <div className="student-name-title">
               {studentInfo.Name} {studentInfo.Surname}

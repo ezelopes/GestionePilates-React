@@ -12,6 +12,7 @@ import toastConfig from '../helpers/toast.config';
 import { ages, receiptType } from '../commondata/commondata';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { getAllReceipts } from '../helpers/apiCalls';
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
@@ -83,10 +84,8 @@ const ReceiptsPage = () => {
 
   const onGridReady = (params) => {
     const fetchData = async () => {
-      const result = await fetch('/api/receipt/getAllReceipts');
-      const body = await result.json();
-
-      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(body);
+      const { receipts } = await getAllReceipts();
+      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts);
 
       setAllReceipts(orderedReceipts);
       setCurrentReceipts(orderedReceipts);
@@ -276,22 +275,12 @@ const ReceiptsPage = () => {
 
           <Form.Group>
             <Form.Label> Da: </Form.Label> <br />
-            <input
-              ref={fromDateRef}
-              type="date"
-              defaultValue={today}
-              onChange={({ target }) => setFromDate(target.value)}
-            />
+            <input ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label> A: </Form.Label> <br />
-            <input
-              ref={toDateRef}
-              type="date"
-              defaultValue={today}
-              onChange={({ target }) => setToDate(target.value)}
-            />
+            <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
           </Form.Group>
         </div>
 

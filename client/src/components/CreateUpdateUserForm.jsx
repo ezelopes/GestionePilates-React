@@ -108,12 +108,7 @@ const CreateUpdateUserForm = ({
         </div>
 
         <Form.Label> Nome {isStudent(personType) ? 'Allieva' : 'Insegnante'} </Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Inserisci Nome..."
-          defaultValue={personInfo?.Name}
-          {...register('Name')}
-        />
+        <Form.Control type="text" placeholder="Inserisci Nome..." defaultValue={personInfo?.Name} {...register('Name')} />
 
         <Form.Label> Cognome {isStudent(personType) ? 'Allieva' : 'Insegnante'} </Form.Label>
         <Form.Control
@@ -127,12 +122,7 @@ const CreateUpdateUserForm = ({
         <Divider />
 
         <Form.Label> Citta </Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Inserisci Citta..."
-          defaultValue={personInfo?.City}
-          {...register('City')}
-        />
+        <Form.Control type="text" placeholder="Inserisci Citta..." defaultValue={personInfo?.City} {...register('City')} />
 
         <Form.Label> Indirizzo </Form.Label>
         <Form.Control
@@ -151,12 +141,7 @@ const CreateUpdateUserForm = ({
         />
 
         <Form.Label> Email </Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Inserisci Email..."
-          defaultValue={personInfo?.Email}
-          {...register('Email')}
-        />
+        <Form.Control type="text" placeholder="Inserisci Email..." defaultValue={personInfo?.Email} {...register('Email')} />
 
         <Form.Label> Luogo Nascita </Form.Label>
         <Form.Control
@@ -207,18 +192,10 @@ const CreateUpdateUserForm = ({
         <Divider />
 
         <Form.Label> Data Scadenza Certificato </Form.Label>
-        <input
-          type="date"
-          defaultValue={personInfo?.CertificateExpirationDate}
-          {...register('CertificateExpirationDate')}
-        />
+        <input type="date" defaultValue={personInfo?.CertificateExpirationDate} {...register('CertificateExpirationDate')} />
 
         <Form.Label> Data Scadenza Green Pass </Form.Label>
-        <input
-          type="date"
-          defaultValue={personInfo?.GreenPassExpirationDate}
-          {...register('GreenPassExpirationDate')}
-        />
+        <input type="date" defaultValue={personInfo?.GreenPassExpirationDate} {...register('GreenPassExpirationDate')} />
 
         {isStudent(personType) && isUnderAge(newIsAdult) && (
           <>
@@ -240,10 +217,7 @@ const CreateUpdateUserForm = ({
                 name="ParentTaxCode"
                 render={() => {
                   if (errors?.ParentTaxCode?.type === 'pattern') {
-                    return toast.error(
-                      'Assicurati che il codice fiscale del genitore sia nel formato corretto!',
-                      toastConfig
-                    );
+                    return toast.error('Assicurati che il codice fiscale del genitore sia nel formato corretto!', toastConfig);
                   }
                   return null;
                 }}
