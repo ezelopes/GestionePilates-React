@@ -63,12 +63,8 @@ const MembershipFeeTemplateAdult = async (studentInfo, receiptInfo) => {
           studentInfo.Surname || BLANK_SPACE
         } , C.F. ${studentInfo.TaxCode || BLANK_SPACE}, nato/a a ${studentInfo.BirthPlace || BLANK_SPACE}, il ${
           studentInfo.DOB ? formatDate(new Date(studentInfo.DOB)) : BLANK_DATE
-        } residente in ${studentInfo.Address || BLANK_SPACE}, ${
-          studentInfo.City || BLANK_SPACE
-        }, il pagamento effetuato${
-          receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI'
-            ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}`
-            : ''
+        } residente in ${studentInfo.Address || BLANK_SPACE}, ${studentInfo.City || BLANK_SPACE}, il pagamento effetuato${
+          receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}` : ''
         } equilavente alla somma di ${receiptInfo.AmountPaid || BLANK_SPACE}€ (${
           eurosInLetters.toUpperCase() || BLANK_SPACE
         } EURO${centsInLetters.toUpperCase()}) per il contributo relativo alla quota associativa della durata di un anno.`,

@@ -1,11 +1,5 @@
 const { Router } = require('express');
-const {
-  getTeachers,
-  getSingleTeacher,
-  createTeacher,
-  updateTeacher,
-  deleteTeacher,
-} = require('../database/teacherQuery');
+const { getTeachers, getSingleTeacher, createTeacher, updateTeacher, deleteTeacher } = require('../database/teacherQuery');
 
 const teacherRouter = new Router();
 

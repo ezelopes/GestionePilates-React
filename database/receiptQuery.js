@@ -119,10 +119,7 @@ const createReceipt = async ({
     );
 
     if (RegistrationDate === true) {
-      await pool.execute(`UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`, [
-        CourseStartDateFormatted,
-        StudentID,
-      ]);
+      await pool.execute(`UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`, [CourseStartDateFormatted, StudentID]);
     }
 
     return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };

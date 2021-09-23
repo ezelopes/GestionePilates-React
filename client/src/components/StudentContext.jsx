@@ -6,9 +6,7 @@ const StudentContext = createContext(null);
 const useStudent = () => useContext(StudentContext);
 
 const StudentProvider = ({ studentInfo, studentReceipts, setStudentReceipts, children }) => (
-  <StudentContext.Provider value={{ studentInfo, studentReceipts, setStudentReceipts }}>
-    {children}
-  </StudentContext.Provider>
+  <StudentContext.Provider value={{ studentInfo, studentReceipts, setStudentReceipts }}>{children}</StudentContext.Provider>
 );
 
 StudentProvider.propTypes = {

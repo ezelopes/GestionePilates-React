@@ -55,9 +55,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
       if (!isForCreating) {
         const updatedStudentReceipts = [...studentReceipts];
 
-        const receiptIndex = updatedStudentReceipts.findIndex(
-          (receipt) => receipt.ReceiptID === defaultValues.ReceiptID
-        );
+        const receiptIndex = updatedStudentReceipts.findIndex((receipt) => receipt.ReceiptID === defaultValues.ReceiptID);
         updatedStudentReceipts[receiptIndex] = response.receipt;
 
         setStudentReceipts(updatedStudentReceipts);
@@ -178,11 +176,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
             <>
               <div className="flex-element">
                 <Form.Label> Data Inizio Corso </Form.Label> <br />
-                <input
-                  type="date"
-                  defaultValue={receiptInfo?.CourseStartDate || today}
-                  {...register('CourseStartDate')}
-                />
+                <input type="date" defaultValue={receiptInfo?.CourseStartDate || today} {...register('CourseStartDate')} />
               </div>
 
               <div className="flex-element">
@@ -194,11 +188,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
 
           {isForCreating && (
             <div className="flex-element">
-              <Form.Check
-                label="Usa Data Ricevuta come Data Iscrizione"
-                type="checkbox"
-                {...register('RegistrationDate')}
-              />
+              <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type="checkbox" {...register('RegistrationDate')} />
 
               {newReceiptType === receiptType[0].type && (
                 <Form.Check label="Contiene Quota Associativa" type="checkbox" style={{ marginTop: '1em' }} />

@@ -221,9 +221,7 @@ const StudentReceiptsList = () => {
         <Modal.Header closeButton>
           <Modal.Title> Elimina Ricevuta </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="filtered-receipt-modal">
-          Sei sicura di voler eliminare la ricevuta selezionata?
-        </Modal.Body>
+        <Modal.Body className="filtered-receipt-modal">Sei sicura di voler eliminare la ricevuta selezionata?</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleDeleteReceipt}>
             ELIMINA

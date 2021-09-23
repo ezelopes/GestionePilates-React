@@ -62,9 +62,7 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
         text: `di aver ricevuto dal/dalla Sig./Sig.Ra ${studentInfo.ParentName || BLANK_SPACE} ${
           studentInfo.ParentSurname || BLANK_SPACE
         }, C.F. ${studentInfo.ParentTaxCode || BLANK_SPACE}, il pagamento effetuato${
-          receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI'
-            ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}`
-            : ''
+          receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}` : ''
         } equilavente alla somma di ${receiptInfo.AmountPaid || BLANK_SPACE}€ (${
           eurosInLetters.toUpperCase() || BLANK_SPACE
         } EURO${centsInLetters.toUpperCase()}), per l'iscrizione di ${studentInfo.Name || BLANK_SPACE} ${

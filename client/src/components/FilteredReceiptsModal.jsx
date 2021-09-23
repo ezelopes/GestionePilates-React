@@ -76,8 +76,8 @@ const FilteredReceiptsModal = ({
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            Ricevute dal {formatDate(new Date(fromDate)) || BLANK_DATE} al {formatDate(new Date(toDate)) || BLANK_DATE}{' '}
-            (tramite {filteredPaymentMethod})
+            Ricevute dal {formatDate(new Date(fromDate)) || BLANK_DATE} al {formatDate(new Date(toDate)) || BLANK_DATE} (tramite
+            {` ${filteredPaymentMethod}`})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="filtered-receipt-modal">

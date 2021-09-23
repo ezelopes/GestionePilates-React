@@ -63,19 +63,13 @@ const ReceiptTemplateAdult = async (studentInfo, receiptInfo) => {
           studentInfo.Surname || BLANK_SPACE
         } , C.F. ${studentInfo.TaxCode || BLANK_SPACE}, nato/a a ${studentInfo.BirthPlace || BLANK_SPACE}, il ${
           studentInfo.DOB ? formatDate(new Date(studentInfo.DOB)) : BLANK_DATE
-        } residente in ${studentInfo.Address || BLANK_SPACE}, ${
-          studentInfo.City || BLANK_SPACE
-        }, il pagamento effetuato${
-          receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI'
-            ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}`
-            : ''
+        } residente in ${studentInfo.Address || BLANK_SPACE}, ${studentInfo.City || BLANK_SPACE}, il pagamento effetuato${
+          receiptInfo.PaymentMethod.toUpperCase() !== 'CONTANTI' ? ` tramite ${receiptInfo.PaymentMethod.toUpperCase()}` : ''
         } equilavente alla somma di ${receiptInfo.AmountPaid || BLANK_SPACE}€ (${
           eurosInLetters.toUpperCase() || BLANK_SPACE
-        } EURO${centsInLetters.toUpperCase()}) per l'iscrizione al corso di ${
-          studentInfo.Discipline || BLANK_SPACE
-        } dal ${receiptInfo.CourseStartDate ? formatDate(new Date(receiptInfo.CourseStartDate)) : BLANK_DATE} al ${
-          receiptInfo.CourseEndDate ? formatDate(new Date(receiptInfo.CourseEndDate)) : BLANK_DATE
-        }`,
+        } EURO${centsInLetters.toUpperCase()}) per l'iscrizione al corso di ${studentInfo.Discipline || BLANK_SPACE} dal ${
+          receiptInfo.CourseStartDate ? formatDate(new Date(receiptInfo.CourseStartDate)) : BLANK_DATE
+        } al ${receiptInfo.CourseEndDate ? formatDate(new Date(receiptInfo.CourseEndDate)) : BLANK_DATE}`,
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,

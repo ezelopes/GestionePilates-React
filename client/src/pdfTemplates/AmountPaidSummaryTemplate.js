@@ -115,9 +115,7 @@ const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filter
 
   const docDefinition = {
     info: {
-      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate || BLANK_DATE} al ${
-        toDate || BLANK_DATE
-      }`,
+      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate || BLANK_DATE} al ${toDate || BLANK_DATE}`,
       author: 'Roxana Carro',
       subject: `Riepilogo Importo`,
     },

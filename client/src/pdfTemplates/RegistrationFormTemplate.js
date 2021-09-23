@@ -128,11 +128,7 @@ const RegistrationFormTemplate = async (studentInfo) => {
       {
         text: [
           {
-            text: [
-              '___ ',
-              { text: 'AGONISTICA', bold: true },
-              '\t\t\t  - certificato di idoneità agonistica sportiva \n',
-            ],
+            text: ['___ ', { text: 'AGONISTICA', bold: true }, '\t\t\t  - certificato di idoneità agonistica sportiva \n'],
           },
           {
             text: [

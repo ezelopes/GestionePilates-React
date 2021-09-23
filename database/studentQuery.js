@@ -206,10 +206,7 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   try {
     const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
 
-    await pool.execute(`UPDATE Allieva SET DataIscrizione = ? WHERE AllievaID = ?;`, [
-      RegistrationDateFormatted,
-      StudentID,
-    ]);
+    await pool.execute(`UPDATE Allieva SET DataIscrizione = ? WHERE AllievaID = ?;`, [RegistrationDateFormatted, StudentID]);
     return 'Data Iscrizione Aggiornata Correttamente!';
   } catch (error) {
     console.log(error);

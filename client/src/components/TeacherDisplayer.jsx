@@ -77,14 +77,11 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
           </Card.Text>
           <Card.Text>
             <b>Luogo e Data Nascita:</b>
-            {teacherInfo.BirthPlace} -
-            {teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
+            {teacherInfo.BirthPlace} -{teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
             <b>Data Iscrizione:</b>
-            {teacherInfo.RegistrationDate !== null
-              ? new Date(teacherInfo.RegistrationDate).toLocaleDateString()
-              : 'Non Definito'}
+            {teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
             <b>Scuola:</b> {teacherInfo.School}
