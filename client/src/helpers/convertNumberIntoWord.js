@@ -1,5 +1,5 @@
 const convertNumberIntoWord = (n, abbr, separator) => {
-  if (isNaN(n) === true) {
+  if (Number.isNaN(n) === true) {
     return '00';
   }
   if (n.indexOf('.') >= 0 || n.indexOf(',') >= 0) {
@@ -30,20 +30,9 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       'Sedici',
       'Diciassette',
       'Diciotto',
-      'Diciannove'
+      'Diciannove',
     ],
-    decine: [
-      null,
-      null,
-      'Venti',
-      'Trenta',
-      'Quaranta',
-      'Cinquanta',
-      'Sessanta',
-      'Settanta',
-      'Ottanta',
-      'Novanta'
-    ],
+    decine: [null, null, 'Venti', 'Trenta', 'Quaranta', 'Cinquanta', 'Sessanta', 'Settanta', 'Ottanta', 'Novanta'],
     decine1: [null, null, 'Vent', 'Trent', 'Quarant', 'Cinquant', 'Sessant', 'Settant', 'Ottant', 'Novant'],
     cento: 'Cento',
     multipli: [
@@ -56,7 +45,7 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       'Trilioni',
       'Triliardi',
       'Quadrilioni',
-      'Quadriliardi'
+      'Quadriliardi',
     ],
     multipli1: [
       null,
@@ -68,9 +57,9 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       'Trilione',
       'Triliardo',
       'Quadrilione',
-      'Quadriliardo'
+      'Quadriliardo',
     ],
-    un: 'Un'
+    un: 'Un',
   };
 
   let numero = n.replace(/^\s+|\s+$/g, '');
@@ -81,27 +70,28 @@ const convertNumberIntoWord = (n, abbr, separator) => {
   if (abbr === true) {
     if (numero.length > 2) {
       abbrNum = numero.substr(numero.length - 2, 2);
-      numero = numero.substr(0, numero.length - 2) + '00';
+      numero = `${numero.substr(0, numero.length - 2)}00`;
     }
   }
 
-  //per semplificare il calcolo arrotondo la lunghezza a un mutiplo di 3
   const padding3 = numero.length % 3;
-  if (padding3 === 1) numero = '00' + numero;
-  else if (padding3 === 2) numero = '0' + numero;
+  if (padding3 === 1) {
+    numero = `00${numero}`;
+  } else if (padding3 === 2) {
+    numero = `0${numero}`;
+  }
   const len = numero.length;
 
-  // trovo quanti gruppi di 3 cifre ci sono
   let mult3 = numero.length / 3 - 1;
 
   const sep = separator === true ? ' ' : '';
   let result = '';
   let i = 0;
   while (i < len) {
-    let v = parseInt(numero.substr(i, 3));
+    const v = parseInt(numero.substr(i, 3), 10);
     let r = '';
-    //cifra delle centinaia
-    const n100 = parseInt(numero.charAt(i));
+
+    const n100 = parseInt(numero.charAt(i), 10);
     if (n100 > 0) {
       if (n100 === 1) {
         r += sep + lettere.cento;
@@ -109,16 +99,14 @@ const convertNumberIntoWord = (n, abbr, separator) => {
         r += sep + lettere.numeri[n100] + sep + lettere.cento;
       }
     }
-    //decine e unità
-    const n10 = parseInt(numero.substr(i + 1, 2));
+
+    const n10 = parseInt(numero.substr(i + 1, 2), 10);
     if (n10 > 0) {
       if (n10 < 20) {
-        // numeri da 1 a 19
         r += sep + lettere.numeri[n10];
       } else {
-        //nueri da 20 a 99
-        const n20 = parseInt(numero.charAt(i + 1));
-        const n2 = parseInt(numero.charAt(i + 2));
+        const n20 = parseInt(numero.charAt(i + 1), 10);
+        const n2 = parseInt(numero.charAt(i + 2), 10);
         r += sep + (n2 === 1 ? lettere.decine1[n20] : lettere.decine[n20]);
         if (n2 > 0) {
           r += sep + lettere.numeri[n2];
@@ -126,15 +114,18 @@ const convertNumberIntoWord = (n, abbr, separator) => {
       }
     }
     if (v > 0 && mult3 > 0) {
-      if (v === 1) result += (mult3 === 1 ? '' : lettere.un + sep) + lettere.multipli1[mult3];
-      else result += r + sep + lettere.multipli[mult3];
+      if (v === 1) {
+        result += (mult3 === 1 ? '' : lettere.un + sep) + lettere.multipli1[mult3];
+      } else {
+        result += r + sep + lettere.multipli[mult3];
+      }
     } else {
       result += r;
     }
     i += 3;
-    mult3--;
+    mult3 -= 1;
   }
-  return result + (abbrNum.length > 0 ? ' / ' + abbrNum : '');
+  return result + (abbrNum.length > 0 ? ` / ${abbrNum}` : '');
 };
 
 module.exports = convertNumberIntoWord;

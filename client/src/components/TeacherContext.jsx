@@ -1,11 +1,17 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react';
+import PropTypes from 'prop-types';
 
-const TeacherContext = createContext(null)
+const TeacherContext = createContext(null);
 
-const useTeacher = () => useContext(TeacherContext)
+const useTeacher = () => useContext(TeacherContext);
 
 const TeacherProvider = ({ teacherInfo, children }) => (
-    <TeacherContext.Provider value={{ teacherInfo }}>{children}</TeacherContext.Provider>
-)
+  <TeacherContext.Provider value={{ teacherInfo }}>{children}</TeacherContext.Provider>
+);
 
-export { TeacherProvider, useTeacher }
+TeacherProvider.propTypes = {
+  teacherInfo: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+export { TeacherProvider, useTeacher };

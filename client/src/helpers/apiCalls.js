@@ -1,11 +1,17 @@
+import produce from 'immer';
+
+const STUDENT_LIST_KEY = 'studentsList';
+const studentListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+};
+
 const createStudent = async (newStudent) => {
   const response = await fetch('/api/student/createStudent', {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newStudent)
+    headers,
+    body: JSON.stringify(newStudent),
   });
 
   const responseParsed = await response.json();
@@ -13,192 +19,200 @@ const createStudent = async (newStudent) => {
   if (response.status === 200) {
     const { StudentID } = responseParsed;
 
-    newStudent.StudentID = StudentID;
+    const newStudentWithID = produce(newStudent, (draft) => {
+      draft.StudentID = StudentID;
+    });
 
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-    studentListCached.push(newStudent);
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
+    studentListCached.push(newStudentWithID);
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
   }
 
-  return { status: response.status, message: responseParsed.message }
+  return { status: response.status, message: responseParsed.message };
 };
 
 const createReceipt = async (newReceipt) => {
   const response = await fetch('/api/receipt/createReceipt', {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newReceipt)
+    headers,
+    body: JSON.stringify(newReceipt),
   });
 
   const responseParsed = await response.json();
 
   if (response.status === 200) {
-    newReceipt.ReceiptID = responseParsed.ReceiptID
-    return { status: response.status, message: responseParsed.message, receipt: newReceipt }
+    const receiptWithID = produce(newReceipt, (draft) => {
+      draft.ReceiptID = responseParsed.ReceiptID;
+    });
+
+    return { status: response.status, message: responseParsed.message, receipt: receiptWithID };
   }
-  
-  return { status: response.status, message: responseParsed.message }
+
+  return { status: response.status, message: responseParsed.message };
 };
 
 const createTeacher = async (newTeacher) => {
   const response = await fetch('/api/teacher/createTeacher', {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newTeacher)
+    headers,
+    body: JSON.stringify(newTeacher),
   });
-  
+
   const responseParsed = await response.json();
-  return { status: response.status, message: responseParsed.message }
+  return { status: response.status, message: responseParsed.message };
 };
 
 const updateStudent = async (updatedStudent) => {
   const response = await fetch('/api/student/updateStudent', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(updatedStudent)
+    headers,
+    body: JSON.stringify(updatedStudent),
   });
-  
+
   const responseParsed = await response.json();
 
   if (response.status === 200) {
-    const studentsListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-    
-    for (let i = 0; i < studentsListCached.length; i++) {
-      if(updatedStudent.StudentID === studentsListCached[i].StudentID) {
+    const studentsListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
+
+    for (let i = 0; i < studentsListCached.length; i += 1) {
+      if (updatedStudent.StudentID === studentsListCached[i].StudentID) {
         studentsListCached[i] = updatedStudent;
         break;
       }
     }
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentsListCached));
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentsListCached));
   }
 
-  return { status: response.status, message: responseParsed.message }
-}
+  return { status: response.status, message: responseParsed.message };
+};
 
 const updateTeacher = async (updatedTeacherInfo) => {
   const response = await fetch('/api/teacher/updateTeacher', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(updatedTeacherInfo)
+    headers,
+    body: JSON.stringify(updatedTeacherInfo),
   });
 
   const responseParsed = await response.json();
 
-  return { status: response.status, message: responseParsed.message }
-}
+  return { status: response.status, message: responseParsed.message };
+};
 
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   const response = await fetch('/api/student/updateRegistrationDate', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ StudentID, RegistrationDate })
+    headers,
+    body: JSON.stringify({ StudentID, RegistrationDate }),
   });
 
   const responseParsed = await response.json();
 
   if (response.status === 200) {
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-    let updatedStudent = null
+    let updatedStudent = null;
 
-    for (let i = 0; i < studentListCached.length; i++) {
+    for (let i = 0; i < studentListCached.length; i += 1) {
       if (StudentID === studentListCached[i].StudentID) {
         studentListCached[i].RegistrationDate = RegistrationDate || null;
-        updatedStudent = studentListCached[i]
+        updatedStudent = studentListCached[i];
         break;
       }
     }
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
-    return { status: response.status, message: responseParsed.message, updatedStudent }
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
+    return { status: response.status, message: responseParsed.message, updatedStudent };
   }
-  return { status: response.status, message: responseParsed.message }
-}
+  return { status: response.status, message: responseParsed.message };
+};
 
 const updateReceipt = async (updatedReceipt) => {
   const response = await fetch('/api/receipt/updateReceipt', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(updatedReceipt)
+    headers,
+    body: JSON.stringify(updatedReceipt),
   });
   const responseParsed = await response.json();
-  
-  return { status: response.status, message: responseParsed.message, receipt: updatedReceipt }
-}
+
+  return { status: response.status, message: responseParsed.message, receipt: updatedReceipt };
+};
 
 const deleteStudent = async (StudentID) => {
   const response = await fetch('/api/student/deleteStudent', {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ StudentID })
+    headers,
+    body: JSON.stringify({ StudentID }),
   });
 
   if (response.status === 200) {
-    const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-
-    const removeIndex = studentListCached.findIndex(student => student.StudentID === StudentID);
+    const removeIndex = studentListCached.findIndex((student) => student.StudentID === StudentID);
     studentListCached.splice(removeIndex, 1);
 
-    sessionStorage.setItem('studentsList', JSON.stringify(studentListCached));
+    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
   }
 
   const responseParsed = await response.json();
 
-  return { status: response.status, message: responseParsed.message }
-}
+  return { status: response.status, message: responseParsed.message };
+};
 
 const deleteReceipt = async (ReceiptID) => {
   const response = await fetch('/api/receipt/deleteReceipt', {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ ReceiptID })
+    headers,
+    body: JSON.stringify({ ReceiptID }),
   });
 
   const responseParsed = await response.json();
 
-  return { status: response.status, message: responseParsed.message }
-}
+  return { status: response.status, message: responseParsed.message };
+};
 
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
-      TeacherID
-    })
+      TeacherID,
+    }),
   });
 
   const responseParsed = await response.json();
 
-  return { status: response.status, message: responseParsed.message }
-}
+  return { status: response.status, message: responseParsed.message };
+};
+
+const getAllStudents = async () => {
+  const result = await fetch('/api/student/getStudents');
+  const body = await result.json();
+
+  sessionStorage.setItem('studentsList', JSON.stringify(body));
+
+  return { allStudents: body };
+};
+
+const getAllTeachers = async () => {
+  const result = await fetch('/api/teacher/getTeachers');
+  const body = await result.json();
+
+  return { teachers: body };
+};
+
+const getAllReceipts = async () => {
+  const result = await fetch('/api/receipt/getAllReceipts');
+  const body = await result.json();
+
+  return { receipts: body };
+};
+
+// TODO: Reduce this to one endpoint call!
+const getStudentWithReceipts = async (TaxCode) => {
+  const getStudentResult = await fetch(`/api/student/getSingleStudent/${TaxCode}`);
+  const student = await getStudentResult.json();
+
+  const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${TaxCode}`);
+  const receipts = await getReceiptsOfStudentResult.json();
+
+  return { student, receipts };
+};
 
 export {
   createStudent,
@@ -211,4 +225,8 @@ export {
   deleteStudent,
   deleteReceipt,
   deleteTeacher,
+  getAllStudents,
+  getAllTeachers,
+  getAllReceipts,
+  getStudentWithReceipts,
 };

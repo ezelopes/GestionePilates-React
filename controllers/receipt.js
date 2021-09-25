@@ -11,7 +11,7 @@ const getStudentReceiptsEndpoint = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 const getAllReceiptsEndpoint = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ const getAllReceiptsEndpoint = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 const createReceiptEndpoint = async (req, res) => {
   try {
@@ -29,9 +29,9 @@ const createReceiptEndpoint = async (req, res) => {
     res.status(200).send({ ReceiptID, message });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ message: e.message })
+    res.status(500).send({ message: e.message });
   }
-}
+};
 
 const updateReceiptEndpoint = async (req, res) => {
   try {
@@ -40,9 +40,9 @@ const updateReceiptEndpoint = async (req, res) => {
     res.status(200).send({ message });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ message: e.message })
+    res.status(500).send({ message: e.message });
   }
-}
+};
 
 const deleteReceiptEndpoint = async (req, res) => {
   try {
@@ -52,9 +52,9 @@ const deleteReceiptEndpoint = async (req, res) => {
     res.status(200).send({ message });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ message: e.message })
+    res.status(500).send({ message: e.message });
   }
-}
+};
 
 receiptRouter.get('/getStudentReceipts/:TaxCode', getStudentReceiptsEndpoint);
 receiptRouter.get('/getAllReceipts', getAllReceiptsEndpoint);

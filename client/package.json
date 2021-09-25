@@ -1,6 +1,6 @@
 {
   "name": "gestionepilates-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Management tool to create/update/delete students of a Pilates organization",
   "main": "index.js",
   "proxy": "http://localhost:8000/",
@@ -10,8 +10,10 @@
     "ag-grid-react": "^25.3.0",
     "bootstrap": "^5.0.2",
     "express": "^4.17.1",
+    "immer": "^8.0.1",
     "npm": "^7.19.0",
     "pdfmake": "^0.1.65",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
@@ -25,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint \"**/*.js\""
   },
   "keywords": [
     "gestione",
@@ -46,5 +49,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^36.1.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "prettier": "^2.4.1"
   }
 }
