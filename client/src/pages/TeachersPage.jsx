@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
 
-import TeacherDisplayer from '../components/TeacherDisplayer';
+import TeacherDisplayer from '../components/Teacher/TeacherDisplayer';
 import { getAllTeachers } from '../helpers/apiCalls';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';

@@ -5,18 +5,18 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
-import CreateUpdateReceiptForm from './CreateUpdateReceiptForm';
-import { updateReceipt, deleteReceipt } from '../helpers/apiCalls';
-import toastConfig from '../helpers/toast.config';
-import { ages, receiptType } from '../commondata/commondata';
+import CreateUpdateReceiptForm from '../CreateUpdateReceiptForm';
+import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
+import toastConfig from '../../helpers/toast.config';
+import { ages, receiptType } from '../../commondata/commondata';
 
 import { useStudent } from './StudentContext';
 
-const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
-const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
+const ReceiptTemplateAdult = require('../../pdfTemplates/ReceiptTemplateAdult');
+const ReceiptTemplateUnderAge = require('../../pdfTemplates/ReceiptTemplateUnderAge');
 
-const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
-const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
+const MembershipFeeTemplateAdult = require('../../pdfTemplates/MembershipFeeTemplateAdult');
+const MembershipFeeTemplateUnderAge = require('../../pdfTemplates/MembershipFeeTemplateUnderAge');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -53,6 +53,11 @@ const columnsDefinition = [
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
+  {
+    headerName: 'Include Quota Associativa',
+    field: 'IncludeMembershipFee',
+    cellRenderer: (params) => (params.value ? 'Si' : 'No'),
+  },
 ];
 
 const StudentReceiptsList = () => {
@@ -136,7 +141,7 @@ const StudentReceiptsList = () => {
   };
 
   return (
-    <>
+    <div className="tab-content">
       <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
           scrollbarWidth
@@ -153,9 +158,8 @@ const StudentReceiptsList = () => {
       <div className="buttons-container">
         <Button onClick={async () => printReceipt()}>
           <span role="img" aria-label="receipt">
-            🧾
-          </span>{' '}
-          STAMPA RICEVUTA
+            🖨️ STAMPA RICEVUTA
+          </span>
         </Button>
 
         <Button
@@ -168,9 +172,8 @@ const StudentReceiptsList = () => {
           }}
         >
           <span role="img" aria-label="update">
-            🔄
-          </span>{' '}
-          AGGIORNA RICEVUTA
+            🔄 AGGIORNA RICEVUTA
+          </span>
         </Button>
 
         <Button
@@ -183,9 +186,8 @@ const StudentReceiptsList = () => {
           }}
         >
           <span role="img" aria-label="bin">
-            🗑️
-          </span>{' '}
-          ELIMINA RICEVUTA
+            🗑️ ELIMINA RICEVUTA
+          </span>
         </Button>
       </div>
 
@@ -236,7 +238,7 @@ const StudentReceiptsList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 };
 

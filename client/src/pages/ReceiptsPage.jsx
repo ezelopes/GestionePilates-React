@@ -5,7 +5,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
-import FilteredReceiptsModal from '../components/FilteredReceiptsModal';
+import FilteredReceiptsModal from '../components/Receipts/FilteredReceiptsModal';
 import formatDate from '../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import toastConfig from '../helpers/toast.config';
@@ -70,6 +70,7 @@ const ReceiptsPage = () => {
   const [columnDefs] = useState(columnsDefinition);
   const [allReceipts, setAllReceipts] = useState([]);
   const [currentReceipts, setCurrentReceipts] = useState([]);
+  const [receiptsWithMembershipFee, setReceiptsWithMembershipFee] = useState([]);
   const [filteredReceipts, setFilteredReceipts] = useState([]);
   const [selectedReceipts, setSelectedReceipts] = useState([]);
   const [filteredAmountPaid, setFilteredAmountPaid] = useState(0);
@@ -78,6 +79,10 @@ const ReceiptsPage = () => {
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
 
+  const [selectedReceiptType, setSelectedReceiptType] = useState(receiptType[0].type);
+
+  const buttonReceiptType = useRef();
+  const buttonReceiptWithMembershipFeeType = useRef();
   const selectPaymentMethodRef = useRef();
   const fromDateRef = useRef();
   const toDateRef = useRef();
@@ -86,7 +91,11 @@ const ReceiptsPage = () => {
     const fetchData = async () => {
       const { receipts } = await getAllReceipts();
       const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts);
+      const currentReceiptsWithMembershipFee = orderedReceipts.filter(
+        ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || ReceiptType === receiptType[1].type
+      );
 
+      setReceiptsWithMembershipFee(currentReceiptsWithMembershipFee);
       setAllReceipts(orderedReceipts);
       setCurrentReceipts(orderedReceipts);
     };
@@ -227,6 +236,9 @@ const ReceiptsPage = () => {
   };
 
   const calculateAmountBetweenDates = () => {
+    if (selectedReceiptType === receiptType[1].type) {
+      return toast.error('Funzionalita non ancora disponibile!', toastConfig);
+    }
     if (!filteredPaymentMethod) {
       return toast.error('Seleziona Tipo di Pagamento!', toastConfig);
     }
@@ -246,81 +258,136 @@ const ReceiptsPage = () => {
     return setShowFilteredAmountModal(true);
   };
 
-  const orderReceipts = () => {
-    const copy = [...currentReceipts];
-    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy);
+  // Const orderReceipts = () => {
+  //   const copy = [...currentReceipts];
+  //   const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy);
 
-    setCurrentReceipts(orderedReceipts);
+  //   setCurrentReceipts(orderedReceipts);
+  // };
+
+  const onToggleChanged = (receiptTypeSelected) => {
+    if (receiptTypeSelected === 'receipt') {
+      setCurrentReceipts(allReceipts);
+      setSelectedReceipts([]);
+      setSelectedReceiptType(receiptType[0].type);
+      buttonReceiptType.current.className = 'toggle-option toggle-option-active';
+      buttonReceiptWithMembershipFeeType.current.className = 'toggle-option';
+    } else {
+      setCurrentReceipts(receiptsWithMembershipFee);
+      setSelectedReceipts([]);
+      setSelectedReceiptType(receiptType[1].type);
+      buttonReceiptType.current.className = 'toggle-option';
+      buttonReceiptWithMembershipFeeType.current.className = 'toggle-option toggle-option-active';
+    }
   };
 
   return (
     <>
       <div className="page-body">
-        <div className="filter-form">
-          <Form.Group>
-            <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
-            <Form.Control
-              ref={selectPaymentMethodRef}
-              as="select"
-              onChange={({ target }) => setFilteredPaymentMethod(target.value)}
-            >
-              {paymentMethods.map((method) => (
-                <option key={`select_${method}`} value={method}>
-                  {' '}
-                  {method}{' '}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
+        <div className="toggle">
+          <button
+            ref={buttonReceiptType}
+            type="button"
+            className="toggle-option toggle-option-active"
+            name="receipt"
+            onClick={({ target }) => onToggleChanged(target.name)}
+          >
+            Ricevute
+          </button>
 
-          <Form.Group>
-            <Form.Label> Da: </Form.Label> <br />
-            <input ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label> A: </Form.Label> <br />
-            <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
-          </Form.Group>
+          <button
+            ref={buttonReceiptWithMembershipFeeType}
+            type="button"
+            className="toggle-option"
+            name="receiptsWithMembershipFee"
+            onClick={({ target }) => onToggleChanged(target.name)}
+          >
+            Quote Associative
+          </button>
         </div>
+        <div className="tab-content">
+          {selectedReceiptType === receiptType[0].type && (
+            <>
+              <div className="filter-form">
+                <Form.Group>
+                  <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
+                  <Form.Control
+                    ref={selectPaymentMethodRef}
+                    as="select"
+                    onChange={({ target }) => setFilteredPaymentMethod(target.value)}
+                  >
+                    {paymentMethods.map((method) => (
+                      <option key={`select_${method}`} value={method}>
+                        {' '}
+                        {method}{' '}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-        <div className="buttons-container">
-          <Button variant="success" onClick={calculateAmountBetweenDates}>
-            Calcola Importo Totale
-          </Button>
+                <Form.Group>
+                  <Form.Label> Da: </Form.Label> <br />
+                  <input
+                    ref={fromDateRef}
+                    type="date"
+                    defaultValue={today}
+                    onChange={({ target }) => setFromDate(target.value)}
+                  />
+                </Form.Group>
 
-          <Button variant="primary" onClick={filterReceipts}>
-            Filtra
-          </Button>
+                <Form.Group>
+                  <Form.Label> A: </Form.Label> <br />
+                  <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
+                </Form.Group>
+              </div>
+              <div className="buttons-container">
+                <Button variant="success" onClick={calculateAmountBetweenDates}>
+                  <span role="img" aria-label="summary">
+                    🧾 Calcola Importo Totale
+                  </span>
+                </Button>
 
-          <Button variant="primary" onClick={orderReceipts}>
-            Ordina per Numero Ricevuta
-          </Button>
+                <Button variant="primary" onClick={filterReceipts}>
+                  <span role="img" aria-label="filter">
+                    🔎 Filtra
+                  </span>
+                </Button>
 
-          <Button variant="danger" onClick={clearFilters}>
-            Rimuovi Filtri
-          </Button>
-        </div>
+                {/* <Button variant="primary" onClick={orderReceipts}>
+                  Ordina per Numero Ricevuta
+                </Button> */}
 
-        <div className="ag-theme-balham receipts-grid">
-          <AgGridReact
-            reactNext
-            rowMultiSelectWithClick
-            rowSelection="multiple"
-            scrollbarWidth
-            rowHeight="45"
-            gridOptions={gridOptions}
-            columnDefs={columnDefs}
-            rowData={currentReceipts}
-            onSelectionChanged={onReceiptSelectionChanged}
-            onGridReady={onGridReady}
-          />
-        </div>
-
-        <div className="buttons-container">
-          <Button variant="success" onClick={printReceipts}>
-            Stampa Ricevute Selezionate
-          </Button>
+                <Button variant="danger" onClick={clearFilters}>
+                  <span role="img" aria-label="remove-filters">
+                    🗑️ Rimuovi Filtri
+                  </span>
+                </Button>
+              </div>
+            </>
+          )}
+          <div className="ag-theme-balham receipts-grid">
+            <AgGridReact
+              reactNext
+              rowMultiSelectWithClick
+              rowSelection="multiple"
+              scrollbarWidth
+              rowHeight="45"
+              gridOptions={gridOptions}
+              columnDefs={columnDefs}
+              rowData={currentReceipts}
+              onSelectionChanged={onReceiptSelectionChanged}
+              onGridReady={onGridReady}
+            />
+          </div>
+          {selectedReceiptType === receiptType[0].type && (
+            <div className="buttons-container">
+              <Button variant="success" onClick={printReceipts}>
+                <span role="img" aria-label="print-selected">
+                  🖨️ Stampa Ricevute Selezionate
+                </span>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

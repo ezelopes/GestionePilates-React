@@ -9,7 +9,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import toastConfig from '../helpers/toast.config';
 import { getAllStudents } from '../helpers/apiCalls';
 
-import Divider from '../components/Divider';
+import Divider from '../components/common/Divider';
 
 import { ages, months, years } from '../commondata/commondata';
 
@@ -233,87 +233,89 @@ const StudentsPage = () => {
   return (
     <>
       <div className="page-body">
-        <div className="filter-form">
-          <Form.Group>
-            <Form.Label> Nome Allieva </Form.Label>
-            <Form.Control
-              ref={filterNameRef}
-              type="text"
-              placeholder="Inserisci Nome..."
-              onChange={(e) => {
-                filterColumn('Name', e.target.value);
-              }}
+        <div className="tab-content">
+          <div className="filter-form">
+            <Form.Group>
+              <Form.Label> Nome Allieva </Form.Label>
+              <Form.Control
+                ref={filterNameRef}
+                type="text"
+                placeholder="Inserisci Nome..."
+                onChange={(e) => {
+                  filterColumn('Name', e.target.value);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label> Cognome Allieva </Form.Label>
+              <Form.Control
+                ref={filterSurnameRef}
+                type="text"
+                placeholder="Inserisci Cognome..."
+                onChange={(e) => {
+                  filterColumn('Surname', e.target.value);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label> Città </Form.Label>
+              <Form.Control
+                ref={filterCityRef}
+                type="text"
+                placeholder="Città..."
+                onChange={(e) => {
+                  filterColumn('City', e.target.value);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label> Età </Form.Label>
+              <Form.Control
+                ref={filterAgeRef}
+                as="select"
+                onChange={({ target }) => {
+                  filterColumn('IsAdult', target.value);
+                }}
+              >
+                {dropdownAges.map((age) => (
+                  <option key={`select_${age}`} value={age}>
+                    {' '}
+                    {age}{' '}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
+              Rimuovi Filtri
+            </Button>
+          </div>
+
+          <div className="ag-theme-balham student-list-grid">
+            <AgGridReact
+              reactNext
+              rowMultiSelectWithClick
+              rowSelection="multiple"
+              scrollbarWidth
+              rowHeight="45"
+              gridOptions={gridOptions}
+              columnDefs={columnDefs}
+              rowData={students}
+              onSelectionChanged={onStudentSelectionChanged}
+              onGridReady={onGridReady}
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group>
-            <Form.Label> Cognome Allieva </Form.Label>
-            <Form.Control
-              ref={filterSurnameRef}
-              type="text"
-              placeholder="Inserisci Cognome..."
-              onChange={(e) => {
-                filterColumn('Surname', e.target.value);
-              }}
-            />
-          </Form.Group>
+          <Divider />
 
-          <Form.Group>
-            <Form.Label> Città </Form.Label>
-            <Form.Control
-              ref={filterCityRef}
-              type="text"
-              placeholder="Città..."
-              onChange={(e) => {
-                filterColumn('City', e.target.value);
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label> Età </Form.Label>
-            <Form.Control
-              ref={filterAgeRef}
-              as="select"
-              onChange={({ target }) => {
-                filterColumn('IsAdult', target.value);
-              }}
-            >
-              {dropdownAges.map((age) => (
-                <option key={`select_${age}`} value={age}>
-                  {' '}
-                  {age}{' '}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
-            Rimuovi Filtri
-          </Button>
-        </div>
-
-        <div className="ag-theme-balham student-list-grid">
-          <AgGridReact
-            reactNext
-            rowMultiSelectWithClick
-            rowSelection="multiple"
-            scrollbarWidth
-            rowHeight="45"
-            gridOptions={gridOptions}
-            columnDefs={columnDefs}
-            rowData={students}
-            onSelectionChanged={onStudentSelectionChanged}
-            onGridReady={onGridReady}
-          />
-        </div>
-
-        <Divider />
-
-        <div className="buttons-container">
-          <Button variant="success" onClick={printSelectedStudents}>
-            Stampa Allieve Selezionate
-          </Button>
+          <div className="buttons-container">
+            <Button variant="success" onClick={printSelectedStudents}>
+              Stampa Allieve Selezionate
+            </Button>
+          </div>
         </div>
 
         <div className="form-wrapper green-pass-form">

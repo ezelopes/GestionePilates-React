@@ -15,7 +15,7 @@ const mappingReceipt = (rows) => {
       AmountPaid: row.SommaEuro,
       FK_StudentID: row.FK_AllievaID,
       PaymentMethod: row.TipoPagamento,
-      Archived: row.Archiviata,
+      IncludeMembershipFee: row.IncludeMembershipFee,
     };
   });
   return receipts;
@@ -50,6 +50,7 @@ const mappingAllReceipts = (rows) => {
       ReceiptDate: getFormattedDate(row.DataRicevuta),
       CourseStartDate: getFormattedDate(row.DataInizioCorso),
       CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
+      IncludeMembershipFee: row.IncludeMembershipFee,
     };
   });
   return receipts;
@@ -85,6 +86,7 @@ const createReceipt = async ({
   TaxCode,
   StudentID,
   RegistrationDate,
+  IncludeMembershipFee,
 }) => {
   try {
     // TODO: Reduce this code
@@ -94,7 +96,7 @@ const createReceipt = async ({
 
     if (ReceiptType == receiptType[1].type) {
       const [rows] = await pool.execute(
-        'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
+        'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, IncludeMembershipFee) \
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
         [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, AmountPaid, TaxCode, StudentID, false]
       );
@@ -102,7 +104,7 @@ const createReceipt = async ({
     }
 
     const [rows] = await pool.execute(
-      'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, Archiviata) \
+      'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, IncludeMembershipFee) \
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [
         ReceiptNumber,
@@ -114,7 +116,7 @@ const createReceipt = async ({
         AmountPaid,
         TaxCode,
         StudentID,
-        false,
+        IncludeMembershipFee,
       ]
     );
 
@@ -138,6 +140,7 @@ const updateReceipt = async ({
   CourseStartDate,
   CourseEndDate,
   AmountPaid,
+  IncludeMembershipFee,
 }) => {
   try {
     // TODO: Reduce this code
@@ -154,7 +157,7 @@ const updateReceipt = async ({
     }
 
     await pool.execute(
-      `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;`,
+      `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=?, IncludeMembershipFee=? WHERE RicevutaID=?;`,
       [
         ReceiptNumber,
         PaymentMethod,
@@ -163,6 +166,7 @@ const updateReceipt = async ({
         CourseStartDateFormatted,
         CourseEndDateFormatted,
         AmountPaid,
+        IncludeMembershipFee,
         ReceiptID,
       ]
     );

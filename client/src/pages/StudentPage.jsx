@@ -9,10 +9,10 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import NotFoundPage from './NotFoundPage';
 
 import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
-import StudentReceiptsList from '../components/StudentReceiptsList';
+import StudentReceiptsList from '../components/Student/StudentReceiptsList';
 import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
-import { StudentProvider } from '../components/StudentContext';
-import Divider from '../components/Divider';
+import { StudentProvider } from '../components/Student/StudentContext';
+import Divider from '../components/common/Divider';
 
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
@@ -112,39 +112,36 @@ const StudentPage = ({ match }) => {
             <div className="buttons-container">
               <Button onClick={printRegistrationForm}>
                 <span role="img" aria-label="module">
-                  💾
-                </span>{' '}
-                MODULO ISCRIZIONE
+                  🖨️ MODULO ISCRIZIONE
+                </span>
               </Button>
 
               <Button variant="warning" onClick={() => setShowUpdateStudentModal(true)}>
                 <span role="img" aria-label="update">
-                  🔄
-                </span>{' '}
-                AGGIORNA ALLIEVA
+                  🔄 AGGIORNA ALLIEVA
+                </span>
               </Button>
 
               <Button variant="warning" onClick={() => setShowRegistrationDateModal(true)}>
                 <span role="img" aria-label="update">
-                  🔄
-                </span>{' '}
-                AGGIORNA DATA ISCRIZIONE
+                  🔄 AGGIORNA DATA ISCRIZIONE
+                </span>
               </Button>
 
               <Button variant="danger" onClick={() => setShowDeleteStudentModal(true)}>
                 <span role="img" aria-label="bin">
-                  🗑️
-                </span>{' '}
-                ELIMINA ALLIEVA
+                  🗑️ ELIMINA ALLIEVA
+                </span>
               </Button>
 
               <Button variant="secondary" onClick={history.goBack}>
                 <span role="img" aria-label="back">
-                  🔙
-                </span>{' '}
-                INDIETRO
+                  🔙 INDIETRO
+                </span>
               </Button>
             </div>
+
+            <Divider double />
 
             <StudentReceiptsList />
 
