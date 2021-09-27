@@ -4,6 +4,46 @@ Colors:
  Blue: #009ED5
  White: #000
 */
+
+.toggle {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+
+  margin-bottom: 1rem !important;
+  background: #f3f4f6;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.toggle-option {
+  all: unset;
+  display: block;
+  padding: 0.5rem 1rem;
+  color: black;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.toggle-option:focus {
+  outline: none;
+}
+
+.toggle-option-active {
+  background-color: #bdc3c7;
+  color: #218838;
+}
+
+.tab-content {
+  background: #f3f4f6;
+  padding: 1em;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
 body {
   background-color: #dcdcdc;
 }
@@ -140,10 +180,6 @@ form-control {
   background-color: #f3f4f6;
 }
 
-.btn {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-}
-
 .update-registration-date {
   max-height: calc(100vh - 150px);
   overflow-y: auto;
@@ -248,7 +284,6 @@ form-control {
 
 .student-list-grid {
   height: 45vh;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .subscription-form {

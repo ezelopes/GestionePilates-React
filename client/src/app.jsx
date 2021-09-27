@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import NavBar from './components/Navbar';
+import NavBar from './components/common/Navbar';
 
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';

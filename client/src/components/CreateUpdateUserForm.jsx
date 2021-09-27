@@ -4,7 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
-import Divider from './Divider';
+import Divider from './common/Divider';
 
 import toastConfig from '../helpers/toast.config';
 import 'react-toastify/dist/ReactToastify.css';
