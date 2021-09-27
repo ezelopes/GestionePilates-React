@@ -6,9 +6,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
 
-import Divider from './Divider';
+import Divider from './common/Divider';
 
-import { useStudent } from './StudentContext';
+import { useStudent } from './Student/StudentContext';
 
 import toastConfig from '../helpers/toast.config';
 import formatDate from '../helpers/formatDateForInputDate';
@@ -186,15 +186,23 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
             </>
           )}
 
-          {isForCreating && (
-            <div className="flex-element">
+          <div className="flex-element" style={{ alignSelf: 'flex-end' }}>
+            {isForCreating && (
               <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type="checkbox" {...register('RegistrationDate')} />
+            )}
 
-              {newReceiptType === receiptType[0].type && (
-                <Form.Check label="Contiene Quota Associativa" type="checkbox" style={{ marginTop: '1em' }} />
-              )}
-            </div>
-          )}
+            {/* DISABLE IF ANOTHER MEMBERSHIP FEE HAS BEEN CREATED DURING THE SOLAR YEAR!
+            (MAYBE CONSIDER BOTH Membership Fee type of receipt and IncludeMembershipFee field?) */}
+            {newReceiptType === receiptType[0].type && (
+              <Form.Check
+                label="Contiene Quota Associativa"
+                type="checkbox"
+                style={{ marginTop: '1em' }}
+                {...register('IncludeMembershipFee')}
+                defaultChecked={receiptInfo?.IncludeMembershipFee || false}
+              />
+            )}
+          </div>
         </div>
 
         <Divider double />
@@ -222,6 +230,7 @@ CreateUpdateReceiptForm.propTypes = {
     ReceiptDate: PropTypes.string,
     CourseStartDate: PropTypes.string,
     CourseEndDate: PropTypes.string,
+    IncludeMembershipFee: PropTypes.bool,
   }),
   callback: PropTypes.func.isRequired,
   isForCreating: PropTypes.bool,
