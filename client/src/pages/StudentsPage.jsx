@@ -66,7 +66,6 @@ const columnsDefinition = [
 ];
 
 const gridOptionsDefault = {
-  masterDetail: true,
   defaultColDef: {
     resizable: true,
     sortable: true,
@@ -313,7 +312,9 @@ const StudentsPage = () => {
 
           <div className="buttons-container">
             <Button variant="success" onClick={printSelectedStudents}>
-              Stampa Allieve Selezionate
+              <span role="img" aria-label="print">
+                🖨️ Stampa Allieve Selezionate
+              </span>
             </Button>
           </div>
         </div>

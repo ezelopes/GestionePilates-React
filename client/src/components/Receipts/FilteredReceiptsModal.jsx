@@ -25,7 +25,6 @@ const columnDefs = [
 ];
 
 const gridOptions = {
-  masterDetail: true,
   defaultColDef: {
     resizable: true,
     sortable: true,

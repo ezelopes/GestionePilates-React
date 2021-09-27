@@ -24,7 +24,6 @@ require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const gridOptionsDefault = {
-  masterDetail: true,
   defaultColDef: {
     resizable: true,
     sortable: true,
