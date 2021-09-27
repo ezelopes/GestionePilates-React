@@ -64,42 +64,42 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
             </b>
           </Card.Title>
           <Card.Text>
-            <b>Codice Fiscale:</b> {teacherInfo.TaxCode}
+            <b>Codice Fiscale: </b> {teacherInfo.TaxCode}
           </Card.Text>
           <Card.Text>
-            <b>Citta e Indirizzo:</b> {teacherInfo.City} - {teacherInfo.Address}
+            <b>Citta e Indirizzo: </b> {teacherInfo.City} - {teacherInfo.Address}
           </Card.Text>
           <Card.Text>
-            <b>Cellulare:</b> {teacherInfo.MobilePhone}
+            <b>Cellulare: </b> {teacherInfo.MobilePhone}
           </Card.Text>
           <Card.Text>
-            <b>Email:</b> {teacherInfo.Email}
+            <b>Email: </b> {teacherInfo.Email}
           </Card.Text>
           <Card.Text>
-            <b>Luogo e Data Nascita:</b>
+            <b>Luogo e Data Nascita: </b>
             {teacherInfo.BirthPlace} -{teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
-            <b>Data Iscrizione:</b>
+            <b>Data Iscrizione: </b>
             {teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
-            <b>Scuola:</b> {teacherInfo.School}
+            <b>Scuola: </b> {teacherInfo.School}
           </Card.Text>
           <Card.Text>
-            <b>Disciplina:</b> {teacherInfo.Discipline}
+            <b>Disciplina: </b> {teacherInfo.Discipline}
           </Card.Text>
           <Card.Text>
-            <b>Corso:</b> {teacherInfo.Course}
+            <b>Corso: </b> {teacherInfo.Course}
           </Card.Text>
           <Card.Text>
-            <b>Data Scadenza Certificato:</b>
+            <b>Data Scadenza Certificato: </b>
             {teacherInfo.CertificateExpirationDate !== null
               ? new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()
               : 'Non Definito'}
           </Card.Text>
           <Card.Text>
-            <b>Data Scadenza Green Pass:</b>
+            <b>Data Scadenza Green Pass: </b>
             {teacherInfo.GreenPassExpirationDate !== null
               ? new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()
               : 'Non Definito'}
