@@ -96,9 +96,16 @@ const printSelectedReceipts = async (selectedReceipts) => {
 };
 
 const printMembershipFeeSummaryTemplate = async (studentReceiptsList, fromData, toDate) => {
-  const documentDefinition = await MembershipFeeSummaryTemplate.default(studentReceiptsList, fromData, toDate);
+  try {
+    const documentDefinition = await MembershipFeeSummaryTemplate.default(studentReceiptsList, fromData, toDate);
 
-  pdfMake.createPdf(documentDefinition).open();
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success('PDF Quote Associative Creato Correttamente', toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(`Un errore se e' verificato nello stampare le quote associative`, toastConfig);
+  }
 };
 
 // eslint-disable-next-line import/prefer-default-export
