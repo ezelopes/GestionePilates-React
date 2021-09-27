@@ -6,11 +6,11 @@ import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import formatDate from '../helpers/formatDateForInputDate';
+import formatDate from '../../helpers/formatDateForInputDate';
 
-import toastConfig from '../helpers/toast.config';
+import toastConfig from '../../helpers/toast.config';
 
-const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
+const AmountPaidSummaryTemplate = require('../../pdfTemplates/AmountPaidSummaryTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -97,7 +97,9 @@ const FilteredReceiptsModal = ({
         </Modal.Body>
         <Modal.Footer>
           <Button variant="success" onClick={printDetails}>
-            STAMPA
+            <span role="img" aria-label="print-selected">
+              🖨️ Stampa
+            </span>
           </Button>
           <Button
             variant="secondary"
@@ -105,7 +107,7 @@ const FilteredReceiptsModal = ({
               setShowFilteredAmountModal(false);
             }}
           >
-            CHIUDI
+            Chiudi
           </Button>
         </Modal.Footer>
       </Modal>

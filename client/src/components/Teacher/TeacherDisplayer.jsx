@@ -5,17 +5,17 @@ import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import CreateUpdateUserForm from './CreateUpdateUserForm';
+import CreateUpdateUserForm from '../CreateUpdateUserForm';
 import { TeacherProvider } from './TeacherContext';
 
-import { updateTeacher, deleteTeacher } from '../helpers/apiCalls';
-import toastConfig from '../helpers/toast.config';
+import { updateTeacher, deleteTeacher } from '../../helpers/apiCalls';
+import toastConfig from '../../helpers/toast.config';
 
-import { userType } from '../commondata/commondata';
+import { userType } from '../../commondata/commondata';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
+const RegistrationFormTemplate = require('../../pdfTemplates/RegistrationFormTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -107,16 +107,19 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
 
           <div className="buttons-container">
             <Button variant="success" onClick={() => printRegistrationForm()}>
-              {' '}
-              Scarica Modulo{' '}
+              <span role="img" aria-label="module">
+                🖨️ Scarica Modulo
+              </span>
             </Button>
             <Button variant="primary" onClick={() => setShowUpdateTeacherModal(true)}>
-              {' '}
-              Aggiorna{' '}
+              <span role="img" aria-label="update">
+                🔄 Aggiorna
+              </span>
             </Button>
             <Button variant="danger" onClick={() => setShowDeleteTeacherModal(true)}>
-              {' '}
-              Elimina{' '}
+              <span role="img" aria-label="bin">
+                🗑️ Elimina
+              </span>
             </Button>
           </div>
         </Card.Body>
