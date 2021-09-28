@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
@@ -15,7 +15,22 @@ import formatDate from '../helpers/formatDateForInputDate';
 
 import { receiptType, paymentMethod, defaultAmounts } from '../commondata/commondata';
 
-import 'react-toastify/dist/ReactToastify.css';
+const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
+  const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {
+    if (ReceiptType === receiptType[0].type && !IncludeMembershipFee) {
+      return accumulator;
+    }
+
+    const currentMembershipYear = new Date(ReceiptDate).getFullYear();
+    accumulator.push(currentMembershipYear);
+
+    return accumulator;
+  }, []);
+
+  const existingMembershipFeeYears = [...new Set(existingMembershipFeeYearsArray)];
+
+  return existingMembershipFeeYears.includes(selectedReceiptDateYear);
+};
 
 const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
   const today = formatDate(new Date(), true);
@@ -23,12 +38,14 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
 
   const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptType[0].type);
+  const [disableIncludeMembershipFee, setDisableIncludeMembershipFee] = useState(false);
 
   const defaultValues = {
     TaxCode: studentInfo.TaxCode,
     StudentID: studentInfo.StudentID,
     ReceiptID: receiptInfo?.ReceiptID,
     AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
+    IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
   };
 
   if (newReceiptType === receiptType[1].type) {
@@ -82,8 +99,24 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
     }
   };
 
+  useEffect(() => {
+    const membershipFeeExitsInSelectedYear = checkMembershipFeePerSolarYear(
+      new Date(receiptInfo?.ReceiptDate || today).getFullYear(),
+      studentReceipts
+    );
+
+    setDisableIncludeMembershipFee(membershipFeeExitsInSelectedYear);
+  }, [receiptInfo, studentReceipts, today]);
+
   watch((data) => {
     setNewReceiptType(data.ReceiptType);
+
+    const membershipFeeExitsInSelectedYear = checkMembershipFeePerSolarYear(
+      new Date(data.ReceiptDate).getFullYear(),
+      studentReceipts
+    );
+
+    setDisableIncludeMembershipFee(membershipFeeExitsInSelectedYear);
   });
 
   return (
@@ -123,12 +156,16 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
                 onReceiptTypeChange(e.target.value);
               }}
             >
-              {receiptType.map((currentType) => (
-                <option key={`select_${currentType.type}`} value={currentType.type}>
-                  {' '}
-                  {currentType.type}{' '}
-                </option>
-              ))}
+              <option key={`select_${receiptType[0].type}`} value={receiptType[0].type}>
+                {receiptType[0].type}
+              </option>
+              <option
+                key={`select_${receiptType[1].type}`}
+                value={receiptType[1].type}
+                disabled={newReceiptType === receiptType[0].type && disableIncludeMembershipFee}
+              >
+                {receiptType[1].type}
+              </option>
             </Form.Control>
           </div>
 
@@ -137,8 +174,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
             <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
               {paymentMethod.map((currentType) => (
                 <option key={`select_${currentType.type}`} value={currentType.type}>
-                  {' '}
-                  {currentType.type}{' '}
+                  {currentType.type}
                 </option>
               ))}
             </Form.Control>
@@ -191,8 +227,6 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
               <Form.Check label="Usa Data Ricevuta come Data Iscrizione" type="checkbox" {...register('RegistrationDate')} />
             )}
 
-            {/* DISABLE IF ANOTHER MEMBERSHIP FEE HAS BEEN CREATED DURING THE SOLAR YEAR!
-            (MAYBE CONSIDER BOTH Membership Fee type of receipt and IncludeMembershipFee field?) */}
             {newReceiptType === receiptType[0].type && (
               <Form.Check
                 label="Contiene Quota Associativa"
@@ -200,6 +234,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
                 style={{ marginTop: '1em' }}
                 {...register('IncludeMembershipFee')}
                 defaultChecked={receiptInfo?.IncludeMembershipFee || false}
+                disabled={!receiptInfo?.IncludeMembershipFee && disableIncludeMembershipFee}
               />
             )}
           </div>
@@ -209,9 +244,8 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
 
         <Button type="submit" variant="success">
           <span role="img" aria-label="create">
-            🆕
-          </span>{' '}
-          {isForCreating ? 'CREA RICEVUTA' : 'AGGIORNA RICEVUTA'}
+            🆕 {isForCreating ? 'CREA RICEVUTA' : 'AGGIORNA RICEVUTA'}
+          </span>
         </Button>
       </form>
     </>

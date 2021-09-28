@@ -6,8 +6,6 @@ import toastConfig from './toast.config';
 
 import { ages, receiptType } from '../commondata/commondata';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
@@ -95,9 +93,12 @@ const printSelectedReceipts = async (selectedReceipts) => {
   }
 };
 
-const printMembershipFeeSummaryTemplate = async (studentReceiptsList, fromData, toDate) => {
+const printMembershipFeeSummaryTemplate = async (studentMembershipFeeList, fromData, toDate) => {
   try {
-    const documentDefinition = await MembershipFeeSummaryTemplate.default(studentReceiptsList, fromData, toDate);
+    if (studentMembershipFeeList.length < 1) {
+      return toast.error('Nessuna Quota Associativa trovata nel periodo selezionato!', toastConfig);
+    }
+    const documentDefinition = await MembershipFeeSummaryTemplate.default(studentMembershipFeeList, fromData, toDate);
 
     pdfMake.createPdf(documentDefinition).open();
 

@@ -53,6 +53,10 @@ body {
   height: 5rem;
 }
 
+.nav-link {
+  color: white !important;
+}
+
 .homepage {
   display: flex;
   align-items: center;

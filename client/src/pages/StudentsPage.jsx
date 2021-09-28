@@ -190,7 +190,7 @@ const StudentsPage = () => {
         return toast.success('PDF Creato Correttamente', toastConfig);
       }
 
-      return toast.error(`Nessuna allieva iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
+      return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
     } catch (err) {
       return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
     }
