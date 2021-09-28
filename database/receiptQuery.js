@@ -15,7 +15,7 @@ const mappingReceipt = (rows) => {
       AmountPaid: row.SommaEuro,
       FK_StudentID: row.FK_AllievaID,
       PaymentMethod: row.TipoPagamento,
-      IncludeMembershipFee: row.IncludeMembershipFee,
+      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
     };
   });
   return receipts;
@@ -50,7 +50,7 @@ const mappingAllReceipts = (rows) => {
       ReceiptDate: getFormattedDate(row.DataRicevuta),
       CourseStartDate: getFormattedDate(row.DataInizioCorso),
       CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-      IncludeMembershipFee: row.IncludeMembershipFee,
+      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
     };
   });
   return receipts;
