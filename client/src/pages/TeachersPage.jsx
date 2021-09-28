@@ -34,8 +34,7 @@ const TeachersPage = () => {
             <Row>
               {teachersList.length === 0 ? (
                 <h2 className="center">
-                  {' '}
-                  <div> Non ci sono insegnanti </div>{' '}
+                  <div> Non ci sono insegnanti </div>
                 </h2>
               ) : (
                 teachersList.map((currentTeacher) => (

@@ -281,8 +281,7 @@ const StudentsPage = () => {
               >
                 {dropdownAges.map((age) => (
                   <option key={`select_${age}`} value={age}>
-                    {' '}
-                    {age}{' '}
+                    {age}
                   </option>
                 ))}
               </Form.Control>
@@ -331,8 +330,7 @@ const StudentsPage = () => {
             >
               {months.map((month) => (
                 <option key={`select_${month.id}`} value={month.id}>
-                  {' '}
-                  {month.month}{' '}
+                  {month.month}
                 </option>
               ))}
             </Form.Control>
@@ -349,8 +347,7 @@ const StudentsPage = () => {
             >
               {years.map((year) => (
                 <option key={`select_${year.id}`} value={year.id}>
-                  {' '}
-                  {year.year}{' '}
+                  {year.year}
                 </option>
               ))}
             </Form.Control>

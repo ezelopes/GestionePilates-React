@@ -76,8 +76,7 @@ const CreateUpdateUserForm = ({
             <Form.Control as="select" defaultValue={personInfo?.IsAdult} {...register('IsAdult')}>
               {ages.map((age) => (
                 <option key={`select_${age.id}`} value={age.age}>
-                  {' '}
-                  {age.age}{' '}
+                  {age.age}
                 </option>
               ))}
             </Form.Control>
@@ -160,8 +159,7 @@ const CreateUpdateUserForm = ({
         <Form.Control as="select" defaultValue={personInfo?.Discipline} {...register('Discipline')}>
           {disciplines.map((discipline) => (
             <option key={`select_${discipline.id}`} value={discipline.discipline}>
-              {' '}
-              {discipline.discipline}{' '}
+              {discipline.discipline}
             </option>
           ))}
         </Form.Control>
@@ -170,8 +168,7 @@ const CreateUpdateUserForm = ({
         <Form.Control as="select" defaultValue={personInfo?.Course} {...register('Course')}>
           {courses.map((course) => (
             <option key={`select_${course.id}`} value={course.course}>
-              {' '}
-              {course.course}{' '}
+              {course.course}
             </option>
           ))}
         </Form.Control>
@@ -180,8 +177,7 @@ const CreateUpdateUserForm = ({
         <Form.Control as="select" defaultValue={personInfo?.School} {...register('School')}>
           {schools.map((school) => (
             <option key={`select_${school.id}`} value={school.school}>
-              {' '}
-              {school.school}{' '}
+              {school.school}
             </option>
           ))}
         </Form.Control>
