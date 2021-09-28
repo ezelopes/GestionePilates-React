@@ -7,8 +7,6 @@ import FilterReceiptsForm from './FilterReceiptsForm';
 
 import { printSelectedReceipts } from '../../helpers/printPDF';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 

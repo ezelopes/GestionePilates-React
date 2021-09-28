@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import Divider from './common/Divider';
 
 import toastConfig from '../helpers/toast.config';
-import 'react-toastify/dist/ReactToastify.css';
 
 import { userType, ages, disciplines, schools, courses } from '../commondata/commondata';
 

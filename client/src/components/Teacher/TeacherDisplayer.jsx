@@ -13,8 +13,6 @@ import toastConfig from '../../helpers/toast.config';
 
 import { userType } from '../../commondata/commondata';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 const RegistrationFormTemplate = require('../../pdfTemplates/RegistrationFormTemplate');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;

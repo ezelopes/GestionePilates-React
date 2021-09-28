@@ -4,8 +4,6 @@ import { AgGridReact } from 'ag-grid-react';
 
 import FilterReceiptsForm from './FilterReceiptsForm';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 

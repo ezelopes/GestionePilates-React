@@ -77,12 +77,7 @@ const FilterReceiptsForm = ({
   const printMembershipFeeSummaryByMonth = () => {
     const receipts = allReceipts.filter(({ ReceiptDate }) => validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate));
 
-    // eslint-disable-next-line no-console
-    console.log(receipts);
-
     return printMembershipFeeSummaryTemplate(receipts, formatDate(new Date(fromDate)), formatDate(new Date(toDate)));
-
-    // Print Function Here!
   };
 
   const clearFilters = () => {
