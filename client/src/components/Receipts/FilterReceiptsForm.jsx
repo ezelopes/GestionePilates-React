@@ -1,17 +1,19 @@
-import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { Button, Form } from 'react-bootstrap';
+import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import FilteredReceiptsModal from './FilteredReceiptsModal';
-
 import formatDate from '../../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../../helpers/orderReceiptsBasedOnReceiptNumber';
+import { printMembershipFeeSummaryTemplate } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
 
-import { printMembershipFeeSummaryTemplate } from '../../helpers/printPDF';
-
 const paymentMethods = [null, 'Contanti', 'Assegno', 'Bonifico'];
+const filterFields = [
+  { field: 'receipt_date', description: 'Data Ricevuta' },
+  { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
+];
 
 const FilterReceiptsForm = ({
   allReceipts,
@@ -23,6 +25,7 @@ const FilterReceiptsForm = ({
 }) => {
   const today = formatDate(new Date(), true);
 
+  const [filterByField, setFilterByField] = useState(filterFields[0]);
   const [filteredPaymentMethod, setFilteredPaymentMethod] = useState(null);
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
@@ -38,9 +41,14 @@ const FilterReceiptsForm = ({
   const validateDateBetweenTwoDates = (fromDateValidation, toDateValidation, givenDate) =>
     new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation);
 
+  const validateCourseDatesBetweenTwoDates = (fromDateValidation, toDateValidation, CourseStartDate, CourseEndDate) =>
+    new Date(CourseStartDate) >= new Date(fromDateValidation) && new Date(CourseEndDate) <= new Date(toDateValidation);
+
   const filterReceipts = () => {
-    const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate }) =>
-      validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
+    const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate, CourseStartDate, CourseEndDate }) =>
+      filterByField === 'receipt_date'
+        ? validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
+        : validateCourseDatesBetweenTwoDates(fromDate, toDate, CourseStartDate, CourseEndDate)
     );
 
     if (!filteredPaymentMethod) {
@@ -55,6 +63,10 @@ const FilterReceiptsForm = ({
   };
 
   const calculateAmountBetweenDatesAndByPaymentMethod = () => {
+    if (filterByField !== 'receipt_date') {
+      return toast.error(`Calcolo dell'importo non si puo' effetturare con il filtro impostato!`, toastConfig);
+    }
+
     if (!filteredPaymentMethod) {
       return toast.error('Seleziona Tipo di Pagamento!', toastConfig);
     }
@@ -101,6 +113,20 @@ const FilterReceiptsForm = ({
   return (
     <>
       <div className="filter-form">
+        {!isMembershipFee && (
+          <Form.Group>
+            <Form.Label> Filtra per: </Form.Label>
+            {/* . ref={selectFilterByFieldRef} */}
+            <Form.Control as="select" onChange={({ target }) => setFilterByField(target.value)}>
+              {filterFields.map(({ field, description }) => (
+                <option key={`select_${field}`} value={field}>
+                  {description}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        )}
+
         {!isMembershipFee && (
           <Form.Group>
             <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
