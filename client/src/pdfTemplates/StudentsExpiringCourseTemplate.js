@@ -82,7 +82,7 @@ const StudentsExpiringCourseTemplate = async (studentsReceiptsListByMonth) => {
 
   const docDefinition = {
     info: {
-      title: `Informazioni Allieve ...`,
+      title: `Informazioni Allieve Cui Corso Sta Scadendo`,
       author: 'Roxana Carro',
       subject: `Dati Allieve`,
     },
