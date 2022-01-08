@@ -22,10 +22,11 @@ const FilterReceiptsForm = ({
   setReceiptsForAmountSummary,
   gridOptions,
   isMembershipFee,
+  filterByField,
+  setFilterByField,
 }) => {
   const today = formatDate(new Date(), true);
 
-  const [filterByField, setFilterByField] = useState(filterFields[0]);
   const [filteredPaymentMethod, setFilteredPaymentMethod] = useState(null);
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
@@ -116,7 +117,6 @@ const FilterReceiptsForm = ({
         {!isMembershipFee && (
           <Form.Group>
             <Form.Label> Filtra per: </Form.Label>
-            {/* . ref={selectFilterByFieldRef} */}
             <Form.Control as="select" onChange={({ target }) => setFilterByField(target.value)}>
               {filterFields.map(({ field, description }) => (
                 <option key={`select_${field}`} value={field}>
@@ -156,7 +156,11 @@ const FilterReceiptsForm = ({
       </div>
       <div className="buttons-container">
         {!isMembershipFee ? (
-          <Button variant="success" onClick={calculateAmountBetweenDatesAndByPaymentMethod}>
+          <Button
+            variant="success"
+            onClick={calculateAmountBetweenDatesAndByPaymentMethod}
+            disabled={filterByField !== 'receipt_date' || !filteredPaymentMethod}
+          >
             <span role="img" aria-label="summary">
               🧾 Calcola Importo Totale
             </span>
@@ -202,12 +206,16 @@ FilterReceiptsForm.propTypes = {
   setCurrentReceipts: PropTypes.func.isRequired,
   gridOptions: PropTypes.object.isRequired,
   isMembershipFee: PropTypes.bool,
+  filterByField: PropTypes.string,
+  setFilterByField: PropTypes.func,
 };
 
 FilterReceiptsForm.defaultProps = {
   receiptsForAmountSummary: [],
   setReceiptsForAmountSummary: () => {},
   isMembershipFee: false,
+  filterByField: null,
+  setFilterByField: () => {},
 };
 
 export default FilterReceiptsForm;

@@ -4,7 +4,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import toastConfig from './toast.config';
 
-import { ages, receiptType } from '../commondata/commondata';
+import { ages, receiptType, getMonthFromId } from '../commondata/commondata';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -15,6 +15,8 @@ const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplat
 const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
 
 const MembershipFeeSummaryTemplate = require('../pdfTemplates/MembershipFeeSummaryTemplate');
+
+const StudentsExpiringCourseTemplate = require('../pdfTemplates/StudentsExpiringCourseTemplate');
 
 const printSelectedReceipts = async (selectedReceipts) => {
   try {
@@ -109,5 +111,44 @@ const printMembershipFeeSummaryTemplate = async (studentMembershipFeeList, fromD
   }
 };
 
+const printExpiringStudents = async (studentsReceiptsList) => {
+  try {
+    if (studentsReceiptsList.length < 1) {
+      return toast.error('Lista vuota!', toastConfig);
+    }
+
+    const studentsReceiptsListOrdered = studentsReceiptsList.sort((a, b) => {
+      if (a.CourseEndDate === b.CourseEndDate) {
+        return a.Name.toUpperCase() > b.Name.toUpperCase() ? 1 : -1;
+      }
+
+      return new Date(a.CourseEndDate) - new Date(b.CourseEndDate);
+    });
+
+    const studentsReceiptsListByMonth = {};
+
+    for (let i = 0; i < studentsReceiptsListOrdered.length; i += 1) {
+      const receipt = studentsReceiptsListOrdered[i];
+      const monthId = parseInt(receipt.CourseEndDate.split('-')[1], 10) - 1;
+
+      const month = getMonthFromId(monthId);
+
+      if (!studentsReceiptsListByMonth[month]) {
+        studentsReceiptsListByMonth[month] = [];
+      }
+      studentsReceiptsListByMonth[month].push(receipt);
+    }
+
+    const documentDefinition = await StudentsExpiringCourseTemplate.default(studentsReceiptsListByMonth);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success('PDF Lista Allieve In Scadenza Creato Correttamente', toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(`Un errore se e' verificato nello stampare la lista di allieve in scadenza`, toastConfig);
+  }
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export { printSelectedReceipts, printMembershipFeeSummaryTemplate };
+export { printSelectedReceipts, printMembershipFeeSummaryTemplate, printExpiringStudents };

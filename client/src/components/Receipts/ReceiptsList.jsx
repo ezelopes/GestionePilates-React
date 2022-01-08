@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 
 import FilterReceiptsForm from './FilterReceiptsForm';
 
-import { printSelectedReceipts } from '../../helpers/printPDF';
+import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -45,11 +45,18 @@ const gridOptionsDefault = {
   rowSelection: 'single',
 };
 
+const filterFields = [
+  { field: 'receipt_date', description: 'Data Ricevuta' },
+  { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
+];
+
 const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
   const [gridOptions] = useState(gridOptionsDefault);
   const [columnDefs] = useState(columnsDefinition);
   const [selectedReceipts, setSelectedReceipts] = useState([]);
   const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
+
+  const [filterByField, setFilterByField] = useState(filterFields[0]);
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
@@ -78,6 +85,8 @@ const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
         setCurrentReceipts={setCurrentReceipts}
         setReceiptsForAmountSummary={setReceiptsForAmountSummary}
         gridOptions={gridOptions}
+        filterByField={filterByField}
+        setFilterByField={setFilterByField}
       />
       <div className="ag-theme-balham receipts-grid">
         <AgGridReact
@@ -94,9 +103,22 @@ const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
       </div>
 
       <div className="buttons-container">
-        <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)}>
+        <Button
+          variant="success"
+          onClick={() => printSelectedReceipts(selectedReceipts)}
+          disabled={filterByField !== 'receipt_date'}
+        >
           <span role="img" aria-label="print-selected">
             🖨️ Stampa Ricevute Selezionate
+          </span>
+        </Button>
+        <Button
+          variant="success"
+          onClick={() => printExpiringStudents(currentReceipts)}
+          disabled={filterByField !== 'course_date'}
+        >
+          <span role="img" aria-label="print-selected">
+            🖨️ Lista Allieve In Scadenza
           </span>
         </Button>
       </div>
