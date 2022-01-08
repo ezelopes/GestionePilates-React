@@ -223,7 +223,6 @@ form-control {
 
 .teacher-card-wrapper {
   border-radius: 2em;
-  /* width: 25vw; */
   height: fit-content;
   font-size: 14px;
   margin-right: 2.5em;
@@ -234,8 +233,6 @@ form-control {
 .teachers-container {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 
 .teachers-container > * {

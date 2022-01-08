@@ -6,8 +6,6 @@ const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const RegistrationFormTemplate = async (studentInfo) => {
-  // Print only if Certificate Expiry Date does not expire soon
-
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
   const BLANK_SPACE = '________________________________________';
   const BLANK_DATE = '______-______-________';
