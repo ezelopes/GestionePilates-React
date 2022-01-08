@@ -37,15 +37,17 @@ const TeachersPage = () => {
                   <div> Non ci sono insegnanti </div>
                 </h2>
               ) : (
-                teachersList.map((currentTeacher) => (
-                  <div key={currentTeacher.TaxCode} className="teacher-card-wrapper">
-                    <TeacherDisplayer
-                      teacherInitialInfo={currentTeacher}
-                      teachersList={teachersList}
-                      setTeachersList={setTeachersList}
-                    />
-                  </div>
-                ))
+                <div className="teachers-container">
+                  {teachersList.map((currentTeacher) => (
+                    <div key={currentTeacher.TaxCode} className="teacher-card-wrapper">
+                      <TeacherDisplayer
+                        teacherInitialInfo={currentTeacher}
+                        teachersList={teachersList}
+                        setTeachersList={setTeachersList}
+                      />
+                    </div>
+                  ))}
+                </div>
               )}
             </Row>
           </div>
