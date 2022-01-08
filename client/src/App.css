@@ -42,6 +42,7 @@ Colors:
   padding: 1em;
   border-radius: 10px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 2em;
 }
 
 body {
@@ -222,12 +223,20 @@ form-control {
 
 .teacher-card-wrapper {
   border-radius: 2em;
-  width: 25vw;
-  height: 100%;
+  height: fit-content;
   font-size: 14px;
   margin-right: 2.5em;
   margin-top: 1.5em;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.teachers-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.teachers-container > * {
+  flex: 1 1 auto;
 }
 
 .student-name-title {
@@ -291,10 +300,11 @@ form-control {
 }
 
 .subscription-form {
-  width: 60vw;
-  margin-left: 20vw;
+  width: 80vw;
+  margin-left: 10vw;
   margin-top: 2em;
   padding-bottom: 2em;
+  margin-bottom: 2em;
 }
 
 .subscription-form-buttons {

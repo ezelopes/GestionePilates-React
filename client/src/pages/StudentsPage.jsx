@@ -318,48 +318,50 @@ const StudentsPage = () => {
           </div>
         </div>
 
-        <div className="form-wrapper green-pass-form">
+        <div className="form-wrapper">
           <Form.Group>
-            <Form.Label> Mese </Form.Label>
-            <Form.Control
-              ref={filterAgeRef}
-              as="select"
-              onChange={({ target }) => {
-                setselectedMonth(parseInt(target.value, 10));
-              }}
-            >
-              {months.map((month) => (
-                <option key={`select_${month.id}`} value={month.id}>
-                  {month.month}
-                </option>
-              ))}
-            </Form.Control>
+            <Form.Label> Stampa Allieve </Form.Label>
           </Form.Group>
-
-          <Form.Group>
-            <Form.Label> Anno </Form.Label>
-            <Form.Control
-              ref={filterAgeRef}
-              as="select"
-              onChange={({ target }) => {
-                setSelectedYearGreenPass(parseInt(target.value, 10));
-              }}
-            >
-              {years.map((year) => (
-                <option key={`select_${year.id}`} value={year.id}>
-                  {year.year}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Button variant="success" onClick={printStudentsWithExpiringGreenPass} style={{ marginTop: '1em' }}>
-            Stampa Allieve (Green Pass)
-          </Button>
-
-          <Button variant="success" onClick={printStudentsBasedOnRegistrationDate} style={{ marginTop: '1em' }}>
-            Stampa Allieve (Data Iscrizione)
-          </Button>
+          <div className="green-pass-form">
+            <Form.Group>
+              <Form.Label> Mese </Form.Label>
+              <Form.Control
+                ref={filterAgeRef}
+                as="select"
+                onChange={({ target }) => {
+                  setselectedMonth(parseInt(target.value, 10));
+                }}
+              >
+                {months.map((month) => (
+                  <option key={`select_${month.id}`} value={month.id}>
+                    {month.month}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label> Anno </Form.Label>
+              <Form.Control
+                ref={filterAgeRef}
+                as="select"
+                onChange={({ target }) => {
+                  setSelectedYearGreenPass(parseInt(target.value, 10));
+                }}
+              >
+                {years.map((year) => (
+                  <option key={`select_${year.id}`} value={year.id}>
+                    {year.year}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Button variant="success" onClick={printStudentsWithExpiringGreenPass} style={{ marginTop: '1em' }}>
+              Scadenza Green Pass
+            </Button>
+            <Button variant="success" onClick={printStudentsBasedOnRegistrationDate} style={{ marginTop: '1em' }}>
+              Scadenza Data Iscrizione
+            </Button>
+          </div>
         </div>
       </div>
     </>

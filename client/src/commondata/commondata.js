@@ -82,4 +82,19 @@ const years = [
   { id: 2024, year: 2024 },
 ];
 
-export { userType, ages, disciplines, schools, courses, receiptType, paymentMethod, defaultAmounts, months, years };
+const getMonthFromId = (monthId) =>
+  months.map(({ id, month }) => (id === monthId ? month : null)).filter((month) => month !== null);
+
+export {
+  userType,
+  ages,
+  disciplines,
+  schools,
+  courses,
+  receiptType,
+  paymentMethod,
+  defaultAmounts,
+  months,
+  years,
+  getMonthFromId,
+};
