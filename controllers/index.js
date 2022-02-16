@@ -11,8 +11,8 @@ router.use('/teacher', teacher);
 
 // if path corresponds to none of the above
 router.use('/', (req, res) => {
-  res.render('404', {
-    url: 'This is a landing page only. Eze is still working on it :)',
+  res.status(404).send({
+    message: 'This endpoint does not exist :(',
   });
 });
 

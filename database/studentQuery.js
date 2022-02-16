@@ -1,199 +1,106 @@
-const pool = require('./pool');
+const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/index');
 
-const mappingStudents = (rows) => {
-  const students = rows.map((row) => {
-    return {
-      StudentID: row.AllievaID,
-      IsAdult: row.Maggiorenne,
-      TaxCode: row.CodiceFiscale,
-      Name: row.Nome,
-      Surname: row.Cognome,
-      City: row.Citta,
-      Address: row.Indirizzo,
-      MobilePhone: row.Cellulare,
-      Email: row.Email,
-      BirthPlace: row.LuogoNascita,
-      Discipline: row.Disciplina,
-      Course: row.Corso,
-      School: row.Scuola,
-      RegistrationDate: getFormattedDate(row.DataIscrizione),
-      CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-      DOB: getFormattedDate(row.DataNascita),
-      GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
-      ParentTaxCode: row.CodiceFiscaleGenitore,
-      ParentName: row.NomeGenitore,
-      ParentSurname: row.CognomeGenitore,
-    };
-  });
-  return students;
-};
+const STUDENT_TABLE = 'allieva';
+const RECEIPT_TABLE = 'ricevuta';
 
-const countStudentReceiptsAmount = async (StudentID) => {
-  const [rows] = await pool.execute('SELECT RicevutaID FROM Ricevuta WHERE FK_AllievaID = ? LIMIT 1', [StudentID]);
-  return rows.length;
-};
+const mappingStudents = (rows) =>
+  rows.map((row) => ({
+    StudentID: row.AllievaID,
+    IsAdult: row.Maggiorenne,
+    TaxCode: row.CodiceFiscale,
+    Name: row.Nome,
+    Surname: row.Cognome,
+    City: row.Citta,
+    Address: row.Indirizzo,
+    MobilePhone: row.Cellulare,
+    Email: row.Email,
+    BirthPlace: row.LuogoNascita,
+    Discipline: row.Disciplina,
+    Course: row.Corso,
+    School: row.Scuola,
+    RegistrationDate: getFormattedDate(row.DataIscrizione),
+    CertificateExpirationDate: getFormattedDate(row.DataCertificato),
+    DOB: getFormattedDate(row.DataNascita),
+    GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
+    ParentTaxCode: row.CodiceFiscaleGenitore,
+    ParentName: row.NomeGenitore,
+    ParentSurname: row.CognomeGenitore,
+  }));
 
 const getStudents = async () => {
-  const [rows] = await pool.execute('SELECT * FROM allieva');
-  const students = mappingStudents(rows);
+  const students = await knex(STUDENT_TABLE).select();
 
-  return students;
+  return mappingStudents(students);
 };
 
+// TODO: Get single student should retrieve both student info and their receipts.
 // SELECT * FROM allieva INNER JOIN ricevuta ON ricevuta.FK_CodiceFiscale = allieva.CodiceFiscale where allieva.CodiceFiscale = ?;
 const getSingleStudent = async (TaxCode) => {
-  const [rows] = await pool.execute('SELECT * FROM allieva WHERE CodiceFiscale= ?;', [TaxCode]);
-  const student = mappingStudents(rows);
+  const student = await knex(STUDENT_TABLE).select().where({ CodiceFiscale: TaxCode });
 
-  return student[0];
+  return mappingStudents(student)[0];
 };
 
-const createStudent = async ({
-  IsAdult,
-  TaxCode,
-  Name,
-  Surname,
-  City,
-  Address,
-  MobilePhone,
-  Email,
-  BirthPlace,
-  Discipline,
-  Course,
-  School,
-  RegistrationDate,
-  CertificateExpirationDate,
-  DOB,
-  GreenPassExpirationDate,
-  ParentTaxCode,
-  ParentName,
-  ParentSurname,
-}) => {
+const createStudent = async (studentInfo) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
-    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate);
-    const DOBFormatted = getFormattedDate(DOB);
-    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate);
+    const newStudentID = await knex(STUDENT_TABLE).insert({
+      CodiceFiscale: studentInfo.TaxCode,
+      Maggiorenne: studentInfo.IsAdult,
+      Nome: studentInfo.Name,
+      Cognome: studentInfo.Surname,
+      Citta: studentInfo.City,
+      Indirizzo: studentInfo.Address,
+      Cellulare: studentInfo.MobilePhone,
+      Email: studentInfo.Email,
+      DataIscrizione: getFormattedDate(studentInfo.RegistrationDate),
+      DataCertificato: getFormattedDate(studentInfo.CertificateExpirationDate),
+      DataNascita: getFormattedDate(studentInfo.DOB),
+      DataGreenPass: getFormattedDate(studentInfo.GreenPassExpirationDate),
+      LuogoNascita: studentInfo.BirthPlace,
+      Disciplina: studentInfo.Discipline,
+      Corso: studentInfo.Course,
+      Scuola: studentInfo.School,
+      CodiceFiscaleGenitore: studentInfo.ParentTaxCode,
+      NomeGenitore: studentInfo.ParentName,
+      CognomeGenitore: studentInfo.ParentSurname,
+    });
 
-    const [rows] = await pool.execute(
-      'INSERT INTO Allieva (CodiceFiscale, Maggiorenne, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola, CodiceFiscaleGenitore, NomeGenitore, CognomeGenitore) \
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [
-        TaxCode,
-        IsAdult,
-        Name,
-        Surname,
-        City,
-        Address,
-        MobilePhone,
-        Email,
-        RegistrationDateFormatted,
-        CertificateExpirationDateFormatted,
-        DOBFormatted,
-        GreenPassExpirationDateFormatted,
-        BirthPlace,
-        Discipline,
-        Course,
-        School,
-        ParentTaxCode,
-        ParentName,
-        ParentSurname,
-      ]
-    );
-
-    return { StudentID: rows.insertId, message: 'Allieva creata correttamente' };
+    return { StudentID: newStudentID[0], message: 'Allieva creata correttamente' };
   } catch (error) {
     console.log(error);
+
     return { message: 'Errore nel creare Allieva!' };
   }
 };
 
-const updateStudent = async ({
-  StudentID,
-  IsAdult,
-  TaxCode,
-  Name,
-  Surname,
-  City,
-  Address,
-  MobilePhone,
-  Email,
-  BirthPlace,
-  Discipline,
-  Course,
-  School,
-  RegistrationDate,
-  CertificateExpirationDate,
-  DOB,
-  GreenPassExpirationDate,
-  ParentTaxCode,
-  ParentName,
-  ParentSurname,
-}) => {
+const updateStudent = async (studentInfo) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
-    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate);
-    const DOBFormatted = getFormattedDate(DOB);
-    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate);
+    await knex(STUDENT_TABLE)
+      .where({ AllievaID: studentInfo.StudentID })
+      .update({
+        CodiceFiscale: studentInfo.TaxCode,
+        Maggiorenne: studentInfo.IsAdult,
+        Nome: studentInfo.Name,
+        Cognome: studentInfo.Surname,
+        Citta: studentInfo.City,
+        Indirizzo: studentInfo.Address,
+        Cellulare: studentInfo.MobilePhone,
+        Email: studentInfo.Email,
+        DataIscrizione: getFormattedDate(studentInfo.RegistrationDate),
+        DataCertificato: getFormattedDate(studentInfo.CertificateExpirationDate),
+        DataNascita: getFormattedDate(studentInfo.DOB),
+        DataGreenPass: getFormattedDate(studentInfo.GreenPassExpirationDate),
+        LuogoNascita: studentInfo.BirthPlace,
+        Disciplina: studentInfo.Discipline,
+        CodiceFiscaleGenitore: studentInfo.ParentTaxCode,
+        NomeGenitore: studentInfo.ParentName,
+        CognomeGenitore: studentInfo.ParentSurname,
+        Corso: studentInfo.Course,
+        Scuola: studentInfo.School,
+      });
 
-    const receiptsAmount = await countStudentReceiptsAmount(StudentID);
-
-    if (receiptsAmount > 0) {
-      await pool.execute(
-        `UPDATE Allieva, Ricevuta SET Allieva.CodiceFiscale=?, Allieva.Maggiorenne=?, Allieva.Nome=?, Allieva.Cognome=?, Allieva.Citta=?, Allieva.Indirizzo=?, Allieva.Cellulare=?, Allieva.Email=?, Allieva.DataIscrizione=?, Allieva.DataCertificato=?, Allieva.DataNascita=?, Allieva.DataGreenPass=?, Allieva.LuogoNascita=?, Allieva.Disciplina=?, Allieva.CodiceFiscaleGenitore=?, Allieva.NomeGenitore=?, Allieva.CognomeGenitore=?, Allieva.Corso=?, Allieva.Scuola=?, Ricevuta.FK_CodiceFiscale=? WHERE Allieva.AllievaID=? AND Ricevuta.FK_AllievaID=?;`,
-        [
-          TaxCode,
-          IsAdult,
-          Name,
-          Surname,
-          City,
-          Address,
-          MobilePhone,
-          Email,
-          RegistrationDateFormatted,
-          CertificateExpirationDateFormatted,
-          DOBFormatted,
-          GreenPassExpirationDateFormatted,
-          BirthPlace,
-          Discipline,
-          ParentTaxCode,
-          ParentName,
-          ParentSurname,
-          Course,
-          School,
-          TaxCode,
-          StudentID,
-          StudentID,
-        ]
-      );
-    } else {
-      await pool.execute(
-        `UPDATE Allieva SET CodiceFiscale=?, Maggiorenne=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, CodiceFiscaleGenitore=?, NomeGenitore=?, CognomeGenitore=?, Corso=?, Scuola=? WHERE AllievaID=?;`,
-        [
-          TaxCode,
-          IsAdult,
-          Name,
-          Surname,
-          City,
-          Address,
-          MobilePhone,
-          Email,
-          RegistrationDateFormatted,
-          CertificateExpirationDateFormatted,
-          DOBFormatted,
-          GreenPassExpirationDateFormatted,
-          BirthPlace,
-          Discipline,
-          ParentTaxCode,
-          ParentName,
-          ParentSurname,
-          Course,
-          School,
-          StudentID,
-        ]
-      );
-    }
+    await knex(RECEIPT_TABLE).where({ FK_AllievaID: studentInfo.StudentID }).update({ FK_CodiceFiscale: studentInfo.TaxCode });
 
     return { message: 'Allieva Aggiornata Correttamente!' };
   } catch (error) {
@@ -204,24 +111,26 @@ const updateStudent = async ({
 
 const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
+    await knex(STUDENT_TABLE)
+      .where({ AllievaID: StudentID })
+      .update({ DataIscrizione: getFormattedDate(RegistrationDate) });
 
-    await pool.execute(`UPDATE Allieva SET DataIscrizione = ? WHERE AllievaID = ?;`, [RegistrationDateFormatted, StudentID]);
-    return 'Data Iscrizione Aggiornata Correttamente!';
+    return { message: 'Data Iscrizione Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
-    return `Errore nell'aggiornare Data Iscrizione!`;
+    return { message: `Errore nell'aggiornare Data Iscrizione!` };
   }
 };
 
 const deleteStudent = async (StudentID) => {
   try {
-    await pool.execute('DELETE FROM ricevuta WHERE FK_AllievaID=?;', [StudentID]);
-    await pool.execute('DELETE FROM allieva WHERE AllievaID=?;', [StudentID]);
-    return 'Allieva Eliminata Correttamente!';
+    await knex(RECEIPT_TABLE).where({ FK_AllievaID: StudentID }).del();
+    await knex(STUDENT_TABLE).where({ AllievaID: StudentID }).del();
+
+    return { message: 'Allieva Eliminata Correttamente!' };
   } catch (error) {
     console.log(error);
-    return `Errore nell'eliminare Allieva!`;
+    return { message: `Errore nell'eliminare Allieva!` };
   }
 };
 

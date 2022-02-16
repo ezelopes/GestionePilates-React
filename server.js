@@ -8,8 +8,9 @@ const indexControllers = require('./controllers/index');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// adds `.body` in the request
 app.use(compression());
+
+// Adds `.body` in the request
 app.use(bodyParser.json({ extended: false }));
 
 app.use('/api', indexControllers);

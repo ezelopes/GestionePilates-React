@@ -1,27 +1,27 @@
-const pool = require('./pool');
+/* eslint-disable no-multi-str */
+/* eslint-disable max-len */
+const { knex, pool } = require('./connection');
 const { getFormattedDate } = require('./helpers/index');
 
 const mappingTeachers = (rows) => {
-  const teachers = rows.map((row) => {
-    return {
-      TeacherID: row.InsegnanteID,
-      TaxCode: row.CodiceFiscale,
-      Name: row.Nome,
-      Surname: row.Cognome,
-      City: row.Citta,
-      Address: row.Indirizzo,
-      MobilePhone: row.Cellulare,
-      Email: row.Email,
-      RegistrationDate: getFormattedDate(row.DataIscrizione),
-      CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-      DOB: getFormattedDate(row.DataNascita),
-      GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
-      BirthPlace: row.LuogoNascita,
-      Discipline: row.Disciplina,
-      Course: row.Corso,
-      School: row.Scuola,
-    };
-  });
+  const teachers = rows.map((row) => ({
+    TeacherID: row.InsegnanteID,
+    TaxCode: row.CodiceFiscale,
+    Name: row.Nome,
+    Surname: row.Cognome,
+    City: row.Citta,
+    Address: row.Indirizzo,
+    MobilePhone: row.Cellulare,
+    Email: row.Email,
+    RegistrationDate: getFormattedDate(row.DataIscrizione),
+    CertificateExpirationDate: getFormattedDate(row.DataCertificato),
+    DOB: getFormattedDate(row.DataNascita),
+    GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
+    BirthPlace: row.LuogoNascita,
+    Discipline: row.Disciplina,
+    Course: row.Corso,
+    School: row.Scuola,
+  }));
   return teachers;
 };
 

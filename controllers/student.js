@@ -23,7 +23,7 @@ const getStudentsEndpoint = async (req, res) => {
 
 const getSingleStudentEndpoint = async (req, res) => {
   try {
-    const TaxCode = req.params.TaxCode;
+    const { TaxCode } = req.params;
     const student = await getSingleStudent(TaxCode);
 
     res.status(200).send(student);
@@ -44,7 +44,7 @@ const createStudentEndpoint = async (req, res) => {
     return res.status(200).send({ StudentID, message });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ message: e.message });
+    return res.status(500).send({ message: e.message });
   }
 };
 
@@ -61,12 +61,11 @@ const updateStudentEndpoint = async (req, res) => {
 
 const updateRegistrationDateEndpoint = async (req, res) => {
   try {
-    const StudentID = req.body.StudentID;
-    const RegistrationDate = req.body.RegistrationDate;
+    const { StudentID, RegistrationDate } = req.body;
 
-    const response = await updateRegistrationDate(StudentID, RegistrationDate);
+    const { message } = await updateRegistrationDate(StudentID, RegistrationDate);
 
-    res.status(200).send({ message: response });
+    res.status(200).send({ message });
   } catch (e) {
     console.log(e);
     res.status(500).send({ message: e.message });
@@ -75,10 +74,10 @@ const updateRegistrationDateEndpoint = async (req, res) => {
 
 const deleteStudentEndpoint = async (req, res) => {
   try {
-    const StudentID = req.body.StudentID;
-    const response = await deleteStudent(StudentID);
+    const { StudentID } = req.body;
+    const { message } = await deleteStudent(StudentID);
 
-    res.status(200).send({ message: response });
+    res.status(200).send({ message });
   } catch (e) {
     console.log(e);
     res.status(500).send({ message: e.message });
