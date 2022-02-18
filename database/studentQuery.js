@@ -28,18 +28,42 @@ const mappingStudents = (rows) =>
     ParentSurname: row.CognomeGenitore,
   }));
 
+const mappingReceipt = (rows) =>
+  rows.map((row) => ({
+    ReceiptID: row.RicevutaID,
+    ReceiptType: row.TipoRicevuta,
+    ReceiptDate: getFormattedDate(row.DataRicevuta),
+    CourseStartDate: getFormattedDate(row.DataInizioCorso),
+    CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
+    ReceiptNumber: row.NumeroRicevuta,
+    AmountPaid: row.SommaEuro,
+    FK_StudentID: row.FK_AllievaID,
+    PaymentMethod: row.TipoPagamento,
+    IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
+  }));
+
 const getStudents = async () => {
   const students = await knex(STUDENT_TABLE).select();
 
   return mappingStudents(students);
 };
 
-// TODO: Get single student should retrieve both student info and their receipts.
-// SELECT * FROM allieva INNER JOIN ricevuta ON ricevuta.FK_CodiceFiscale = allieva.CodiceFiscale where allieva.CodiceFiscale = ?;
 const getSingleStudent = async (TaxCode) => {
   const student = await knex(STUDENT_TABLE).select().where({ CodiceFiscale: TaxCode });
 
   return mappingStudents(student)[0];
+};
+
+const getStudentWithReceipts = async (TaxCode) => {
+  const studentWithReceipts = await knex(RECEIPT_TABLE)
+    .join(STUDENT_TABLE, `${RECEIPT_TABLE}.FK_AllievaID`, '=', `${STUDENT_TABLE}.AllievaID`)
+    .where({ CodiceFiscale: TaxCode })
+    .select();
+
+  const student = mappingStudents(studentWithReceipts)[0];
+  const receipts = mappingReceipt(studentWithReceipts);
+
+  return { student, receipts };
 };
 
 const createStudent = async (studentInfo) => {
@@ -137,6 +161,7 @@ const deleteStudent = async (StudentID) => {
 module.exports = {
   getStudents,
   getSingleStudent,
+  getStudentWithReceipts,
   createStudent,
   updateStudent,
   updateRegistrationDate,

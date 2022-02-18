@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
   getStudents,
   getSingleStudent,
+  getStudentWithReceipts,
   createStudent,
   updateStudent,
   updateRegistrationDate,
@@ -27,6 +28,18 @@ const getSingleStudentEndpoint = async (req, res) => {
     const student = await getSingleStudent(TaxCode);
 
     res.status(200).send(student);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({ message: e.message });
+  }
+};
+
+const getStudentWithReceiptsEndpoint = async (req, res) => {
+  try {
+    const { TaxCode } = req.params;
+    const { student, receipts } = await getStudentWithReceipts(TaxCode);
+
+    res.status(200).send({ student, receipts });
   } catch (e) {
     console.log(e);
     res.status(500).send({ message: e.message });
@@ -86,6 +99,7 @@ const deleteStudentEndpoint = async (req, res) => {
 
 studentRouter.get('/getStudents', getStudentsEndpoint);
 studentRouter.get('/getSingleStudent/:TaxCode', getSingleStudentEndpoint);
+studentRouter.get('/getStudentWithReceipts/:TaxCode', getStudentWithReceiptsEndpoint);
 studentRouter.put('/createStudent', createStudentEndpoint);
 studentRouter.post('/updateStudent', updateStudentEndpoint);
 studentRouter.post('/updateRegistrationDate', updateRegistrationDateEndpoint);
