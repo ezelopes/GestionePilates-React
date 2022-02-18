@@ -1,10 +1,10 @@
-/* eslint-disable no-multi-str */
-/* eslint-disable max-len */
-const { knex, pool } = require('./connection');
+const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/index');
 
-const mappingTeachers = (rows) => {
-  const teachers = rows.map((row) => ({
+const TEACHER_TABLE = 'insegnante';
+
+const mappingTeachers = (rows) =>
+  rows.map((row) => ({
     TeacherID: row.InsegnanteID,
     TaxCode: row.CodiceFiscale,
     Name: row.Nome,
@@ -22,119 +22,68 @@ const mappingTeachers = (rows) => {
     Course: row.Corso,
     School: row.Scuola,
   }));
-  return teachers;
-};
 
 const getTeachers = async () => {
-  const [rows] = await pool.execute('SELECT * FROM insegnante');
-  const teachers = mappingTeachers(rows);
+  const teachers = await knex(TEACHER_TABLE).select();
 
-  return teachers;
+  return mappingTeachers(teachers);
 };
 
-const getSingleTeacher = async (CodiceFiscale) => {
-  const [rows] = await pool.execute('SELECT * FROM insegnante WHERE CodiceFiscale= ?;', [CodiceFiscale]);
-  const teacher = mappingTeachers(rows);
+const getTeacher = async (TaxCode) => {
+  const teacher = await knex(TEACHER_TABLE).select().where({ CodiceFiscale: TaxCode });
 
-  return teacher;
+  return mappingTeachers(teacher)[0];
 };
 
-const createTeacher = async ({
-  TaxCode,
-  Name,
-  Surname,
-  City,
-  Address,
-  MobilePhone,
-  Email,
-  RegistrationDate,
-  CertificateExpirationDate,
-  DOB,
-  GreenPassExpirationDate,
-  BirthPlace,
-  Discipline,
-  Course,
-  School,
-}) => {
+const createTeacher = async (teacherInfo) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
-    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate);
-    const DOBFormatted = getFormattedDate(DOB);
-    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate);
+    const newTeacherID = await knex(TEACHER_TABLE).insert({
+      CodiceFiscale: teacherInfo.TaxCode,
+      Nome: teacherInfo.Name,
+      Cognome: teacherInfo.Surname,
+      Citta: teacherInfo.City,
+      Indirizzo: teacherInfo.Address,
+      Cellulare: teacherInfo.MobilePhone,
+      Email: teacherInfo.Email,
+      DataIscrizione: getFormattedDate(teacherInfo.RegistrationDate),
+      DataCertificato: getFormattedDate(teacherInfo.CertificateExpirationDate),
+      DataNascita: getFormattedDate(teacherInfo.DOB),
+      DataGreenPass: getFormattedDate(teacherInfo.GreenPassExpirationDate),
+      LuogoNascita: teacherInfo.BirthPlace,
+      Disciplina: teacherInfo.Discipline,
+      Corso: teacherInfo.Course,
+      Scuola: teacherInfo.School,
+    });
 
-    await pool.execute(
-      'INSERT INTO Insegnante (CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola) \
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [
-        TaxCode,
-        Name,
-        Surname,
-        City,
-        Address,
-        MobilePhone,
-        Email,
-        RegistrationDateFormatted,
-        CertificateExpirationDateFormatted,
-        DOBFormatted,
-        GreenPassExpirationDateFormatted,
-        BirthPlace,
-        Discipline,
-        Course,
-        School,
-      ]
-    );
-    return { message: 'Insegnante Inserita Correttamente!' };
+    return { TeacherID: newTeacherID[0], message: 'Insegnante Inserita Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: 'Errore nel creare Insegnante!' };
   }
 };
 
-const updateTeacher = async ({
-  TeacherID,
-  TaxCode,
-  Name,
-  Surname,
-  City,
-  Address,
-  MobilePhone,
-  Email,
-  RegistrationDate,
-  CertificateExpirationDate,
-  DOB,
-  GreenPassExpirationDate,
-  BirthPlace,
-  Discipline,
-  Course,
-  School,
-}) => {
+const updateTeacher = async (teacherInfo) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
-    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate);
-    const DOBFormatted = getFormattedDate(DOB);
-    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate);
+    await knex(TEACHER_TABLE)
+      .where({ InsegnanteID: teacherInfo.TeacherID })
+      .update({
+        CodiceFiscale: teacherInfo.TaxCode,
+        Nome: teacherInfo.Name,
+        Cognome: teacherInfo.Surname,
+        Citta: teacherInfo.City,
+        Indirizzo: teacherInfo.Address,
+        Cellulare: teacherInfo.MobilePhone,
+        Email: teacherInfo.Email,
+        DataIscrizione: getFormattedDate(teacherInfo.RegistrationDate),
+        DataCertificato: getFormattedDate(teacherInfo.CertificateExpirationDate),
+        DataNascita: getFormattedDate(teacherInfo.DOB),
+        DataGreenPass: getFormattedDate(teacherInfo.GreenPassExpirationDate),
+        LuogoNascita: teacherInfo.BirthPlace,
+        Disciplina: teacherInfo.Discipline,
+        Corso: teacherInfo.Course,
+        Scuola: teacherInfo.School,
+      });
 
-    await pool.execute(
-      `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
-      [
-        TaxCode,
-        Name,
-        Surname,
-        City,
-        Address,
-        MobilePhone,
-        Email,
-        RegistrationDateFormatted,
-        CertificateExpirationDateFormatted,
-        DOBFormatted,
-        GreenPassExpirationDateFormatted,
-        BirthPlace,
-        Discipline,
-        Course,
-        School,
-        TeacherID,
-      ]
-    );
     return { message: 'Insegnante Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
@@ -144,8 +93,9 @@ const updateTeacher = async ({
 
 const deleteTeacher = async (TeacherID) => {
   try {
-    await pool.execute('DELETE FROM insegnante WHERE InsegnanteID=?;', [TeacherID]);
-    return 'Insegnante Eliminata Correttamente!';
+    await knex(TEACHER_TABLE).where({ InsegnanteID: TeacherID }).del();
+
+    return { message: 'Insegnante Eliminata Correttamente!' };
   } catch (error) {
     console.log(error);
     return `Errore nell'eliminare Insegnante!`;
@@ -154,7 +104,7 @@ const deleteTeacher = async (TeacherID) => {
 
 module.exports = {
   getTeachers,
-  getSingleTeacher,
+  getTeacher,
   createTeacher,
   updateTeacher,
   deleteTeacher,

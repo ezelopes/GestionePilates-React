@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
-/* eslint-disable no-multi-str */
-const { knex, pool } = require('./connection');
+const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/index');
 
 const receiptType = [{ type: 'Quota' }, { type: 'Quota Associativa' }];
@@ -68,27 +65,27 @@ const getAllReceipts = async () => {
   return mappingAllReceipts(receipts);
 };
 
-const createReceipt = async (newReceipt) => {
+const createReceipt = async (receiptInfo) => {
   try {
-    const isMembershipFee = newReceipt.ReceiptType === receiptType[1].type;
+    const isMembershipFee = receiptInfo.ReceiptType === receiptType[1].type;
 
     const newReceiptID = await knex(RECEIPT_TABLE).insert({
-      NumeroRicevuta: newReceipt.ReceiptNumber,
-      TipoPagamento: newReceipt.PaymentMethod,
-      TipoRicevuta: newReceipt.ReceiptType,
-      DataRicevuta: getFormattedDate(newReceipt.ReceiptDate),
-      DataInizioCorso: isMembershipFee ? null : getFormattedDate(newReceipt.CourseStartDate),
-      DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(newReceipt.CourseEndDate),
-      SommaEuro: newReceipt.AmountPaid,
-      FK_CodiceFiscale: newReceipt.TaxCode,
-      FK_AllievaID: newReceipt.StudentID,
-      IncludeMembershipFee: isMembershipFee ? false : newReceipt.IncludeMembershipFee,
+      NumeroRicevuta: receiptInfo.ReceiptNumber,
+      TipoPagamento: receiptInfo.PaymentMethod,
+      TipoRicevuta: receiptInfo.ReceiptType,
+      DataRicevuta: getFormattedDate(receiptInfo.ReceiptDate),
+      DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
+      DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
+      SommaEuro: receiptInfo.AmountPaid,
+      FK_CodiceFiscale: receiptInfo.TaxCode,
+      FK_AllievaID: receiptInfo.StudentID,
+      IncludeMembershipFee: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
     });
 
-    if (newReceipt.RegistrationDate === true) {
+    if (receiptInfo.RegistrationDate === true) {
       await knex(STUDENT_TABLE)
-        .where({ AllievaID: newReceipt.StudentID })
-        .update({ DataIscrizione: getFormattedDate(newReceipt.CourseStartDate) });
+        .where({ AllievaID: receiptInfo.StudentID })
+        .update({ DataIscrizione: getFormattedDate(receiptInfo.CourseStartDate) });
     }
 
     return { ReceiptID: newReceiptID[0], message: 'Ricevuta Inserita Correttamente!' };
@@ -98,21 +95,21 @@ const createReceipt = async (newReceipt) => {
   }
 };
 
-const updateReceipt = async (receipt) => {
+const updateReceipt = async (receiptInfo) => {
   try {
-    const isMembershipFee = receipt.ReceiptType === receiptType[1].type;
+    const isMembershipFee = receiptInfo.ReceiptType === receiptType[1].type;
 
     await knex(RECEIPT_TABLE)
-      .where({ RicevutaID: receipt.ReceiptID })
+      .where({ RicevutaID: receiptInfo.ReceiptID })
       .update({
-        NumeroRicevuta: receipt.ReceiptNumber,
-        TipoPagamento: receipt.PaymentMethod,
-        TipoRicevuta: receipt.ReceiptType,
-        DataRicevuta: getFormattedDate(receipt.ReceiptDate),
-        DataInizioCorso: isMembershipFee ? null : getFormattedDate(receipt.CourseStartDate),
-        DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receipt.CourseEndDate),
-        SommaEuro: receipt.AmountPaid,
-        IncludeMembershipFee: isMembershipFee ? false : receipt.IncludeMembershipFee,
+        NumeroRicevuta: receiptInfo.ReceiptNumber,
+        TipoPagamento: receiptInfo.PaymentMethod,
+        TipoRicevuta: receiptInfo.ReceiptType,
+        DataRicevuta: getFormattedDate(receiptInfo.ReceiptDate),
+        DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
+        DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
+        SommaEuro: receiptInfo.AmountPaid,
+        IncludeMembershipFee: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
       });
 
     return { message: 'Ricevuta Aggiornata Correttamente!' };
