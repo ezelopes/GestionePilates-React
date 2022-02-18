@@ -13,7 +13,7 @@ const getStudentReceiptsEndpoint = async (req, res) => {
   }
 };
 
-const getAllReceiptsEndpoint = async (req, res) => {
+const getAllReceiptsEndpoint = async (_, res) => {
   try {
     const receipts = await getAllReceipts();
     res.status(200).send(receipts);

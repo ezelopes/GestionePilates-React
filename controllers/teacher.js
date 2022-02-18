@@ -3,7 +3,7 @@ const { getTeachers, getSingleTeacher, createTeacher, updateTeacher, deleteTeach
 
 const teacherRouter = new Router();
 
-const getTeachersEndpoint = async (req, res) => {
+const getTeachersEndpoint = async (_, res) => {
   try {
     const teachers = await getTeachers();
 
@@ -16,7 +16,7 @@ const getTeachersEndpoint = async (req, res) => {
 
 const getSingleTeacherEndpoint = async (req, res) => {
   try {
-    const TaxCode = req.params.TaxCode;
+    const { TaxCode } = req.params;
     const teacher = await getSingleTeacher(TaxCode);
 
     res.status(200).send(teacher);
@@ -50,7 +50,7 @@ const updateTeacherEndpoint = async (req, res) => {
 
 const deleteTeacherEndpoint = async (req, res) => {
   try {
-    const TeacherID = req.body.TeacherID;
+    const { TeacherID } = req.body;
     const response = await deleteTeacher(TeacherID);
     const responseObject = { message: response };
 

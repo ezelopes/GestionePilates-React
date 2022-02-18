@@ -10,7 +10,7 @@ const {
 
 const studentRouter = new Router();
 
-const getStudentsEndpoint = async (req, res) => {
+const getStudentsEndpoint = async (_, res) => {
   try {
     const students = await getStudents();
 
