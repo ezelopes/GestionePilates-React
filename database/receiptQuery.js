@@ -9,8 +9,8 @@ const receiptType = [{ type: 'Quota' }, { type: 'Quota Associativa' }];
 const STUDENT_TABLE = 'allieva';
 const RECEIPT_TABLE = 'ricevuta';
 
-const mappingReceipt = (rows) => {
-  const receipts = rows.map((row) => ({
+const mappingReceipt = (rows) =>
+  rows.map((row) => ({
     ReceiptID: row.RicevutaID,
     ReceiptType: row.TipoRicevuta,
     ReceiptDate: getFormattedDate(row.DataRicevuta),
@@ -22,11 +22,9 @@ const mappingReceipt = (rows) => {
     PaymentMethod: row.TipoPagamento,
     IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
   }));
-  return receipts;
-};
 
-const mappingAllReceipts = (rows) => {
-  const receipts = rows.map((row) => ({
+const mappingAllReceipts = (rows) =>
+  rows.map((row) => ({
     IsAdult: row.Maggiorenne,
     TaxCode: row.CodiceFiscale,
     Name: row.Nome,
@@ -55,8 +53,6 @@ const mappingAllReceipts = (rows) => {
     CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
     IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
   }));
-  return receipts;
-};
 
 const getStudentReceipts = async (TaxCode) => {
   const receipts = await knex(RECEIPT_TABLE).select().where({ FK_CodiceFiscale: TaxCode });
@@ -72,101 +68,53 @@ const getAllReceipts = async () => {
   return mappingAllReceipts(receipts);
 };
 
-const createReceipt = async ({
-  ReceiptNumber,
-  ReceiptDate,
-  CourseStartDate,
-  CourseEndDate,
-  AmountPaid,
-  PaymentMethod,
-  ReceiptType,
-  TaxCode,
-  StudentID,
-  RegistrationDate,
-  IncludeMembershipFee,
-}) => {
+const createReceipt = async (newReceipt) => {
   try {
-    // TODO: Reduce this code
-    const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
-    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
-    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
+    const isMembershipFee = newReceipt.ReceiptType === receiptType[1].type;
 
-    if (ReceiptType === receiptType[1].type) {
-      const [rows] = await pool.execute(
-        'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, IncludeMembershipFee) \
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
-        [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, AmountPaid, TaxCode, StudentID, false]
-      );
-      return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
+    const newReceiptID = await knex(RECEIPT_TABLE).insert({
+      NumeroRicevuta: newReceipt.ReceiptNumber,
+      TipoPagamento: newReceipt.PaymentMethod,
+      TipoRicevuta: newReceipt.ReceiptType,
+      DataRicevuta: getFormattedDate(newReceipt.ReceiptDate),
+      DataInizioCorso: isMembershipFee ? null : getFormattedDate(newReceipt.CourseStartDate),
+      DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(newReceipt.CourseEndDate),
+      SommaEuro: newReceipt.AmountPaid,
+      FK_CodiceFiscale: newReceipt.TaxCode,
+      FK_AllievaID: newReceipt.StudentID,
+      IncludeMembershipFee: isMembershipFee ? false : newReceipt.IncludeMembershipFee,
+    });
+
+    if (newReceipt.RegistrationDate === true) {
+      await knex(STUDENT_TABLE)
+        .where({ AllievaID: newReceipt.StudentID })
+        .update({ DataIscrizione: getFormattedDate(newReceipt.CourseStartDate) });
     }
 
-    const [rows] = await pool.execute(
-      'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, IncludeMembershipFee) \
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [
-        ReceiptNumber,
-        PaymentMethod,
-        ReceiptType,
-        ReceiptDateFormatted,
-        CourseStartDateFormatted,
-        CourseEndDateFormatted,
-        AmountPaid,
-        TaxCode,
-        StudentID,
-        IncludeMembershipFee,
-      ]
-    );
-
-    if (RegistrationDate === true) {
-      await pool.execute(`UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`, [CourseStartDateFormatted, StudentID]);
-    }
-
-    return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
+    return { ReceiptID: newReceiptID[0], message: 'Ricevuta Inserita Correttamente!' };
   } catch (error) {
     console.log(error);
     return { message: 'Errore nel creare la Ricevuta!' };
   }
 };
 
-const updateReceipt = async ({
-  ReceiptID,
-  ReceiptNumber,
-  PaymentMethod,
-  ReceiptType,
-  ReceiptDate,
-  CourseStartDate,
-  CourseEndDate,
-  AmountPaid,
-  IncludeMembershipFee,
-}) => {
+const updateReceipt = async (receipt) => {
   try {
-    // TODO: Reduce this code
-    const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
-    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
-    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
+    const isMembershipFee = receipt.ReceiptType === receiptType[1].type;
 
-    if (ReceiptType.toUpperCase() === 'QUOTA ASSOCIATIVA') {
-      await pool.execute(
-        'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;',
-        [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, null, null, AmountPaid, ReceiptID]
-      );
-      return { message: 'Ricevuta Aggiornata Correttamente!' };
-    }
+    await knex(RECEIPT_TABLE)
+      .where({ RicevutaID: receipt.ReceiptID })
+      .update({
+        NumeroRicevuta: receipt.ReceiptNumber,
+        TipoPagamento: receipt.PaymentMethod,
+        TipoRicevuta: receipt.ReceiptType,
+        DataRicevuta: getFormattedDate(receipt.ReceiptDate),
+        DataInizioCorso: isMembershipFee ? null : getFormattedDate(receipt.CourseStartDate),
+        DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receipt.CourseEndDate),
+        SommaEuro: receipt.AmountPaid,
+        IncludeMembershipFee: isMembershipFee ? false : receipt.IncludeMembershipFee,
+      });
 
-    await pool.execute(
-      `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=?, IncludeMembershipFee=? WHERE RicevutaID=?;`,
-      [
-        ReceiptNumber,
-        PaymentMethod,
-        ReceiptType,
-        ReceiptDateFormatted,
-        CourseStartDateFormatted,
-        CourseEndDateFormatted,
-        AmountPaid,
-        IncludeMembershipFee,
-        ReceiptID,
-      ]
-    );
     return { message: 'Ricevuta Aggiornata Correttamente!' };
   } catch (error) {
     console.log(error);
