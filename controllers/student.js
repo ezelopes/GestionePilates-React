@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const {
   getStudents,
-  getSingleStudent,
+  getStudent,
   getStudentWithReceipts,
   createStudent,
   updateStudent,
@@ -22,10 +22,10 @@ const getStudentsEndpoint = async (_, res) => {
   }
 };
 
-const getSingleStudentEndpoint = async (req, res) => {
+const getStudentEndpoint = async (req, res) => {
   try {
     const { TaxCode } = req.params;
-    const student = await getSingleStudent(TaxCode);
+    const student = await getStudent(TaxCode);
 
     res.status(200).send(student);
   } catch (e) {
@@ -98,7 +98,7 @@ const deleteStudentEndpoint = async (req, res) => {
 };
 
 studentRouter.get('/getStudents', getStudentsEndpoint);
-studentRouter.get('/getSingleStudent/:TaxCode', getSingleStudentEndpoint);
+studentRouter.get('/getStudent/:TaxCode', getStudentEndpoint);
 studentRouter.get('/getStudentWithReceipts/:TaxCode', getStudentWithReceiptsEndpoint);
 studentRouter.put('/createStudent', createStudentEndpoint);
 studentRouter.post('/updateStudent', updateStudentEndpoint);

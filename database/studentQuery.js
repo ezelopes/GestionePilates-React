@@ -48,7 +48,7 @@ const getStudents = async () => {
   return mappingStudents(students);
 };
 
-const getSingleStudent = async (TaxCode) => {
+const getStudent = async (TaxCode) => {
   const student = await knex(STUDENT_TABLE).select().where({ CodiceFiscale: TaxCode });
 
   return mappingStudents(student)[0];
@@ -160,7 +160,7 @@ const deleteStudent = async (StudentID) => {
 
 module.exports = {
   getStudents,
-  getSingleStudent,
+  getStudent,
   getStudentWithReceipts,
   createStudent,
   updateStudent,
