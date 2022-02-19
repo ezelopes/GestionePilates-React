@@ -9,7 +9,6 @@ const getTeachersEndpoint = async (_, res) => {
 
     res.status(200).send(teachers);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -21,7 +20,6 @@ const getTeacherEndpoint = async (req, res) => {
 
     res.status(200).send(teacher);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -32,7 +30,6 @@ const createTeacherEndpoint = async (req, res) => {
 
     res.status(200).send({ TeacherID, message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -43,7 +40,6 @@ const updateTeacherEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -55,7 +51,6 @@ const deleteTeacherEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };

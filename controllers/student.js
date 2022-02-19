@@ -17,7 +17,6 @@ const getStudentsEndpoint = async (_, res) => {
 
     res.status(200).send(students);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -29,7 +28,6 @@ const getStudentEndpoint = async (req, res) => {
 
     res.status(200).send(student);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -41,7 +39,6 @@ const getStudentWithReceiptsEndpoint = async (req, res) => {
 
     res.status(200).send({ student, receipts });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -56,7 +53,6 @@ const createStudentEndpoint = async (req, res) => {
 
     return res.status(200).send({ StudentID, message });
   } catch (e) {
-    console.log(e);
     return res.status(500).send({ message: e.message });
   }
 };
@@ -67,7 +63,6 @@ const updateStudentEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -80,7 +75,6 @@ const updateRegistrationDateEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -92,7 +86,6 @@ const deleteStudentEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };

@@ -1,38 +1,31 @@
 const { knex } = require('./connection');
-const { getFormattedDate } = require('./helpers/index');
+const { getFormattedDate } = require('./helpers/dates');
+const { mappingTeachers } = require('./helpers/mapDatabaseEntries');
 
 const TEACHER_TABLE = 'insegnante';
 
-const mappingTeachers = (rows) =>
-  rows.map((row) => ({
-    TeacherID: row.InsegnanteID,
-    TaxCode: row.CodiceFiscale,
-    Name: row.Nome,
-    Surname: row.Cognome,
-    City: row.Citta,
-    Address: row.Indirizzo,
-    MobilePhone: row.Cellulare,
-    Email: row.Email,
-    RegistrationDate: getFormattedDate(row.DataIscrizione),
-    CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-    DOB: getFormattedDate(row.DataNascita),
-    GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
-    BirthPlace: row.LuogoNascita,
-    Discipline: row.Disciplina,
-    Course: row.Corso,
-    School: row.Scuola,
-  }));
-
 const getTeachers = async () => {
-  const teachers = await knex(TEACHER_TABLE).select();
+  try {
+    const teachers = await knex(TEACHER_TABLE).select();
 
-  return mappingTeachers(teachers);
+    return mappingTeachers(teachers);
+  } catch (error) {
+    console.log(error);
+
+    return { message: 'Errore nel recuperare i dati delle insegnanti!' };
+  }
 };
 
 const getTeacher = async (TaxCode) => {
-  const teacher = await knex(TEACHER_TABLE).select().where({ CodiceFiscale: TaxCode });
+  try {
+    const teacher = await knex(TEACHER_TABLE).select().where({ CodiceFiscale: TaxCode });
 
-  return mappingTeachers(teacher)[0];
+    return mappingTeachers(teacher)[0];
+  } catch (error) {
+    console.log(error);
+
+    return { message: `Errore nel recuperare i dati dell'insegnante!` };
+  }
 };
 
 const createTeacher = async (teacherInfo) => {

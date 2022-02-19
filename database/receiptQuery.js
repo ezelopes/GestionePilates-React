@@ -1,73 +1,44 @@
 const { knex } = require('./connection');
-const { getFormattedDate } = require('./helpers/index');
+const { getFormattedDate } = require('./helpers/dates');
+const { mappingReceipt, mappingReceiptsWithStudentInfo } = require('./helpers/mapDatabaseEntries');
 
-const receiptType = [{ type: 'Quota' }, { type: 'Quota Associativa' }];
+const receiptTypes = {
+  paymentFee: 'QUOTA',
+  membershipFee: 'QUOTA ASSOCIATIVA',
+};
 
 const STUDENT_TABLE = 'allieva';
 const RECEIPT_TABLE = 'ricevuta';
 
-const mappingReceipt = (rows) =>
-  rows.map((row) => ({
-    ReceiptID: row.RicevutaID,
-    ReceiptType: row.TipoRicevuta,
-    ReceiptDate: getFormattedDate(row.DataRicevuta),
-    CourseStartDate: getFormattedDate(row.DataInizioCorso),
-    CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-    ReceiptNumber: row.NumeroRicevuta,
-    AmountPaid: row.SommaEuro,
-    FK_StudentID: row.FK_AllievaID,
-    PaymentMethod: row.TipoPagamento,
-    IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
-  }));
-
-const mappingAllReceipts = (rows) =>
-  rows.map((row) => ({
-    IsAdult: row.Maggiorenne,
-    TaxCode: row.CodiceFiscale,
-    Name: row.Nome,
-    Surname: row.Cognome,
-    City: row.Citta,
-    Address: row.Indirizzo,
-    MobilePhone: row.Cellulare,
-    Email: row.Email,
-    RegistrationDate: getFormattedDate(row.DataIscrizione),
-    CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-    DOB: getFormattedDate(row.DataNascita),
-    BirthPlace: row.LuogoNascita,
-    Discipline: row.Disciplina,
-    Course: row.Corso,
-    School: row.Scuola,
-    ParentName: row.NomeGenitore,
-    ParentSurname: row.CognomeGenitore,
-    ParentTaxCode: row.CodiceFiscaleGenitore,
-
-    ReceiptNumber: row.NumeroRicevuta,
-    AmountPaid: row.SommaEuro,
-    PaymentMethod: row.TipoPagamento,
-    ReceiptType: row.TipoRicevuta,
-    ReceiptDate: getFormattedDate(row.DataRicevuta),
-    CourseStartDate: getFormattedDate(row.DataInizioCorso),
-    CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-    IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
-  }));
-
 const getStudentReceipts = async (TaxCode) => {
-  const receipts = await knex(RECEIPT_TABLE).select().where({ FK_CodiceFiscale: TaxCode });
+  try {
+    const receipts = await knex(RECEIPT_TABLE).select().where({ FK_CodiceFiscale: TaxCode });
 
-  return mappingReceipt(receipts);
+    return mappingReceipt(receipts);
+  } catch (error) {
+    console.log(error);
+
+    return { message: 'Errore nel recuperare le ricevute!' };
+  }
 };
 
 const getAllReceipts = async () => {
-  const receipts = await knex(RECEIPT_TABLE)
-    .join(STUDENT_TABLE, `${RECEIPT_TABLE}.FK_AllievaID`, '=', `${STUDENT_TABLE}.AllievaID`)
-    .select();
+  try {
+    const receipts = await knex(RECEIPT_TABLE)
+      .join(STUDENT_TABLE, `${RECEIPT_TABLE}.FK_AllievaID`, '=', `${STUDENT_TABLE}.AllievaID`)
+      .select();
 
-  return mappingAllReceipts(receipts);
+    return mappingReceiptsWithStudentInfo(receipts);
+  } catch (error) {
+    console.log(error);
+
+    return { message: 'Errore nel recuperare le ricevute!' };
+  }
 };
 
 const createReceipt = async (receiptInfo) => {
   try {
-    const isMembershipFee = receiptInfo.ReceiptType === receiptType[1].type;
+    const isMembershipFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.membershipFee;
 
     const newReceiptID = await knex(RECEIPT_TABLE).insert({
       NumeroRicevuta: receiptInfo.ReceiptNumber,
@@ -97,7 +68,7 @@ const createReceipt = async (receiptInfo) => {
 
 const updateReceipt = async (receiptInfo) => {
   try {
-    const isMembershipFee = receiptInfo.ReceiptType === receiptType[1].type;
+    const isMembershipFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.membershipFee;
 
     await knex(RECEIPT_TABLE)
       .where({ RicevutaID: receiptInfo.ReceiptID })

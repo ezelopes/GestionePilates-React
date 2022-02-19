@@ -1,72 +1,51 @@
 const { knex } = require('./connection');
-const { getFormattedDate } = require('./helpers/index');
+const { getFormattedDate } = require('./helpers/dates');
+const { mappingStudents, mappingReceipt } = require('./helpers/mapDatabaseEntries');
 
 const STUDENT_TABLE = 'allieva';
 const RECEIPT_TABLE = 'ricevuta';
 
-const mappingStudents = (rows) =>
-  rows.map((row) => ({
-    StudentID: row.AllievaID,
-    IsAdult: row.Maggiorenne,
-    TaxCode: row.CodiceFiscale,
-    Name: row.Nome,
-    Surname: row.Cognome,
-    City: row.Citta,
-    Address: row.Indirizzo,
-    MobilePhone: row.Cellulare,
-    Email: row.Email,
-    BirthPlace: row.LuogoNascita,
-    Discipline: row.Disciplina,
-    Course: row.Corso,
-    School: row.Scuola,
-    RegistrationDate: getFormattedDate(row.DataIscrizione),
-    CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-    DOB: getFormattedDate(row.DataNascita),
-    GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
-    ParentTaxCode: row.CodiceFiscaleGenitore,
-    ParentName: row.NomeGenitore,
-    ParentSurname: row.CognomeGenitore,
-  }));
-
-const mappingReceipt = (rows) =>
-  rows
-    .map((row) => ({
-      ReceiptID: row.RicevutaID,
-      ReceiptType: row.TipoRicevuta,
-      ReceiptDate: getFormattedDate(row.DataRicevuta),
-      CourseStartDate: getFormattedDate(row.DataInizioCorso),
-      CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-      ReceiptNumber: row.NumeroRicevuta,
-      AmountPaid: row.SommaEuro,
-      FK_StudentID: row.FK_AllievaID,
-      PaymentMethod: row.TipoPagamento,
-      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
-    }))
-    .filter((row) => !!row.ReceiptID); // Remove null values
-
 const getStudents = async () => {
-  const students = await knex(STUDENT_TABLE).select();
+  try {
+    const students = await knex(STUDENT_TABLE).select();
 
-  return mappingStudents(students);
+    return mappingStudents(students);
+  } catch (error) {
+    console.log(error);
+
+    return { message: 'Errore nel recuperare i dati delle Allieve!' };
+  }
 };
 
 const getStudent = async (TaxCode) => {
-  const student = await knex(STUDENT_TABLE).select().where({ CodiceFiscale: TaxCode });
+  try {
+    const student = await knex(STUDENT_TABLE).select().where({ CodiceFiscale: TaxCode });
 
-  return mappingStudents(student)[0];
+    return mappingStudents(student)[0];
+  } catch (error) {
+    console.log(error);
+
+    return { message: `Errore nel recuperare i dati dell'Allieva!` };
+  }
 };
 
 const getStudentWithReceipts = async (TaxCode) => {
-  // Left join always return student info even if no receipts are found.
-  const studentWithReceipts = await knex(STUDENT_TABLE)
-    .leftJoin(RECEIPT_TABLE, `${STUDENT_TABLE}.AllievaID`, '=', `${RECEIPT_TABLE}.FK_AllievaID`)
-    .where({ CodiceFiscale: TaxCode })
-    .select();
+  try {
+    // Left join always return student info even if no receipts are found.
+    const studentWithReceipts = await knex(STUDENT_TABLE)
+      .leftJoin(RECEIPT_TABLE, `${STUDENT_TABLE}.AllievaID`, '=', `${RECEIPT_TABLE}.FK_AllievaID`)
+      .where({ CodiceFiscale: TaxCode })
+      .select();
 
-  const student = mappingStudents(studentWithReceipts)[0];
-  const receipts = mappingReceipt(studentWithReceipts);
+    const student = mappingStudents(studentWithReceipts)[0];
+    const receipts = mappingReceipt(studentWithReceipts);
 
-  return { student, receipts };
+    return { student, receipts };
+  } catch (error) {
+    console.log(error);
+
+    return { message: `Errore nel recuperare i dati dell'Allieva!` };
+  }
 };
 
 const createStudent = async (studentInfo) => {
