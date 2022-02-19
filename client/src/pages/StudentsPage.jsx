@@ -11,7 +11,7 @@ import { getAllStudents } from '../helpers/apiCalls';
 
 import Divider from '../components/common/Divider';
 
-import { ages, months, years } from '../commondata/commondata';
+import { ages, months, years } from '../commondata';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';

@@ -5,13 +5,13 @@ import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import CreateUpdateUserForm from '../CreateUpdateUserForm';
+import CreateUpdateUserForm from '../forms/CreateUpdateUserForm';
 import { TeacherProvider } from './TeacherContext';
 
 import { updateTeacher, deleteTeacher } from '../../helpers/apiCalls';
 import toastConfig from '../../helpers/toast.config';
 
-import { userType } from '../../commondata/commondata';
+import { userType } from '../../commondata';
 
 const RegistrationFormTemplate = require('../../pdfTemplates/RegistrationFormTemplate');
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStudent } from '../helpers/apiCalls';
 
-import { userType } from '../commondata/commondata';
+import { userType } from '../commondata';
 
-import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
+import CreateUpdateUserForm from '../components/forms/CreateUpdateUserForm';
 
 const StudentSubscriptionPage = () => (
   <>

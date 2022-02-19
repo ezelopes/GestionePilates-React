@@ -8,16 +8,16 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import NotFoundPage from './NotFoundPage';
 
-import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/Student/StudentReceiptsList';
-import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
+import CreateUpdateUserForm from '../components/forms/CreateUpdateUserForm';
+import CreateUpdateReceiptForm from '../components/forms/CreateUpdateReceiptForm';
 import { StudentProvider } from '../components/Student/StudentContext';
 import Divider from '../components/common/Divider';
 
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
 
-import { userType } from '../commondata/commondata';
+import { userType } from '../commondata';
 
 const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 

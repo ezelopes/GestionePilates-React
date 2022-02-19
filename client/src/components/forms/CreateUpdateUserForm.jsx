@@ -4,11 +4,11 @@ import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
-import Divider from './common/Divider';
+import Divider from '../common/Divider';
 
-import toastConfig from '../helpers/toast.config';
+import toastConfig from '../../helpers/toast.config';
 
-import { userType, ages, disciplines, schools, courses } from '../commondata/commondata';
+import { userType, ages, disciplines, schools, courses } from '../../commondata';
 
 const isStudent = (type) => type === userType[0].user;
 

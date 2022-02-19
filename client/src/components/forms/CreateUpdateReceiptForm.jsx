@@ -6,14 +6,14 @@ import { useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
 
-import Divider from './common/Divider';
+import Divider from '../common/Divider';
 
-import { useStudent } from './Student/StudentContext';
+import { useStudent } from '../Student/StudentContext';
 
-import toastConfig from '../helpers/toast.config';
-import formatDate from '../helpers/formatDateForInputDate';
+import toastConfig from '../../helpers/toast.config';
+import formatDate from '../../helpers/formatDateForInputDate';
 
-import { receiptType, paymentMethod, defaultAmounts } from '../commondata/commondata';
+import { receiptType, paymentMethod, defaultAmounts } from '../../commondata';
 
 const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {

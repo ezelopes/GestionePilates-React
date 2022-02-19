@@ -5,10 +5,10 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
-import CreateUpdateReceiptForm from '../CreateUpdateReceiptForm';
+import CreateUpdateReceiptForm from '../forms/CreateUpdateReceiptForm';
 import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
 import toastConfig from '../../helpers/toast.config';
-import { ages, receiptType } from '../../commondata/commondata';
+import { ages, receiptType } from '../../commondata';
 
 import { useStudent } from './StudentContext';
 

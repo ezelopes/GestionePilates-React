@@ -4,7 +4,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import toastConfig from './toast.config';
 
-import { ages, receiptType, getMonthFromId } from '../commondata/commondata';
+import { ages, receiptType, getMonthFromId } from '../commondata';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 

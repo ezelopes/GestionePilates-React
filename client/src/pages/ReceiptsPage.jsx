@@ -5,7 +5,7 @@ import MembershipFeeList from '../components/Receipts/MembershipFeesList';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import { getAllReceipts } from '../helpers/apiCalls';
 
-import { receiptType } from '../commondata/commondata';
+import { receiptType } from '../commondata';
 
 const ReceiptsPage = () => {
   const [allReceipts, setAllReceipts] = useState([]);
