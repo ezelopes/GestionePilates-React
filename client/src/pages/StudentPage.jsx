@@ -56,7 +56,7 @@ const StudentPage = ({ match }) => {
       const { student, receipts } = await getStudentWithReceipts(match.params.TaxCode);
 
       setStudentInfo(student);
-      setNewRegistrationDate(student.RegistrationDate);
+      setNewRegistrationDate(student?.RegistrationDate);
       setStudentReceipts(receipts);
 
       setLoading(false);

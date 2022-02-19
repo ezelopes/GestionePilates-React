@@ -29,18 +29,20 @@ const mappingStudents = (rows) =>
   }));
 
 const mappingReceipt = (rows) =>
-  rows.map((row) => ({
-    ReceiptID: row.RicevutaID,
-    ReceiptType: row.TipoRicevuta,
-    ReceiptDate: getFormattedDate(row.DataRicevuta),
-    CourseStartDate: getFormattedDate(row.DataInizioCorso),
-    CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-    ReceiptNumber: row.NumeroRicevuta,
-    AmountPaid: row.SommaEuro,
-    FK_StudentID: row.FK_AllievaID,
-    PaymentMethod: row.TipoPagamento,
-    IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
-  }));
+  rows
+    .map((row) => ({
+      ReceiptID: row.RicevutaID,
+      ReceiptType: row.TipoRicevuta,
+      ReceiptDate: getFormattedDate(row.DataRicevuta),
+      CourseStartDate: getFormattedDate(row.DataInizioCorso),
+      CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
+      ReceiptNumber: row.NumeroRicevuta,
+      AmountPaid: row.SommaEuro,
+      FK_StudentID: row.FK_AllievaID,
+      PaymentMethod: row.TipoPagamento,
+      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
+    }))
+    .filter((row) => !!row.ReceiptID); // Remove null values
 
 const getStudents = async () => {
   const students = await knex(STUDENT_TABLE).select();
@@ -55,8 +57,9 @@ const getStudent = async (TaxCode) => {
 };
 
 const getStudentWithReceipts = async (TaxCode) => {
-  const studentWithReceipts = await knex(RECEIPT_TABLE)
-    .join(STUDENT_TABLE, `${RECEIPT_TABLE}.FK_AllievaID`, '=', `${STUDENT_TABLE}.AllievaID`)
+  // Left join always return student info even if no receipts are found.
+  const studentWithReceipts = await knex(STUDENT_TABLE)
+    .leftJoin(RECEIPT_TABLE, `${STUDENT_TABLE}.AllievaID`, '=', `${RECEIPT_TABLE}.FK_AllievaID`)
     .where({ CodiceFiscale: TaxCode })
     .select();
 
