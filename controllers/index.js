@@ -9,7 +9,7 @@ router.use('/student', student);
 router.use('/receipt', receipt);
 router.use('/teacher', teacher);
 
-// if path corresponds to none of the above
+// If path corresponds to none of the above
 router.use('/', (req, res) => {
   res.status(404).send({
     message: 'This endpoint does not exist :(',

@@ -20,8 +20,6 @@
     "func-names": "off",
     "max-len": ["warn", 130],
     "curly": ["warn", "all"],
-    "react/jsx-props-no-spreading": "off",
-    "react/forbid-prop-types": 0,
     "no-console": "off",
     "capitalized-comments": [
       "warn",
@@ -30,5 +28,11 @@
         "ignoreConsecutiveComments": true
       }
     ]
+  },
+  // Removing warning only.
+  "settings": {
+    "react": {
+      "version": "17"
+    }
   }
 }
