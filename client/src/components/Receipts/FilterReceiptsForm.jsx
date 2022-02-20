@@ -15,6 +15,20 @@ const filterFields = [
   { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
 ];
 
+// TODO: FIX FILTER FUNCTIONS !!!! (AND ESLINT PLS)
+
+const validateDateBetweenTwoDates = (fromDateValidation, toDateValidation, givenDate) =>
+  new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation);
+
+const validateCourseDatesBetweenTwoDates = (fromDateValidation, toDateValidation, CourseStartDate, CourseEndDate) =>
+  new Date(CourseStartDate) >= new Date(fromDateValidation) && new Date(CourseEndDate) <= new Date(toDateValidation);
+
+const printMembershipFeeSummaryByMonth = (allReceipts, fromDate, toDate) => {
+  const receipts = allReceipts.filter(({ ReceiptDate }) => validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate));
+
+  return printMembershipFeeSummaryTemplate(receipts, formatDate(new Date(fromDate)), formatDate(new Date(toDate)));
+};
+
 const FilterReceiptsForm = ({
   allReceipts,
   setCurrentReceipts,
@@ -22,11 +36,10 @@ const FilterReceiptsForm = ({
   setReceiptsForAmountSummary,
   gridOptions,
   isMembershipFee,
-  filterByField,
-  setFilterByField,
 }) => {
   const today = formatDate(new Date(), true);
 
+  const [filterByField, setFilterByField] = useState(filterFields[0].field);
   const [filteredPaymentMethod, setFilteredPaymentMethod] = useState(null);
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
@@ -36,14 +49,9 @@ const FilterReceiptsForm = ({
   const [showFilteredAmountModal, setShowFilteredAmountModal] = useState(false);
 
   const selectPaymentMethodRef = useRef();
+  const selectFilterFieldRef = useRef();
   const fromDateRef = useRef();
   const toDateRef = useRef();
-
-  const validateDateBetweenTwoDates = (fromDateValidation, toDateValidation, givenDate) =>
-    new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation);
-
-  const validateCourseDatesBetweenTwoDates = (fromDateValidation, toDateValidation, CourseStartDate, CourseEndDate) =>
-    new Date(CourseStartDate) >= new Date(fromDateValidation) && new Date(CourseEndDate) <= new Date(toDateValidation);
 
   const filterReceipts = () => {
     const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate, CourseStartDate, CourseEndDate }) =>
@@ -84,13 +92,8 @@ const FilterReceiptsForm = ({
 
     setReceiptsForAmountSummary(orderedReceipts);
     setTotalAmountPaid(filteredAmount);
+
     return setShowFilteredAmountModal(true);
-  };
-
-  const printMembershipFeeSummaryByMonth = () => {
-    const receipts = allReceipts.filter(({ ReceiptDate }) => validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate));
-
-    return printMembershipFeeSummaryTemplate(receipts, formatDate(new Date(fromDate)), formatDate(new Date(toDate)));
   };
 
   const clearFilters = () => {
@@ -101,6 +104,9 @@ const FilterReceiptsForm = ({
       gridOptions.api.onFilterChanged();
 
       selectPaymentMethodRef.current.value = null;
+      selectFilterFieldRef.current.value = filterFields[0].field;
+
+      setFilterByField(filterFields[0].field);
     }
 
     // Set default values in other components
@@ -117,7 +123,7 @@ const FilterReceiptsForm = ({
         {!isMembershipFee && (
           <Form.Group>
             <Form.Label> Filtra per: </Form.Label>
-            <Form.Control as="select" onChange={({ target }) => setFilterByField(target.value)}>
+            <Form.Control ref={selectFilterFieldRef} as="select" onChange={({ target }) => setFilterByField(target.value)}>
               {filterFields.map(({ field, description }) => (
                 <option key={`select_${field}`} value={field}>
                   {description}
@@ -166,7 +172,7 @@ const FilterReceiptsForm = ({
             </span>
           </Button>
         ) : (
-          <Button variant="success" onClick={printMembershipFeeSummaryByMonth}>
+          <Button variant="success" onClick={() => printMembershipFeeSummaryByMonth(allReceipts, fromDate, toDate)}>
             <span role="img" aria-label="summary">
               🖨️ Stampa Riepilogo Quote Associative
             </span>
@@ -206,16 +212,12 @@ FilterReceiptsForm.propTypes = {
   setCurrentReceipts: PropTypes.func.isRequired,
   gridOptions: PropTypes.object.isRequired,
   isMembershipFee: PropTypes.bool,
-  filterByField: PropTypes.string,
-  setFilterByField: PropTypes.func,
 };
 
 FilterReceiptsForm.defaultProps = {
   receiptsForAmountSummary: [],
   setReceiptsForAmountSummary: () => {},
   isMembershipFee: false,
-  filterByField: null,
-  setFilterByField: () => {},
 };
 
 export default FilterReceiptsForm;

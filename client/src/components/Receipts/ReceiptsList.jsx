@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { AgGridReact } from 'ag-grid-react'
-import { Button } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import { Button } from 'react-bootstrap';
 
-import FilterReceiptsForm from './FilterReceiptsForm'
+import FilterReceiptsForm from './FilterReceiptsForm';
 
-import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF'
-import { useReceipt } from './ReceiptContext'
+import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
+import { useReceipt } from './ReceiptContext';
 
-require('ag-grid-community/dist/styles/ag-grid.css')
-require('ag-grid-community/dist/styles/ag-theme-balham.css')
+require('ag-grid-community/dist/styles/ag-grid.css');
+require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
@@ -31,7 +31,7 @@ const columnsDefinition = [
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
-]
+];
 
 const gridOptionsDefault = {
   defaultColDef: {
@@ -43,41 +43,36 @@ const gridOptionsDefault = {
     flex: 10,
   },
   rowSelection: 'single',
-}
-
-const filterFields = [
-  { field: 'receipt_date', description: 'Data Ricevuta' },
-  { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
-]
+};
 
 const ReceiptsList = () => {
-  const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt()
+  const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt();
 
-  const [gridOptions] = useState(gridOptionsDefault)
-  const [columnDefs] = useState(columnsDefinition)
-  const [selectedReceipts, setSelectedReceipts] = useState([])
-  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([])
+  const [gridOptions] = useState(gridOptionsDefault);
+  const [columnDefs] = useState(columnsDefinition);
 
-  const [filterByField, setFilterByField] = useState(filterFields[0].field)
+  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
+
+  const [selectedReceipts, setSelectedReceipts] = useState([]);
 
   const onReceiptSelectionChanged = () => {
-    const selectedNodes = gridOptions.api.getSelectedNodes()
+    const selectedNodes = gridOptions.api.getSelectedNodes();
     if (selectedNodes.length === 0) {
-      return setSelectedReceipts([])
+      return setSelectedReceipts([]);
     }
 
-    const receipts = []
+    const receipts = [];
     selectedNodes.forEach((node) => {
-      receipts.push(node.data)
-    })
+      receipts.push(node.data);
+    });
 
-    return setSelectedReceipts(receipts)
-  }
+    return setSelectedReceipts(receipts);
+  };
 
   useEffect(() => {
-    setSelectedReceipts([])
-    setReceiptsForAmountSummary([])
-  }, [currentReceipts])
+    setSelectedReceipts([]);
+    setReceiptsForAmountSummary([]);
+  }, [currentReceipts]);
 
   return (
     <div className="tab-content">
@@ -87,8 +82,6 @@ const ReceiptsList = () => {
         setCurrentReceipts={setCurrentReceipts}
         setReceiptsForAmountSummary={setReceiptsForAmountSummary}
         gridOptions={gridOptions}
-        filterByField={filterByField}
-        setFilterByField={setFilterByField}
       />
       <div className="ag-theme-balham receipts-grid">
         <AgGridReact
@@ -105,27 +98,19 @@ const ReceiptsList = () => {
       </div>
 
       <div className="buttons-container">
-        <Button
-          variant="success"
-          onClick={() => printSelectedReceipts(selectedReceipts)}
-          disabled={filterByField !== 'receipt_date'}
-        >
+        <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)}>
           <span role="img" aria-label="print-selected">
             🖨️ Stampa Ricevute Selezionate
           </span>
         </Button>
-        <Button
-          variant="success"
-          onClick={() => printExpiringStudents(currentReceipts)}
-          disabled={filterByField !== 'course_date'}
-        >
+        <Button variant="success" onClick={() => printExpiringStudents(currentReceipts)}>
           <span role="img" aria-label="print-selected">
             🖨️ Lista Allieve In Scadenza
           </span>
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ReceiptsList
+export default ReceiptsList;

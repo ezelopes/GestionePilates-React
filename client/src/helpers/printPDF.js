@@ -279,7 +279,6 @@ const printTeacherRegistrationForm = async (teacherInfo) => {
   }
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export {
   printSelectedReceipts,
   printMembershipFeeSummaryTemplate,
