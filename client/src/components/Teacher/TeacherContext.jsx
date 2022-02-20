@@ -5,9 +5,7 @@ const TeacherContext = createContext(null);
 
 const useTeacher = () => useContext(TeacherContext);
 
-const TeacherProvider = ({ teacherInfo, children }) => (
-  <TeacherContext.Provider value={{ teacherInfo }}>{children}</TeacherContext.Provider>
-);
+const TeacherProvider = ({ children, ...props }) => <TeacherContext.Provider value={props}>{children}</TeacherContext.Provider>;
 
 TeacherProvider.propTypes = {
   teacherInfo: PropTypes.object.isRequired,

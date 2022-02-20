@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { AgGridReact } from 'ag-grid-react';
-import { Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'
+import { AgGridReact } from 'ag-grid-react'
+import { Button } from 'react-bootstrap'
 
-import FilterReceiptsForm from './FilterReceiptsForm';
+import FilterReceiptsForm from './FilterReceiptsForm'
 
-import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
+import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF'
+import { useReceipt } from './ReceiptContext'
 
-require('ag-grid-community/dist/styles/ag-grid.css');
-require('ag-grid-community/dist/styles/ag-theme-balham.css');
+require('ag-grid-community/dist/styles/ag-grid.css')
+require('ag-grid-community/dist/styles/ag-theme-balham.css')
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
@@ -31,7 +31,7 @@ const columnsDefinition = [
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
-];
+]
 
 const gridOptionsDefault = {
   defaultColDef: {
@@ -43,39 +43,41 @@ const gridOptionsDefault = {
     flex: 10,
   },
   rowSelection: 'single',
-};
+}
 
 const filterFields = [
   { field: 'receipt_date', description: 'Data Ricevuta' },
   { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
-];
+]
 
-const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
-  const [selectedReceipts, setSelectedReceipts] = useState([]);
-  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
+const ReceiptsList = () => {
+  const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt()
 
-  const [filterByField, setFilterByField] = useState(filterFields[0]);
+  const [gridOptions] = useState(gridOptionsDefault)
+  const [columnDefs] = useState(columnsDefinition)
+  const [selectedReceipts, setSelectedReceipts] = useState([])
+  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([])
+
+  const [filterByField, setFilterByField] = useState(filterFields[0].field)
 
   const onReceiptSelectionChanged = () => {
-    const selectedNodes = gridOptions.api.getSelectedNodes();
+    const selectedNodes = gridOptions.api.getSelectedNodes()
     if (selectedNodes.length === 0) {
-      return setSelectedReceipts([]);
+      return setSelectedReceipts([])
     }
 
-    const receipts = [];
+    const receipts = []
     selectedNodes.forEach((node) => {
-      receipts.push(node.data);
-    });
+      receipts.push(node.data)
+    })
 
-    return setSelectedReceipts(receipts);
-  };
+    return setSelectedReceipts(receipts)
+  }
 
   useEffect(() => {
-    setSelectedReceipts([]);
-    setReceiptsForAmountSummary([]);
-  }, [currentReceipts]);
+    setSelectedReceipts([])
+    setReceiptsForAmountSummary([])
+  }, [currentReceipts])
 
   return (
     <div className="tab-content">
@@ -123,13 +125,7 @@ const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-ReceiptsList.propTypes = {
-  allReceipts: PropTypes.array.isRequired,
-  currentReceipts: PropTypes.array.isRequired,
-  setCurrentReceipts: PropTypes.func.isRequired,
-};
-
-export default ReceiptsList;
+export default ReceiptsList

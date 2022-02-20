@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { AgGridReact } from 'ag-grid-react';
+import React, { useState } from 'react'
+import { AgGridReact } from 'ag-grid-react'
 
-import FilterReceiptsForm from './FilterReceiptsForm';
+import FilterReceiptsForm from './FilterReceiptsForm'
+import { useReceipt } from './ReceiptContext'
 
-require('ag-grid-community/dist/styles/ag-grid.css');
-require('ag-grid-community/dist/styles/ag-theme-balham.css');
+require('ag-grid-community/dist/styles/ag-grid.css')
+require('ag-grid-community/dist/styles/ag-theme-balham.css')
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -17,7 +17,7 @@ const columnsDefinition = [
     cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
-];
+]
 
 const gridOptionsDefault = {
   defaultColDef: {
@@ -28,11 +28,13 @@ const gridOptionsDefault = {
     cellStyle: { fontSize: '1.5em' },
     flex: 10,
   },
-};
+}
 
-const MembershipFeesList = ({ allMembershipFees, currentMembershipFees, setCurrentMembershipFees }) => {
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
+const MembershipFeesList = () => {
+  const { allMembershipFees, currentMembershipFees, setCurrentMembershipFees } = useReceipt()
+
+  const [gridOptions] = useState(gridOptionsDefault)
+  const [columnDefs] = useState(columnsDefinition)
 
   return (
     <div className="tab-content">
@@ -56,13 +58,7 @@ const MembershipFeesList = ({ allMembershipFees, currentMembershipFees, setCurre
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-MembershipFeesList.propTypes = {
-  allMembershipFees: PropTypes.array.isRequired,
-  currentMembershipFees: PropTypes.array.isRequired,
-  setCurrentMembershipFees: PropTypes.func.isRequired,
-};
-
-export default MembershipFeesList;
+export default MembershipFeesList
