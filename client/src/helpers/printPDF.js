@@ -99,6 +99,33 @@ const printSelectedReceipts = async (selectedReceipts) => {
   }
 };
 
+const printStudentReceipt = async (selectedReceipt, studentInfo) => {
+  try {
+    if (!selectedReceipt) {
+      return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
+    }
+
+    let documentDefinition;
+
+    if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) {
+      documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
+    } else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type) {
+      documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
+    } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type) {
+      documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
+    } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type) {
+      documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
+    }
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success('PDF Ricevuta Creato Correttamente', toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(`Un errore se e' verificato nello stampare la ricevuta`, toastConfig);
+  }
+};
+
 const printMembershipFeeSummaryTemplate = async (studentMembershipFeeList, fromData, toDate) => {
   try {
     if (studentMembershipFeeList.length < 1) {
@@ -281,6 +308,7 @@ const printTeacherRegistrationForm = async (teacherInfo) => {
 
 export {
   printSelectedReceipts,
+  printStudentReceipt,
   printMembershipFeeSummaryTemplate,
   printReceiptsDetails,
   printExpiringStudents,

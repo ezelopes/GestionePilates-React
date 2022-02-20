@@ -15,13 +15,13 @@ const filterFields = [
   { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
 ];
 
-// TODO: FIX FILTER FUNCTIONS !!!! (AND ESLINT PLS)
-
 const validateDateBetweenTwoDates = (fromDateValidation, toDateValidation, givenDate) =>
-  new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation);
+  givenDate ? new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation) : null;
 
 const validateCourseDatesBetweenTwoDates = (fromDateValidation, toDateValidation, CourseStartDate, CourseEndDate) =>
-  new Date(CourseStartDate) >= new Date(fromDateValidation) && new Date(CourseEndDate) <= new Date(toDateValidation);
+  CourseStartDate && CourseEndDate
+    ? new Date(CourseStartDate) >= new Date(fromDateValidation) && new Date(CourseEndDate) <= new Date(toDateValidation)
+    : null;
 
 const printMembershipFeeSummaryByMonth = (allReceipts, fromDate, toDate) => {
   const receipts = allReceipts.filter(({ ReceiptDate }) => validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate));

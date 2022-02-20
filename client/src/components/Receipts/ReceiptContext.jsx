@@ -11,9 +11,6 @@ ReceiptProvider.propTypes = {
   allReceipts: PropTypes.array.isRequired,
   currentReceipts: PropTypes.array.isRequired,
   setCurrentReceipts: PropTypes.func.isRequired,
-  allMembershipFees: PropTypes.array.isRequired,
-  currentMembershipFees: PropTypes.array.isRequired,
-  setCurrentMembershipFees: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 

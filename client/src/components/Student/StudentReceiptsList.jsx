@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
 import CreateUpdateReceiptForm from '../forms/CreateUpdateReceiptForm';
 import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
+import { printStudentReceipt } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
-import { ages, receiptType } from '../../commondata';
 
 import { useStudent } from './StudentContext';
-
-const ReceiptTemplateAdult = require('../../pdfTemplates/ReceiptTemplateAdult');
-const ReceiptTemplateUnderAge = require('../../pdfTemplates/ReceiptTemplateUnderAge');
-
-const MembershipFeeTemplateAdult = require('../../pdfTemplates/MembershipFeeTemplateAdult');
-const MembershipFeeTemplateUnderAge = require('../../pdfTemplates/MembershipFeeTemplateUnderAge');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -85,33 +75,6 @@ const StudentReceiptsList = () => {
     }
   };
 
-  const printReceipt = async () => {
-    try {
-      if (!selectedReceipt) {
-        return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
-      }
-
-      let documentDefinition;
-
-      if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) {
-        documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-      } else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type) {
-        documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-      } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type) {
-        documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-      } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type) {
-        documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
-      }
-
-      pdfMake.createPdf(documentDefinition).open();
-
-      return toast.success('PDF Ricevuta Creato Correttamente', toastConfig);
-    } catch (error) {
-      console.error(error);
-      return toast.error(`Un errore se e' verificato nello stampare la ricevuta`, toastConfig);
-    }
-  };
-
   const onReceiptSelectionChanged = () => {
     const selectedNode = gridOptions.api.getSelectedNodes();
     if (selectedNode.length === 0) {
@@ -155,7 +118,7 @@ const StudentReceiptsList = () => {
       </div>
 
       <div className="buttons-container">
-        <Button onClick={async () => printReceipt()}>
+        <Button onClick={async () => printStudentReceipt(selectedReceipt, studentInfo)}>
           <span role="img" aria-label="receipt">
             🖨️ STAMPA RICEVUTA
           </span>
