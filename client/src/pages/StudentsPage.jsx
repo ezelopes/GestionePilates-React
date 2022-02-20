@@ -2,12 +2,12 @@ import React, { useState, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-
-import toastConfig from '../helpers/toast.config';
 import { getAllStudents } from '../helpers/apiCalls';
+import {
+  printSelectedStudents,
+  printStudentsWithExpiringGreenPass,
+  printStudentsBasedOnRegistrationDate,
+} from '../helpers/printPDF';
 
 import Divider from '../components/common/Divider';
 
@@ -15,11 +15,6 @@ import { ages, months, years } from '../commondata';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
-const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
 
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
@@ -146,89 +141,6 @@ const StudentsPage = () => {
     gridOptions.api.onFilterChanged();
   };
 
-  const printSelectedStudents = async () => {
-    try {
-      if (selectedStudents.length === 0) {
-        return toast.error('Seleziona Allieve per Stamparle', toastConfig);
-      }
-      const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
-
-      pdfMake.createPdf(documentDefinition).open();
-      return toast.success('PDF Allieve Creato Correttamente', toastConfig);
-    } catch (err) {
-      return toast.error('Si e` verificato un errore', toastConfig);
-    }
-  };
-
-  const printStudentsBasedOnRegistrationDate = async () => {
-    try {
-      const studentsWithExpiringGreenPass = students.filter(({ RegistrationDate, GreenPassExpirationDate, IsAdult }) => {
-        if (RegistrationDate) {
-          const RegistrationDateFormatted = new Date(RegistrationDate);
-
-          return (
-            RegistrationDateFormatted.getMonth() === selectedMonth &&
-            RegistrationDateFormatted.getFullYear() === selectedYearGreenPass &&
-            IsAdult === ages[0].age &&
-            !!GreenPassExpirationDate
-          );
-        }
-
-        return false;
-      });
-
-      const { month } = months.find(({ id }) => id === selectedMonth);
-
-      if (studentsWithExpiringGreenPass.length > 0) {
-        const documentDefinition = await StudentsDataTemplate.default(
-          studentsWithExpiringGreenPass,
-          month.toUpperCase(),
-          selectedYearGreenPass
-        );
-
-        pdfMake.createPdf(documentDefinition).open();
-        return toast.success('PDF Creato Correttamente', toastConfig);
-      }
-
-      return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
-    } catch (err) {
-      return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
-    }
-  };
-
-  const printStudentsWithExpiringGreenPass = async () => {
-    try {
-      const studentsWithExpiringGreenPass = students.filter(({ GreenPassExpirationDate }) => {
-        if (GreenPassExpirationDate) {
-          const GreenPassExpirationDateFormatted = new Date(GreenPassExpirationDate);
-          return (
-            GreenPassExpirationDateFormatted.getMonth() === selectedMonth &&
-            GreenPassExpirationDateFormatted.getFullYear() === selectedYearGreenPass
-          );
-        }
-
-        return false;
-      });
-
-      const { month } = months.find(({ id }) => id === selectedMonth);
-
-      if (studentsWithExpiringGreenPass.length > 0) {
-        const documentDefinition = await StudentsDataGreenPassTemplate.default(
-          studentsWithExpiringGreenPass,
-          month.toUpperCase(),
-          selectedYearGreenPass
-        );
-
-        pdfMake.createPdf(documentDefinition).open();
-        return toast.success('PDF Creato Correttamente', toastConfig);
-      }
-
-      return toast.error(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`, toastConfig);
-    } catch (err) {
-      return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
-    }
-  };
-
   return (
     <>
       <div className="page-body">
@@ -310,7 +222,7 @@ const StudentsPage = () => {
           <Divider />
 
           <div className="buttons-container">
-            <Button variant="success" onClick={printSelectedStudents}>
+            <Button variant="success" onClick={() => printSelectedStudents(selectedStudents)}>
               <span role="img" aria-label="print">
                 🖨️ Stampa Allieve Selezionate
               </span>
@@ -355,10 +267,18 @@ const StudentsPage = () => {
                 ))}
               </Form.Control>
             </Form.Group>
-            <Button variant="success" onClick={printStudentsWithExpiringGreenPass} style={{ marginTop: '1em' }}>
+            <Button
+              variant="success"
+              onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYearGreenPass)}
+              style={{ marginTop: '1em' }}
+            >
               Scadenza Green Pass
             </Button>
-            <Button variant="success" onClick={printStudentsBasedOnRegistrationDate} style={{ marginTop: '1em' }}>
+            <Button
+              variant="success"
+              onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYearGreenPass)}
+              style={{ marginTop: '1em' }}
+            >
               Scadenza Data Iscrizione
             </Button>
           </div>

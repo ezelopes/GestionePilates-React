@@ -4,7 +4,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import toastConfig from './toast.config';
 
-import { ages, receiptType, getMonthFromId } from '../commondata';
+import { ages, receiptType, getMonthFromId, months } from '../commondata';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -16,6 +16,8 @@ const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemp
 
 const MembershipFeeSummaryTemplate = require('../pdfTemplates/MembershipFeeSummaryTemplate');
 
+const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
+const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
 const StudentsExpiringCourseTemplate = require('../pdfTemplates/StudentsExpiringCourseTemplate');
 
 const printSelectedReceipts = async (selectedReceipts) => {
@@ -150,5 +152,95 @@ const printExpiringStudents = async (studentsReceiptsList) => {
   }
 };
 
+const printSelectedStudents = async (selectedStudents) => {
+  try {
+    if (selectedStudents.length === 0) {
+      return toast.error('Seleziona Allieve per Stamparle', toastConfig);
+    }
+    const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
+
+    pdfMake.createPdf(documentDefinition).open();
+    return toast.success('PDF Allieve Creato Correttamente', toastConfig);
+  } catch (err) {
+    return toast.error('Si e` verificato un errore', toastConfig);
+  }
+};
+
+const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, selectedYearGreenPass) => {
+  try {
+    const studentsWithExpiringGreenPass = students.filter(({ RegistrationDate, GreenPassExpirationDate, IsAdult }) => {
+      if (RegistrationDate) {
+        const RegistrationDateFormatted = new Date(RegistrationDate);
+
+        return (
+          RegistrationDateFormatted.getMonth() === selectedMonth &&
+          RegistrationDateFormatted.getFullYear() === selectedYearGreenPass &&
+          IsAdult === ages[0].age &&
+          !!GreenPassExpirationDate
+        );
+      }
+
+      return false;
+    });
+
+    const { month } = months.find(({ id }) => id === selectedMonth);
+
+    if (studentsWithExpiringGreenPass.length > 0) {
+      const documentDefinition = await StudentsDataTemplate.default(
+        studentsWithExpiringGreenPass,
+        month.toUpperCase(),
+        selectedYearGreenPass
+      );
+
+      pdfMake.createPdf(documentDefinition).open();
+      return toast.success('PDF Creato Correttamente', toastConfig);
+    }
+
+    return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
+  } catch (err) {
+    return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
+  }
+};
+
+const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selectedYearGreenPass) => {
+  try {
+    const studentsWithExpiringGreenPass = students.filter(({ GreenPassExpirationDate }) => {
+      if (GreenPassExpirationDate) {
+        const GreenPassExpirationDateFormatted = new Date(GreenPassExpirationDate);
+        return (
+          GreenPassExpirationDateFormatted.getMonth() === selectedMonth &&
+          GreenPassExpirationDateFormatted.getFullYear() === selectedYearGreenPass
+        );
+      }
+
+      return false;
+    });
+
+    const { month } = months.find(({ id }) => id === selectedMonth);
+
+    if (studentsWithExpiringGreenPass.length > 0) {
+      const documentDefinition = await StudentsDataGreenPassTemplate.default(
+        studentsWithExpiringGreenPass,
+        month.toUpperCase(),
+        selectedYearGreenPass
+      );
+
+      pdfMake.createPdf(documentDefinition).open();
+      return toast.success('PDF Creato Correttamente', toastConfig);
+    }
+
+    return toast.error(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`, toastConfig);
+  } catch (err) {
+    return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
+  }
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export { printSelectedReceipts, printMembershipFeeSummaryTemplate, printExpiringStudents };
+export {
+  printSelectedReceipts,
+  printMembershipFeeSummaryTemplate,
+  printExpiringStudents,
+  printSelectedStudents,
+  printStudentsBasedOnRegistrationDate,
+  printStudentsWithExpiringGreenPass,
+};
