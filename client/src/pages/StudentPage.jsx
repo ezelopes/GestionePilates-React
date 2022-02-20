@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Modal, Button, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import NotFoundPage from './NotFoundPage';
 
@@ -16,12 +14,9 @@ import Divider from '../components/common/Divider';
 
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
+import { printRegistrationForm } from '../helpers/printPDF';
 
 import { userType } from '../commondata';
-
-const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -38,18 +33,6 @@ const StudentPage = ({ match }) => {
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
 
   const history = useHistory();
-
-  const printRegistrationForm = async () => {
-    try {
-      const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
-
-      pdfMake.createPdf(documentDefinition).open();
-
-      return toast.success('PDF Creato Correttamente', toastConfig);
-    } catch (error) {
-      return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,7 +93,7 @@ const StudentPage = ({ match }) => {
             </div>
 
             <div className="buttons-container">
-              <Button onClick={printRegistrationForm}>
+              <Button onClick={() => printRegistrationForm(studentInfo)}>
                 <span role="img" aria-label="module">
                   🖨️ MODULO ISCRIZIONE
                 </span>

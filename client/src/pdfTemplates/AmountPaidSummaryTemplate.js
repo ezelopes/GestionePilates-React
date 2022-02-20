@@ -1,9 +1,5 @@
-const pdfMake = require('pdfmake/build/pdfmake');
-const pdfFonts = require('pdfmake/build/vfs_fonts');
-const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 const formatDate = require('../helpers/formatDateForInputDate');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 
 const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filteredPaymentMethod, fromDate, toDate) => {
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');

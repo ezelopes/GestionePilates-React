@@ -1,9 +1,5 @@
-const pdfMake = require('pdfmake/build/pdfmake');
-const pdfFonts = require('pdfmake/build/vfs_fonts');
 const formatDate = require('../helpers/formatDateForInputDate');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const StudentsDataGreenPassTemplate = async (studentsList, expiryMonth, expiryYear) => {
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');

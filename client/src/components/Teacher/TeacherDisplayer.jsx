@@ -2,37 +2,20 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import CreateUpdateUserForm from '../forms/CreateUpdateUserForm';
 import { TeacherProvider } from './TeacherContext';
 
 import { updateTeacher, deleteTeacher } from '../../helpers/apiCalls';
+import { printTeacherRegistrationForm } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
 
 import { userType } from '../../commondata';
-
-const RegistrationFormTemplate = require('../../pdfTemplates/RegistrationFormTemplate');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo);
   const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
   const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
-
-  const printRegistrationForm = async () => {
-    try {
-      const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
-      pdfMake.createPdf(documentDefinition).open();
-
-      return toast.success('Modulo Iscrizione Creato Correttamente', toastConfig);
-    } catch (error) {
-      console.error(error);
-      return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
-    }
-  };
 
   const handleTeacherDeletion = async () => {
     const response = await deleteTeacher(teacherInfo.TeacherID);
@@ -104,7 +87,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
           </Card.Text>
 
           <div className="buttons-container">
-            <Button variant="success" onClick={() => printRegistrationForm()}>
+            <Button variant="success" onClick={() => printTeacherRegistrationForm(teacherInfo)}>
               <span role="img" aria-label="module">
                 🖨️ Scarica Modulo
               </span>

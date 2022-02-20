@@ -1,10 +1,6 @@
-const pdfMake = require('pdfmake/build/pdfmake');
-const pdfFonts = require('pdfmake/build/vfs_fonts');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
 const convertNumberIntoWord = require('../helpers/convertNumberIntoWord');
 const formatDate = require('../helpers/formatDateForInputDate');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const ReceiptTemplateAdult = async (studentInfo, receiptInfo) => {
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');

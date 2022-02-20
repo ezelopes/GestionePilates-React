@@ -13,12 +13,14 @@ const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge
 
 const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
 const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
+const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
 
 const MembershipFeeSummaryTemplate = require('../pdfTemplates/MembershipFeeSummaryTemplate');
 
 const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
 const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
 const StudentsExpiringCourseTemplate = require('../pdfTemplates/StudentsExpiringCourseTemplate');
+const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
 const printSelectedReceipts = async (selectedReceipts) => {
   try {
@@ -113,6 +115,24 @@ const printMembershipFeeSummaryTemplate = async (studentMembershipFeeList, fromD
   }
 };
 
+const printReceiptsDetails = async (filteredReceipts, filteredAmountPaid, filteredPaymentMethod, fromDate, toDate) => {
+  try {
+    const documentDefinition = await AmountPaidSummaryTemplate.default(
+      filteredReceipts,
+      filteredAmountPaid,
+      filteredPaymentMethod,
+      fromDate,
+      toDate
+    );
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success('PDF Riepilogo Ricevute Creato Correttamente', toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(`Un errore se e' verificato nello stampare il riepilogo ricevute`, toastConfig);
+  }
+};
+
 const printExpiringStudents = async (studentsReceiptsList) => {
   try {
     if (studentsReceiptsList.length < 1) {
@@ -149,6 +169,18 @@ const printExpiringStudents = async (studentsReceiptsList) => {
   } catch (error) {
     console.error(error);
     return toast.error(`Un errore se e' verificato nello stampare la lista di allieve in scadenza`, toastConfig);
+  }
+};
+
+const printRegistrationForm = async (studentInfo) => {
+  try {
+    const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success('PDF Creato Correttamente', toastConfig);
+  } catch (error) {
+    return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
   }
 };
 
@@ -235,12 +267,27 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
   }
 };
 
+const printTeacherRegistrationForm = async (teacherInfo) => {
+  try {
+    const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success('Modulo Iscrizione Creato Correttamente', toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
+  }
+};
+
 // eslint-disable-next-line import/prefer-default-export
 export {
   printSelectedReceipts,
   printMembershipFeeSummaryTemplate,
+  printReceiptsDetails,
   printExpiringStudents,
+  printRegistrationForm,
   printSelectedStudents,
   printStudentsBasedOnRegistrationDate,
   printStudentsWithExpiringGreenPass,
+  printTeacherRegistrationForm,
 };
