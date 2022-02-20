@@ -1,7 +1,7 @@
 {
   "root": true,
   "extends": ["airbnb", "airbnb/hooks", "prettier"],
-  "plugins": ["simple-import-sort", "prefer-arrow"],
+  "plugins": ["react", "simple-import-sort", "prefer-arrow"],
   "env": {
     "browser": false,
     "commonjs": true,
@@ -12,7 +12,10 @@
     "Atomics": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2021
+    "ecmaVersion": 2021,
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "no-unused-vars": "warn",
