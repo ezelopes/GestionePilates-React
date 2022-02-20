@@ -1,73 +1,65 @@
-import React, { useState, useEffect } from 'react'
-import ReceiptsList from '../components/Receipts/ReceiptsList'
-import MembershipFeeList from '../components/Receipts/MembershipFeesList'
+import React, { useState, useEffect } from 'react';
+import ReceiptsList from '../components/Receipts/ReceiptsList';
+import MembershipFeeList from '../components/Receipts/MembershipFeesList';
 
-import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber'
-import { getAllReceipts } from '../helpers/apiCalls'
+import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
+import { getAllReceipts } from '../helpers/apiCalls';
 
-import { receiptType } from '../commondata'
-import Toggle from '../components/common/Toggle'
-import { ReceiptProvider } from '../components/Receipts/ReceiptContext'
+import { receiptType } from '../commondata';
+import Toggle from '../components/common/Toggle';
+import { ReceiptProvider } from '../components/Receipts/ReceiptContext';
 
 const ReceiptsPage = () => {
-  const [allReceipts, setAllReceipts] = useState([])
-  const [currentReceipts, setCurrentReceipts] = useState([])
+  const [allReceipts, setAllReceipts] = useState([]);
+  const [currentReceipts, setCurrentReceipts] = useState([]);
 
-  const [allMembershipFees, setAllMembershipFees] = useState([])
-  const [currentMembershipFees, setCurrentMembershipFees] = useState([])
+  const [allMembershipFees, setAllMembershipFees] = useState([]);
 
-  const [selectedReceiptType, setSelectedReceiptType] = useState(receiptType[0].type)
+  const [isMembershipFeeSelected, setIsMembershipFeeSelected] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const { receipts } = await getAllReceipts()
+      const { receipts } = await getAllReceipts();
 
-      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts)
+      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts);
 
       const receiptsWithMembershipFee = orderedReceipts.filter(
         ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || ReceiptType === receiptType[1].type
-      )
+      );
 
-      setAllReceipts(orderedReceipts)
-      setCurrentReceipts(orderedReceipts)
+      setAllReceipts(orderedReceipts);
+      setAllMembershipFees(receiptsWithMembershipFee);
 
-      setAllMembershipFees(receiptsWithMembershipFee)
-      setCurrentMembershipFees(receiptsWithMembershipFee)
-    }
-    fetchData()
-  }, [])
+      setCurrentReceipts(orderedReceipts);
+    };
+    fetchData();
+  }, []);
 
   const onToggleChanged = (receiptTypeSelected) => {
     // Reset state
-    if (receiptTypeSelected === 'receipt') {
-      setCurrentReceipts(allReceipts)
-      setSelectedReceiptType(receiptType[0].type)
-    } else {
-      setCurrentMembershipFees(allMembershipFees)
-      setSelectedReceiptType(receiptType[1].type)
-    }
-  }
+    setCurrentReceipts(receiptTypeSelected === 'receipt' ? allReceipts : allMembershipFees);
+
+    setIsMembershipFeeSelected(receiptTypeSelected !== 'receipt');
+  };
 
   return (
     <div className="page-body">
+      <Toggle
+        optionOne={{ title: 'Ricevute', name: 'receipt' }}
+        optionTwo={{ title: 'Quote Associative', name: 'receiptsWithMembershipFee' }}
+        callback={onToggleChanged}
+      />
+
       <ReceiptProvider
         allReceipts={allReceipts}
+        allMembershipFees={allMembershipFees}
         currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
-        allMembershipFees={allMembershipFees}
-        currentMembershipFees={currentMembershipFees}
-        setCurrentMembershipFees={setCurrentMembershipFees}
       >
-        <Toggle
-          optionOne={{ title: 'Ricevute', name: 'receipt' }}
-          optionTwo={{ title: 'Quote Associative', name: 'receiptsWithMembershipFee' }}
-          callback={onToggleChanged}
-        />
-
-        {selectedReceiptType === receiptType[0].type ? <ReceiptsList /> : <MembershipFeeList />}
+        {isMembershipFeeSelected ? <MembershipFeeList /> : <ReceiptsList />}
       </ReceiptProvider>
     </div>
-  )
-}
+  );
+};
 
-export default ReceiptsPage
+export default ReceiptsPage;

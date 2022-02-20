@@ -1,9 +1,9 @@
-import React, { useRef } from 'react'
-import PropTypes from 'prop-types'
+import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 
 const Toggle = ({ optionOne, optionTwo, callback }) => {
-  const optionOneButton = useRef()
-  const optionTwoButton = useRef()
+  const optionOneButton = useRef();
+  const optionTwoButton = useRef();
 
   return (
     <div className="toggle">
@@ -13,10 +13,10 @@ const Toggle = ({ optionOne, optionTwo, callback }) => {
         className="toggle-option toggle-option-active"
         name={optionOne.name}
         onClick={({ target }) => {
-          optionOneButton.current.className = 'toggle-option toggle-option-active'
-          optionTwoButton.current.className = 'toggle-option'
+          optionOneButton.current.className = 'toggle-option toggle-option-active';
+          optionTwoButton.current.className = 'toggle-option';
 
-          callback(target.name)
+          callback(target.name);
         }}
       >
         {optionOne.title}
@@ -28,17 +28,17 @@ const Toggle = ({ optionOne, optionTwo, callback }) => {
         className="toggle-option"
         name={optionTwo.name}
         onClick={({ target }) => {
-          optionOneButton.current.className = 'toggle-option'
-          optionTwoButton.current.className = 'toggle-option toggle-option-active'
+          optionOneButton.current.className = 'toggle-option';
+          optionTwoButton.current.className = 'toggle-option toggle-option-active';
 
-          callback(target.name)
+          callback(target.name);
         }}
       >
         {optionTwo.title}
       </button>
     </div>
-  )
-}
+  );
+};
 
 Toggle.propTypes = {
   optionOne: PropTypes.objectOf({
@@ -50,6 +50,6 @@ Toggle.propTypes = {
     name: PropTypes.string,
   }).isRequired,
   callback: PropTypes.func.isRequired,
-}
+};
 
-export default Toggle
+export default Toggle;
