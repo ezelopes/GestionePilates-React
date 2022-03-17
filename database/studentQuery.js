@@ -1,6 +1,7 @@
 const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/dates');
 const { mappingStudents, mappingReceipt } = require('./helpers/mapDatabaseEntries');
+const { studentResponseMessages } = require('./helpers/responses');
 
 const STUDENT_TABLE = 'allieva';
 const RECEIPT_TABLE = 'ricevuta';
@@ -13,7 +14,7 @@ const getStudents = async () => {
   } catch (error) {
     console.log(error);
 
-    return { message: 'Errore nel recuperare i dati delle Allieve!' };
+    return { message: studentResponseMessages.error.getMultiple };
   }
 };
 
@@ -25,7 +26,7 @@ const getStudent = async (TaxCode) => {
   } catch (error) {
     console.log(error);
 
-    return { message: `Errore nel recuperare i dati dell'Allieva!` };
+    return { message: studentResponseMessages.error.getSingle };
   }
 };
 
@@ -44,7 +45,7 @@ const getStudentWithReceipts = async (TaxCode) => {
   } catch (error) {
     console.log(error);
 
-    return { message: `Errore nel recuperare i dati dell'Allieva!` };
+    return { message: studentResponseMessages.error.getSingle };
   }
 };
 
@@ -72,11 +73,11 @@ const createStudent = async (studentInfo) => {
       CognomeGenitore: studentInfo.ParentSurname,
     });
 
-    return { StudentID: newStudentID[0], message: 'Allieva creata correttamente' };
+    return { StudentID: newStudentID[0], message: studentResponseMessages.ok.create };
   } catch (error) {
     console.log(error);
 
-    return { message: 'Errore nel creare Allieva!' };
+    return { message: studentResponseMessages.error.create };
   }
 };
 
@@ -108,10 +109,11 @@ const updateStudent = async (studentInfo) => {
 
     await knex(RECEIPT_TABLE).where({ FK_AllievaID: studentInfo.StudentID }).update({ FK_CodiceFiscale: studentInfo.TaxCode });
 
-    return { message: 'Allieva Aggiornata Correttamente!' };
+    return { message: studentResponseMessages.ok.update };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'aggiornare Allieva!` };
+
+    return { message: studentResponseMessages.error.update };
   }
 };
 
@@ -121,10 +123,11 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
       .where({ AllievaID: StudentID })
       .update({ DataIscrizione: getFormattedDate(RegistrationDate) });
 
-    return { message: 'Data Iscrizione Aggiornata Correttamente!' };
+    return { message: studentResponseMessages.ok.updateRegistration };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'aggiornare Data Iscrizione!` };
+
+    return { message: studentResponseMessages.error.updateRegistration };
   }
 };
 
@@ -133,10 +136,11 @@ const deleteStudent = async (StudentID) => {
     await knex(RECEIPT_TABLE).where({ FK_AllievaID: StudentID }).del();
     await knex(STUDENT_TABLE).where({ AllievaID: StudentID }).del();
 
-    return { message: 'Allieva Eliminata Correttamente!' };
+    return { message: studentResponseMessages.ok.delete };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'eliminare Allieva!` };
+
+    return { message: studentResponseMessages.error.delete };
   }
 };
 

@@ -1,6 +1,7 @@
 const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/dates');
 const { mappingTeachers } = require('./helpers/mapDatabaseEntries');
+const { teacherResponseMessages } = require('./helpers/responses');
 
 const TEACHER_TABLE = 'insegnante';
 
@@ -12,7 +13,7 @@ const getTeachers = async () => {
   } catch (error) {
     console.log(error);
 
-    return { message: 'Errore nel recuperare i dati delle insegnanti!' };
+    return { message: teacherResponseMessages.error.getMultiple };
   }
 };
 
@@ -24,7 +25,7 @@ const getTeacher = async (TaxCode) => {
   } catch (error) {
     console.log(error);
 
-    return { message: `Errore nel recuperare i dati dell'insegnante!` };
+    return { message: teacherResponseMessages.error.getSingle };
   }
 };
 
@@ -48,10 +49,11 @@ const createTeacher = async (teacherInfo) => {
       Scuola: teacherInfo.School,
     });
 
-    return { TeacherID: newTeacherID[0], message: 'Insegnante Inserita Correttamente!' };
+    return { TeacherID: newTeacherID[0], message: teacherResponseMessages.ok.create };
   } catch (error) {
     console.log(error);
-    return { message: 'Errore nel creare Insegnante!' };
+
+    return { message: teacherResponseMessages.error.create };
   }
 };
 
@@ -77,10 +79,11 @@ const updateTeacher = async (teacherInfo) => {
         Scuola: teacherInfo.School,
       });
 
-    return { message: 'Insegnante Aggiornata Correttamente!' };
+    return { message: teacherResponseMessages.ok.update };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'aggiornare Insegnante!` };
+
+    return { message: teacherResponseMessages.error.update };
   }
 };
 
@@ -88,10 +91,11 @@ const deleteTeacher = async (TeacherID) => {
   try {
     await knex(TEACHER_TABLE).where({ InsegnanteID: TeacherID }).del();
 
-    return { message: 'Insegnante Eliminata Correttamente!' };
+    return { message: teacherResponseMessages.ok.delete };
   } catch (error) {
     console.log(error);
-    return `Errore nell'eliminare Insegnante!`;
+
+    return { message: teacherResponseMessages.error.delete };
   }
 };
 

@@ -1,6 +1,7 @@
 const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/dates');
 const { mappingReceipt, mappingReceiptsWithStudentInfo } = require('./helpers/mapDatabaseEntries');
+const { receiptResponseMessages } = require('./helpers/responses');
 
 const receiptTypes = {
   paymentFee: 'QUOTA',
@@ -18,7 +19,7 @@ const getStudentReceipts = async (TaxCode) => {
   } catch (error) {
     console.log(error);
 
-    return { message: 'Errore nel recuperare le ricevute!' };
+    return { message: receiptResponseMessages.error.getMultiple };
   }
 };
 
@@ -32,7 +33,7 @@ const getAllReceipts = async () => {
   } catch (error) {
     console.log(error);
 
-    return { message: 'Errore nel recuperare le ricevute!' };
+    return { message: receiptResponseMessages.error.getMultiple };
   }
 };
 
@@ -59,10 +60,11 @@ const createReceipt = async (receiptInfo) => {
         .update({ DataIscrizione: getFormattedDate(receiptInfo.CourseStartDate) });
     }
 
-    return { ReceiptID: newReceiptID[0], message: 'Ricevuta Inserita Correttamente!' };
+    return { ReceiptID: newReceiptID[0], message: receiptResponseMessages.ok.create };
   } catch (error) {
     console.log(error);
-    return { message: 'Errore nel creare la Ricevuta!' };
+
+    return { message: receiptResponseMessages.error.create };
   }
 };
 
@@ -83,10 +85,11 @@ const updateReceipt = async (receiptInfo) => {
         IncludeMembershipFee: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
       });
 
-    return { message: 'Ricevuta Aggiornata Correttamente!' };
+    return { message: receiptResponseMessages.ok.update };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'aggiornare Ricevuta!` };
+
+    return { message: receiptResponseMessages.error.update };
   }
 };
 
@@ -94,10 +97,11 @@ const deleteReceipt = async (ReceiptID) => {
   try {
     await knex(RECEIPT_TABLE).where({ RicevutaID: ReceiptID }).del();
 
-    return { message: 'Ricevuta Eliminata Correttamente!' };
+    return { message: receiptResponseMessages.ok.delete };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'eliminare Ricevute!` };
+
+    return { message: receiptResponseMessages.error.delete };
   }
 };
 
