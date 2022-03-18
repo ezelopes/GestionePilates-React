@@ -14,6 +14,8 @@ const isStudent = (type) => type === userType[0].user;
 
 const isUnderAge = (age) => age === ages[1].age;
 
+const TAX_CODE_REGEX = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i;
+
 const CreateUpdateUserForm = ({
   personInfo,
   personType,
@@ -87,7 +89,7 @@ const CreateUpdateUserForm = ({
           type="text"
           placeholder="Inserisci Codice Fiscale..."
           defaultValue={personInfo?.TaxCode}
-          {...register('TaxCode', { required: true, pattern: { value: /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i } })}
+          {...register('TaxCode', { required: true, pattern: { value: TAX_CODE_REGEX } })}
         />
         <div style={{ display: 'none' }}>
           <ErrorMessage

@@ -1,17 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import FilterStudentsForm from '../components/Students/FilterStudentsForm';
+import PrintStudentsForm from '../components/Students/PrintStudentsForm';
+
 import { getAllStudents } from '../helpers/apiCalls';
-import {
-  printSelectedStudents,
-  printStudentsWithExpiringGreenPass,
-  printStudentsBasedOnRegistrationDate,
-} from '../helpers/printPDF';
+import { printSelectedStudents } from '../helpers/printPDF';
 
-import Divider from '../components/common/Divider';
-
-import { ages, months, years } from '../commondata';
+import Translation from '../components/common/Translation/Translation';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -76,15 +73,6 @@ const StudentsPage = () => {
 
   const [students, setStudents] = useState();
   const [selectedStudents, setSelectedStudents] = useState([]);
-  const [selectedMonth, setselectedMonth] = useState(months[0].id);
-  const [selectedYearGreenPass, setSelectedYearGreenPass] = useState(years[0].id);
-
-  const filterNameRef = useRef();
-  const filterSurnameRef = useRef();
-  const filterCityRef = useRef();
-  const filterAgeRef = useRef();
-
-  const dropdownAges = [null, ages[0].age, ages[1].age];
 
   const onGridReady = () => {
     const fetchData = async () => {
@@ -114,22 +102,6 @@ const StudentsPage = () => {
     return setSelectedStudents(currentSelectedStudents);
   };
 
-  const clearFilters = () => {
-    const filterColumns = ['IsAdult', 'Name', 'Surname', 'City'];
-
-    filterColumns.forEach((columnName) => {
-      const filterComponent = gridOptions.api.getFilterInstance(columnName);
-      filterComponent.setModel(null);
-    });
-
-    filterNameRef.current.value = null;
-    filterSurnameRef.current.value = null;
-    filterCityRef.current.value = null;
-    filterAgeRef.current.value = null;
-
-    gridOptions.api.onFilterChanged();
-  };
-
   const filterColumn = (columnName, value) => {
     const columnFilterComponent = gridOptions.api.getFilterInstance(columnName);
 
@@ -141,68 +113,20 @@ const StudentsPage = () => {
     gridOptions.api.onFilterChanged();
   };
 
+  const clearColumns = (filterColumns) => {
+    filterColumns.forEach((columnName) => {
+      const filterComponent = gridOptions.api.getFilterInstance(columnName);
+      filterComponent.setModel(null);
+    });
+
+    gridOptions.api.onFilterChanged();
+  };
+
   return (
     <>
       <div className="page-body">
         <div className="tab-content">
-          <div className="filter-form">
-            <Form.Group>
-              <Form.Label> Nome Allieva </Form.Label>
-              <Form.Control
-                ref={filterNameRef}
-                type="text"
-                placeholder="Inserisci Nome..."
-                onChange={(e) => {
-                  filterColumn('Name', e.target.value);
-                }}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label> Cognome Allieva </Form.Label>
-              <Form.Control
-                ref={filterSurnameRef}
-                type="text"
-                placeholder="Inserisci Cognome..."
-                onChange={(e) => {
-                  filterColumn('Surname', e.target.value);
-                }}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label> Città </Form.Label>
-              <Form.Control
-                ref={filterCityRef}
-                type="text"
-                placeholder="Città..."
-                onChange={(e) => {
-                  filterColumn('City', e.target.value);
-                }}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label> Età </Form.Label>
-              <Form.Control
-                ref={filterAgeRef}
-                as="select"
-                onChange={({ target }) => {
-                  filterColumn('IsAdult', target.value);
-                }}
-              >
-                {dropdownAges.map((age) => (
-                  <option key={`select_${age}`} value={age}>
-                    {age}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-
-            <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
-              Rimuovi Filtri
-            </Button>
-          </div>
+          <FilterStudentsForm filterColumn={filterColumn} clearColumns={clearColumns} />
 
           <div className="ag-theme-balham student-list-grid">
             <AgGridReact
@@ -219,70 +143,16 @@ const StudentsPage = () => {
             />
           </div>
 
-          <Divider />
-
           <div className="buttons-container">
             <Button variant="success" onClick={() => printSelectedStudents(selectedStudents)}>
               <span role="img" aria-label="print">
-                🖨️ Stampa Allieve Selezionate
+                🖨️ <Translation value="buttons.student.printSelectedStudents" />
               </span>
             </Button>
           </div>
         </div>
 
-        <div className="form-wrapper">
-          <Form.Group>
-            <Form.Label> Stampa Allieve </Form.Label>
-          </Form.Group>
-          <div className="green-pass-form">
-            <Form.Group>
-              <Form.Label> Mese </Form.Label>
-              <Form.Control
-                ref={filterAgeRef}
-                as="select"
-                onChange={({ target }) => {
-                  setselectedMonth(parseInt(target.value, 10));
-                }}
-              >
-                {months.map((month) => (
-                  <option key={`select_${month.id}`} value={month.id}>
-                    {month.month}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label> Anno </Form.Label>
-              <Form.Control
-                ref={filterAgeRef}
-                as="select"
-                onChange={({ target }) => {
-                  setSelectedYearGreenPass(parseInt(target.value, 10));
-                }}
-              >
-                {years.map((year) => (
-                  <option key={`select_${year.id}`} value={year.id}>
-                    {year.year}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Button
-              variant="success"
-              onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYearGreenPass)}
-              style={{ marginTop: '1em' }}
-            >
-              Scadenza Green Pass
-            </Button>
-            <Button
-              variant="success"
-              onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYearGreenPass)}
-              style={{ marginTop: '1em' }}
-            >
-              Scadenza Data Iscrizione
-            </Button>
-          </div>
-        </div>
+        <PrintStudentsForm students={students} />
       </div>
     </>
   );

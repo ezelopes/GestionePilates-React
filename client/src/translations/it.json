@@ -1,0 +1,104 @@
+{
+  "placeholder": {
+    "name": "Inserisci Nome...",
+    "surname": "Inserisci Cognome...",
+    "city": "Inserisci Città...",
+    "address": "Inserisci Indirizzo...",
+    "phone": "Cellulare",
+    "email": "Inserisci Email...",
+    "placeOfBirth": "Inserisci Luogo di Nascita...",
+    "parentTaxCode": "Inserisci Codice Fiscale Genitore...",
+    "parentName": "Inserisci Nome Genitore...",
+    "parentSurname": "Inserisci Cognome Genitore..."
+  },
+  "form": {
+    "taxCode": "Codice Fiscale",
+    "studentName": "Nome Allieva",
+    "studentSurname": "Cognome Allieva",
+    "teacherName": "Nome Insegnante",
+    "teacherSurname": "Cognome Insegnante",
+    "city": "Città",
+    "age": "Età",
+    "address": "Indirizzo",
+    "phone": "Cellulare",
+    "email": "Email",
+    "placeOfBirth": "Luogo di Nascita",
+    "dateOfBirth": "Data di Nascita",
+    "discipline": "Disciplina",
+    "course": "Corso",
+    "school": "Scuola",
+    "registrationDate": "Data Iscrizione",
+    "certificateExpirationDate": "Data Scadenza Certificato",
+    "greenPassExpirationDate": "Data Scadenza Green Pass",
+    "parentTaxCode": "Codice Fiscale Genitore",
+    "parentName": "Nome Genitore",
+    "parentSurname": "Cognome Genitore"
+  },
+  "receiptForm": {
+    "receiptNumber": "Numero Ricevuta",
+    "receiptType": "Tipo Ricevuta",
+    "paymentType": "Tipo Pagamento",
+    "amountPaid": "Importo",
+    "receiptDate": "Data Ricevuta",
+    "courseStartDate": "Data Inizio Corso",
+    "courseEndDate": "Data Scadenza Corso",
+    "isRegistrationDate": "Usa Data Ricevuta come Data Iscrizione",
+    "includeMembershipFee": "Contiene Quota Associativa"
+  },
+  "buttons": {
+    "student": {
+      "createStudent": "Crea Allieva",
+      "updateStudent": "Aggiorna Allieva",
+      "deleteStudent": "Elimina Allieva",
+      "updateRegistrationDate": "Aggiorna Data Iscrizione",
+      "printSelectedStudents": "Stampa Allieve Selezionate",
+      "printExpiringStudents": "Stampa Lista Allieve In Scadenza",
+      "printRegistrationForm": "Stampa Modulo Iscrizione",
+      "printExpiringGreenPass": "Scadenza Green Pass",
+      "printExpiringRegistrationDate": "Scadenza Data Iscrizione"
+    },
+    "receipt": {
+      "createReceipt": "Crea Ricevuta",
+      "updateReceipt": "Aggiorna Ricevuta",
+      "deleteReceipt": "Elimina Ricevuta",
+      "printReceipt": "Stampa Ricevuta",
+      "printSelectedReceipts": "Stampa Ricevute Selezionate",
+      "printMembershipFeeSummary": "Stampa Riepilogo Quote Associative"
+    },
+    "teacher": {
+      "createTeacher": "Crea Insegnante",
+      "updateTeacher": "Aggiorna",
+      "deleteTeacher": "Elimina",
+      "printTeacherRegistrationForm": "Scarica Modulo"
+    },
+    "filter": "Filtra",
+    "print": "Stampa",
+    "close": "Chiudi",
+    "resetForm": "Reset Form",
+    "removeFilters": "Rimuovi Filtri"
+  },
+  "navbar": {
+    "studentsList": "Lista Allieve",
+    "studentsSubscription": "Iscrizione Allieve",
+    "teachersList": "Lista Insegnanti",
+    "teachersSubscription": "Iscrizione Insegnanti",
+    "receiptsList": "Ricevute"
+  },
+  "common": {
+    "pilart": "PilArt",
+    "student": "Allieva",
+    "teacher": "Insegnante",
+    "receipt": "Ricevuta",
+    "students": "Allieve",
+    "teachers": "Insegnanti",
+    "receipts": "Ricevute",
+    "month": "Mese",
+    "year": "Anno",
+    "back": "Indietro",
+    "from": "Da",
+    "to": "A",
+    "printStudentsFormTitle": "Stampa Allieve",
+    "teachersNotFound": "Nessun insegnante trovato."
+  },
+  "toast": {}
+}

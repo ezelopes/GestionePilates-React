@@ -82,7 +82,7 @@ const StudentPage = ({ match }) => {
       {loading ? (
         <div className="spinnerWrapper">
           <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only" />
           </Spinner>
         </div>
       ) : (
