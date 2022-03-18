@@ -3,6 +3,8 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
+import Translation from '../common/Translation/Translation';
+import { getTranslation } from '../common/Translation/helpers';
 import FilteredReceiptsModal from './FilteredReceiptsModal';
 import formatDate from '../../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../../helpers/orderReceiptsBasedOnReceiptNumber';
@@ -73,11 +75,11 @@ const FilterReceiptsForm = ({
 
   const calculateAmountBetweenDatesAndByPaymentMethod = () => {
     if (filterByField !== 'receipt_date') {
-      return toast.error(`Calcolo dell'importo non si puo' effetturare con il filtro impostato!`, toastConfig);
+      return toast.error(getTranslation('toast.error.noEligibleFilter'), toastConfig);
     }
 
     if (!filteredPaymentMethod) {
-      return toast.error('Seleziona Tipo di Pagamento!', toastConfig);
+      return toast.error(getTranslation('toast.error.noPaymentMethodSelected'), toastConfig);
     }
 
     const receipts = allReceipts.filter(
@@ -122,7 +124,9 @@ const FilterReceiptsForm = ({
       <div className="filter-form">
         {!isMembershipFee && (
           <Form.Group>
-            <Form.Label> Filtra per: </Form.Label>
+            <Form.Label>
+              <Translation value="receiptFilterForm.filterBy" />
+            </Form.Label>
             <Form.Control ref={selectFilterFieldRef} as="select" onChange={({ target }) => setFilterByField(target.value)}>
               {filterFields.map(({ field, description }) => (
                 <option key={`select_${field}`} value={field}>
@@ -135,7 +139,9 @@ const FilterReceiptsForm = ({
 
         {!isMembershipFee && (
           <Form.Group>
-            <Form.Label> Seleziona Tipo Pagamento: </Form.Label>
+            <Form.Label>
+              <Translation value="receiptFilterForm.selectPaymentMethod" />
+            </Form.Label>
             <Form.Control
               ref={selectPaymentMethodRef}
               as="select"
@@ -151,12 +157,18 @@ const FilterReceiptsForm = ({
         )}
 
         <Form.Group>
-          <Form.Label> Da: </Form.Label> <br />
+          <Form.Label>
+            <Translation value="common.from" />
+          </Form.Label>
+          <br />
           <input ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
         </Form.Group>
 
         <Form.Group>
-          <Form.Label> A: </Form.Label> <br />
+          <Form.Label>
+            <Translation value="common.to" />
+          </Form.Label>
+          <br />
           <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
         </Form.Group>
       </div>
@@ -168,26 +180,26 @@ const FilterReceiptsForm = ({
             disabled={filterByField !== 'receipt_date' || !filteredPaymentMethod}
           >
             <span role="img" aria-label="summary">
-              🧾 Calcola Importo Totale
+              🧾 <Translation value="buttons.receipt.calculateTotalAmount" />
             </span>
           </Button>
         ) : (
           <Button variant="success" onClick={() => printMembershipFeeSummaryByMonth(allReceipts, fromDate, toDate)}>
             <span role="img" aria-label="summary">
-              🖨️ Stampa Riepilogo Quote Associative
+              🖨️ <Translation value="buttons.receipt.printMembershipFeeSummary" />
             </span>
           </Button>
         )}
 
         <Button variant="primary" onClick={filterReceipts}>
           <span role="img" aria-label="filter">
-            🔎 Filtra
+            🔎 <Translation value="buttons.filter" />
           </span>
         </Button>
 
         <Button variant="danger" onClick={clearFilters}>
           <span role="img" aria-label="remove-filters">
-            🗑️ Rimuovi Filtri
+            🗑️ <Translation value="buttons.removeFilters" />
           </span>
         </Button>
       </div>

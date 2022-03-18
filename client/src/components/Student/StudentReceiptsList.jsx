@@ -3,6 +3,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import { toast } from 'react-toastify';
 
+import Translation from '../common/Translation/Translation';
+import { getTranslation } from '../common/Translation/helpers';
 import CreateUpdateReceiptForm from '../forms/CreateUpdateReceiptForm';
 import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
 import { printStudentReceipt } from '../../helpers/printPDF';
@@ -120,7 +122,7 @@ const StudentReceiptsList = () => {
       <div className="buttons-container">
         <Button onClick={async () => printStudentReceipt(selectedReceipt, studentInfo)}>
           <span role="img" aria-label="receipt">
-            🖨️ STAMPA RICEVUTA
+            🖨️ <Translation value="buttons.receipt.printReceipt" />
           </span>
         </Button>
 
@@ -128,13 +130,13 @@ const StudentReceiptsList = () => {
           variant="warning"
           onClick={() => {
             if (!selectedReceipt) {
-              return toast.error('Seleziona Ricevuta per Aggiornarla', toastConfig);
+              return toast.error(getTranslation('toast.error.noReceiptSelectedForUpdate'), toastConfig);
             }
             return setShowUpdateReceiptModal(true);
           }}
         >
           <span role="img" aria-label="update">
-            🔄 AGGIORNA RICEVUTA
+            🔄 <Translation value="buttons.receipt.updateReceipt" />
           </span>
         </Button>
 
@@ -142,13 +144,13 @@ const StudentReceiptsList = () => {
           variant="danger"
           onClick={() => {
             if (!selectedReceipt) {
-              return toast.error('Seleziona Ricevuta per Eliminarla', toastConfig);
+              return toast.error(getTranslation('toast.error.noReceiptSelectedForDelete'), toastConfig);
             }
             return setShowDeleteReceiptModal(true);
           }}
         >
           <span role="img" aria-label="bin">
-            🗑️ ELIMINA RICEVUTA
+            🗑️ <Translation value="buttons.receipt.deleteReceipt" />
           </span>
         </Button>
       </div>
@@ -160,7 +162,9 @@ const StudentReceiptsList = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title> Aggiorna Ricevuta </Modal.Title>
+          <Modal.Title>
+            <Translation value="modalsContent.updateReceiptHeader" />
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
           <CreateUpdateReceiptForm
@@ -176,19 +180,23 @@ const StudentReceiptsList = () => {
               setShowUpdateReceiptModal(false);
             }}
           >
-            CHIUDI
+            <Translation value="buttons.close" />
           </Button>
         </Modal.Footer>
       </Modal>
 
       <Modal show={showDeleteReceiptModal} onHide={() => setShowDeleteReceiptModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title> Elimina Ricevuta </Modal.Title>
+          <Modal.Title>
+            <Translation value="modalsContent.deleteReceiptHeader" />
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="filtered-receipt-modal">Sei sicura di voler eliminare la ricevuta selezionata?</Modal.Body>
+        <Modal.Body className="filtered-receipt-modal">
+          <Translation value="modalsContent.deleteReceiptBody" />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleDeleteReceipt}>
-            ELIMINA
+            <Translation value="buttons.receipt.deleteReceipt" />
           </Button>
           <Button
             variant="secondary"
@@ -196,7 +204,7 @@ const StudentReceiptsList = () => {
               setShowDeleteReceiptModal(false);
             }}
           >
-            CHIUDI
+            <Translation value="buttons.close" />
           </Button>
         </Modal.Footer>
       </Modal>

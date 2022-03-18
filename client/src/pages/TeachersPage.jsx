@@ -6,6 +6,7 @@ import { getAllTeachers } from '../helpers/apiCalls';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Translation from '../components/common/Translation/Translation';
 
 const TeachersPage = () => {
   const [teachersList, setTeachersList] = useState();
@@ -25,7 +26,7 @@ const TeachersPage = () => {
       {loading ? (
         <div className="spinnerWrapper">
           <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only" />
           </Spinner>
         </div>
       ) : (
@@ -34,7 +35,7 @@ const TeachersPage = () => {
             <Row>
               {teachersList.length === 0 ? (
                 <h2 className="center">
-                  <div> Non ci sono insegnanti </div>
+                  <Translation value="common.teachersNotFound" />
                 </h2>
               ) : (
                 <div className="teachers-container">

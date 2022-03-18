@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap';
 
+import Translation from '../common/Translation/Translation';
 import formatDate from '../../helpers/formatDateForInputDate';
 import { printReceiptsDetails } from '../../helpers/printPDF';
+
+// TODO: Export printReceiptsDetails as a callback and define it one level above
 
 const columnDefs = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -76,7 +79,7 @@ const FilteredReceiptsModal = ({
           }
         >
           <span role="img" aria-label="print-selected">
-            🖨️ Stampa
+            🖨️ <Translation value="buttons.print" />
           </span>
         </Button>
         <Button
@@ -85,7 +88,7 @@ const FilteredReceiptsModal = ({
             setShowFilteredAmountModal(false);
           }}
         >
-          Chiudi
+          <Translation value="buttons.close" />
         </Button>
       </Modal.Footer>
     </Modal>

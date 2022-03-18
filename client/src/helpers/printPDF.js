@@ -2,6 +2,8 @@ import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
+import { getTranslation } from '../components/common/Translation/helpers';
+
 import toastConfig from './toast.config';
 
 import { ages, receiptType, getMonthFromId, months } from '../commondata';
@@ -25,7 +27,7 @@ const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTempla
 const printSelectedReceipts = async (selectedReceipts) => {
   try {
     if (selectedReceipts.length === 0) {
-      return toast.error('Seleziona Ricevute per Stamparle', toastConfig);
+      return toast.error(getTranslation('toast.error.noReceiptsSelected'), toastConfig);
     }
 
     const finalDocumentDefinition = {
@@ -92,17 +94,17 @@ const printSelectedReceipts = async (selectedReceipts) => {
 
     pdfMake.createPdf(finalDocumentDefinition).open();
 
-    return toast.success('PDF Ricevute Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
     console.error(error);
-    return toast.error(`Un errore se e' verificato nello stampare le ricevute`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
 const printStudentReceipt = async (selectedReceipt, studentInfo) => {
   try {
     if (!selectedReceipt) {
-      return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
+      return toast.error(getTranslation('toast.error.noReceiptSelected'), toastConfig);
     }
 
     let documentDefinition;
@@ -119,26 +121,26 @@ const printStudentReceipt = async (selectedReceipt, studentInfo) => {
 
     pdfMake.createPdf(documentDefinition).open();
 
-    return toast.success('PDF Ricevuta Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
     console.error(error);
-    return toast.error(`Un errore se e' verificato nello stampare la ricevuta`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
 const printMembershipFeeSummaryTemplate = async (studentMembershipFeeList, fromData, toDate) => {
   try {
     if (studentMembershipFeeList.length < 1) {
-      return toast.error('Nessuna Quota Associativa trovata nel periodo selezionato!', toastConfig);
+      return toast.error(getTranslation('toast.error.noMembershipFeeFound'), toastConfig);
     }
     const documentDefinition = await MembershipFeeSummaryTemplate.default(studentMembershipFeeList, fromData, toDate);
 
     pdfMake.createPdf(documentDefinition).open();
 
-    return toast.success('PDF Quote Associative Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
     console.error(error);
-    return toast.error(`Un errore se e' verificato nello stampare le quote associative`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
@@ -153,17 +155,17 @@ const printReceiptsDetails = async (filteredReceipts, filteredAmountPaid, filter
     );
     pdfMake.createPdf(documentDefinition).open();
 
-    return toast.success('PDF Riepilogo Ricevute Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
     console.error(error);
-    return toast.error(`Un errore se e' verificato nello stampare il riepilogo ricevute`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
 const printExpiringStudents = async (studentsReceiptsList) => {
   try {
     if (studentsReceiptsList.length < 1) {
-      return toast.error('Lista vuota!', toastConfig);
+      return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
     }
 
     const studentsReceiptsListOrdered = studentsReceiptsList.sort((a, b) => {
@@ -192,10 +194,10 @@ const printExpiringStudents = async (studentsReceiptsList) => {
 
     pdfMake.createPdf(documentDefinition).open();
 
-    return toast.success('PDF Lista Allieve In Scadenza Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
     console.error(error);
-    return toast.error(`Un errore se e' verificato nello stampare la lista di allieve in scadenza`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
@@ -205,23 +207,23 @@ const printRegistrationForm = async (studentInfo) => {
 
     pdfMake.createPdf(documentDefinition).open();
 
-    return toast.success('PDF Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
-    return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
 const printSelectedStudents = async (selectedStudents) => {
   try {
     if (selectedStudents.length === 0) {
-      return toast.error('Seleziona Allieve per Stamparle', toastConfig);
+      return toast.error(getTranslation('toast.error.noStudentsSelected'), toastConfig);
     }
     const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
 
     pdfMake.createPdf(documentDefinition).open();
-    return toast.success('PDF Allieve Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (err) {
-    return toast.error('Si e` verificato un errore', toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
@@ -252,12 +254,12 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
       );
 
       pdfMake.createPdf(documentDefinition).open();
-      return toast.success('PDF Creato Correttamente', toastConfig);
+      return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
     return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
   } catch (err) {
-    return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
@@ -285,12 +287,12 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
       );
 
       pdfMake.createPdf(documentDefinition).open();
-      return toast.success('PDF Creato Correttamente', toastConfig);
+      return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
     return toast.error(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`, toastConfig);
   } catch (err) {
-    return toast.error('Si e` verificato un errore nel creare il documento', toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 
@@ -299,10 +301,10 @@ const printTeacherRegistrationForm = async (teacherInfo) => {
     const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
     pdfMake.createPdf(documentDefinition).open();
 
-    return toast.success('Modulo Iscrizione Creato Correttamente', toastConfig);
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (error) {
     console.error(error);
-    return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
 };
 

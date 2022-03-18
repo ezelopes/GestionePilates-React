@@ -1,5 +1,6 @@
 {
   "placeholder": {
+    "taxCode": "Inserisci Codice Fiscale...",
     "name": "Inserisci Nome...",
     "surname": "Inserisci Cognome...",
     "city": "Inserisci Città...",
@@ -9,7 +10,8 @@
     "placeOfBirth": "Inserisci Luogo di Nascita...",
     "parentTaxCode": "Inserisci Codice Fiscale Genitore...",
     "parentName": "Inserisci Nome Genitore...",
-    "parentSurname": "Inserisci Cognome Genitore..."
+    "parentSurname": "Inserisci Cognome Genitore...",
+    "receiptNumber": "Inserisci Numero Ricevuta..."
   },
   "form": {
     "taxCode": "Codice Fiscale",
@@ -32,7 +34,9 @@
     "greenPassExpirationDate": "Data Scadenza Green Pass",
     "parentTaxCode": "Codice Fiscale Genitore",
     "parentName": "Nome Genitore",
-    "parentSurname": "Cognome Genitore"
+    "parentSurname": "Cognome Genitore",
+    "cityAndAddress": "Città e Indirizzo",
+    "placeAndDOB": "Luogo e Data di Nascita"
   },
   "receiptForm": {
     "receiptNumber": "Numero Ricevuta",
@@ -44,6 +48,10 @@
     "courseEndDate": "Data Scadenza Corso",
     "isRegistrationDate": "Usa Data Ricevuta come Data Iscrizione",
     "includeMembershipFee": "Contiene Quota Associativa"
+  },
+  "receiptFilterForm": {
+    "filterBy": "Filtra per:",
+    "selectPaymentMethod": "Seleziona Tipo Pagamento:"
   },
   "buttons": {
     "student": {
@@ -63,11 +71,12 @@
       "deleteReceipt": "Elimina Ricevuta",
       "printReceipt": "Stampa Ricevuta",
       "printSelectedReceipts": "Stampa Ricevute Selezionate",
-      "printMembershipFeeSummary": "Stampa Riepilogo Quote Associative"
+      "printMembershipFeeSummary": "Stampa Riepilogo Quote Associative",
+      "calculateTotalAmount": "Calcola Importo Totale"
     },
     "teacher": {
       "createTeacher": "Crea Insegnante",
-      "updateTeacher": "Aggiorna",
+      "updateTeacher": "Aggiorna Insegnante",
       "deleteTeacher": "Elimina",
       "printTeacherRegistrationForm": "Scarica Modulo"
     },
@@ -84,6 +93,13 @@
     "teachersSubscription": "Iscrizione Insegnanti",
     "receiptsList": "Ricevute"
   },
+  "modalsContent": {
+    "updateReceiptHeader": "Aggiorna Ricevuta",
+    "deleteReceiptBody": "Sei sicura di voler eliminare la ricevuta selezionata?",
+    "deleteReceiptHeader": "Elimina Ricevuta",
+    "updateTeacherHeader": "Aggiorna Insegnante",
+    "deleteTeacherHeader": "Elimina Insegnante"
+  },
   "common": {
     "pilart": "PilArt",
     "student": "Allieva",
@@ -98,7 +114,27 @@
     "from": "Da",
     "to": "A",
     "printStudentsFormTitle": "Stampa Allieve",
-    "teachersNotFound": "Nessun insegnante trovato."
+    "teachersNotFound": "Nessun insegnante trovato.",
+    "undefined": "Non Definito"
   },
-  "toast": {}
+  "toast": {
+    "success": {
+      "general": "PDF Creato Correttamente"
+    },
+    "error": {
+      "general": "Si e` verificato un errore nel creare il documento",
+      "noStudentsSelected": "Seleziona Allieve per Stamparle",
+      "noStudentFound": "Nessuno studente trovato!",
+      "noReceiptSelected": "Seleziona Ricevuta per Stamparla",
+      "noReceiptsSelected": "Seleziona Ricevute per Stamparle",
+      "noMembershipFeeFound": "Nessuna Quota Associativa trovata nel periodo selezionato!",
+      "emptyTaxCode": "Codice Fiscale non puo essere vuoto",
+      "taxCodeIncorrectFormat": "Assicurati che il codice fiscale sia nel formato corretto",
+      "parentTaxCodeIncorrectFormat": "Assicurati che il codice fiscale del genitore sia nel formato corretto",
+      "noEligibleFilter": "Calcolo dell'importo non si puo' effetturare con il filtro impostato!",
+      "noPaymentMethodSelected": "Seleziona Tipo di Pagamento!",
+      "noReceiptSelectedForUpdate": "Seleziona Ricevuta per Aggiornarla",
+      "noReceiptSelectedForDelete": "Seleziona Ricevuta per Eliminarla"
+    }
+  }
 }

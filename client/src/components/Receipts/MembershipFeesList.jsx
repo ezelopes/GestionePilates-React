@@ -44,7 +44,6 @@ const MembershipFeesList = () => {
         gridOptions={gridOptions}
         isMembershipFee
       />
-      {/* Receipts */}
       <div className="ag-theme-balham receipts-grid">
         <AgGridReact
           reactNext

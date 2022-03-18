@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button } from 'react-bootstrap';
 
 import FilterReceiptsForm from './FilterReceiptsForm';
+import Translation from '../common/Translation/Translation';
 
 import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
 import { useReceipt } from './ReceiptContext';
@@ -100,12 +101,12 @@ const ReceiptsList = () => {
       <div className="buttons-container">
         <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)}>
           <span role="img" aria-label="print-selected">
-            🖨️ Stampa Ricevute Selezionate
+            🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
           </span>
         </Button>
         <Button variant="success" onClick={() => printExpiringStudents(currentReceipts)}>
           <span role="img" aria-label="print-selected">
-            🖨️ Lista Allieve In Scadenza
+            🖨️ <Translation value="buttons.student.printExpiringStudents" />
           </span>
         </Button>
       </div>
