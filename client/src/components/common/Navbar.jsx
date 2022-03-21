@@ -6,7 +6,9 @@ import Translation from './Translation/Translation';
 const NavBar = () => (
   <>
     <Navbar bg="dark" variant="dark" expanded="false" className="navbar">
-      <Navbar.Brand href="/"> PilArt </Navbar.Brand>
+      <Navbar.Brand href="/">
+        <Translation value="common.pilart" />
+      </Navbar.Brand>
       <Nav className="mr-auto">
         <NavDropdown title="Allieve" id="navbarScrollingDropdown">
           <NavDropdown.Item href="/paginaallieve">

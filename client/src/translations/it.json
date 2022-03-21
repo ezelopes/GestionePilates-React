@@ -94,11 +94,15 @@
     "receiptsList": "Ricevute"
   },
   "modalsContent": {
+    "deleteStudentHeader": "Elimina Allieva",
+    "deleteStudentBody": "Sei sicura di voler eliminare...",
+    "updateStudentHeader": "Aggiorna Allieva",
     "updateReceiptHeader": "Aggiorna Ricevuta",
     "deleteReceiptBody": "Sei sicura di voler eliminare la ricevuta selezionata?",
     "deleteReceiptHeader": "Elimina Ricevuta",
     "updateTeacherHeader": "Aggiorna Insegnante",
-    "deleteTeacherHeader": "Elimina Insegnante"
+    "deleteTeacherHeader": "Elimina Insegnante",
+    "updateRegistrationDateHeader": "Aggiorna Data Iscrizione"
   },
   "common": {
     "pilart": "PilArt",
