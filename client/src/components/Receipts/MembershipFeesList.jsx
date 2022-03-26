@@ -4,6 +4,8 @@ import { AgGridReact } from 'ag-grid-react';
 import FilterReceiptsForm from './FilterReceiptsForm';
 import { useReceipt } from './ReceiptContext';
 
+import { gridOptionsDefaultMembershipFee } from '../../helpers/grid.config';
+
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
@@ -19,22 +21,10 @@ const columnsDefinition = [
   { headerName: 'Somma Euro', field: 'AmountPaid' },
 ];
 
-const gridOptionsDefault = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    floatingFilter: true,
-    cellStyle: { fontSize: '1.5em' },
-    flex: 10,
-  },
-};
-
 const MembershipFeesList = () => {
   const { allMembershipFees, currentReceipts, setCurrentReceipts } = useReceipt();
 
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
+  const [gridOptions] = useState(gridOptionsDefaultMembershipFee);
 
   return (
     <div className="tab-content">
@@ -52,7 +42,7 @@ const MembershipFeesList = () => {
           scrollbarWidth
           rowHeight="45"
           gridOptions={gridOptions}
-          columnDefs={columnDefs}
+          columnDefs={columnsDefinition}
           rowData={currentReceipts}
         />
       </div>

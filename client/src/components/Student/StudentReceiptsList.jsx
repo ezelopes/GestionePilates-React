@@ -9,20 +9,12 @@ import CreateUpdateReceiptForm from '../forms/CreateUpdateReceiptForm';
 import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
 import { printStudentReceipt } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
+import { gridOptionsDefaultStudentReceipts } from '../../helpers/grid.config';
 
 import { useStudent } from './StudentContext';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
-
-const gridOptionsDefault = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    cellStyle: { fontSize: '1.5em' },
-  },
-};
 
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
@@ -54,8 +46,7 @@ const columnsDefinition = [
 const StudentReceiptsList = () => {
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
 
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
+  const [gridOptions] = useState(gridOptionsDefaultStudentReceipts);
   const [rowData, setRowData] = useState(studentReceipts);
 
   const [selectedReceipt, setSelectedReceipt] = useState();
@@ -112,7 +103,7 @@ const StudentReceiptsList = () => {
           rowHeight="45"
           rowSelection="single"
           gridOptions={gridOptions}
-          columnDefs={columnDefs}
+          columnDefs={columnsDefinition}
           rowData={rowData}
           onSelectionChanged={onReceiptSelectionChanged}
           onGridReady={onGridReady}

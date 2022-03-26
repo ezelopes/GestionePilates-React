@@ -7,6 +7,7 @@ import PrintStudentsForm from '../components/Students/PrintStudentsForm';
 
 import { getAllStudents } from '../helpers/apiCalls';
 import { printSelectedStudents } from '../helpers/printPDF';
+import { gridOptionsDefaultStudents } from '../helpers/grid.config';
 
 import Translation from '../components/common/Translation/Translation';
 
@@ -57,19 +58,8 @@ const columnsDefinition = [
   { headerName: 'Cognome Genitore', field: 'ParentSurname' },
 ];
 
-const gridOptionsDefault = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    cellStyle: { fontSize: '1.5em' },
-  },
-  rowSelection: 'single',
-};
-
 const StudentsPage = () => {
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
+  const [gridOptions] = useState(gridOptionsDefaultStudents);
 
   const [students, setStudents] = useState();
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -136,7 +126,7 @@ const StudentsPage = () => {
               scrollbarWidth
               rowHeight="45"
               gridOptions={gridOptions}
-              columnDefs={columnDefs}
+              columnDefs={columnsDefinition}
               rowData={students}
               onSelectionChanged={onStudentSelectionChanged}
               onGridReady={onGridReady}
@@ -152,7 +142,7 @@ const StudentsPage = () => {
           </div>
         </div>
 
-        <PrintStudentsForm students={students} />
+        {students && <PrintStudentsForm students={students} />}
       </div>
     </>
   );

@@ -8,6 +8,7 @@ import formatDate from '../../helpers/formatDateForInputDate';
 import { printReceiptsDetails } from '../../helpers/printPDF';
 
 // TODO: Export printReceiptsDetails as a callback and define it one level above
+// TODO: APPLY TRANSLATIONS HERE
 
 const columnDefs = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -46,14 +47,23 @@ const FilteredReceiptsModal = ({
     <Modal show={showFilteredAmountModal} onHide={() => setShowFilteredAmountModal(false)} centered dialogClassName="modal-90vw">
       <Modal.Header closeButton>
         <Modal.Title>
-          Ricevute dal {formatDate(new Date(fromDate)) || BLANK_DATE} al {formatDate(new Date(toDate)) || BLANK_DATE} (tramite
-          {` ${filteredPaymentMethod}`})
+          <Translation
+            value="receiptFilterForm.title"
+            replace={{
+              fromDate: formatDate(new Date(fromDate)) || BLANK_DATE,
+              toDate: formatDate(new Date(toDate)) || BLANK_DATE,
+              paymentMethod: filteredPaymentMethod,
+            }}
+          />
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className="filtered-receipt-modal">
-        <div>
-          Importo Totale tra le date selezionte: <b> {filteredAmountPaid}€ </b>
-        </div>
+        <Translation
+          value="receiptFilterForm.totalAmount"
+          replace={{
+            totalAmount: filteredAmountPaid,
+          }}
+        />
         <div className="ag-theme-balham filtered-receipt-grid">
           <AgGridReact
             reactNext

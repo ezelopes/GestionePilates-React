@@ -2,15 +2,13 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import Translation from '../common/Translation/Translation';
-import useTranslation from '../common/Translation/useTranslation';
+import { getTranslation } from '../common/Translation/helpers';
 
 import { ages } from '../../commondata';
 
 const dropdownAges = [null, ages[0].age, ages[1].age];
 
 const FilterStudentsForm = ({ filterColumn, clearColumns }) => {
-  const { translate } = useTranslation();
-
   const filterNameRef = useRef();
   const filterSurnameRef = useRef();
   const filterCityRef = useRef();
@@ -34,7 +32,7 @@ const FilterStudentsForm = ({ filterColumn, clearColumns }) => {
         <Form.Control
           ref={filterNameRef}
           type="text"
-          placeholder={translate('placeholder.name')}
+          placeholder={getTranslation('placeholder.name')}
           onChange={(e) => {
             filterColumn('Name', e.target.value);
           }}
@@ -48,7 +46,7 @@ const FilterStudentsForm = ({ filterColumn, clearColumns }) => {
         <Form.Control
           ref={filterSurnameRef}
           type="text"
-          placeholder={translate('placeholder.surname')}
+          placeholder={getTranslation('placeholder.surname')}
           onChange={(e) => {
             filterColumn('Surname', e.target.value);
           }}
@@ -62,7 +60,7 @@ const FilterStudentsForm = ({ filterColumn, clearColumns }) => {
         <Form.Control
           ref={filterCityRef}
           type="text"
-          placeholder={translate('placeholder.city')}
+          placeholder={getTranslation('placeholder.city')}
           onChange={(e) => {
             filterColumn('City', e.target.value);
           }}

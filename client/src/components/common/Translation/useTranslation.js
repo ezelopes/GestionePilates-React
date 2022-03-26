@@ -1,18 +1,26 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { getTranslation } from './helpers';
+import { getTranslation, replaceTranslation } from './helpers';
 
-const useTranslation = () => {
+const useTranslation = (value, replace) => {
   const [language, setLanguage] = useState('it');
 
-  const translate = (value) => getTranslation(value, language) ?? value;
+  const translation = useMemo(() => {
+    const string = getTranslation(value, language);
+
+    return string;
+  }, [value, language]);
+
+  if (!translation) {
+    return null;
+  }
 
   return {
     // Language,
     // fallbackLanguage,
     // setFallbackLanguage,
     setLanguage,
-    translate,
+    translation: replace ? replaceTranslation(translation, replace) : translation,
   };
 };
 

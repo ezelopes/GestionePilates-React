@@ -51,7 +51,9 @@
   },
   "receiptFilterForm": {
     "filterBy": "Filtra per:",
-    "selectPaymentMethod": "Seleziona Tipo Pagamento:"
+    "selectPaymentMethod": "Seleziona Tipo Pagamento:",
+    "title": "Ricevute dal {{ fromDate }} al {{ toDate }} (tramite {{ paymentMethod }})",
+    "totalAmount": "Importo Totale tra le date selezionte: <strong>{{ totalAmount }}€ </strong>"
   },
   "buttons": {
     "student": {

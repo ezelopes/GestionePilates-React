@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// TODO: FIND A BETTER WAY FOR THIS
+
 const Divider = ({ half = false, single = false, double = false }) => {
   if (single) {
     return <div style={{ marginTop: '1em' }} />;

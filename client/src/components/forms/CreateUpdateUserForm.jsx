@@ -103,6 +103,7 @@ const CreateUpdateUserForm = ({
             errors={errors}
             name="TaxCode"
             render={() => {
+              // TODO: THIS ERROR MESSAGE COMES UP TWICE
               if (errors?.TaxCode?.type === 'required') {
                 return toast.error(getTranslation('toast.error.emptyTaxCode'), toastConfig);
               }

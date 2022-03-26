@@ -8,6 +8,8 @@ import Translation from '../common/Translation/Translation';
 import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
 import { useReceipt } from './ReceiptContext';
 
+import { gridOptionsDefaultReceipt } from '../../helpers/grid.config';
+
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
 
@@ -34,23 +36,10 @@ const columnsDefinition = [
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
 ];
 
-const gridOptionsDefault = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    floatingFilter: true,
-    cellStyle: { fontSize: '1.5em' },
-    flex: 10,
-  },
-  rowSelection: 'single',
-};
-
 const ReceiptsList = () => {
   const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt();
 
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
+  const [gridOptions] = useState(gridOptionsDefaultReceipt);
 
   const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
 
@@ -92,7 +81,7 @@ const ReceiptsList = () => {
           scrollbarWidth
           rowHeight="45"
           gridOptions={gridOptions}
-          columnDefs={columnDefs}
+          columnDefs={columnsDefinition}
           rowData={currentReceipts}
           onSelectionChanged={onReceiptSelectionChanged}
         />
