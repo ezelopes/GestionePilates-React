@@ -82,6 +82,8 @@ const years = [
   { id: 2024, year: 2024 },
 ];
 
+const BLANK_DATE = '______-______-________';
+
 const getMonthFromId = (monthId) =>
   months.map(({ id, month }) => (id === monthId ? month : null)).filter((month) => month !== null);
 
@@ -96,5 +98,6 @@ export {
   defaultAmounts,
   months,
   years,
+  BLANK_DATE,
   getMonthFromId,
 };

@@ -6,9 +6,10 @@ import { Button, Modal } from 'react-bootstrap';
 import Translation from '../common/Translation/Translation';
 import formatDate from '../../helpers/formatDateForInputDate';
 import { printReceiptsDetails } from '../../helpers/printPDF';
+import { gridOptionsFilteredReceipts } from '../../helpers/grid.config';
+import { BLANK_DATE } from '../../commondata';
 
 // TODO: Export printReceiptsDetails as a callback and define it one level above
-// TODO: APPLY TRANSLATIONS HERE
 
 const columnDefs = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -19,20 +20,6 @@ const columnDefs = [
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
 ];
-
-const gridOptions = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    floatingFilter: true,
-    cellStyle: { fontSize: '1.5em' },
-    flex: 10,
-  },
-  rowSelection: 'single',
-};
-
-const BLANK_DATE = '______-______-________';
 
 const FilteredReceiptsModal = ({
   filteredReceipts,
@@ -69,7 +56,7 @@ const FilteredReceiptsModal = ({
             reactNext
             scrollbarWidth
             rowHeight="45"
-            gridOptions={gridOptions}
+            gridOptions={gridOptionsFilteredReceipts}
             columnDefs={columnDefs}
             rowData={filteredReceipts}
           />

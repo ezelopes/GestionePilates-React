@@ -40,9 +40,22 @@ const gridOptionsDefaultStudents = {
   rowSelection: 'single',
 };
 
+const gridOptionsFilteredReceipts = {
+  defaultColDef: {
+    resizable: true,
+    sortable: true,
+    filter: true,
+    floatingFilter: true,
+    cellStyle: { fontSize: '1.5em' },
+    flex: 10,
+  },
+  rowSelection: 'single',
+};
+
 export {
   gridOptionsDefaultMembershipFee,
   gridOptionsDefaultReceipt,
   gridOptionsDefaultStudentReceipts,
   gridOptionsDefaultStudents,
+  gridOptionsFilteredReceipts,
 };
