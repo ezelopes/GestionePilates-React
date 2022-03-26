@@ -1,8 +1,3 @@
-const userType = [
-  { id: 0, user: 'Student' },
-  { id: 1, user: 'Teacher' },
-];
-
 const ages = [
   { id: 0, age: 'Maggiorenne' },
   { id: 1, age: 'Minorenne' },
@@ -88,7 +83,6 @@ const getMonthFromId = (monthId) =>
   months.map(({ id, month }) => (id === monthId ? month : null)).filter((month) => month !== null);
 
 export {
-  userType,
   ages,
   disciplines,
   schools,

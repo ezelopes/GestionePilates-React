@@ -16,7 +16,6 @@ import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, ge
 import toastConfig from '../helpers/toast.config';
 import { printRegistrationForm } from '../helpers/printPDF';
 
-import { userType } from '../commondata';
 import Translation from '../components/common/Translation/Translation';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
@@ -201,7 +200,7 @@ const StudentPage = ({ match }) => {
             <Modal.Body className="update-student-modal-body">
               <CreateUpdateUserForm
                 personInfo={studentInfo}
-                personType={userType[0].user}
+                isStudent
                 callback={updateStudent}
                 handleModal={setShowUpdateStudentModal}
                 setUserInfo={setStudentInfo}

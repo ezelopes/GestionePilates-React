@@ -11,9 +11,7 @@ import { getTranslation } from '../common/Translation/helpers';
 
 import toastConfig from '../../helpers/toast.config';
 
-import { userType, ages, disciplines, schools, courses } from '../../commondata';
-
-const isStudent = (type) => type === userType[0].user;
+import { ages, disciplines, schools, courses } from '../../commondata';
 
 const isUnderAge = (age) => age === ages[1].age;
 
@@ -21,7 +19,7 @@ const TAX_CODE_REGEX = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i;
 
 const CreateUpdateUserForm = ({
   personInfo,
-  personType,
+  isStudent = false,
   callback,
   isForCreating,
   setUserInfo = () => {},
@@ -31,13 +29,13 @@ const CreateUpdateUserForm = ({
 
   const defaultValues = {};
 
-  if (isStudent(personType)) {
+  if (isStudent) {
     defaultValues.StudentID = personInfo?.StudentID;
   } else {
     defaultValues.TeacherID = personInfo?.TeacherID;
   }
 
-  if (newIsAdult === ages[0].age && isStudent(personType)) {
+  if (newIsAdult === ages[0].age && isStudent) {
     defaultValues.ParentTaxCode = null;
     defaultValues.ParentName = null;
     defaultValues.ParentSurname = null;
@@ -74,7 +72,7 @@ const CreateUpdateUserForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="user-form">
-        {isStudent(personType) && (
+        {isStudent && (
           <>
             <Form.Label>
               <Translation value="form.age" />
@@ -115,9 +113,7 @@ const CreateUpdateUserForm = ({
           />
         </div>
 
-        <Form.Label>
-          {isStudent(personType) ? <Translation value="form.studentName" /> : <Translation value="form.teacherName" />}
-        </Form.Label>
+        <Form.Label>{isStudent ? <Translation value="form.studentName" /> : <Translation value="form.teacherName" />}</Form.Label>
         <Form.Control
           type="text"
           placeholder={getTranslation('placeholder.name')}
@@ -126,7 +122,7 @@ const CreateUpdateUserForm = ({
         />
 
         <Form.Label>
-          {isStudent(personType) ? <Translation value="form.studentSurname" /> : <Translation value="form.teacherSurname" />}
+          {isStudent ? <Translation value="form.studentSurname" /> : <Translation value="form.teacherSurname" />}
         </Form.Label>
         <Form.Control
           type="text"
@@ -135,7 +131,7 @@ const CreateUpdateUserForm = ({
           {...register('Surname')}
         />
 
-        {!isStudent(personType) && <Divider half />}
+        {!isStudent && <Divider half />}
         <Divider />
 
         <Form.Label>
@@ -245,7 +241,7 @@ const CreateUpdateUserForm = ({
         </Form.Label>
         <input type="date" defaultValue={personInfo?.GreenPassExpirationDate} {...register('GreenPassExpirationDate')} />
 
-        {isStudent(personType) && isUnderAge(newIsAdult) && (
+        {isStudent && isUnderAge(newIsAdult) && (
           <>
             <Divider />
 
@@ -299,10 +295,10 @@ const CreateUpdateUserForm = ({
 
       <div className="subscription-form-buttons">
         <Button type="submit" variant="success">
-          {isForCreating && isStudent(personType) && <Translation value="buttons.student.createStudent" />}
-          {!isForCreating && isStudent(personType) && <Translation value="buttons.student.updateStudent" />}
-          {isForCreating && !isStudent(personType) && <Translation value="buttons.teacher.createTeacher" />}
-          {!isForCreating && !isStudent(personType) && <Translation value="buttons.teacher.updateTeacher" />}
+          {isForCreating && isStudent && <Translation value="buttons.student.createStudent" />}
+          {!isForCreating && isStudent && <Translation value="buttons.student.updateStudent" />}
+          {isForCreating && !isStudent && <Translation value="buttons.teacher.createTeacher" />}
+          {!isForCreating && !isStudent && <Translation value="buttons.teacher.updateTeacher" />}
         </Button>
         {isForCreating && (
           <Button variant="secondary" onClick={() => reset()}>
@@ -338,7 +334,7 @@ CreateUpdateUserForm.propTypes = {
     ParentName: PropTypes.string,
     ParentSurname: PropTypes.string,
   }),
-  personType: PropTypes.string.isRequired,
+  isStudent: PropTypes.bool,
   callback: PropTypes.func.isRequired,
   isForCreating: PropTypes.bool,
   setUserInfo: PropTypes.func,
@@ -347,6 +343,7 @@ CreateUpdateUserForm.propTypes = {
 
 CreateUpdateUserForm.defaultProps = {
   personInfo: {},
+  isStudent: false,
   isForCreating: false,
   setUserInfo: () => {},
   handleModal: () => {},

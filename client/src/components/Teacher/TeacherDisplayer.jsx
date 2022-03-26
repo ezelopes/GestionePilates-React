@@ -11,7 +11,6 @@ import { printTeacherRegistrationForm } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
 
 import Translation from '../common/Translation/Translation';
-import { userType } from '../../commondata';
 
 const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo);
@@ -165,7 +164,6 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
         <Modal.Body className="update-student-teacher-modal-body">
           <CreateUpdateUserForm
             personInfo={teacherInfo}
-            personType={userType[1].user}
             callback={updateTeacher}
             handleModal={setShowUpdateTeacherModal}
             setUserInfo={setTeacherInfo}
