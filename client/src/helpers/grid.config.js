@@ -9,7 +9,7 @@ const gridOptionsDefaultMembershipFee = {
   },
 };
 
-const gridOptionsDefaultReceipt = {
+const gridOptionsDefaultReceipts = {
   defaultColDef: {
     resizable: true,
     sortable: true,
@@ -54,7 +54,7 @@ const gridOptionsFilteredReceipts = {
 
 export {
   gridOptionsDefaultMembershipFee,
-  gridOptionsDefaultReceipt,
+  gridOptionsDefaultReceipts,
   gridOptionsDefaultStudentReceipts,
   gridOptionsDefaultStudents,
   gridOptionsFilteredReceipts,

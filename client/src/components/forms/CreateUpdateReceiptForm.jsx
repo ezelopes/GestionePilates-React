@@ -15,11 +15,11 @@ import { useStudent } from '../Student/StudentContext';
 import toastConfig from '../../helpers/toast.config';
 import formatDate from '../../helpers/formatDateForInputDate';
 
-import { receiptType, paymentMethod, defaultAmounts } from '../../commondata';
+import { receiptTypes, paymentMethod, defaultAmounts, isMembershipFee } from '../../commondata';
 
 const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {
-    if (ReceiptType === receiptType[0].type && !IncludeMembershipFee) {
+    if (!isMembershipFee(ReceiptType) && !IncludeMembershipFee) {
       return accumulator;
     }
 
@@ -39,7 +39,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
 
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
 
-  const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptType[0].type);
+  const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptTypes[0].type);
   const [disableIncludeMembershipFee, setDisableIncludeMembershipFee] = useState(false);
 
   const defaultValues = {
@@ -50,7 +50,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
     IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
   };
 
-  if (newReceiptType === receiptType[1].type) {
+  if (isMembershipFee(newReceiptType)) {
     defaultValues.CourseStartDate = null;
     defaultValues.CourseEndDate = null;
   }
@@ -92,7 +92,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
   };
 
   const onReceiptTypeChange = (value) => {
-    if (value === receiptType[1].type) {
+    if (isMembershipFee(value)) {
       setValue('CourseStartDate', null);
       setValue('CourseEndDate', null);
     } else {
@@ -162,15 +162,15 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
                 onReceiptTypeChange(e.target.value);
               }}
             >
-              <option key={`select_${receiptType[0].type}`} value={receiptType[0].type}>
-                {receiptType[0].type}
+              <option key={`select_${receiptTypes[0].type}`} value={receiptTypes[0].type}>
+                {receiptTypes[0].type}
               </option>
               <option
-                key={`select_${receiptType[1].type}`}
-                value={receiptType[1].type}
-                disabled={newReceiptType === receiptType[0].type && disableIncludeMembershipFee}
+                key={`select_${receiptTypes[1].type}`}
+                value={receiptTypes[1].type}
+                disabled={!isMembershipFee(newReceiptType) && disableIncludeMembershipFee}
               >
-                {receiptType[1].type}
+                {receiptTypes[1].type}
               </option>
             </Form.Control>
           </div>
@@ -221,7 +221,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
             <input type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
           </div>
 
-          {newReceiptType === receiptType[0].type && (
+          {!isMembershipFee(newReceiptType) && (
             <>
               <div className="flex-element">
                 <Form.Label>
@@ -250,7 +250,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
               />
             )}
 
-            {newReceiptType === receiptType[0].type && (
+            {!isMembershipFee(newReceiptType) && (
               <Form.Check
                 label={<Translation value="receiptForm.includeMembershipFee" />}
                 type="checkbox"

@@ -6,7 +6,7 @@ import { getTranslation } from '../components/common/Translation/helpers';
 
 import toastConfig from './toast.config';
 
-import { ages, receiptType, getMonthFromId, months } from '../commondata';
+import { getMonthFromId, months, isAdult, isMembershipFee } from '../commondata';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -71,16 +71,16 @@ const printSelectedReceipts = async (selectedReceipts) => {
         CourseEndDate: data.CourseEndDate,
       };
 
-      if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[0].type) {
+      if (isAdult(studentInfo.IsAdult) && !isMembershipFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await ReceiptTemplateAdult.default(studentInfo, receiptInfo);
-      } else if (studentInfo.IsAdult === ages[0].age && receiptInfo.ReceiptType === receiptType[1].type) {
+      } else if (isAdult(studentInfo.IsAdult) && isMembershipFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
-      } else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[0].type) {
+      } else if (!isAdult(studentInfo.IsAdult) && !isMembershipFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
-      } else if (studentInfo.IsAdult === ages[1].age && receiptInfo.ReceiptType === receiptType[1].type) {
+      } else if (!isAdult(studentInfo.IsAdult) && isMembershipFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
       }
@@ -109,13 +109,13 @@ const printStudentReceipt = async (selectedReceipt, studentInfo) => {
 
     let documentDefinition;
 
-    if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) {
+    if (isAdult(studentInfo.IsAdult) && !isMembershipFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-    } else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type) {
+    } else if (isAdult(studentInfo.IsAdult) && isMembershipFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-    } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type) {
+    } else if (!isAdult(studentInfo.IsAdult) && !isMembershipFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-    } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type) {
+    } else if (!isAdult(studentInfo.IsAdult) && isMembershipFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
     }
 
@@ -236,7 +236,7 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
         return (
           RegistrationDateFormatted.getMonth() === selectedMonth &&
           RegistrationDateFormatted.getFullYear() === selectedYearGreenPass &&
-          IsAdult === ages[0].age &&
+          isAdult(IsAdult) &&
           !!GreenPassExpirationDate
         );
       }
@@ -245,6 +245,8 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
     });
 
     const { month } = months.find(({ id }) => id === selectedMonth);
+
+    // TODO: Const month = getMonthFromId(selectedMonth);
 
     if (studentsWithExpiringGreenPass.length > 0) {
       const documentDefinition = await StudentsDataTemplate.default(
@@ -278,6 +280,8 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
     });
 
     const { month } = months.find(({ id }) => id === selectedMonth);
+
+    // TODO: Const month = getMonthFromId(selectedMonth);
 
     if (studentsWithExpiringGreenPass.length > 0) {
       const documentDefinition = await StudentsDataGreenPassTemplate.default(

@@ -38,7 +38,7 @@ const courses = [
   { id: 21, course: 'Musiscal Teens' },
 ];
 
-const receiptType = [
+const receiptTypes = [
   { id: 0, type: 'Quota' },
   { id: 1, type: 'Quota Associativa' },
 ];
@@ -82,16 +82,22 @@ const BLANK_DATE = '______-______-________';
 const getMonthFromId = (monthId) =>
   months.map(({ id, month }) => (id === monthId ? month : null)).filter((month) => month !== null);
 
+const isAdult = (age) => age === ages[0].age;
+
+const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
+
 export {
   ages,
   disciplines,
   schools,
   courses,
-  receiptType,
+  receiptTypes,
   paymentMethod,
   defaultAmounts,
   months,
   years,
   BLANK_DATE,
   getMonthFromId,
+  isAdult,
+  isMembershipFee,
 };

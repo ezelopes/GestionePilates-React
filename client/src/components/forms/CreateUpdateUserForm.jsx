@@ -11,9 +11,7 @@ import { getTranslation } from '../common/Translation/helpers';
 
 import toastConfig from '../../helpers/toast.config';
 
-import { ages, disciplines, schools, courses } from '../../commondata';
-
-const isUnderAge = (age) => age === ages[1].age;
+import { ages, disciplines, schools, courses, isAdult } from '../../commondata';
 
 const TAX_CODE_REGEX = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i;
 
@@ -35,7 +33,7 @@ const CreateUpdateUserForm = ({
     defaultValues.TeacherID = personInfo?.TeacherID;
   }
 
-  if (newIsAdult === ages[0].age && isStudent) {
+  if (isAdult(newIsAdult) && isStudent) {
     defaultValues.ParentTaxCode = null;
     defaultValues.ParentName = null;
     defaultValues.ParentSurname = null;
@@ -241,7 +239,7 @@ const CreateUpdateUserForm = ({
         </Form.Label>
         <input type="date" defaultValue={personInfo?.GreenPassExpirationDate} {...register('GreenPassExpirationDate')} />
 
-        {isStudent && isUnderAge(newIsAdult) && (
+        {isStudent && !isAdult(newIsAdult) && (
           <>
             <Divider />
 

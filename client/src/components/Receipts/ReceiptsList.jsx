@@ -8,7 +8,7 @@ import Translation from '../common/Translation/Translation';
 import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
 import { useReceipt } from './ReceiptContext';
 
-import { gridOptionsDefaultReceipt } from '../../helpers/grid.config';
+import { gridOptionsDefaultReceipts } from '../../helpers/grid.config';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -39,7 +39,7 @@ const columnsDefinition = [
 const ReceiptsList = () => {
   const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt();
 
-  const [gridOptions] = useState(gridOptionsDefaultReceipt);
+  const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
   const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
 

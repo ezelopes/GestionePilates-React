@@ -5,7 +5,7 @@ import MembershipFeeList from '../components/Receipts/MembershipFeesList';
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import { getAllReceipts } from '../helpers/apiCalls';
 
-import { receiptType } from '../commondata';
+import { isMembershipFee } from '../commondata';
 import Toggle from '../components/common/Toggle';
 import { ReceiptProvider } from '../components/Receipts/ReceiptContext';
 
@@ -24,7 +24,7 @@ const ReceiptsPage = () => {
       const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts);
 
       const receiptsWithMembershipFee = orderedReceipts.filter(
-        ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || ReceiptType === receiptType[1].type
+        ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || isMembershipFee(ReceiptType)
       );
 
       setAllReceipts(orderedReceipts);
