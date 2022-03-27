@@ -51,7 +51,7 @@ const createReceipt = async (receiptInfo) => {
       SommaEuro: receiptInfo.AmountPaid,
       FK_CodiceFiscale: receiptInfo.TaxCode,
       FK_AllievaID: receiptInfo.StudentID,
-      IncludeMembershipFee: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
+      IncludeQuotaAssociativa: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
     });
 
     if (receiptInfo.RegistrationDate === true) {
@@ -82,7 +82,7 @@ const updateReceipt = async (receiptInfo) => {
         DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
         DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
         SommaEuro: receiptInfo.AmountPaid,
-        IncludeMembershipFee: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
+        IncludeQuotaAssociativa: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
       });
 
     return { message: receiptResponseMessages.ok.update };

@@ -42,7 +42,7 @@ const mappingReceipt = (rows) =>
       AmountPaid: row.SommaEuro,
       FK_StudentID: row.FK_AllievaID,
       PaymentMethod: row.TipoPagamento,
-      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
+      IncludeMembershipFee: Boolean(row.IncludeQuotaAssociativa),
     }))
     .filter((row) => !!row.ReceiptID); // Remove null values
 
@@ -77,7 +77,7 @@ const mappingReceiptsWithStudentInfo = (rows) =>
     ReceiptDate: getFormattedDate(row.DataRicevuta),
     CourseStartDate: getFormattedDate(row.DataInizioCorso),
     CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-    IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
+    IncludeMembershipFee: Boolean(row.IncludeQuotaAssociativa),
   }));
 
 /**

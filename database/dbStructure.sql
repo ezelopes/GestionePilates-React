@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS Ricevuta (
   DataScadenzaCorso DATETIME,
   SommaEuro varchar(255),
   FK_CodiceFiscale varchar(255),
-  IncludeMembershipFee bool,
+  IncludeQuotaAssociativa bool,
   PRIMARY KEY (RicevutaID),
   FOREIGN KEY (FK_CodiceFiscale) REFERENCES Allieva(CodiceFiscale) ON UPDATE CASCADE
 );
