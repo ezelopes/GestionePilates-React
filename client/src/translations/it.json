@@ -86,7 +86,8 @@
     "print": "Stampa",
     "close": "Chiudi",
     "resetForm": "Reset Form",
-    "removeFilters": "Rimuovi Filtri"
+    "removeFilters": "Rimuovi Filtri",
+    "notFoundPage": "Torna alla Lista delle Allieve"
   },
   "navbar": {
     "studentsList": "Lista Allieve",
@@ -143,5 +144,8 @@
       "noReceiptSelectedForDelete": "Seleziona Ricevuta per Eliminarla",
       "noYearSelected": "Anno non selezionato!"
     }
+  },
+  "notFoundPage": {
+    "title": "Oops! Ti sei persa?"
   }
 }
