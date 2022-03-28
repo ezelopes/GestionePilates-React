@@ -99,9 +99,6 @@ const StudentReceiptsList = () => {
     <div className="tab-content">
       <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
-          scrollbarWidth
-          rowHeight="45"
-          rowSelection="single"
           gridOptions={gridOptions}
           columnDefs={columnsDefinition}
           rowData={rowData}

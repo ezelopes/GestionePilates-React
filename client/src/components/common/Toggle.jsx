@@ -41,11 +41,11 @@ const Toggle = ({ optionOne, optionTwo, callback }) => {
 };
 
 Toggle.propTypes = {
-  optionOne: PropTypes.objectOf({
+  optionOne: PropTypes.shape({
     title: PropTypes.string,
     name: PropTypes.string,
   }).isRequired,
-  optionTwo: PropTypes.objectOf({
+  optionTwo: PropTypes.shape({
     title: PropTypes.string,
     name: PropTypes.string,
   }).isRequired,

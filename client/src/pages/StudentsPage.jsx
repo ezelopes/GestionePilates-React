@@ -121,10 +121,6 @@ const StudentsPage = () => {
           <div className="ag-theme-balham student-list-grid">
             <AgGridReact
               reactNext
-              rowMultiSelectWithClick
-              rowSelection="multiple"
-              scrollbarWidth
-              rowHeight="45"
               gridOptions={gridOptions}
               columnDefs={columnsDefinition}
               rowData={students}

@@ -43,13 +43,14 @@ const receiptTypes = [
   { id: 1, type: 'Quota Associativa' },
 ];
 
-const paymentMethod = [
+const paymentMethods = [
   { id: 0, type: 'Contanti' },
   { id: 1, type: 'Assegno' },
   { id: 2, type: 'Bonifico Bancario' },
 ];
 
 const defaultAmounts = [
+  { value: '10', label: '10' },
   { value: '90', label: '90' },
   { value: '120', label: '120' },
   { value: '150', label: '150' },
@@ -79,8 +80,7 @@ const years = [
 
 const BLANK_DATE = '______-______-________';
 
-const getMonthFromId = (monthId) =>
-  months.map(({ id, month }) => (id === monthId ? month : null)).filter((month) => month !== null);
+const getMonthFromId = (monthId) => months.find(({ id }) => id === monthId);
 
 const isAdult = (age) => age === ages[0].age;
 
@@ -92,7 +92,7 @@ export {
   schools,
   courses,
   receiptTypes,
-  paymentMethod,
+  paymentMethods,
   defaultAmounts,
   months,
   years,

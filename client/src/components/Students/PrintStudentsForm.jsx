@@ -9,6 +9,7 @@ import { months, years } from '../../commondata';
 
 const PrintStudentsForm = ({ students }) => {
   const [selectedMonth, setselectedMonth] = useState(months[0].id);
+  // TODO: UPDATE THIS SO IT GETS CURRENT YEAR
   const [selectedYearGreenPass, setSelectedYearGreenPass] = useState(years[0].id);
 
   return (
@@ -65,7 +66,7 @@ const PrintStudentsForm = ({ students }) => {
           onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYearGreenPass)}
           style={{ marginTop: '1em' }}
         >
-          🖨️ <Translation value="buttons.student.printExpiringRegistrationDate" />
+          🖨️ <Translation value="buttons.student.printBasedOnRegistrationDate" />
         </Button>
       </div>
     </div>

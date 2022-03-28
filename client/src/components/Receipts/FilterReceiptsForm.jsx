@@ -8,8 +8,9 @@ import { getTranslation } from '../common/Translation/helpers';
 import FilteredReceiptsModal from './FilteredReceiptsModal';
 import formatDate from '../../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../../helpers/orderReceiptsBasedOnReceiptNumber';
-import { printMembershipFeeSummaryTemplate } from '../../helpers/printPDF';
+import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
+import { BLANK_DATE } from '../../commondata';
 
 const paymentMethods = [null, 'Contanti', 'Assegno', 'Bonifico'];
 const filterFields = [
@@ -209,9 +210,18 @@ const FilterReceiptsForm = ({
         setShowFilteredAmountModal={setShowFilteredAmountModal}
         filteredAmountPaid={totalAmountPaid}
         filteredReceipts={receiptsForAmountSummary}
-        fromDate={fromDate}
-        toDate={toDate}
+        fromDate={formatDate(new Date(fromDate)) || BLANK_DATE}
+        toDate={formatDate(new Date(toDate)) || BLANK_DATE}
         filteredPaymentMethod={filteredPaymentMethod}
+        printReceipts={() =>
+          printReceiptsDetails(
+            receiptsForAmountSummary,
+            totalAmountPaid,
+            filteredPaymentMethod,
+            formatDate(new Date(fromDate)),
+            formatDate(new Date(toDate))
+          )
+        }
       />
     </>
   );

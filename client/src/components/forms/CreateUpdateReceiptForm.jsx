@@ -15,7 +15,7 @@ import { useStudent } from '../Student/StudentContext';
 import toastConfig from '../../helpers/toast.config';
 import formatDate from '../../helpers/formatDateForInputDate';
 
-import { receiptTypes, paymentMethod, defaultAmounts, isMembershipFee } from '../../commondata';
+import { receiptTypes, paymentMethods, defaultAmounts, isMembershipFee } from '../../commondata';
 
 const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {
@@ -180,7 +180,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
               <Translation value="receiptForm.paymentType" />
             </Form.Label>
             <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
-              {paymentMethod.map((currentType) => (
+              {paymentMethods.map((currentType) => (
                 <option key={`select_${currentType.type}`} value={currentType.type}>
                   {currentType.type}
                 </option>

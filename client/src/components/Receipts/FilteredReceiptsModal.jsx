@@ -4,12 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap';
 
 import Translation from '../common/Translation/Translation';
-import formatDate from '../../helpers/formatDateForInputDate';
-import { printReceiptsDetails } from '../../helpers/printPDF';
 import { gridOptionsFilteredReceipts } from '../../helpers/grid.config';
-import { BLANK_DATE } from '../../commondata';
-
-// TODO: Export printReceiptsDetails as a callback and define it one level above
 
 const columnDefs = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -29,6 +24,7 @@ const FilteredReceiptsModal = ({
   filteredPaymentMethod,
   fromDate,
   toDate,
+  printReceipts,
 }) => (
   <>
     <Modal show={showFilteredAmountModal} onHide={() => setShowFilteredAmountModal(false)} centered dialogClassName="modal-90vw">
@@ -37,8 +33,8 @@ const FilteredReceiptsModal = ({
           <Translation
             value="receiptFilterForm.title"
             replace={{
-              fromDate: formatDate(new Date(fromDate)) || BLANK_DATE,
-              toDate: formatDate(new Date(toDate)) || BLANK_DATE,
+              fromDate,
+              toDate,
               paymentMethod: filteredPaymentMethod,
             }}
           />
@@ -52,29 +48,11 @@ const FilteredReceiptsModal = ({
           }}
         />
         <div className="ag-theme-balham filtered-receipt-grid">
-          <AgGridReact
-            reactNext
-            scrollbarWidth
-            rowHeight="45"
-            gridOptions={gridOptionsFilteredReceipts}
-            columnDefs={columnDefs}
-            rowData={filteredReceipts}
-          />
+          <AgGridReact reactNext gridOptions={gridOptionsFilteredReceipts} columnDefs={columnDefs} rowData={filteredReceipts} />
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="success"
-          onClick={() =>
-            printReceiptsDetails(
-              filteredReceipts,
-              filteredAmountPaid,
-              filteredPaymentMethod,
-              formatDate(new Date(fromDate)),
-              formatDate(new Date(toDate))
-            )
-          }
-        >
+        <Button variant="success" onClick={printReceipts}>
           <span role="img" aria-label="print-selected">
             🖨️ <Translation value="buttons.print" />
           </span>
@@ -100,10 +78,12 @@ FilteredReceiptsModal.propTypes = {
   filteredPaymentMethod: PropTypes.string,
   fromDate: PropTypes.string.isRequired,
   toDate: PropTypes.string.isRequired,
+  printReceipts: PropTypes.func,
 };
 
 FilteredReceiptsModal.defaultProps = {
   filteredPaymentMethod: '',
+  printReceipts: () => {},
 };
 
 export default FilteredReceiptsModal;

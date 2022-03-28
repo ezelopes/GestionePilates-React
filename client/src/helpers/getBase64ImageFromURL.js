@@ -19,5 +19,5 @@ const getBase64ImageFromURL = (url) =>
 
 module.exports = getBase64ImageFromURL;
 
-// TODO
+// TODO:
 // https://stackoverflow.com/questions/36280818/how-to-convert-file-to-base64-in-javascript

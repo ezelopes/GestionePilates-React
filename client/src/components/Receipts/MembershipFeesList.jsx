@@ -35,16 +35,7 @@ const MembershipFeesList = () => {
         isMembershipFee
       />
       <div className="ag-theme-balham receipts-grid">
-        <AgGridReact
-          reactNext
-          rowMultiSelectWithClick
-          rowSelection="multiple"
-          scrollbarWidth
-          rowHeight="45"
-          gridOptions={gridOptions}
-          columnDefs={columnsDefinition}
-          rowData={currentReceipts}
-        />
+        <AgGridReact reactNext gridOptions={gridOptions} columnDefs={columnsDefinition} rowData={currentReceipts} />
       </div>
     </div>
   );

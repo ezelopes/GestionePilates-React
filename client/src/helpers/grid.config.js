@@ -7,6 +7,9 @@ const gridOptionsDefaultMembershipFee = {
     cellStyle: { fontSize: '1.5em' },
     flex: 10,
   },
+  rowSelection: 'multiple',
+  rowMultiSelectWithClick: true,
+  rowHeight: 45,
 };
 
 const gridOptionsDefaultReceipts = {
@@ -18,7 +21,9 @@ const gridOptionsDefaultReceipts = {
     cellStyle: { fontSize: '1.5em' },
     flex: 10,
   },
-  rowSelection: 'single',
+  rowSelection: 'multiple',
+  rowMultiSelectWithClick: true,
+  rowHeight: 45,
 };
 
 const gridOptionsDefaultStudentReceipts = {
@@ -28,6 +33,8 @@ const gridOptionsDefaultStudentReceipts = {
     filter: true,
     cellStyle: { fontSize: '1.5em' },
   },
+  rowSelection: 'single',
+  rowHeight: 45,
 };
 
 const gridOptionsDefaultStudents = {
@@ -37,7 +44,9 @@ const gridOptionsDefaultStudents = {
     filter: true,
     cellStyle: { fontSize: '1.5em' },
   },
-  rowSelection: 'single',
+  rowMultiSelectWithClick: true,
+  rowSelection: 'multiple',
+  rowHeight: 45,
 };
 
 const gridOptionsFilteredReceipts = {
@@ -50,6 +59,7 @@ const gridOptionsFilteredReceipts = {
     flex: 10,
   },
   rowSelection: 'single',
+  rowHeight: 45,
 };
 
 export {

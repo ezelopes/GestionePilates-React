@@ -34,6 +34,11 @@ const columnsDefinition = [
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
+  {
+    headerName: 'Include Quota Associativa',
+    field: 'IncludeMembershipFee',
+    cellRenderer: (params) => (params.value ? '✅' : ''),
+  },
 ];
 
 const ReceiptsList = () => {
@@ -76,10 +81,6 @@ const ReceiptsList = () => {
       <div className="ag-theme-balham receipts-grid">
         <AgGridReact
           reactNext
-          rowMultiSelectWithClick
-          rowSelection="multiple"
-          scrollbarWidth
-          rowHeight="45"
           gridOptions={gridOptions}
           columnDefs={columnsDefinition}
           rowData={currentReceipts}
@@ -93,6 +94,7 @@ const ReceiptsList = () => {
             🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
           </span>
         </Button>
+        {/* ADD COMBOBOX FOR SELECTING YEAR */}
         <Button variant="success" onClick={() => printExpiringStudents(currentReceipts)}>
           <span role="img" aria-label="print-selected">
             🖨️ <Translation value="buttons.student.printExpiringStudents" />

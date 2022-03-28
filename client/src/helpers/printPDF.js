@@ -6,7 +6,7 @@ import { getTranslation } from '../components/common/Translation/helpers';
 
 import toastConfig from './toast.config';
 
-import { getMonthFromId, months, isAdult, isMembershipFee } from '../commondata';
+import { getMonthFromId, isAdult, isMembershipFee } from '../commondata';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -162,13 +162,15 @@ const printReceiptsDetails = async (filteredReceipts, filteredAmountPaid, filter
   }
 };
 
-const printExpiringStudents = async (studentsReceiptsList) => {
+// TODO: AT THE MOMENT IT PRINTS ALL RECEIPTS, THIS FUNCTION NEEDS TO ACCEPT A FILTER FOR YEAR(S) TOO.
+const printExpiringStudents = async (studentsReceiptsList, selectedYear = 2022) => {
   try {
     if (studentsReceiptsList.length < 1) {
       return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
     }
 
     const studentsReceiptsListOrdered = studentsReceiptsList.sort((a, b) => {
+      // If course date is the same, order by student name ASC
       if (a.CourseEndDate === b.CourseEndDate) {
         return a.Name.toUpperCase() > b.Name.toUpperCase() ? 1 : -1;
       }
@@ -176,19 +178,26 @@ const printExpiringStudents = async (studentsReceiptsList) => {
       return new Date(a.CourseEndDate) - new Date(b.CourseEndDate);
     });
 
-    const studentsReceiptsListByMonth = {};
+    const studentsReceiptsListByMonth = studentsReceiptsListOrdered
+      .filter((receipt) => new Date(receipt.CourseEndDate).getFullYear() === selectedYear)
+      .reduce((accumulator, receipt) => {
+        if (isMembershipFee(receipt.ReceiptType) || !receipt.CourseEndDate) {
+          return accumulator;
+        }
 
-    for (let i = 0; i < studentsReceiptsListOrdered.length; i += 1) {
-      const receipt = studentsReceiptsListOrdered[i];
-      const monthId = parseInt(receipt.CourseEndDate.split('-')[1], 10) - 1;
+        const monthId = parseInt(receipt.CourseEndDate.split('-')[1], 10) - 1;
 
-      const month = getMonthFromId(monthId);
+        const { month } = getMonthFromId(monthId);
 
-      if (!studentsReceiptsListByMonth[month]) {
-        studentsReceiptsListByMonth[month] = [];
-      }
-      studentsReceiptsListByMonth[month].push(receipt);
-    }
+        if (!accumulator[month]) {
+          // eslint-disable-next-line no-param-reassign
+          accumulator[month] = [];
+        }
+
+        accumulator[month].push(receipt);
+
+        return accumulator;
+      }, {});
 
     const documentDefinition = await StudentsExpiringCourseTemplate.default(studentsReceiptsListByMonth);
 
@@ -244,9 +253,7 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
       return false;
     });
 
-    const { month } = months.find(({ id }) => id === selectedMonth);
-
-    // TODO: Const month = getMonthFromId(selectedMonth);
+    const { month } = getMonthFromId(selectedMonth);
 
     if (studentsWithExpiringGreenPass.length > 0) {
       const documentDefinition = await StudentsDataTemplate.default(
@@ -279,9 +286,7 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
       return false;
     });
 
-    const { month } = months.find(({ id }) => id === selectedMonth);
-
-    // TODO: Const month = getMonthFromId(selectedMonth);
+    const { month } = getMonthFromId(selectedMonth);
 
     if (studentsWithExpiringGreenPass.length > 0) {
       const documentDefinition = await StudentsDataGreenPassTemplate.default(
