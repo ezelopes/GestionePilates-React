@@ -8,7 +8,7 @@ import { printExpiringStudents } from '../../helpers/printPDF';
 import { years } from '../../commondata';
 
 const PrintExpiringReceiptsForm = () => {
-  const [selectedYear, setSelectedYear] = useState(years[0].year);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const { currentReceipts } = useReceipt();
 
@@ -19,6 +19,7 @@ const PrintExpiringReceiptsForm = () => {
       </Form.Label>
       <Form.Control
         as="select"
+        defaultValue={selectedYear}
         onChange={({ target }) => {
           setSelectedYear(parseInt(target.value, 10));
         }}

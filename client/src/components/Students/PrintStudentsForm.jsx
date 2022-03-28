@@ -8,9 +8,9 @@ import { printStudentsWithExpiringGreenPass, printStudentsBasedOnRegistrationDat
 import { months, years } from '../../commondata';
 
 const PrintStudentsForm = ({ students }) => {
-  const [selectedMonth, setselectedMonth] = useState(months[0].id);
-  // TODO: UPDATE THIS SO IT GETS CURRENT YEAR
-  const [selectedYearGreenPass, setSelectedYearGreenPass] = useState(years[0].id);
+  const [selectedMonth, setselectedMonth] = useState(new Date().getMonth());
+
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   return (
     <div className="form-wrapper">
@@ -26,6 +26,7 @@ const PrintStudentsForm = ({ students }) => {
           </Form.Label>
           <Form.Control
             as="select"
+            defaultValue={selectedMonth}
             onChange={({ target }) => {
               setselectedMonth(parseInt(target.value, 10));
             }}
@@ -43,8 +44,9 @@ const PrintStudentsForm = ({ students }) => {
           </Form.Label>
           <Form.Control
             as="select"
+            defaultValue={selectedYear}
             onChange={({ target }) => {
-              setSelectedYearGreenPass(parseInt(target.value, 10));
+              setSelectedYear(parseInt(target.value, 10));
             }}
           >
             {years.map((year) => (
@@ -56,14 +58,14 @@ const PrintStudentsForm = ({ students }) => {
         </Form.Group>
         <Button
           variant="success"
-          onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYearGreenPass)}
+          onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYear)}
           style={{ marginTop: '1em' }}
         >
           🖨️ <Translation value="buttons.student.printExpiringGreenPass" />
         </Button>
         <Button
           variant="success"
-          onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYearGreenPass)}
+          onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYear)}
           style={{ marginTop: '1em' }}
         >
           🖨️ <Translation value="buttons.student.printBasedOnRegistrationDate" />
