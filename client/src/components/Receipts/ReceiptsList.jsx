@@ -39,6 +39,7 @@ const columnsDefinition = [
     headerName: 'Include Quota Associativa',
     field: 'IncludeMembershipFee',
     cellRenderer: (params) => (params.value ? '✅' : ''),
+    cellClass: 'ag-grid-cell-centered',
   },
 ];
 

@@ -191,6 +191,16 @@ form-control {
   font-size: 1.3em;
 }
 
+.ag-row .ag-cell {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ag-grid-cell-centered {
+  justify-content: center !important;
+}
+
 .form-wrapper {
   border: 2px solid #dcdcdc;
   border-radius: 5px;
