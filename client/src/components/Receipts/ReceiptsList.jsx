@@ -5,10 +5,11 @@ import { Button } from 'react-bootstrap';
 import FilterReceiptsForm from './FilterReceiptsForm';
 import Translation from '../common/Translation/Translation';
 
-import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
+import { printSelectedReceipts } from '../../helpers/printPDF';
 import { useReceipt } from './ReceiptContext';
 
 import { gridOptionsDefaultReceipts } from '../../helpers/grid.config';
+import PrintExpiringReceiptsForm from './PrintExpiringReceiptsForm';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -94,13 +95,9 @@ const ReceiptsList = () => {
             🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
           </span>
         </Button>
-        {/* ADD COMBOBOX FOR SELECTING YEAR */}
-        <Button variant="success" onClick={() => printExpiringStudents(currentReceipts)}>
-          <span role="img" aria-label="print-selected">
-            🖨️ <Translation value="buttons.student.printExpiringStudents" />
-          </span>
-        </Button>
       </div>
+
+      <PrintExpiringReceiptsForm />
     </div>
   );
 };

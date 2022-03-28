@@ -140,7 +140,8 @@
       "noEligibleFilter": "Calcolo dell'importo non si puo' effetturare con il filtro impostato!",
       "noPaymentMethodSelected": "Seleziona Tipo di Pagamento!",
       "noReceiptSelectedForUpdate": "Seleziona Ricevuta per Aggiornarla",
-      "noReceiptSelectedForDelete": "Seleziona Ricevuta per Eliminarla"
+      "noReceiptSelectedForDelete": "Seleziona Ricevuta per Eliminarla",
+      "noYearSelected": "Anno non selezionato!"
     }
   }
 }

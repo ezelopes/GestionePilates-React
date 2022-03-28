@@ -162,11 +162,14 @@ const printReceiptsDetails = async (filteredReceipts, filteredAmountPaid, filter
   }
 };
 
-// TODO: AT THE MOMENT IT PRINTS ALL RECEIPTS, THIS FUNCTION NEEDS TO ACCEPT A FILTER FOR YEAR(S) TOO.
-const printExpiringStudents = async (studentsReceiptsList, selectedYear = 2022) => {
+const printExpiringStudents = async (studentsReceiptsList, selectedYear) => {
   try {
     if (studentsReceiptsList.length < 1) {
       return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
+    }
+
+    if (!selectedYear) {
+      return toast.error(getTranslation('toast.error.noYearSelected'), toastConfig);
     }
 
     const studentsReceiptsListOrdered = studentsReceiptsList.sort((a, b) => {
