@@ -340,3 +340,14 @@ form-control {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.not-found-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  text-align: center;
+  height: 80vh;
+  gap: 1em;
+}
