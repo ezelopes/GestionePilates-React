@@ -5,9 +5,7 @@ const StudentContext = createContext(null);
 
 const useStudent = () => useContext(StudentContext);
 
-const StudentProvider = ({ studentInfo, studentReceipts, setStudentReceipts, children }) => (
-  <StudentContext.Provider value={{ studentInfo, studentReceipts, setStudentReceipts }}>{children}</StudentContext.Provider>
-);
+const StudentProvider = ({ children, ...props }) => <StudentContext.Provider value={props}>{children}</StudentContext.Provider>;
 
 StudentProvider.propTypes = {
   studentInfo: PropTypes.object.isRequired,

@@ -1,8 +1,3 @@
-const userType = [
-  { id: 0, user: 'Student' },
-  { id: 1, user: 'Teacher' },
-];
-
 const ages = [
   { id: 0, age: 'Maggiorenne' },
   { id: 1, age: 'Minorenne' },
@@ -43,18 +38,19 @@ const courses = [
   { id: 21, course: 'Musiscal Teens' },
 ];
 
-const receiptType = [
+const receiptTypes = [
   { id: 0, type: 'Quota' },
   { id: 1, type: 'Quota Associativa' },
 ];
 
-const paymentMethod = [
+const paymentMethods = [
   { id: 0, type: 'Contanti' },
   { id: 1, type: 'Assegno' },
   { id: 2, type: 'Bonifico Bancario' },
 ];
 
 const defaultAmounts = [
+  { value: '10', label: '10' },
   { value: '90', label: '90' },
   { value: '120', label: '120' },
   { value: '150', label: '150' },
@@ -82,19 +78,26 @@ const years = [
   { id: 2024, year: 2024 },
 ];
 
-const getMonthFromId = (monthId) =>
-  months.map(({ id, month }) => (id === monthId ? month : null)).filter((month) => month !== null);
+const BLANK_DATE = '______-______-________';
+
+const getMonthFromId = (monthId) => months.find(({ id }) => id === monthId);
+
+const isAdult = (age) => age === ages[0].age;
+
+const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
 
 export {
-  userType,
   ages,
   disciplines,
   schools,
   courses,
-  receiptType,
-  paymentMethod,
+  receiptTypes,
+  paymentMethods,
   defaultAmounts,
   months,
   years,
+  BLANK_DATE,
   getMonthFromId,
+  isAdult,
+  isMembershipFee,
 };

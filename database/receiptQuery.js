@@ -1,190 +1,107 @@
-const pool = require('./pool');
-const { getFormattedDate } = require('./helpers/index');
+const { knex } = require('./connection');
+const { getFormattedDate } = require('./helpers/dates');
+const { mappingReceipt, mappingReceiptsWithStudentInfo } = require('./helpers/mapDatabaseEntries');
+const { receiptResponseMessages } = require('./helpers/responses');
 
-const receiptType = [{ type: 'Quota' }, { type: 'Quota Associativa' }];
-
-const mappingReceipt = (rows) => {
-  const receipts = rows.map((row) => {
-    return {
-      ReceiptID: row.RicevutaID,
-      ReceiptType: row.TipoRicevuta,
-      ReceiptDate: getFormattedDate(row.DataRicevuta),
-      CourseStartDate: getFormattedDate(row.DataInizioCorso),
-      CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-      ReceiptNumber: row.NumeroRicevuta,
-      AmountPaid: row.SommaEuro,
-      FK_StudentID: row.FK_AllievaID,
-      PaymentMethod: row.TipoPagamento,
-      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
-    };
-  });
-  return receipts;
+const receiptTypes = {
+  paymentFee: 'QUOTA',
+  membershipFee: 'QUOTA ASSOCIATIVA',
 };
 
-const mappingAllReceipts = (rows) => {
-  const receipts = rows.map((row) => {
-    return {
-      IsAdult: row.Maggiorenne,
-      TaxCode: row.CodiceFiscale,
-      Name: row.Nome,
-      Surname: row.Cognome,
-      City: row.Citta,
-      Address: row.Indirizzo,
-      MobilePhone: row.Cellulare,
-      Email: row.Email,
-      RegistrationDate: getFormattedDate(row.DataIscrizione),
-      CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-      DOB: getFormattedDate(row.DataNascita),
-      BirthPlace: row.LuogoNascita,
-      Discipline: row.Disciplina,
-      Course: row.Corso,
-      School: row.Scuola,
-      ParentName: row.NomeGenitore,
-      ParentSurname: row.CognomeGenitore,
-      ParentTaxCode: row.CodiceFiscaleGenitore,
-
-      ReceiptNumber: row.NumeroRicevuta,
-      AmountPaid: row.SommaEuro,
-      PaymentMethod: row.TipoPagamento,
-      ReceiptType: row.TipoRicevuta,
-      ReceiptDate: getFormattedDate(row.DataRicevuta),
-      CourseStartDate: getFormattedDate(row.DataInizioCorso),
-      CourseEndDate: getFormattedDate(row.DataScadenzaCorso),
-      IncludeMembershipFee: Boolean(row.IncludeMembershipFee),
-    };
-  });
-  return receipts;
-};
+const STUDENT_TABLE = 'allieva';
+const RECEIPT_TABLE = 'ricevuta';
 
 const getStudentReceipts = async (TaxCode) => {
-  const [rows] = await pool.execute('SELECT * FROM Ricevuta WHERE FK_CodiceFiscale = ?', [TaxCode]);
-  const receipts = mappingReceipt(rows);
-
-  return receipts;
-};
-
-const getAllReceipts = async () => {
-  const [rows] = await pool.execute(
-    'SELECT * \
-    FROM ricevuta \
-    INNER JOIN allieva \
-    ON ricevuta.FK_AllievaID = allieva.AllievaID;'
-  );
-  const receipts = mappingAllReceipts(rows);
-
-  return receipts;
-};
-
-const createReceipt = async ({
-  ReceiptNumber,
-  ReceiptDate,
-  CourseStartDate,
-  CourseEndDate,
-  AmountPaid,
-  PaymentMethod,
-  ReceiptType,
-  TaxCode,
-  StudentID,
-  RegistrationDate,
-  IncludeMembershipFee,
-}) => {
   try {
-    // TODO: Reduce this code
-    const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
-    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
-    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
+    const receipts = await knex(RECEIPT_TABLE).select().where({ FK_CodiceFiscale: TaxCode });
 
-    if (ReceiptType == receiptType[1].type) {
-      const [rows] = await pool.execute(
-        'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, SommaEuro, FK_CodiceFiscale, FK_AllievaID, IncludeMembershipFee) \
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
-        [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, AmountPaid, TaxCode, StudentID, false]
-      );
-      return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
-    }
-
-    const [rows] = await pool.execute(
-      'INSERT INTO Ricevuta (NumeroRicevuta, TipoPagamento, TipoRicevuta, DataRicevuta, DataInizioCorso, DataScadenzaCorso, SommaEuro, FK_CodiceFiscale, FK_AllievaID, IncludeMembershipFee) \
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [
-        ReceiptNumber,
-        PaymentMethod,
-        ReceiptType,
-        ReceiptDateFormatted,
-        CourseStartDateFormatted,
-        CourseEndDateFormatted,
-        AmountPaid,
-        TaxCode,
-        StudentID,
-        IncludeMembershipFee,
-      ]
-    );
-
-    if (RegistrationDate === true) {
-      await pool.execute(`UPDATE Allieva SET DataIscrizione=? WHERE AllievaID=?;`, [CourseStartDateFormatted, StudentID]);
-    }
-
-    return { ReceiptID: rows.insertId, message: 'Ricevuta Inserita Correttamente!' };
+    return mappingReceipt(receipts);
   } catch (error) {
     console.log(error);
-    return { message: 'Errore nel creare la Ricevuta!' };
+
+    return { message: receiptResponseMessages.error.getMultiple };
   }
 };
 
-const updateReceipt = async ({
-  ReceiptID,
-  ReceiptNumber,
-  PaymentMethod,
-  ReceiptType,
-  ReceiptDate,
-  CourseStartDate,
-  CourseEndDate,
-  AmountPaid,
-  IncludeMembershipFee,
-}) => {
+const getAllReceipts = async () => {
   try {
-    // TODO: Reduce this code
-    const ReceiptDateFormatted = getFormattedDate(ReceiptDate);
-    const CourseStartDateFormatted = getFormattedDate(CourseStartDate);
-    const CourseEndDateFormatted = getFormattedDate(CourseEndDate);
+    const receipts = await knex(RECEIPT_TABLE)
+      .join(STUDENT_TABLE, `${RECEIPT_TABLE}.FK_AllievaID`, '=', `${STUDENT_TABLE}.AllievaID`)
+      .select();
 
-    if (ReceiptType.toUpperCase() == 'QUOTA ASSOCIATIVA') {
-      await pool.execute(
-        'UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=? WHERE RicevutaID=?;',
-        [ReceiptNumber, PaymentMethod, ReceiptType, ReceiptDateFormatted, null, null, AmountPaid, ReceiptID]
-      );
-      return { message: 'Ricevuta Aggiornata Correttamente!' };
-    }
-
-    await pool.execute(
-      `UPDATE ricevuta SET NumeroRicevuta=?, TipoPagamento=?, TipoRicevuta=?, DataRicevuta=?, DataInizioCorso=?, DataScadenzaCorso=?, SommaEuro=?, IncludeMembershipFee=? WHERE RicevutaID=?;`,
-      [
-        ReceiptNumber,
-        PaymentMethod,
-        ReceiptType,
-        ReceiptDateFormatted,
-        CourseStartDateFormatted,
-        CourseEndDateFormatted,
-        AmountPaid,
-        IncludeMembershipFee,
-        ReceiptID,
-      ]
-    );
-    return { message: 'Ricevuta Aggiornata Correttamente!' };
+    return mappingReceiptsWithStudentInfo(receipts);
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'aggiornare Ricevuta!` };
+
+    return { message: receiptResponseMessages.error.getMultiple };
+  }
+};
+
+const createReceipt = async (receiptInfo) => {
+  try {
+    const isMembershipFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.membershipFee;
+
+    const newReceiptID = await knex(RECEIPT_TABLE).insert({
+      NumeroRicevuta: receiptInfo.ReceiptNumber,
+      TipoPagamento: receiptInfo.PaymentMethod,
+      TipoRicevuta: receiptInfo.ReceiptType,
+      DataRicevuta: getFormattedDate(receiptInfo.ReceiptDate),
+      DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
+      DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
+      SommaEuro: receiptInfo.AmountPaid,
+      FK_CodiceFiscale: receiptInfo.TaxCode,
+      FK_AllievaID: receiptInfo.StudentID,
+      IncludeQuotaAssociativa: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
+    });
+
+    if (receiptInfo.RegistrationDate === true) {
+      await knex(STUDENT_TABLE)
+        .where({ AllievaID: receiptInfo.StudentID })
+        .update({ DataIscrizione: getFormattedDate(receiptInfo.CourseStartDate) });
+    }
+
+    return { ReceiptID: newReceiptID[0], message: receiptResponseMessages.ok.create };
+  } catch (error) {
+    console.log(error);
+
+    return { message: receiptResponseMessages.error.create };
+  }
+};
+
+const updateReceipt = async (receiptInfo) => {
+  try {
+    const isMembershipFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.membershipFee;
+
+    await knex(RECEIPT_TABLE)
+      .where({ RicevutaID: receiptInfo.ReceiptID })
+      .update({
+        NumeroRicevuta: receiptInfo.ReceiptNumber,
+        TipoPagamento: receiptInfo.PaymentMethod,
+        TipoRicevuta: receiptInfo.ReceiptType,
+        DataRicevuta: getFormattedDate(receiptInfo.ReceiptDate),
+        DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
+        DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
+        SommaEuro: receiptInfo.AmountPaid,
+        IncludeQuotaAssociativa: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
+      });
+
+    return { message: receiptResponseMessages.ok.update };
+  } catch (error) {
+    console.log(error);
+
+    return { message: receiptResponseMessages.error.update };
   }
 };
 
 const deleteReceipt = async (ReceiptID) => {
   try {
-    await pool.execute('DELETE FROM Ricevuta WHERE RicevutaID=?;', [ReceiptID]);
+    await knex(RECEIPT_TABLE).where({ RicevutaID: ReceiptID }).del();
 
-    return { message: 'Ricevuta Eliminata Correttamente!' };
+    return { message: receiptResponseMessages.ok.delete };
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'eliminare Ricevute!` };
+
+    return { message: receiptResponseMessages.error.delete };
   }
 };
 

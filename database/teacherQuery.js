@@ -1,160 +1,107 @@
-const pool = require('./pool');
-const { getFormattedDate } = require('./helpers/index');
+const { knex } = require('./connection');
+const { getFormattedDate } = require('./helpers/dates');
+const { mappingTeachers } = require('./helpers/mapDatabaseEntries');
+const { teacherResponseMessages } = require('./helpers/responses');
 
-const mappingTeachers = (rows) => {
-  const teachers = rows.map((row) => {
-    return {
-      TeacherID: row.InsegnanteID,
-      TaxCode: row.CodiceFiscale,
-      Name: row.Nome,
-      Surname: row.Cognome,
-      City: row.Citta,
-      Address: row.Indirizzo,
-      MobilePhone: row.Cellulare,
-      Email: row.Email,
-      RegistrationDate: getFormattedDate(row.DataIscrizione),
-      CertificateExpirationDate: getFormattedDate(row.DataCertificato),
-      DOB: getFormattedDate(row.DataNascita),
-      GreenPassExpirationDate: getFormattedDate(row.DataGreenPass),
-      BirthPlace: row.LuogoNascita,
-      Discipline: row.Disciplina,
-      Course: row.Corso,
-      School: row.Scuola,
-    };
-  });
-  return teachers;
-};
+const TEACHER_TABLE = 'insegnante';
 
 const getTeachers = async () => {
-  const [rows] = await pool.execute('SELECT * FROM insegnante');
-  const teachers = mappingTeachers(rows);
-
-  return teachers;
-};
-
-const getSingleTeacher = async (CodiceFiscale) => {
-  const [rows] = await pool.execute('SELECT * FROM insegnante WHERE CodiceFiscale= ?;', [CodiceFiscale]);
-  const teacher = mappingTeachers(rows);
-
-  return teacher;
-};
-
-const createTeacher = async ({
-  TaxCode,
-  Name,
-  Surname,
-  City,
-  Address,
-  MobilePhone,
-  Email,
-  RegistrationDate,
-  CertificateExpirationDate,
-  DOB,
-  GreenPassExpirationDate,
-  BirthPlace,
-  Discipline,
-  Course,
-  School,
-}) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
-    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate);
-    const DOBFormatted = getFormattedDate(DOB);
-    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate);
+    const teachers = await knex(TEACHER_TABLE).select();
 
-    await pool.execute(
-      'INSERT INTO Insegnante (CodiceFiscale, Nome, Cognome, Citta, Indirizzo, Cellulare, Email, DataIscrizione, DataCertificato, DataNascita, DataGreenPass, LuogoNascita, Disciplina, Corso, Scuola) \
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-      [
-        TaxCode,
-        Name,
-        Surname,
-        City,
-        Address,
-        MobilePhone,
-        Email,
-        RegistrationDateFormatted,
-        CertificateExpirationDateFormatted,
-        DOBFormatted,
-        GreenPassExpirationDateFormatted,
-        BirthPlace,
-        Discipline,
-        Course,
-        School,
-      ]
-    );
-    return { message: 'Insegnante Inserita Correttamente!' };
+    return mappingTeachers(teachers);
   } catch (error) {
     console.log(error);
-    return { message: 'Errore nel creare Insegnante!' };
+
+    return { message: teacherResponseMessages.error.getMultiple };
   }
 };
 
-const updateTeacher = async ({
-  TeacherID,
-  TaxCode,
-  Name,
-  Surname,
-  City,
-  Address,
-  MobilePhone,
-  Email,
-  RegistrationDate,
-  CertificateExpirationDate,
-  DOB,
-  GreenPassExpirationDate,
-  BirthPlace,
-  Discipline,
-  Course,
-  School,
-}) => {
+const getTeacher = async (TaxCode) => {
   try {
-    const RegistrationDateFormatted = getFormattedDate(RegistrationDate);
-    const CertificateExpirationDateFormatted = getFormattedDate(CertificateExpirationDate);
-    const DOBFormatted = getFormattedDate(DOB);
-    const GreenPassExpirationDateFormatted = getFormattedDate(GreenPassExpirationDate);
+    const teacher = await knex(TEACHER_TABLE).select().where({ CodiceFiscale: TaxCode });
 
-    await pool.execute(
-      `UPDATE insegnante SET CodiceFiscale=?, Nome=?, Cognome=?, Citta=?, Indirizzo=?, Cellulare=?, Email=?, DataIscrizione=?, DataCertificato=?, DataNascita=?, DataGreenPass=?, LuogoNascita=?, Disciplina=?, Corso=?, Scuola=? WHERE InsegnanteID=?;`,
-      [
-        TaxCode,
-        Name,
-        Surname,
-        City,
-        Address,
-        MobilePhone,
-        Email,
-        RegistrationDateFormatted,
-        CertificateExpirationDateFormatted,
-        DOBFormatted,
-        GreenPassExpirationDateFormatted,
-        BirthPlace,
-        Discipline,
-        Course,
-        School,
-        TeacherID,
-      ]
-    );
-    return { message: 'Insegnante Aggiornata Correttamente!' };
+    return mappingTeachers(teacher)[0];
   } catch (error) {
     console.log(error);
-    return { message: `Errore nell'aggiornare Insegnante!` };
+
+    return { message: teacherResponseMessages.error.getSingle };
+  }
+};
+
+const createTeacher = async (teacherInfo) => {
+  try {
+    const newTeacherID = await knex(TEACHER_TABLE).insert({
+      CodiceFiscale: teacherInfo.TaxCode,
+      Nome: teacherInfo.Name,
+      Cognome: teacherInfo.Surname,
+      Citta: teacherInfo.City,
+      Indirizzo: teacherInfo.Address,
+      Cellulare: teacherInfo.MobilePhone,
+      Email: teacherInfo.Email,
+      DataIscrizione: getFormattedDate(teacherInfo.RegistrationDate),
+      DataCertificato: getFormattedDate(teacherInfo.CertificateExpirationDate),
+      DataNascita: getFormattedDate(teacherInfo.DOB),
+      DataGreenPass: getFormattedDate(teacherInfo.GreenPassExpirationDate),
+      LuogoNascita: teacherInfo.BirthPlace,
+      Disciplina: teacherInfo.Discipline,
+      Corso: teacherInfo.Course,
+      Scuola: teacherInfo.School,
+    });
+
+    return { TeacherID: newTeacherID[0], message: teacherResponseMessages.ok.create };
+  } catch (error) {
+    console.log(error);
+
+    return { message: teacherResponseMessages.error.create };
+  }
+};
+
+const updateTeacher = async (teacherInfo) => {
+  try {
+    await knex(TEACHER_TABLE)
+      .where({ InsegnanteID: teacherInfo.TeacherID })
+      .update({
+        CodiceFiscale: teacherInfo.TaxCode,
+        Nome: teacherInfo.Name,
+        Cognome: teacherInfo.Surname,
+        Citta: teacherInfo.City,
+        Indirizzo: teacherInfo.Address,
+        Cellulare: teacherInfo.MobilePhone,
+        Email: teacherInfo.Email,
+        DataIscrizione: getFormattedDate(teacherInfo.RegistrationDate),
+        DataCertificato: getFormattedDate(teacherInfo.CertificateExpirationDate),
+        DataNascita: getFormattedDate(teacherInfo.DOB),
+        DataGreenPass: getFormattedDate(teacherInfo.GreenPassExpirationDate),
+        LuogoNascita: teacherInfo.BirthPlace,
+        Disciplina: teacherInfo.Discipline,
+        Corso: teacherInfo.Course,
+        Scuola: teacherInfo.School,
+      });
+
+    return { message: teacherResponseMessages.ok.update };
+  } catch (error) {
+    console.log(error);
+
+    return { message: teacherResponseMessages.error.update };
   }
 };
 
 const deleteTeacher = async (TeacherID) => {
   try {
-    await pool.execute('DELETE FROM insegnante WHERE InsegnanteID=?;', [TeacherID]);
-    return 'Insegnante Eliminata Correttamente!';
+    await knex(TEACHER_TABLE).where({ InsegnanteID: TeacherID }).del();
+
+    return { message: teacherResponseMessages.ok.delete };
   } catch (error) {
     console.log(error);
-    return `Errore nell'eliminare Insegnante!`;
+
+    return { message: teacherResponseMessages.error.delete };
   }
 };
 
 module.exports = {
   getTeachers,
-  getSingleTeacher,
+  getTeacher,
   createTeacher,
   updateTeacher,
   deleteTeacher,

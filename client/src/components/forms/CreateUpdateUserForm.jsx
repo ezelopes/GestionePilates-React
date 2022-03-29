@@ -4,19 +4,20 @@ import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
-import Divider from './common/Divider';
 
-import toastConfig from '../helpers/toast.config';
+import Divider from '../common/Divider';
+import Translation from '../common/Translation/Translation';
+import { getTranslation } from '../common/Translation/helpers';
 
-import { userType, ages, disciplines, schools, courses } from '../commondata/commondata';
+import toastConfig from '../../helpers/toast.config';
 
-const isStudent = (type) => type === userType[0].user;
+import { ages, disciplines, schools, courses, isAdult } from '../../commondata';
 
-const isUnderAge = (age) => age === ages[1].age;
+const TAX_CODE_REGEX = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i;
 
 const CreateUpdateUserForm = ({
   personInfo,
-  personType,
+  isStudent = false,
   callback,
   isForCreating,
   setUserInfo = () => {},
@@ -26,13 +27,13 @@ const CreateUpdateUserForm = ({
 
   const defaultValues = {};
 
-  if (isStudent(personType)) {
+  if (isStudent) {
     defaultValues.StudentID = personInfo?.StudentID;
   } else {
     defaultValues.TeacherID = personInfo?.TeacherID;
   }
 
-  if (newIsAdult === ages[0].age && isStudent(personType)) {
+  if (isAdult(newIsAdult) && isStudent) {
     defaultValues.ParentTaxCode = null;
     defaultValues.ParentName = null;
     defaultValues.ParentSurname = null;
@@ -69,9 +70,11 @@ const CreateUpdateUserForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="user-form">
-        {isStudent(personType) && (
+        {isStudent && (
           <>
-            <Form.Label> Età </Form.Label>
+            <Form.Label>
+              <Translation value="form.age" />
+            </Form.Label>
             <Form.Control as="select" defaultValue={personInfo?.IsAdult} {...register('IsAdult')}>
               {ages.map((age) => (
                 <option key={`select_${age.id}`} value={age.age}>
@@ -82,79 +85,113 @@ const CreateUpdateUserForm = ({
           </>
         )}
 
-        <Form.Label> Codice Fiscale </Form.Label>
+        <Form.Label>
+          <Translation value="form.taxCode" />
+        </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Inserisci Codice Fiscale..."
+          placeholder={getTranslation('placeholder.taxCode')}
           defaultValue={personInfo?.TaxCode}
-          {...register('TaxCode', { required: true, pattern: { value: /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i } })}
+          {...register('TaxCode', { required: true, pattern: { value: TAX_CODE_REGEX } })}
         />
         <div style={{ display: 'none' }}>
           <ErrorMessage
             errors={errors}
             name="TaxCode"
             render={() => {
+              // TODO: THIS ERROR MESSAGE COMES UP TWICE
               if (errors?.TaxCode?.type === 'required') {
-                return toast.error('Codice Fiscale non puo essere vuoto', toastConfig);
+                return toast.error(getTranslation('toast.error.emptyTaxCode'), toastConfig);
               }
               if (errors?.TaxCode?.type === 'pattern') {
-                return toast.error('Assicurati che il codice fiscale sia nel formato corretto!', toastConfig);
+                return toast.error(getTranslation('toast.error.taxCodeIncorrectFormat'), toastConfig);
               }
               return null;
             }}
           />
         </div>
 
-        <Form.Label> Nome {isStudent(personType) ? 'Allieva' : 'Insegnante'} </Form.Label>
-        <Form.Control type="text" placeholder="Inserisci Nome..." defaultValue={personInfo?.Name} {...register('Name')} />
-
-        <Form.Label> Cognome {isStudent(personType) ? 'Allieva' : 'Insegnante'} </Form.Label>
+        <Form.Label>{isStudent ? <Translation value="form.studentName" /> : <Translation value="form.teacherName" />}</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Inserisci Cognome..."
+          placeholder={getTranslation('placeholder.name')}
+          defaultValue={personInfo?.Name}
+          {...register('Name')}
+        />
+
+        <Form.Label>
+          {isStudent ? <Translation value="form.studentSurname" /> : <Translation value="form.teacherSurname" />}
+        </Form.Label>
+        <Form.Control
+          type="text"
+          placeholder={getTranslation('placeholder.surname')}
           defaultValue={personInfo?.Surname}
           {...register('Surname')}
         />
 
-        {!isStudent(personType) && <Divider half />}
+        {!isStudent && <Divider half />}
         <Divider />
 
-        <Form.Label> Citta </Form.Label>
-        <Form.Control type="text" placeholder="Inserisci Citta..." defaultValue={personInfo?.City} {...register('City')} />
-
-        <Form.Label> Indirizzo </Form.Label>
+        <Form.Label>
+          <Translation value="form.city" />
+        </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Inserisci Indirizzo..."
+          placeholder={getTranslation('placeholder.city')}
+          defaultValue={personInfo?.City}
+          {...register('City')}
+        />
+
+        <Form.Label>
+          <Translation value="form.address" />
+        </Form.Label>
+        <Form.Control
+          type="text"
+          placeholder={getTranslation('placeholder.address')}
           defaultValue={personInfo?.Address}
           {...register('Address')}
         />
 
-        <Form.Label> Cellulare </Form.Label>
+        <Form.Label>
+          <Translation value="form.phone" />
+        </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Inserisci Cellulare..."
+          placeholder={getTranslation('placeholder.phone')}
           defaultValue={personInfo?.MobilePhone}
           {...register('MobilePhone')}
         />
 
-        <Form.Label> Email </Form.Label>
-        <Form.Control type="text" placeholder="Inserisci Email..." defaultValue={personInfo?.Email} {...register('Email')} />
-
-        <Form.Label> Luogo Nascita </Form.Label>
+        <Form.Label>
+          <Translation value="form.email" />
+        </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Inserisci Luogo Nascita..."
+          placeholder={getTranslation('placeholder.email')}
+          defaultValue={personInfo?.Email}
+          {...register('Email')}
+        />
+
+        <Form.Label>
+          <Translation value="form.placeOfBirth" />
+        </Form.Label>
+        <Form.Control
+          type="text"
+          placeholder={getTranslation('placeholder.placeOfBirth')}
           defaultValue={personInfo?.BirthPlace}
           {...register('BirthPlace')}
         />
 
-        <Form.Label> Data Nascita </Form.Label>
+        <Form.Label>
+          <Translation value="form.dateOfBirth" />
+        </Form.Label>
         <input type="date" defaultValue={personInfo ? personInfo.DOB : null} {...register('DOB')} />
 
         <Divider />
 
-        <Form.Label> Disciplina </Form.Label>
+        <Form.Label>
+          <Translation value="form.discipline" />
+        </Form.Label>
         <Form.Control as="select" defaultValue={personInfo?.Discipline} {...register('Discipline')}>
           {disciplines.map((discipline) => (
             <option key={`select_${discipline.id}`} value={discipline.discipline}>
@@ -163,7 +200,9 @@ const CreateUpdateUserForm = ({
           ))}
         </Form.Control>
 
-        <Form.Label> Corso </Form.Label>
+        <Form.Label>
+          <Translation value="form.course" />
+        </Form.Label>
         <Form.Control as="select" defaultValue={personInfo?.Course} {...register('Course')}>
           {courses.map((course) => (
             <option key={`select_${course.id}`} value={course.course}>
@@ -172,7 +211,9 @@ const CreateUpdateUserForm = ({
           ))}
         </Form.Control>
 
-        <Form.Label> Scuola </Form.Label>
+        <Form.Label>
+          <Translation value="form.school" />
+        </Form.Label>
         <Form.Control as="select" defaultValue={personInfo?.School} {...register('School')}>
           {schools.map((school) => (
             <option key={`select_${school.id}`} value={school.school}>
@@ -181,25 +222,33 @@ const CreateUpdateUserForm = ({
           ))}
         </Form.Control>
 
-        <Form.Label> Data Iscrizione </Form.Label>
+        <Form.Label>
+          <Translation value="form.registrationDate" />
+        </Form.Label>
         <input type="date" defaultValue={personInfo?.RegistrationDate} {...register('RegistrationDate')} />
 
         <Divider />
 
-        <Form.Label> Data Scadenza Certificato </Form.Label>
+        <Form.Label>
+          <Translation value="form.certificateExpirationDate" />
+        </Form.Label>
         <input type="date" defaultValue={personInfo?.CertificateExpirationDate} {...register('CertificateExpirationDate')} />
 
-        <Form.Label> Data Scadenza Green Pass </Form.Label>
+        <Form.Label>
+          <Translation value="form.greenPassExpirationDate" />
+        </Form.Label>
         <input type="date" defaultValue={personInfo?.GreenPassExpirationDate} {...register('GreenPassExpirationDate')} />
 
-        {isStudent(personType) && isUnderAge(newIsAdult) && (
+        {isStudent && !isAdult(newIsAdult) && (
           <>
             <Divider />
 
-            <Form.Label> Codice Fiscale Genitore </Form.Label>
+            <Form.Label>
+              <Translation value="form.parentTaxCode" />
+            </Form.Label>
             <Form.Control
               type="text"
-              placeholder="Inserisci Codice Fiscale Genitore..."
+              placeholder={getTranslation('placeholder.parentTaxCode')}
               defaultValue={personInfo?.ParentTaxCode}
               {...register('ParentTaxCode', {
                 required: false,
@@ -212,25 +261,29 @@ const CreateUpdateUserForm = ({
                 name="ParentTaxCode"
                 render={() => {
                   if (errors?.ParentTaxCode?.type === 'pattern') {
-                    return toast.error('Assicurati che il codice fiscale del genitore sia nel formato corretto!', toastConfig);
+                    return toast.error(getTranslation('toast.error.parentTaxCodeIncorrectFormat'), toastConfig);
                   }
                   return null;
                 }}
               />
             </div>
 
-            <Form.Label> Nome Genitore </Form.Label>
+            <Form.Label>
+              <Translation value="form.parentName" />
+            </Form.Label>
             <Form.Control
               type="text"
-              placeholder="Inserisci Nome Genitore..."
+              placeholder={getTranslation('placeholder.parentName')}
               defaultValue={personInfo?.ParentName}
               {...register('ParentName')}
             />
 
-            <Form.Label> Cognome Genitore </Form.Label>
+            <Form.Label>
+              <Translation value="form.parentSurname" />
+            </Form.Label>
             <Form.Control
               type="text"
-              placeholder="Inserisci Cognome Genitore..."
+              placeholder={getTranslation('placeholder.parentSurname')}
               defaultValue={personInfo?.ParentSurname}
               {...register('ParentSurname')}
             />
@@ -240,11 +293,14 @@ const CreateUpdateUserForm = ({
 
       <div className="subscription-form-buttons">
         <Button type="submit" variant="success">
-          {isForCreating ? 'Crea' : 'Aggiorna'} {isStudent(personType) ? 'Allieva' : 'Insegnante'}
+          {isForCreating && isStudent && <Translation value="buttons.student.createStudent" />}
+          {!isForCreating && isStudent && <Translation value="buttons.student.updateStudent" />}
+          {isForCreating && !isStudent && <Translation value="buttons.teacher.createTeacher" />}
+          {!isForCreating && !isStudent && <Translation value="buttons.teacher.updateTeacher" />}
         </Button>
         {isForCreating && (
           <Button variant="secondary" onClick={() => reset()}>
-            Reset Form
+            <Translation value="buttons.resetForm" />
           </Button>
         )}
       </div>
@@ -276,7 +332,7 @@ CreateUpdateUserForm.propTypes = {
     ParentName: PropTypes.string,
     ParentSurname: PropTypes.string,
   }),
-  personType: PropTypes.string.isRequired,
+  isStudent: PropTypes.bool,
   callback: PropTypes.func.isRequired,
   isForCreating: PropTypes.bool,
   setUserInfo: PropTypes.func,
@@ -285,6 +341,7 @@ CreateUpdateUserForm.propTypes = {
 
 CreateUpdateUserForm.defaultProps = {
   personInfo: {},
+  isStudent: false,
   isForCreating: false,
   setUserInfo: () => {},
   handleModal: () => {},

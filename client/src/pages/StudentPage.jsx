@@ -3,25 +3,20 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Modal, Button, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import NotFoundPage from './NotFoundPage';
 
-import CreateUpdateUserForm from '../components/CreateUpdateUserForm';
 import StudentReceiptsList from '../components/Student/StudentReceiptsList';
-import CreateUpdateReceiptForm from '../components/CreateUpdateReceiptForm';
+import CreateUpdateUserForm from '../components/forms/CreateUpdateUserForm';
+import CreateUpdateReceiptForm from '../components/forms/CreateUpdateReceiptForm';
 import { StudentProvider } from '../components/Student/StudentContext';
 import Divider from '../components/common/Divider';
 
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 import toastConfig from '../helpers/toast.config';
+import { printRegistrationForm } from '../helpers/printPDF';
 
-import { userType } from '../commondata/commondata';
-
-const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import Translation from '../components/common/Translation/Translation';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -39,24 +34,12 @@ const StudentPage = ({ match }) => {
 
   const history = useHistory();
 
-  const printRegistrationForm = async () => {
-    try {
-      const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
-
-      pdfMake.createPdf(documentDefinition).open();
-
-      return toast.success('PDF Creato Correttamente', toastConfig);
-    } catch (error) {
-      return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const { student, receipts } = await getStudentWithReceipts(match.params.TaxCode);
 
       setStudentInfo(student);
-      setNewRegistrationDate(student.RegistrationDate);
+      setNewRegistrationDate(student?.RegistrationDate);
       setStudentReceipts(receipts);
 
       setLoading(false);
@@ -99,7 +82,7 @@ const StudentPage = ({ match }) => {
       {loading ? (
         <div className="spinnerWrapper">
           <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only" />
           </Spinner>
         </div>
       ) : (
@@ -110,33 +93,33 @@ const StudentPage = ({ match }) => {
             </div>
 
             <div className="buttons-container">
-              <Button onClick={printRegistrationForm}>
+              <Button onClick={() => printRegistrationForm(studentInfo)}>
                 <span role="img" aria-label="module">
-                  🖨️ MODULO ISCRIZIONE
+                  🖨️ <Translation value="buttons.student.printRegistrationForm" />
                 </span>
               </Button>
 
               <Button variant="warning" onClick={() => setShowUpdateStudentModal(true)}>
                 <span role="img" aria-label="update">
-                  🔄 AGGIORNA ALLIEVA
+                  🔄 <Translation value="buttons.student.updateStudent" />
                 </span>
               </Button>
 
               <Button variant="warning" onClick={() => setShowRegistrationDateModal(true)}>
                 <span role="img" aria-label="update">
-                  🔄 AGGIORNA DATA ISCRIZIONE
+                  🔄 <Translation value="buttons.student.updateRegistrationDate" />
                 </span>
               </Button>
 
               <Button variant="danger" onClick={() => setShowDeleteStudentModal(true)}>
                 <span role="img" aria-label="bin">
-                  🗑️ ELIMINA ALLIEVA
+                  🗑️ <Translation value="buttons.student.deleteStudent" />
                 </span>
               </Button>
 
               <Button variant="secondary" onClick={history.goBack}>
                 <span role="img" aria-label="back">
-                  🔙 INDIETRO
+                  🔙 <Translation value="common.back" />
                 </span>
               </Button>
             </div>
@@ -153,7 +136,9 @@ const StudentPage = ({ match }) => {
           </div>
           <Modal show={showRegistrationDateModal} onHide={() => setShowRegistrationDateModal(false)} centered>
             <Modal.Header closeButton>
-              <Modal.Title> Aggiorna Data Iscrizione </Modal.Title>
+              <Modal.Title>
+                <Translation value="modalsContent.updateRegistrationDateHeader" />
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body className="update-registration-date">
               <input
@@ -164,7 +149,7 @@ const StudentPage = ({ match }) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="success" onClick={handleRegistrationDateUpdate}>
-                AGGIORNA
+                <Translation value="buttons.student.updateStudent" />
               </Button>
               <Button
                 variant="secondary"
@@ -172,21 +157,23 @@ const StudentPage = ({ match }) => {
                   setShowRegistrationDateModal(false);
                 }}
               >
-                CHIUDI
+                <Translation value="buttons.close" />
               </Button>
             </Modal.Footer>
           </Modal>
 
           <Modal show={showDeleteStudentModal} onHide={() => setShowDeleteStudentModal(false)} centered>
             <Modal.Header closeButton>
-              <Modal.Title> Elimina Allieva </Modal.Title>
+              <Modal.Title>
+                <Translation value="modalsContent.deleteStudentHeader" />
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body className="delete-student-teacher-modal-body">
               Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
             </Modal.Body>
             <Modal.Footer>
               <Button variant="danger" onClick={handleStudentDeletion}>
-                ELIMINA
+                <Translation value="buttons.student.deleteStudent" />
               </Button>
               <Button
                 variant="secondary"
@@ -194,7 +181,7 @@ const StudentPage = ({ match }) => {
                   setShowDeleteStudentModal(false);
                 }}
               >
-                CHIUDI
+                <Translation value="buttons.close" />
               </Button>
             </Modal.Footer>
           </Modal>
@@ -206,12 +193,14 @@ const StudentPage = ({ match }) => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title> Aggiorna Allieva </Modal.Title>
+              <Modal.Title>
+                <Translation value="modalsContent.updateStudentHeader" />
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body className="update-student-modal-body">
               <CreateUpdateUserForm
                 personInfo={studentInfo}
-                personType={userType[0].user}
+                isStudent
                 callback={updateStudent}
                 handleModal={setShowUpdateStudentModal}
                 setUserInfo={setStudentInfo}

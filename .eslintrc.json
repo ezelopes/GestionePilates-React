@@ -1,0 +1,41 @@
+{
+  "root": true,
+  "extends": ["airbnb", "airbnb/hooks", "prettier"],
+  "plugins": ["react", "simple-import-sort", "prefer-arrow"],
+  "env": {
+    "browser": false,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "globals": {
+    "Atomics": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsForRegex": ["^draft"] }],
+    "func-names": "off",
+    "max-len": ["warn", 130],
+    "curly": ["warn", "all"],
+    "no-console": "off",
+    "capitalized-comments": [
+      "warn",
+      "always",
+      {
+        "ignoreConsecutiveComments": true
+      }
+    ]
+  },
+  // Removing warning only.
+  "settings": {
+    "react": {
+      "version": "17"
+    }
+  }
+}

@@ -1,23 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReceiptsList from '../components/Receipts/ReceiptsList';
 import MembershipFeeList from '../components/Receipts/MembershipFeesList';
 
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import { getAllReceipts } from '../helpers/apiCalls';
 
-import { receiptType } from '../commondata/commondata';
+import { isMembershipFee } from '../commondata';
+import Toggle from '../components/common/Toggle';
+import { ReceiptProvider } from '../components/Receipts/ReceiptContext';
 
 const ReceiptsPage = () => {
   const [allReceipts, setAllReceipts] = useState([]);
   const [currentReceipts, setCurrentReceipts] = useState([]);
 
   const [allMembershipFees, setAllMembershipFees] = useState([]);
-  const [currentMembershipFees, setCurrentMembershipFees] = useState([]);
 
-  const [selectedReceiptType, setSelectedReceiptType] = useState(receiptType[0].type);
-
-  const buttonReceiptType = useRef();
-  const buttonReceiptWithMembershipFeeType = useRef();
+  const [isMembershipFeeSelected, setIsMembershipFeeSelected] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,65 +24,40 @@ const ReceiptsPage = () => {
       const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts);
 
       const receiptsWithMembershipFee = orderedReceipts.filter(
-        ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || ReceiptType === receiptType[1].type
+        ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || isMembershipFee(ReceiptType)
       );
 
       setAllReceipts(orderedReceipts);
-      setCurrentReceipts(orderedReceipts);
-
       setAllMembershipFees(receiptsWithMembershipFee);
-      setCurrentMembershipFees(receiptsWithMembershipFee);
+
+      setCurrentReceipts(orderedReceipts);
     };
     fetchData();
   }, []);
 
   const onToggleChanged = (receiptTypeSelected) => {
-    if (receiptTypeSelected === 'receipt') {
-      setCurrentReceipts(allReceipts);
-      setSelectedReceiptType(receiptType[0].type);
-      buttonReceiptType.current.className = 'toggle-option toggle-option-active';
-      buttonReceiptWithMembershipFeeType.current.className = 'toggle-option';
-    } else {
-      setCurrentMembershipFees(allMembershipFees);
-      setSelectedReceiptType(receiptType[1].type);
-      buttonReceiptType.current.className = 'toggle-option';
-      buttonReceiptWithMembershipFeeType.current.className = 'toggle-option toggle-option-active';
-    }
+    // Reset state
+    setCurrentReceipts(receiptTypeSelected === 'receipt' ? allReceipts : allMembershipFees);
+
+    setIsMembershipFeeSelected(receiptTypeSelected !== 'receipt');
   };
 
   return (
     <div className="page-body">
-      <div className="toggle">
-        <button
-          ref={buttonReceiptType}
-          type="button"
-          className="toggle-option toggle-option-active"
-          name="receipt"
-          onClick={({ target }) => onToggleChanged(target.name)}
-        >
-          Ricevute
-        </button>
+      <Toggle
+        optionOne={{ title: 'Ricevute', name: 'receipt' }}
+        optionTwo={{ title: 'Quote Associative', name: 'receiptsWithMembershipFee' }}
+        callback={onToggleChanged}
+      />
 
-        <button
-          ref={buttonReceiptWithMembershipFeeType}
-          type="button"
-          className="toggle-option"
-          name="receiptsWithMembershipFee"
-          onClick={({ target }) => onToggleChanged(target.name)}
-        >
-          Quote Associative
-        </button>
-      </div>
-
-      {selectedReceiptType === receiptType[0].type ? (
-        <ReceiptsList allReceipts={allReceipts} currentReceipts={currentReceipts} setCurrentReceipts={setCurrentReceipts} />
-      ) : (
-        <MembershipFeeList
-          allMembershipFees={allMembershipFees}
-          currentMembershipFees={currentMembershipFees}
-          setCurrentMembershipFees={setCurrentMembershipFees}
-        />
-      )}
+      <ReceiptProvider
+        allReceipts={allReceipts}
+        allMembershipFees={allMembershipFees}
+        currentReceipts={currentReceipts}
+        setCurrentReceipts={setCurrentReceipts}
+      >
+        {isMembershipFeeSelected ? <MembershipFeeList /> : <ReceiptsList />}
+      </ReceiptProvider>
     </div>
   );
 };

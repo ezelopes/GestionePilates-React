@@ -1,38 +1,35 @@
 const { Router } = require('express');
-const { getTeachers, getSingleTeacher, createTeacher, updateTeacher, deleteTeacher } = require('../database/teacherQuery');
+const { getTeachers, getTeacher, createTeacher, updateTeacher, deleteTeacher } = require('../database/teacherQuery');
 
 const teacherRouter = new Router();
 
-const getTeachersEndpoint = async (req, res) => {
+const getTeachersEndpoint = async (_, res) => {
   try {
     const teachers = await getTeachers();
 
     res.status(200).send(teachers);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
 
-const getSingleTeacherEndpoint = async (req, res) => {
+const getTeacherEndpoint = async (req, res) => {
   try {
-    const TaxCode = req.params.TaxCode;
-    const teacher = await getSingleTeacher(TaxCode);
+    const { TaxCode } = req.params;
+    const teacher = await getTeacher(TaxCode);
 
     res.status(200).send(teacher);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
 
 const createTeacherEndpoint = async (req, res) => {
   try {
-    const { message } = await createTeacher(req.body);
+    const { TeacherID, message } = await createTeacher(req.body);
 
-    res.status(200).send({ message });
+    res.status(200).send({ TeacherID, message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -43,26 +40,23 @@ const updateTeacherEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
 
 const deleteTeacherEndpoint = async (req, res) => {
   try {
-    const TeacherID = req.body.TeacherID;
-    const response = await deleteTeacher(TeacherID);
-    const responseObject = { message: response };
+    const { TeacherID } = req.body;
+    const { message } = await deleteTeacher(TeacherID);
 
-    res.status(200).send(responseObject);
+    res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
 
 teacherRouter.get('/getTeachers', getTeachersEndpoint);
-teacherRouter.get('/getSingleTeacher/:TaxCode', getSingleTeacherEndpoint);
+teacherRouter.get('/getTeacher/:TaxCode', getTeacherEndpoint);
 teacherRouter.put('/createTeacher', createTeacherEndpoint);
 teacherRouter.post('/updateTeacher', updateTeacherEndpoint);
 teacherRouter.delete('/deleteTeacher', deleteTeacherEndpoint);

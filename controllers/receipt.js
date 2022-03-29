@@ -5,20 +5,20 @@ const receiptRouter = new Router();
 
 const getStudentReceiptsEndpoint = async (req, res) => {
   try {
-    const TaxCode = req.params.TaxCode;
+    const { TaxCode } = req.params;
     const receipts = await getStudentReceipts(TaxCode);
     res.status(200).send(receipts);
   } catch (e) {
-    console.log(e);
+    res.status(500).send({ message: e.message });
   }
 };
 
-const getAllReceiptsEndpoint = async (req, res) => {
+const getAllReceiptsEndpoint = async (_, res) => {
   try {
     const receipts = await getAllReceipts();
     res.status(200).send(receipts);
   } catch (e) {
-    console.log(e);
+    res.status(500).send({ message: e.message });
   }
 };
 
@@ -28,7 +28,6 @@ const createReceiptEndpoint = async (req, res) => {
 
     res.status(200).send({ ReceiptID, message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
@@ -39,19 +38,17 @@ const updateReceiptEndpoint = async (req, res) => {
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };
 
 const deleteReceiptEndpoint = async (req, res) => {
   try {
-    const ReceiptID = req.body.ReceiptID;
+    const { ReceiptID } = req.body;
     const { message } = await deleteReceipt(ReceiptID);
 
     res.status(200).send({ message });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: e.message });
   }
 };

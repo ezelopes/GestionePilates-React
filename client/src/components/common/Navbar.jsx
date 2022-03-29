@@ -1,20 +1,34 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
+import Translation from './Translation/Translation';
+
 const NavBar = () => (
   <>
     <Navbar bg="dark" variant="dark" expanded="false" className="navbar">
-      <Navbar.Brand href="/"> PilArt </Navbar.Brand>
+      <Navbar.Brand href="/">
+        <Translation value="common.pilart" />
+      </Navbar.Brand>
       <Nav className="mr-auto">
         <NavDropdown title="Allieve" id="navbarScrollingDropdown">
-          <NavDropdown.Item href="/paginaallieve"> Lista Allieve </NavDropdown.Item>
-          <NavDropdown.Item href="/iscrizioneallieve"> Iscrizione Allieva </NavDropdown.Item>
+          <NavDropdown.Item href="/paginaallieve">
+            <Translation value="navbar.studentsList" />
+          </NavDropdown.Item>
+          <NavDropdown.Item href="/iscrizioneallieve">
+            <Translation value="navbar.studentsSubscription" />
+          </NavDropdown.Item>
         </NavDropdown>
         <NavDropdown title="Insegnanti" id="navbarScrollingDropdown">
-          <NavDropdown.Item href="/paginainsegnanti"> Lista Insegnanti </NavDropdown.Item>
-          <NavDropdown.Item href="/iscrizioneinsegnanti"> Iscrizione Insegnante </NavDropdown.Item>
+          <NavDropdown.Item href="/paginainsegnanti">
+            <Translation value="navbar.teachersList" />
+          </NavDropdown.Item>
+          <NavDropdown.Item href="/iscrizioneinsegnanti">
+            <Translation value="navbar.teachersSubscription" />
+          </NavDropdown.Item>
         </NavDropdown>
-        <Nav.Link href="/paginaricevute"> Ricevute </Nav.Link>
+        <Nav.Link href="/paginaricevute">
+          <Translation value="navbar.receiptsList" />
+        </Nav.Link>
       </Nav>
     </Navbar>
   </>

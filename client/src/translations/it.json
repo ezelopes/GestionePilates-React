@@ -1,0 +1,151 @@
+{
+  "placeholder": {
+    "taxCode": "Inserisci Codice Fiscale...",
+    "name": "Inserisci Nome...",
+    "surname": "Inserisci Cognome...",
+    "city": "Inserisci Città...",
+    "address": "Inserisci Indirizzo...",
+    "phone": "Cellulare",
+    "email": "Inserisci Email...",
+    "placeOfBirth": "Inserisci Luogo di Nascita...",
+    "parentTaxCode": "Inserisci Codice Fiscale Genitore...",
+    "parentName": "Inserisci Nome Genitore...",
+    "parentSurname": "Inserisci Cognome Genitore...",
+    "receiptNumber": "Inserisci Numero Ricevuta..."
+  },
+  "form": {
+    "taxCode": "Codice Fiscale",
+    "studentName": "Nome Allieva",
+    "studentSurname": "Cognome Allieva",
+    "teacherName": "Nome Insegnante",
+    "teacherSurname": "Cognome Insegnante",
+    "city": "Città",
+    "age": "Età",
+    "address": "Indirizzo",
+    "phone": "Cellulare",
+    "email": "Email",
+    "placeOfBirth": "Luogo di Nascita",
+    "dateOfBirth": "Data di Nascita",
+    "discipline": "Disciplina",
+    "course": "Corso",
+    "school": "Scuola",
+    "registrationDate": "Data Iscrizione",
+    "certificateExpirationDate": "Data Scadenza Certificato",
+    "greenPassExpirationDate": "Data Scadenza Green Pass",
+    "parentTaxCode": "Codice Fiscale Genitore",
+    "parentName": "Nome Genitore",
+    "parentSurname": "Cognome Genitore",
+    "cityAndAddress": "Città e Indirizzo",
+    "placeAndDOB": "Luogo e Data di Nascita"
+  },
+  "receiptForm": {
+    "receiptNumber": "Numero Ricevuta",
+    "receiptType": "Tipo Ricevuta",
+    "paymentType": "Tipo Pagamento",
+    "amountPaid": "Importo",
+    "receiptDate": "Data Ricevuta",
+    "courseStartDate": "Data Inizio Corso",
+    "courseEndDate": "Data Scadenza Corso",
+    "isRegistrationDate": "Usa Data Ricevuta come Data Iscrizione",
+    "includeMembershipFee": "Contiene Quota Associativa"
+  },
+  "receiptFilterForm": {
+    "filterBy": "Filtra per:",
+    "selectPaymentMethod": "Seleziona Tipo Pagamento:",
+    "title": "Ricevute dal {{ fromDate }} al {{ toDate }} (tramite {{ paymentMethod }})",
+    "totalAmount": "Importo Totale tra le date selezionte: <strong>{{ totalAmount }}€ </strong>"
+  },
+  "buttons": {
+    "student": {
+      "createStudent": "Crea Allieva",
+      "updateStudent": "Aggiorna Allieva",
+      "deleteStudent": "Elimina Allieva",
+      "updateRegistrationDate": "Aggiorna Data Iscrizione",
+      "printSelectedStudents": "Stampa Allieve Selezionate",
+      "printExpiringStudents": "Stampa Lista Allieve In Scadenza",
+      "printRegistrationForm": "Stampa Modulo Iscrizione",
+      "printExpiringGreenPass": "Scadenza Green Pass",
+      "printBasedOnRegistrationDate": "In base alla Data Iscrizione (con Green Pass obbligatorio)"
+    },
+    "receipt": {
+      "createReceipt": "Crea Ricevuta",
+      "updateReceipt": "Aggiorna Ricevuta",
+      "deleteReceipt": "Elimina Ricevuta",
+      "printReceipt": "Stampa Ricevuta",
+      "printSelectedReceipts": "Stampa Ricevute Selezionate",
+      "printMembershipFeeSummary": "Stampa Riepilogo Quote Associative",
+      "calculateTotalAmount": "Calcola Importo Totale"
+    },
+    "teacher": {
+      "createTeacher": "Crea Insegnante",
+      "updateTeacher": "Aggiorna Insegnante",
+      "deleteTeacher": "Elimina",
+      "printTeacherRegistrationForm": "Scarica Modulo"
+    },
+    "filter": "Filtra",
+    "print": "Stampa",
+    "close": "Chiudi",
+    "resetForm": "Reset Form",
+    "removeFilters": "Rimuovi Filtri",
+    "notFoundPage": "Torna alla Lista delle Allieve"
+  },
+  "navbar": {
+    "studentsList": "Lista Allieve",
+    "studentsSubscription": "Iscrizione Allieve",
+    "teachersList": "Lista Insegnanti",
+    "teachersSubscription": "Iscrizione Insegnanti",
+    "receiptsList": "Ricevute"
+  },
+  "modalsContent": {
+    "deleteStudentHeader": "Elimina Allieva",
+    "deleteStudentBody": "Sei sicura di voler eliminare...",
+    "updateStudentHeader": "Aggiorna Allieva",
+    "updateReceiptHeader": "Aggiorna Ricevuta",
+    "deleteReceiptBody": "Sei sicura di voler eliminare la ricevuta selezionata?",
+    "deleteReceiptHeader": "Elimina Ricevuta",
+    "updateTeacherHeader": "Aggiorna Insegnante",
+    "deleteTeacherHeader": "Elimina Insegnante",
+    "updateRegistrationDateHeader": "Aggiorna Data Iscrizione"
+  },
+  "common": {
+    "pilart": "PilArt",
+    "student": "Allieva",
+    "teacher": "Insegnante",
+    "receipt": "Ricevuta",
+    "students": "Allieve",
+    "teachers": "Insegnanti",
+    "receipts": "Ricevute",
+    "month": "Mese",
+    "year": "Anno",
+    "back": "Indietro",
+    "from": "Da",
+    "to": "A",
+    "printStudentsFormTitle": "Stampa Allieve",
+    "teachersNotFound": "Nessun insegnante trovato.",
+    "undefined": "Non Definito"
+  },
+  "toast": {
+    "success": {
+      "general": "PDF Creato Correttamente"
+    },
+    "error": {
+      "general": "Si e` verificato un errore nel creare il documento",
+      "noStudentsSelected": "Seleziona Allieve per Stamparle",
+      "noStudentFound": "Nessuno studente trovato!",
+      "noReceiptSelected": "Seleziona Ricevuta per Stamparla",
+      "noReceiptsSelected": "Seleziona Ricevute per Stamparle",
+      "noMembershipFeeFound": "Nessuna Quota Associativa trovata nel periodo selezionato!",
+      "emptyTaxCode": "Codice Fiscale non puo essere vuoto",
+      "taxCodeIncorrectFormat": "Assicurati che il codice fiscale sia nel formato corretto",
+      "parentTaxCodeIncorrectFormat": "Assicurati che il codice fiscale del genitore sia nel formato corretto",
+      "noEligibleFilter": "Calcolo dell'importo non si puo' effetturare con il filtro impostato!",
+      "noPaymentMethodSelected": "Seleziona Tipo di Pagamento!",
+      "noReceiptSelectedForUpdate": "Seleziona Ricevuta per Aggiornarla",
+      "noReceiptSelectedForDelete": "Seleziona Ricevuta per Eliminarla",
+      "noYearSelected": "Anno non selezionato!"
+    }
+  },
+  "notFoundPage": {
+    "title": "Oops! Ti sei persa?"
+  }
+}

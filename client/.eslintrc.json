@@ -6,13 +6,16 @@
     "browser": true,
     "commonjs": true,
     "es6": true,
-    "node": false
+    "node": true
   },
   "globals": {
     "Atomics": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2021
+    "ecmaVersion": 2021,
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "no-unused-vars": "warn",
@@ -22,6 +25,10 @@
     "curly": ["warn", "all"],
     "react/jsx-props-no-spreading": "off",
     "react/forbid-prop-types": 0,
+    "no-else-return": "warn",
+    "no-unneeded-ternary": "warn",
+    "no-useless-return": "warn",
+    "no-var": "warn",
     "no-console": [
       "warn",
       {
@@ -35,5 +42,10 @@
         "ignoreConsecutiveComments": true
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "17"
+    }
   }
 }

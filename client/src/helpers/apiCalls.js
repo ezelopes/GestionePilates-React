@@ -203,15 +203,11 @@ const getAllReceipts = async () => {
   return { receipts: body };
 };
 
-// TODO: Reduce this to one endpoint call!
 const getStudentWithReceipts = async (TaxCode) => {
-  const getStudentResult = await fetch(`/api/student/getSingleStudent/${TaxCode}`);
-  const student = await getStudentResult.json();
+  const response = await fetch(`/api/student/getStudentWithReceipts/${TaxCode}`);
+  const studentWithReceipts = await response.json();
 
-  const getReceiptsOfStudentResult = await fetch(`/api/receipt/getStudentReceipts/${TaxCode}`);
-  const receipts = await getReceiptsOfStudentResult.json();
-
-  return { student, receipts };
+  return { student: studentWithReceipts.student, receipts: studentWithReceipts.receipts };
 };
 
 export {

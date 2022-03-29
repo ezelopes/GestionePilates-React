@@ -1,9 +1,5 @@
-const pdfMake = require('pdfmake/build/pdfmake');
-const pdfFonts = require('pdfmake/build/vfs_fonts');
 const formatDate = require('../helpers/formatDateForInputDate');
 const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const StudentsDataTemplate = async (studentsList, registrationMonth, registrationYear) => {
   let docTitle = 'INFORMAZIONI ALLIEVE';

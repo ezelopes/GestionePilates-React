@@ -1,36 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { toast } from 'react-toastify';
 
-import CreateUpdateReceiptForm from '../CreateUpdateReceiptForm';
+import Translation from '../common/Translation/Translation';
+import { getTranslation } from '../common/Translation/helpers';
+import CreateUpdateReceiptForm from '../forms/CreateUpdateReceiptForm';
 import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
+import { printStudentReceipt } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
-import { ages, receiptType } from '../../commondata/commondata';
+import { gridOptionsDefaultStudentReceipts } from '../../helpers/grid.config';
 
 import { useStudent } from './StudentContext';
 
-const ReceiptTemplateAdult = require('../../pdfTemplates/ReceiptTemplateAdult');
-const ReceiptTemplateUnderAge = require('../../pdfTemplates/ReceiptTemplateUnderAge');
-
-const MembershipFeeTemplateAdult = require('../../pdfTemplates/MembershipFeeTemplateAdult');
-const MembershipFeeTemplateUnderAge = require('../../pdfTemplates/MembershipFeeTemplateUnderAge');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
-
-const gridOptionsDefault = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    cellStyle: { fontSize: '1.5em' },
-  },
-};
 
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
@@ -62,8 +46,7 @@ const columnsDefinition = [
 const StudentReceiptsList = () => {
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
 
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
+  const [gridOptions] = useState(gridOptionsDefaultStudentReceipts);
   const [rowData, setRowData] = useState(studentReceipts);
 
   const [selectedReceipt, setSelectedReceipt] = useState();
@@ -82,33 +65,6 @@ const StudentReceiptsList = () => {
       });
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const printReceipt = async () => {
-    try {
-      if (!selectedReceipt) {
-        return toast.error('Seleziona Ricevuta per Stamparla', toastConfig);
-      }
-
-      let documentDefinition;
-
-      if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[0].type) {
-        documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-      } else if (studentInfo.IsAdult === ages[0].age && selectedReceipt.ReceiptType === receiptType[1].type) {
-        documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-      } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[0].type) {
-        documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-      } else if (studentInfo.IsAdult === ages[1].age && selectedReceipt.ReceiptType === receiptType[1].type) {
-        documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
-      }
-
-      pdfMake.createPdf(documentDefinition).open();
-
-      return toast.success('PDF Ricevuta Creato Correttamente', toastConfig);
-    } catch (error) {
-      console.error(error);
-      return toast.error(`Un errore se e' verificato nello stampare la ricevuta`, toastConfig);
     }
   };
 
@@ -143,11 +99,9 @@ const StudentReceiptsList = () => {
     <div className="tab-content">
       <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
-          scrollbarWidth
-          rowHeight="45"
-          rowSelection="single"
+          reactNext
           gridOptions={gridOptions}
-          columnDefs={columnDefs}
+          columnDefs={columnsDefinition}
           rowData={rowData}
           onSelectionChanged={onReceiptSelectionChanged}
           onGridReady={onGridReady}
@@ -155,9 +109,9 @@ const StudentReceiptsList = () => {
       </div>
 
       <div className="buttons-container">
-        <Button onClick={async () => printReceipt()}>
+        <Button onClick={async () => printStudentReceipt(selectedReceipt, studentInfo)}>
           <span role="img" aria-label="receipt">
-            🖨️ STAMPA RICEVUTA
+            🖨️ <Translation value="buttons.receipt.printReceipt" />
           </span>
         </Button>
 
@@ -165,13 +119,13 @@ const StudentReceiptsList = () => {
           variant="warning"
           onClick={() => {
             if (!selectedReceipt) {
-              return toast.error('Seleziona Ricevuta per Aggiornarla', toastConfig);
+              return toast.error(getTranslation('toast.error.noReceiptSelectedForUpdate'), toastConfig);
             }
             return setShowUpdateReceiptModal(true);
           }}
         >
           <span role="img" aria-label="update">
-            🔄 AGGIORNA RICEVUTA
+            🔄 <Translation value="buttons.receipt.updateReceipt" />
           </span>
         </Button>
 
@@ -179,13 +133,13 @@ const StudentReceiptsList = () => {
           variant="danger"
           onClick={() => {
             if (!selectedReceipt) {
-              return toast.error('Seleziona Ricevuta per Eliminarla', toastConfig);
+              return toast.error(getTranslation('toast.error.noReceiptSelectedForDelete'), toastConfig);
             }
             return setShowDeleteReceiptModal(true);
           }}
         >
           <span role="img" aria-label="bin">
-            🗑️ ELIMINA RICEVUTA
+            🗑️ <Translation value="buttons.receipt.deleteReceipt" />
           </span>
         </Button>
       </div>
@@ -197,7 +151,9 @@ const StudentReceiptsList = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title> Aggiorna Ricevuta </Modal.Title>
+          <Modal.Title>
+            <Translation value="modalsContent.updateReceiptHeader" />
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
           <CreateUpdateReceiptForm
@@ -213,19 +169,23 @@ const StudentReceiptsList = () => {
               setShowUpdateReceiptModal(false);
             }}
           >
-            CHIUDI
+            <Translation value="buttons.close" />
           </Button>
         </Modal.Footer>
       </Modal>
 
       <Modal show={showDeleteReceiptModal} onHide={() => setShowDeleteReceiptModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title> Elimina Ricevuta </Modal.Title>
+          <Modal.Title>
+            <Translation value="modalsContent.deleteReceiptHeader" />
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="filtered-receipt-modal">Sei sicura di voler eliminare la ricevuta selezionata?</Modal.Body>
+        <Modal.Body className="filtered-receipt-modal">
+          <Translation value="modalsContent.deleteReceiptBody" />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleDeleteReceipt}>
-            ELIMINA
+            <Translation value="buttons.receipt.deleteReceipt" />
           </Button>
           <Button
             variant="secondary"
@@ -233,7 +193,7 @@ const StudentReceiptsList = () => {
               setShowDeleteReceiptModal(false);
             }}
           >
-            CHIUDI
+            <Translation value="buttons.close" />
           </Button>
         </Modal.Footer>
       </Modal>

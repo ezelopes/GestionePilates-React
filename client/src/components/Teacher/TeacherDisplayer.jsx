@@ -2,37 +2,20 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import CreateUpdateUserForm from '../CreateUpdateUserForm';
+import CreateUpdateUserForm from '../forms/CreateUpdateUserForm';
 import { TeacherProvider } from './TeacherContext';
 
 import { updateTeacher, deleteTeacher } from '../../helpers/apiCalls';
+import { printTeacherRegistrationForm } from '../../helpers/printPDF';
 import toastConfig from '../../helpers/toast.config';
 
-import { userType } from '../../commondata/commondata';
-
-const RegistrationFormTemplate = require('../../pdfTemplates/RegistrationFormTemplate');
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import Translation from '../common/Translation/Translation';
 
 const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo);
   const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
   const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
-
-  const printRegistrationForm = async () => {
-    try {
-      const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
-      pdfMake.createPdf(documentDefinition).open();
-
-      return toast.success('Modulo Iscrizione Creato Correttamente', toastConfig);
-    } catch (error) {
-      console.error(error);
-      return toast.error(`Un errore se e' verificato nello stampare il modulo d'iscrizione`, toastConfig);
-    }
-  };
 
   const handleTeacherDeletion = async () => {
     const response = await deleteTeacher(teacherInfo.TeacherID);
@@ -62,61 +45,105 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
             </b>
           </Card.Title>
           <Card.Text>
-            <b>Codice Fiscale: </b> {teacherInfo.TaxCode}
+            <b>
+              <Translation value="form.taxCode" />
+              :&nbsp;
+            </b>
+            {teacherInfo.TaxCode}
           </Card.Text>
           <Card.Text>
-            <b>Citta e Indirizzo: </b> {teacherInfo.City} - {teacherInfo.Address}
+            <b>
+              <Translation value="form.cityAndAddress" />
+              :&nbsp;
+            </b>
+            {teacherInfo.City} - {teacherInfo.Address}
           </Card.Text>
           <Card.Text>
-            <b>Cellulare: </b> {teacherInfo.MobilePhone}
+            <b>
+              <Translation value="form.phone" />
+              :&nbsp;
+            </b>
+            {teacherInfo.MobilePhone}
           </Card.Text>
           <Card.Text>
-            <b>Email: </b> {teacherInfo.Email}
+            <b>
+              <Translation value="form.email" />
+              :&nbsp;
+            </b>
+            {teacherInfo.Email}
           </Card.Text>
           <Card.Text>
-            <b>Luogo e Data Nascita: </b>
+            <b>
+              <Translation value="form.placeAndDOB" />
+              :&nbsp;
+            </b>
             {teacherInfo.BirthPlace} -{teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
-            <b>Data Iscrizione: </b>
+            <b>
+              <Translation value="form.registrationDate" />
+              :&nbsp;
+            </b>
             {teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
-            <b>Scuola: </b> {teacherInfo.School}
+            <b>
+              <Translation value="form.school" />
+              :&nbsp;
+            </b>
+            {teacherInfo.School}
           </Card.Text>
           <Card.Text>
-            <b>Disciplina: </b> {teacherInfo.Discipline}
+            <b>
+              <Translation value="form.discipline" />
+              :&nbsp;
+            </b>
+            {teacherInfo.Discipline}
           </Card.Text>
           <Card.Text>
-            <b>Corso: </b> {teacherInfo.Course}
+            <b>
+              <Translation value="form.course" />
+              :&nbsp;
+            </b>
+            {teacherInfo.Course}
           </Card.Text>
           <Card.Text>
-            <b>Data Scadenza Certificato: </b>
-            {teacherInfo.CertificateExpirationDate !== null
-              ? new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()
-              : 'Non Definito'}
+            <b>
+              <Translation value="form.certificateExpirationDate" />
+              :&nbsp;
+            </b>
+            {teacherInfo.CertificateExpirationDate !== null ? (
+              new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()
+            ) : (
+              <Translation value="common.undefined" />
+            )}
           </Card.Text>
           <Card.Text>
-            <b>Data Scadenza Green Pass: </b>
-            {teacherInfo.GreenPassExpirationDate !== null
-              ? new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()
-              : 'Non Definito'}
+            <b>
+              <Translation value="form.greenPassExpirationDate" />
+              :&nbsp;
+            </b>
+            {teacherInfo.GreenPassExpirationDate !== null ? (
+              new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()
+            ) : (
+              <Translation value="common.undefined" />
+            )}
           </Card.Text>
 
           <div className="buttons-container">
-            <Button variant="success" onClick={() => printRegistrationForm()}>
+            <Button variant="success" onClick={() => printTeacherRegistrationForm(teacherInfo)}>
               <span role="img" aria-label="module">
-                🖨️ Scarica Modulo
+                🖨️ <Translation value="buttons.teacher.printTeacherRegistrationForm" />
               </span>
             </Button>
             <Button variant="primary" onClick={() => setShowUpdateTeacherModal(true)}>
               <span role="img" aria-label="update">
-                🔄 Aggiorna
+                🔄 <Translation value="buttons.teacher.updateTeacher" />
               </span>
             </Button>
             <Button variant="danger" onClick={() => setShowDeleteTeacherModal(true)}>
               <span role="img" aria-label="bin">
-                🗑️ Elimina
+                🗑️ <Translation value="buttons.teacher.deleteTeacher" />
               </span>
             </Button>
           </div>
@@ -130,12 +157,13 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title> Aggiorna Insegnante </Modal.Title>
+          <Modal.Title>
+            <Translation value="modalsContent.updateTeacherHeader" />
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-teacher-modal-body">
           <CreateUpdateUserForm
             personInfo={teacherInfo}
-            personType={userType[1].user}
             callback={updateTeacher}
             handleModal={setShowUpdateTeacherModal}
             setUserInfo={setTeacherInfo}
@@ -146,14 +174,16 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
 
       <Modal show={showDeleteTeacherModal} onHide={() => setShowDeleteTeacherModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title> Elimina Insegnante </Modal.Title>
+          <Modal.Title>
+            <Translation value="modalsContent.deleteTeacherHeader" />
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="delete-student-teacher-modal-body">
           Sei sicura di voler eliminare {teacherInfo.Name} {teacherInfo.Surname}?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleTeacherDeletion}>
-            ELIMINA
+            <Translation value="buttons.teacher.deleteTeacher" />
           </Button>
           <Button
             variant="secondary"
@@ -161,7 +191,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
               setShowDeleteTeacherModal(false);
             }}
           >
-            CHIUDI
+            <Translation value="buttons.close" />
           </Button>
         </Modal.Footer>
       </Modal>

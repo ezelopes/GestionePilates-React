@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { Button } from 'react-bootstrap';
 
 import FilterReceiptsForm from './FilterReceiptsForm';
+import Translation from '../common/Translation/Translation';
 
-import { printSelectedReceipts, printExpiringStudents } from '../../helpers/printPDF';
+import { printSelectedReceipts } from '../../helpers/printPDF';
+import { useReceipt } from './ReceiptContext';
+
+import { gridOptionsDefaultReceipts } from '../../helpers/grid.config';
+import PrintExpiringReceiptsForm from './PrintExpiringReceiptsForm';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -31,32 +35,22 @@ const columnsDefinition = [
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
   { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
-];
-
-const gridOptionsDefault = {
-  defaultColDef: {
-    resizable: true,
-    sortable: true,
-    filter: true,
-    floatingFilter: true,
-    cellStyle: { fontSize: '1.5em' },
-    flex: 10,
+  {
+    headerName: 'Include Quota Associativa',
+    field: 'IncludeMembershipFee',
+    cellRenderer: (params) => (params.value ? '✅' : ''),
+    cellClass: 'ag-grid-cell-centered',
   },
-  rowSelection: 'single',
-};
-
-const filterFields = [
-  { field: 'receipt_date', description: 'Data Ricevuta' },
-  { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
 ];
 
-const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
-  const [gridOptions] = useState(gridOptionsDefault);
-  const [columnDefs] = useState(columnsDefinition);
-  const [selectedReceipts, setSelectedReceipts] = useState([]);
+const ReceiptsList = () => {
+  const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt();
+
+  const [gridOptions] = useState(gridOptionsDefaultReceipts);
+
   const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
 
-  const [filterByField, setFilterByField] = useState(filterFields[0]);
+  const [selectedReceipts, setSelectedReceipts] = useState([]);
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
@@ -85,51 +79,28 @@ const ReceiptsList = ({ allReceipts, currentReceipts, setCurrentReceipts }) => {
         setCurrentReceipts={setCurrentReceipts}
         setReceiptsForAmountSummary={setReceiptsForAmountSummary}
         gridOptions={gridOptions}
-        filterByField={filterByField}
-        setFilterByField={setFilterByField}
       />
       <div className="ag-theme-balham receipts-grid">
         <AgGridReact
           reactNext
-          rowMultiSelectWithClick
-          rowSelection="multiple"
-          scrollbarWidth
-          rowHeight="45"
           gridOptions={gridOptions}
-          columnDefs={columnDefs}
+          columnDefs={columnsDefinition}
           rowData={currentReceipts}
           onSelectionChanged={onReceiptSelectionChanged}
         />
       </div>
 
       <div className="buttons-container">
-        <Button
-          variant="success"
-          onClick={() => printSelectedReceipts(selectedReceipts)}
-          disabled={filterByField !== 'receipt_date'}
-        >
+        <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)}>
           <span role="img" aria-label="print-selected">
-            🖨️ Stampa Ricevute Selezionate
-          </span>
-        </Button>
-        <Button
-          variant="success"
-          onClick={() => printExpiringStudents(currentReceipts)}
-          disabled={filterByField !== 'course_date'}
-        >
-          <span role="img" aria-label="print-selected">
-            🖨️ Lista Allieve In Scadenza
+            🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
           </span>
         </Button>
       </div>
+
+      <PrintExpiringReceiptsForm />
     </div>
   );
-};
-
-ReceiptsList.propTypes = {
-  allReceipts: PropTypes.array.isRequired,
-  currentReceipts: PropTypes.array.isRequired,
-  setCurrentReceipts: PropTypes.func.isRequired,
 };
 
 export default ReceiptsList;

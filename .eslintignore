@@ -1,0 +1,6 @@
+# Dependency directories
+node_modules/
+build/
+
+# React files
+src/serviceWorker.js
