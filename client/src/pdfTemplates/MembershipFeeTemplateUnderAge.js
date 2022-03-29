@@ -1,6 +1,7 @@
-const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
-const convertNumberIntoWord = require('../helpers/convertNumberIntoWord');
-const formatDate = require('../helpers/formatDateForInputDate');
+import convertNumberIntoWord from '../helpers/convertNumberIntoWord';
+import formatDate from '../helpers/formatDateForInputDate';
+
+import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 
 const MembershipFeeTemplateUnderAge = async (studentInfo, receiptInfo) => {
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');

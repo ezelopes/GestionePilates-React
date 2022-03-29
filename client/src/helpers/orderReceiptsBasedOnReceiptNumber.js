@@ -19,4 +19,4 @@ const orderReceiptsBasedOnReceiptNumber = (receipts) => {
   return orderedReceipts;
 };
 
-module.exports = orderReceiptsBasedOnReceiptNumber;
+export default orderReceiptsBasedOnReceiptNumber;

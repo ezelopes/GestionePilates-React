@@ -16,4 +16,4 @@ const formatDate = (date, reversed) => {
   return `${day}-${month}-${year}`;
 };
 
-module.exports = formatDate;
+export default formatDate;

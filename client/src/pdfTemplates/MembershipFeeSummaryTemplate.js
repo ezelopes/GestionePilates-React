@@ -1,5 +1,5 @@
-const formatDate = require('../helpers/formatDateForInputDate');
-const getBase64ImageFromURL = require('../helpers/getBase64ImageFromURL');
+import formatDate from '../helpers/formatDateForInputDate';
+import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 
 const MembershipFeeSummaryTemplate = async (studentReceiptList, fromDate, toDate) => {
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');

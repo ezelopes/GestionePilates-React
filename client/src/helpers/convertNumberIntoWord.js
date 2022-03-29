@@ -140,4 +140,4 @@ const convertNumberIntoWord = (num, abbr) => {
   return result + (abbrNum.length > 0 ? ` / ${abbrNum}` : '');
 };
 
-module.exports = convertNumberIntoWord;
+export default convertNumberIntoWord;
