@@ -99,6 +99,7 @@ const StudentReceiptsList = () => {
     <div className="tab-content">
       <div className="ag-theme-balham student-receipt-list">
         <AgGridReact
+          reactNext
           gridOptions={gridOptions}
           columnDefs={columnsDefinition}
           rowData={rowData}

@@ -44,8 +44,8 @@ const gridOptionsDefaultStudents = {
     filter: true,
     cellStyle: { fontSize: '1.5em' },
   },
-  rowMultiSelectWithClick: true,
   rowSelection: 'multiple',
+  rowMultiSelectWithClick: true,
   rowHeight: 45,
 };
 

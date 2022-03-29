@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// TODO: FIND A BETTER WAY FOR THIS
+// TODO: FIND A BETTER WAY FOR THIS (PART OF CSS REFACTORING)
 
 const Divider = ({ half = false, single = false, double = false }) => {
   if (single) {
