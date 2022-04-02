@@ -17,11 +17,6 @@ import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, ge
 import toastConfig from '../commondata/toast.config';
 import { printRegistrationForm } from '../helpers/printPDF';
 
-// TODO: IMPORT THIS CSS AT THE TOP LEVEL ONLY ONCE?
-
-require('ag-grid-community/dist/styles/ag-grid.css');
-require('ag-grid-community/dist/styles/ag-theme-balham.css');
-
 // TODO: EXPORT MODALS INTO NEW COMPONENTS?
 
 const StudentPage = ({ match }) => {

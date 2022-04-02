@@ -10,9 +10,6 @@ import Translation from '../../common/Translation';
 import { printSelectedReceipts } from '../../../helpers/printPDF';
 import { gridOptionsDefaultReceipts } from '../../../commondata/grid.config';
 
-require('ag-grid-community/dist/styles/ag-grid.css');
-require('ag-grid-community/dist/styles/ag-theme-balham.css');
-
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
   { headerName: 'Nome', field: 'Name' },

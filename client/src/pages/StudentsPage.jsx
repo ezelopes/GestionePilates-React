@@ -11,9 +11,6 @@ import { gridOptionsDefaultStudents } from '../commondata/grid.config';
 
 import Translation from '../components/common/Translation';
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
   {

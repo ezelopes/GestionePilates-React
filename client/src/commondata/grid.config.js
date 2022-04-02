@@ -47,6 +47,7 @@ const gridOptionsDefaultStudents = {
   rowSelection: 'multiple',
   rowMultiSelectWithClick: true,
   rowHeight: 45,
+  suppressHorizontalScroll: false,
 };
 
 const gridOptionsFilteredReceipts = {

@@ -6,9 +6,6 @@ import { useReceipt } from '../ReceiptContext';
 
 import { gridOptionsDefaultMembershipFee } from '../../../commondata/grid.config';
 
-require('ag-grid-community/dist/styles/ag-grid.css');
-require('ag-grid-community/dist/styles/ag-theme-balham.css');
-
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
   { headerName: 'Nome', field: 'Name' },

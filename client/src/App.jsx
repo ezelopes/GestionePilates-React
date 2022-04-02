@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -16,8 +16,6 @@ import TeacherSubscription from './pages/TeacherSubscriptionPage';
 import TeachersPage from './pages/TeachersPage';
 
 import ReceiptsPage from './pages/ReceiptsPage';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => (
   <>

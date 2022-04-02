@@ -13,9 +13,6 @@ import { gridOptionsDefaultStudentReceipts } from '../../../commondata/grid.conf
 
 import { useStudent } from '../StudentContext';
 
-require('ag-grid-community/dist/styles/ag-grid.css');
-require('ag-grid-community/dist/styles/ag-theme-balham.css');
-
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
   { headerName: 'Tipo Ricevuta', field: 'ReceiptType' },
@@ -57,17 +54,6 @@ const StudentReceiptsList = () => {
     setRowData(studentReceipts);
   }, [studentReceipts]);
 
-  const onGridReady = (params) => {
-    try {
-      params.api.sizeColumnsToFit();
-      window.addEventListener('resize', () => {
-        params.api.sizeColumnsToFit();
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const onReceiptSelectionChanged = () => {
     const selectedNode = gridOptions.api.getSelectedNodes();
     if (selectedNode.length === 0) {
@@ -104,7 +90,7 @@ const StudentReceiptsList = () => {
           columnDefs={columnsDefinition}
           rowData={rowData}
           onSelectionChanged={onReceiptSelectionChanged}
-          onGridReady={onGridReady}
+          scrollbarWidth={8}
         />
       </div>
 

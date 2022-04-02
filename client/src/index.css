@@ -201,6 +201,11 @@ form-control {
   justify-content: center !important;
 }
 
+.ag-body-viewport-wrapper.ag-layout-normal {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
 .form-wrapper {
   border: 2px solid #dcdcdc;
   border-radius: 5px;
