@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
-import Translation from '../common/Translation/Translation';
-import { getTranslation } from '../common/Translation/helpers';
+import Translation from '../../common/Translation';
+import { getTranslation } from '../../common/Translation/helpers';
 
-import { ages } from '../../commondata';
+import { ages } from '../../../commondata';
 
 const dropdownAges = [null, ages[0].age, ages[1].age];
 

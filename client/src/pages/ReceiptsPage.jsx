@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import ReceiptsList from '../components/Receipts/ReceiptsList';
-import MembershipFeeList from '../components/Receipts/MembershipFeesList';
+import ReceiptsList from '../components/receipts/ReceiptsList';
+import MembershipFeesList from '../components/receipts/MembershipFeesList';
 
 import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
 import { getAllReceipts } from '../helpers/apiCalls';
 
 import { isMembershipFee } from '../commondata';
 import Toggle from '../components/common/Toggle';
-import { ReceiptProvider } from '../components/Receipts/ReceiptContext';
+import { ReceiptProvider } from '../components/receipts/ReceiptContext';
 
 const ReceiptsPage = () => {
   const [allReceipts, setAllReceipts] = useState([]);
@@ -56,7 +56,7 @@ const ReceiptsPage = () => {
         currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
       >
-        {isMembershipFeeSelected ? <MembershipFeeList /> : <ReceiptsList />}
+        {isMembershipFeeSelected ? <MembershipFeesList /> : <ReceiptsList />}
       </ReceiptProvider>
     </div>
   );

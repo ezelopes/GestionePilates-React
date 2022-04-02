@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
-import { useReceipt } from './ReceiptContext';
+import { useReceipt } from '../ReceiptContext';
 
-import Translation from '../common/Translation/Translation';
-import { printExpiringStudents } from '../../helpers/printPDF';
-import { years } from '../../commondata';
+import Translation from '../../common/Translation';
+import { printExpiringStudents } from '../../../helpers/printPDF';
+import { years } from '../../../commondata';
 
 const PrintExpiringReceiptsForm = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());

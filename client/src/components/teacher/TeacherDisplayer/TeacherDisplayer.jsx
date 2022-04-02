@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import CreateUpdateUserForm from '../forms/CreateUpdateUserForm';
-import { TeacherProvider } from './TeacherContext';
+import UpsertUserForm from '../../user/UpsertUserForm';
+import { TeacherProvider } from '../TeacherContext';
+import Translation from '../../common/Translation';
 
-import { updateTeacher, deleteTeacher } from '../../helpers/apiCalls';
-import { printTeacherRegistrationForm } from '../../helpers/printPDF';
-import toastConfig from '../../helpers/toast.config';
+import { updateTeacher, deleteTeacher } from '../../../helpers/apiCalls';
+import { printTeacherRegistrationForm } from '../../../helpers/printPDF';
+import toastConfig from '../../../commondata/toast.config';
 
-import Translation from '../common/Translation/Translation';
+// TODO: EXPORT MODALS INTO NEW COMPONENTS?
 
 const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo);
@@ -162,7 +163,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-teacher-modal-body">
-          <CreateUpdateUserForm
+          <UpsertUserForm
             personInfo={teacherInfo}
             callback={updateTeacher}
             handleModal={setShowUpdateTeacherModal}

@@ -6,20 +6,23 @@ import { toast } from 'react-toastify';
 
 import NotFoundPage from './NotFoundPage';
 
-import StudentReceiptsList from '../components/Student/StudentReceiptsList';
-import CreateUpdateUserForm from '../components/forms/CreateUpdateUserForm';
-import CreateUpdateReceiptForm from '../components/forms/CreateUpdateReceiptForm';
-import { StudentProvider } from '../components/Student/StudentContext';
+import { StudentProvider } from '../components/student/StudentContext';
+import StudentReceiptsList from '../components/student/StudentReceiptsList';
+import UpsertUserForm from '../components/user/UpsertUserForm';
+import UpsertReceiptForm from '../components/receipts/UpsertReceiptForm';
 import Divider from '../components/common/Divider';
+import Translation from '../components/common/Translation';
 
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
-import toastConfig from '../helpers/toast.config';
+import toastConfig from '../commondata/toast.config';
 import { printRegistrationForm } from '../helpers/printPDF';
 
-import Translation from '../components/common/Translation/Translation';
+// TODO: IMPORT THIS CSS AT THE TOP LEVEL ONLY ONCE?
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
+
+// TODO: EXPORT MODALS INTO NEW COMPONENTS?
 
 const StudentPage = ({ match }) => {
   const [loading, setLoading] = useState(true);
@@ -131,7 +134,7 @@ const StudentPage = ({ match }) => {
             <Divider double />
 
             <div className="form-wrapper create-receipt-form-wrapper">
-              <CreateUpdateReceiptForm isForCreating callback={createReceipt} />
+              <UpsertReceiptForm isForCreating callback={createReceipt} />
             </div>
           </div>
           <Modal show={showRegistrationDateModal} onHide={() => setShowRegistrationDateModal(false)} centered>
@@ -198,7 +201,7 @@ const StudentPage = ({ match }) => {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className="update-student-modal-body">
-              <CreateUpdateUserForm
+              <UpsertUserForm
                 personInfo={studentInfo}
                 isStudent
                 callback={updateStudent}

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap';
 
-import Translation from '../common/Translation/Translation';
-import { gridOptionsFilteredReceipts } from '../../helpers/grid.config';
+import Translation from '../../common/Translation';
+import { gridOptionsFilteredReceipts } from '../../../commondata/grid.config';
 
 const columnDefs = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },

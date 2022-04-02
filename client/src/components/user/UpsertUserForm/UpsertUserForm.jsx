@@ -5,17 +5,17 @@ import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
 
-import Divider from '../common/Divider';
-import Translation from '../common/Translation/Translation';
-import { getTranslation } from '../common/Translation/helpers';
+import Divider from '../../common/Divider';
+import Translation from '../../common/Translation';
+import { getTranslation } from '../../common/Translation/helpers';
 
-import toastConfig from '../../helpers/toast.config';
+import toastConfig from '../../../commondata/toast.config';
 
-import { ages, disciplines, schools, courses, isAdult } from '../../commondata';
+import { ages, disciplines, schools, courses, isAdult } from '../../../commondata';
 
 const TAX_CODE_REGEX = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i;
 
-const CreateUpdateUserForm = ({
+const UpsertUserForm = ({
   personInfo,
   isStudent = false,
   callback,
@@ -308,7 +308,7 @@ const CreateUpdateUserForm = ({
   );
 };
 
-CreateUpdateUserForm.propTypes = {
+UpsertUserForm.propTypes = {
   personInfo: PropTypes.shape({
     IsAdult: PropTypes.string,
     StudentID: PropTypes.number,
@@ -339,7 +339,7 @@ CreateUpdateUserForm.propTypes = {
   handleModal: PropTypes.func,
 };
 
-CreateUpdateUserForm.defaultProps = {
+UpsertUserForm.defaultProps = {
   personInfo: {},
   isStudent: false,
   isForCreating: false,
@@ -347,4 +347,4 @@ CreateUpdateUserForm.defaultProps = {
   handleModal: () => {},
 };
 
-export default CreateUpdateUserForm;
+export default UpsertUserForm;

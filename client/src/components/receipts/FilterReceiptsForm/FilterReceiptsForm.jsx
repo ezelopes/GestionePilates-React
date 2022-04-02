@@ -3,14 +3,14 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import Translation from '../common/Translation/Translation';
-import { getTranslation } from '../common/Translation/helpers';
-import FilteredReceiptsModal from './FilteredReceiptsModal';
-import formatDate from '../../helpers/formatDateForInputDate';
-import orderReceiptsBasedOnReceiptNumber from '../../helpers/orderReceiptsBasedOnReceiptNumber';
-import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../helpers/printPDF';
-import toastConfig from '../../helpers/toast.config';
-import { BLANK_DATE } from '../../commondata';
+import Translation from '../../common/Translation';
+import { getTranslation } from '../../common/Translation/helpers';
+import FilteredReceiptsModal from '../FilteredReceiptsModal';
+import formatDate from '../../../helpers/formatDateForInputDate';
+import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBasedOnReceiptNumber';
+import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../../helpers/printPDF';
+import toastConfig from '../../../commondata/toast.config';
+import { BLANK_DATE } from '../../../commondata';
 
 const paymentMethods = [null, 'Contanti', 'Assegno', 'Bonifico'];
 const filterFields = [

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 
-import Translation from '../common/Translation/Translation';
-import { printStudentsWithExpiringGreenPass, printStudentsBasedOnRegistrationDate } from '../../helpers/printPDF';
+import Translation from '../../common/Translation';
+import { printStudentsWithExpiringGreenPass, printStudentsBasedOnRegistrationDate } from '../../../helpers/printPDF';
 
-import { months, years } from '../../commondata';
+import { months, years } from '../../../commondata';
 
 const PrintStudentsForm = ({ students }) => {
   const [selectedMonth, setselectedMonth] = useState(new Date().getMonth());

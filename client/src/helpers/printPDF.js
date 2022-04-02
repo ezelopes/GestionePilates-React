@@ -4,7 +4,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import { getTranslation } from '../components/common/Translation/helpers';
 
-import toastConfig from './toast.config';
+import toastConfig from '../commondata/toast.config';
 
 import { getMonthFromId, isAdult, isMembershipFee } from '../commondata';
 

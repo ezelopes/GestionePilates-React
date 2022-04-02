@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
-import Translation from './Translation/Translation';
+import Translation from '../Translation';
 
 const NavBar = () => (
   <>

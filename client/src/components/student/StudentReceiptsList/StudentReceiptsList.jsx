@@ -3,15 +3,15 @@ import { Button, Modal } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import { toast } from 'react-toastify';
 
-import Translation from '../common/Translation/Translation';
-import { getTranslation } from '../common/Translation/helpers';
-import CreateUpdateReceiptForm from '../forms/CreateUpdateReceiptForm';
-import { updateReceipt, deleteReceipt } from '../../helpers/apiCalls';
-import { printStudentReceipt } from '../../helpers/printPDF';
-import toastConfig from '../../helpers/toast.config';
-import { gridOptionsDefaultStudentReceipts } from '../../helpers/grid.config';
+import Translation from '../../common/Translation';
+import { getTranslation } from '../../common/Translation/helpers';
+import UpsertReceiptForm from '../../receipts/UpsertReceiptForm';
+import { updateReceipt, deleteReceipt } from '../../../helpers/apiCalls';
+import { printStudentReceipt } from '../../../helpers/printPDF';
+import toastConfig from '../../../commondata/toast.config';
+import { gridOptionsDefaultStudentReceipts } from '../../../commondata/grid.config';
 
-import { useStudent } from './StudentContext';
+import { useStudent } from '../StudentContext';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');
@@ -156,11 +156,7 @@ const StudentReceiptsList = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="update-student-modal-body">
-          <CreateUpdateReceiptForm
-            receiptInfo={selectedReceipt}
-            callback={updateReceipt}
-            handleModal={setShowUpdateReceiptModal}
-          />
+          <UpsertReceiptForm receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
         </Modal.Body>
         <Modal.Footer>
           <Button

@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Button } from 'react-bootstrap';
 
-import FilterReceiptsForm from './FilterReceiptsForm';
-import Translation from '../common/Translation/Translation';
+import { useReceipt } from '../ReceiptContext';
+import FilterReceiptsForm from '../FilterReceiptsForm';
+import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
 
-import { printSelectedReceipts } from '../../helpers/printPDF';
-import { useReceipt } from './ReceiptContext';
-
-import { gridOptionsDefaultReceipts } from '../../helpers/grid.config';
-import PrintExpiringReceiptsForm from './PrintExpiringReceiptsForm';
+import Translation from '../../common/Translation';
+import { printSelectedReceipts } from '../../../helpers/printPDF';
+import { gridOptionsDefaultReceipts } from '../../../commondata/grid.config';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');

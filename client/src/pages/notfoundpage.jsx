@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-import Translation from '../components/common/Translation/Translation';
+import Translation from '../components/common/Translation';
 
 const NotFoundPage = () => (
   <div className="not-found-page">

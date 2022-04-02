@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 
-import FilterReceiptsForm from './FilterReceiptsForm';
-import { useReceipt } from './ReceiptContext';
+import FilterReceiptsForm from '../FilterReceiptsForm';
+import { useReceipt } from '../ReceiptContext';
 
-import { gridOptionsDefaultMembershipFee } from '../../helpers/grid.config';
+import { gridOptionsDefaultMembershipFee } from '../../../commondata/grid.config';
 
 require('ag-grid-community/dist/styles/ag-grid.css');
 require('ag-grid-community/dist/styles/ag-theme-balham.css');

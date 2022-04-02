@@ -6,16 +6,16 @@ import { useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
 
-import Translation from '../common/Translation/Translation';
-import { getTranslation } from '../common/Translation/helpers';
-import Divider from '../common/Divider';
+import Translation from '../../common/Translation';
+import { getTranslation } from '../../common/Translation/helpers';
+import Divider from '../../common/Divider';
 
-import { useStudent } from '../Student/StudentContext';
+import { useStudent } from '../../student/StudentContext';
 
-import toastConfig from '../../helpers/toast.config';
-import formatDate from '../../helpers/formatDateForInputDate';
+import toastConfig from '../../../commondata/toast.config';
+import formatDate from '../../../helpers/formatDateForInputDate';
 
-import { receiptTypes, paymentMethods, defaultAmounts, isMembershipFee } from '../../commondata';
+import { receiptTypes, paymentMethods, defaultAmounts, isMembershipFee } from '../../../commondata';
 
 const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {
@@ -34,7 +34,7 @@ const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   return existingMembershipFeeYears.includes(selectedReceiptDateYear);
 };
 
-const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
+const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
   const today = formatDate(new Date(), true);
 
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
@@ -280,7 +280,7 @@ const CreateUpdateReceiptForm = ({ receiptInfo = null, callback, isForCreating =
   );
 };
 
-CreateUpdateReceiptForm.propTypes = {
+UpsertReceiptForm.propTypes = {
   receiptInfo: PropTypes.shape({
     ReceiptID: PropTypes.number,
     StudentID: PropTypes.number,
@@ -300,11 +300,11 @@ CreateUpdateReceiptForm.propTypes = {
   handleModal: PropTypes.func,
 };
 
-CreateUpdateReceiptForm.defaultProps = {
+UpsertReceiptForm.defaultProps = {
   receiptInfo: {},
   isForCreating: false,
   setUserInfo: () => {},
   handleModal: () => {},
 };
 
-export default CreateUpdateReceiptForm;
+export default UpsertReceiptForm;
