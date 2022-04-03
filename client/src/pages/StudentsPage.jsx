@@ -111,32 +111,30 @@ const StudentsPage = () => {
 
   return (
     <>
-      <div className="page-body">
-        <div className="tab-content">
-          <FilterStudentsForm filterColumn={filterColumn} clearColumns={clearColumns} />
+      <div className="container-fluid">
+        <FilterStudentsForm filterColumn={filterColumn} clearColumns={clearColumns} />
 
-          <div className="ag-theme-balham student-list-grid">
-            <AgGridReact
-              reactNext
-              gridOptions={gridOptions}
-              columnDefs={columnsDefinition}
-              rowData={students}
-              onSelectionChanged={onStudentSelectionChanged}
-              onGridReady={onGridReady}
-            />
-          </div>
-
-          <div className="buttons-container">
-            <Button variant="success" onClick={() => printSelectedStudents(selectedStudents)}>
-              <span role="img" aria-label="print">
-                🖨️ <Translation value="buttons.student.printSelectedStudents" />
-              </span>
-            </Button>
-          </div>
+        <div className="ag-theme-alpine ag-grid-custom">
+          <AgGridReact
+            reactNext
+            gridOptions={gridOptions}
+            columnDefs={columnsDefinition}
+            rowData={students}
+            onSelectionChanged={onStudentSelectionChanged}
+            onGridReady={onGridReady}
+          />
         </div>
 
-        {students && <PrintStudentsForm students={students} />}
+        <div className="buttons-container">
+          <Button variant="success" onClick={() => printSelectedStudents(selectedStudents)}>
+            <span role="img" aria-label="print">
+              🖨️ <Translation value="buttons.student.printSelectedStudents" />
+            </span>
+          </Button>
+        </div>
       </div>
+
+      {students && <PrintStudentsForm students={students} />}
     </>
   );
 };

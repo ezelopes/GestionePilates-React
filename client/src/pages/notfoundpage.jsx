@@ -3,6 +3,8 @@ import { Button } from 'react-bootstrap';
 
 import Translation from '../components/common/Translation';
 
+import '../styles/not-found-page.css';
+
 const NotFoundPage = () => (
   <div className="not-found-page">
     <h1>

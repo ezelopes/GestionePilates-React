@@ -15,9 +15,6 @@ const Literal = ({ children }) => {
 };
 
 Literal.propTypes = {
-  /**
-   * Anything to render which may or may not be a string containing HTML.
-   */
   children: PropTypes.node.isRequired,
 };
 

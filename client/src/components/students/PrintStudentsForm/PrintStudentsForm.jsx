@@ -7,6 +7,8 @@ import { printStudentsWithExpiringGreenPass, printStudentsBasedOnRegistrationDat
 
 import { months, years } from '../../../commondata';
 
+import './print-students-form.css';
+
 const PrintStudentsForm = ({ students }) => {
   const [selectedMonth, setselectedMonth] = useState(new Date().getMonth());
 
@@ -14,12 +16,10 @@ const PrintStudentsForm = ({ students }) => {
 
   return (
     <div className="form-wrapper">
-      <Form.Group>
-        <Form.Text as="h5">
-          <Translation value="common.printStudentsFormTitle" />
-        </Form.Text>
-      </Form.Group>
-      <div className="green-pass-form">
+      <Form.Text as="h5">
+        <Translation value="common.printStudentsFormTitle" />
+      </Form.Text>
+      <div className="print-students-form">
         <Form.Group>
           <Form.Label>
             <Translation value="common.month" />

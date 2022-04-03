@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Spinner } from 'react-bootstrap';
 
-import TeacherDisplayer from '../components/teacher/TeacherDisplayer';
+import TeacherCard from '../components/teacher/TeacherCard';
 import Translation from '../components/common/Translation';
 
 import { getAllTeachers } from '../helpers/apiCalls';
+
+import '../styles/teachers-page.css';
 
 const TeachersPage = () => {
   const [teachersList, setTeachersList] = useState();
@@ -22,35 +24,26 @@ const TeachersPage = () => {
   return (
     <>
       {loading ? (
-        <div className="spinnerWrapper">
-          <Spinner animation="border" role="status">
-            <span className="sr-only" />
-          </Spinner>
-        </div>
+        <Spinner animation="border" role="status" className="spinner" />
       ) : (
-        <>
-          <div className="page-body">
-            <Row>
-              {teachersList.length === 0 ? (
-                <h2 className="center">
-                  <Translation value="common.teachersNotFound" />
-                </h2>
-              ) : (
-                <div className="teachers-container">
-                  {teachersList.map((currentTeacher) => (
-                    <div key={currentTeacher.TaxCode} className="teacher-card-wrapper">
-                      <TeacherDisplayer
-                        teacherInitialInfo={currentTeacher}
-                        teachersList={teachersList}
-                        setTeachersList={setTeachersList}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Row>
-          </div>
-        </>
+        <Row>
+          {teachersList?.length === 0 ? (
+            <h2 className="center">
+              <Translation value="common.teachersNotFound" />
+            </h2>
+          ) : (
+            <div className="teachers-container">
+              {teachersList?.map((currentTeacher) => (
+                <TeacherCard
+                  teacherInitialInfo={currentTeacher}
+                  teachersList={teachersList}
+                  setTeachersList={setTeachersList}
+                  key={currentTeacher.TaxCode}
+                />
+              ))}
+            </div>
+          )}
+        </Row>
       )}
     </>
   );

@@ -17,6 +17,8 @@ import formatDate from '../../../helpers/formatDateForInputDate';
 
 import { receiptTypes, paymentMethods, defaultAmounts, isMembershipFee } from '../../../commondata';
 
+import './upsert-receipt-form.css';
+
 const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {
     if (!isMembershipFee(ReceiptType) && !IncludeMembershipFee) {
@@ -124,8 +126,8 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="create-receipt-form">
-          <div className="flex-element">
+        <div className="upsert-receipt-form">
+          <div>
             <Form.Label>
               <Translation value="receiptForm.receiptNumber" />
             </Form.Label>
@@ -149,7 +151,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             </div>
           </div>
 
-          <div className="flex-element">
+          <div>
             <Form.Label>
               <Translation value="receiptForm.receiptType" />
             </Form.Label>
@@ -175,7 +177,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             </Form.Control>
           </div>
 
-          <div className="flex-element">
+          <div>
             <Form.Label>
               <Translation value="receiptForm.paymentType" />
             </Form.Label>
@@ -188,7 +190,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             </Form.Control>
           </div>
 
-          <div className="flex-element">
+          <div>
             <Form.Label>
               <Translation value="receiptForm.amountPaid" />
             </Form.Label>
@@ -213,35 +215,32 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             />
           </div>
 
-          <div className="flex-element">
+          <div>
             <Form.Label>
               <Translation value="receiptForm.receiptDate" />
             </Form.Label>
-            <br />
-            <input type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
+            <Form.Control type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
           </div>
 
           {!isMembershipFee(newReceiptType) && (
             <>
-              <div className="flex-element">
+              <div>
                 <Form.Label>
                   <Translation value="receiptForm.courseStartDate" />
                 </Form.Label>
-                <br />
-                <input type="date" defaultValue={receiptInfo?.CourseStartDate || today} {...register('CourseStartDate')} />
+                <Form.Control type="date" defaultValue={receiptInfo?.CourseStartDate || today} {...register('CourseStartDate')} />
               </div>
 
-              <div className="flex-element">
+              <div>
                 <Form.Label>
                   <Translation value="receiptForm.courseEndDate" />
                 </Form.Label>
-                <br />
-                <input type="date" defaultValue={receiptInfo?.CourseEndDate || today} {...register('CourseEndDate')} />
+                <Form.Control type="date" defaultValue={receiptInfo?.CourseEndDate || today} {...register('CourseEndDate')} />
               </div>
             </>
           )}
 
-          <div className="flex-element" style={{ alignSelf: 'flex-end' }}>
+          <div className="checkbox-container">
             {isForCreating && (
               <Form.Check
                 label={<Translation value="receiptForm.isRegistrationDate" />}
@@ -254,7 +253,6 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
               <Form.Check
                 label={<Translation value="receiptForm.includeMembershipFee" />}
                 type="checkbox"
-                style={{ marginTop: '1em' }}
                 {...register('IncludeMembershipFee')}
                 defaultChecked={receiptInfo?.IncludeMembershipFee || false}
                 disabled={!receiptInfo?.IncludeMembershipFee && disableIncludeMembershipFee}
@@ -266,14 +264,14 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
         <Divider double />
 
         <Button type="submit" variant="success">
-          <span role="img" aria-label="create">
-            🆕&nbsp;
-            {isForCreating ? (
+          {isForCreating ? (
+            <span role="img" aria-label="create">
+              🆕&nbsp;
               <Translation value="buttons.receipt.createReceipt" />
-            ) : (
-              <Translation value="buttons.receipt.updateReceipt" />
-            )}
-          </span>
+            </span>
+          ) : (
+            <Translation value="buttons.receipt.updateReceipt" />
+          )}
         </Button>
       </form>
     </>

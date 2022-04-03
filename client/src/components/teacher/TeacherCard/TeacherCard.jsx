@@ -11,9 +11,11 @@ import { updateTeacher, deleteTeacher } from '../../../helpers/apiCalls';
 import { printTeacherRegistrationForm } from '../../../helpers/printPDF';
 import toastConfig from '../../../commondata/toast.config';
 
+import './teacher-card.css';
+
 // TODO: EXPORT MODALS INTO NEW COMPONENTS?
 
-const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
+const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo);
   const [showUpdateTeacherModal, setShowUpdateTeacherModal] = useState(false);
   const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
@@ -38,7 +40,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
 
   return (
     <TeacherProvider teacherInfo={teacherInfo}>
-      <Card>
+      <Card className="teacher-card">
         <Card.Body>
           <Card.Title>
             <b>
@@ -154,7 +156,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
       <Modal
         show={showUpdateTeacherModal}
         onHide={() => setShowUpdateTeacherModal(false)}
-        dialogClassName="update-teacher-modal"
+        dialogClassName="update-modal"
         centered
       >
         <Modal.Header closeButton>
@@ -162,7 +164,7 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
             <Translation value="modalsContent.updateTeacherHeader" />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="update-student-teacher-modal-body">
+        <Modal.Body>
           <UpsertUserForm
             personInfo={teacherInfo}
             callback={updateTeacher}
@@ -179,8 +181,11 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
             <Translation value="modalsContent.deleteTeacherHeader" />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="delete-student-teacher-modal-body">
-          Sei sicura di voler eliminare {teacherInfo.Name} {teacherInfo.Surname}?
+        <Modal.Body>
+          <Translation
+            value="modalsContent.deleteConfirmationBody"
+            replace={{ fullname: `${teacherInfo.Name} ${teacherInfo.Surname}` }}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleTeacherDeletion}>
@@ -200,10 +205,10 @@ const TeacherDisplayer = ({ teacherInitialInfo, teachersList, setTeachersList })
   );
 };
 
-TeacherDisplayer.propTypes = {
+TeacherCard.propTypes = {
   teacherInitialInfo: PropTypes.object.isRequired,
   teachersList: PropTypes.array.isRequired,
   setTeachersList: PropTypes.func.isRequired,
 };
 
-export default TeacherDisplayer;
+export default TeacherCard;

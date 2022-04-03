@@ -13,6 +13,8 @@ import toastConfig from '../../../commondata/toast.config';
 
 import { ages, disciplines, schools, courses, isAdult } from '../../../commondata';
 
+import './upsert-user-form.css';
+
 const TAX_CODE_REGEX = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i;
 
 const UpsertUserForm = ({
@@ -185,7 +187,7 @@ const UpsertUserForm = ({
         <Form.Label>
           <Translation value="form.dateOfBirth" />
         </Form.Label>
-        <input type="date" defaultValue={personInfo ? personInfo.DOB : null} {...register('DOB')} />
+        <Form.Control type="date" defaultValue={personInfo ? personInfo.DOB : null} {...register('DOB')} />
 
         <Divider />
 
@@ -225,19 +227,23 @@ const UpsertUserForm = ({
         <Form.Label>
           <Translation value="form.registrationDate" />
         </Form.Label>
-        <input type="date" defaultValue={personInfo?.RegistrationDate} {...register('RegistrationDate')} />
+        <Form.Control type="date" defaultValue={personInfo?.RegistrationDate} {...register('RegistrationDate')} />
 
         <Divider />
 
         <Form.Label>
           <Translation value="form.certificateExpirationDate" />
         </Form.Label>
-        <input type="date" defaultValue={personInfo?.CertificateExpirationDate} {...register('CertificateExpirationDate')} />
+        <Form.Control
+          type="date"
+          defaultValue={personInfo?.CertificateExpirationDate}
+          {...register('CertificateExpirationDate')}
+        />
 
         <Form.Label>
           <Translation value="form.greenPassExpirationDate" />
         </Form.Label>
-        <input type="date" defaultValue={personInfo?.GreenPassExpirationDate} {...register('GreenPassExpirationDate')} />
+        <Form.Control type="date" defaultValue={personInfo?.GreenPassExpirationDate} {...register('GreenPassExpirationDate')} />
 
         {isStudent && !isAdult(newIsAdult) && (
           <>
@@ -291,7 +297,7 @@ const UpsertUserForm = ({
         )}
       </div>
 
-      <div className="subscription-form-buttons">
+      <div className="user-form-buttons-container">
         <Button type="submit" variant="success">
           {isForCreating && isStudent && <Translation value="buttons.student.createStudent" />}
           {!isForCreating && isStudent && <Translation value="buttons.student.updateStudent" />}

@@ -43,7 +43,7 @@ const ReceiptsPage = () => {
   };
 
   return (
-    <div className="page-body">
+    <>
       <Toggle
         optionOne={{ title: 'Ricevute', name: 'receipt' }}
         optionTwo={{ title: 'Quote Associative', name: 'receiptsWithMembershipFee' }}
@@ -58,7 +58,7 @@ const ReceiptsPage = () => {
       >
         {isMembershipFeeSelected ? <MembershipFeesList /> : <ReceiptsList />}
       </ReceiptProvider>
-    </div>
+    </>
   );
 };
 

@@ -1,0 +1,31 @@
+.toggle {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+
+  margin-bottom: 1rem !important;
+  background: #f3f4f6;
+  border-radius: var(--border-radius);
+  width: fit-content;
+}
+
+.toggle-option {
+  all: unset;
+  display: block;
+  padding: 0.5rem 1rem;
+  color: black;
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+}
+
+.toggle-option:focus {
+  outline: none;
+}
+
+.toggle-option-active {
+  background-color: #bdc3c7;
+  color: #218838;
+}

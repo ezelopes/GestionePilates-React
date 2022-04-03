@@ -35,6 +35,7 @@ const gridOptionsDefaultStudentReceipts = {
   },
   rowSelection: 'single',
   rowHeight: 45,
+  suppressHorizontalScroll: false,
 };
 
 const gridOptionsDefaultStudents = {

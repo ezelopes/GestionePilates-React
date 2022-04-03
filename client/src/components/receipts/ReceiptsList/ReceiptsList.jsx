@@ -68,7 +68,7 @@ const ReceiptsList = () => {
   }, [currentReceipts]);
 
   return (
-    <div className="tab-content">
+    <div className="container-fluid">
       <FilterReceiptsForm
         allReceipts={allReceipts}
         receiptsForAmountSummary={receiptsForAmountSummary}
@@ -76,7 +76,7 @@ const ReceiptsList = () => {
         setReceiptsForAmountSummary={setReceiptsForAmountSummary}
         gridOptions={gridOptions}
       />
-      <div className="ag-theme-balham receipts-grid">
+      <div className="ag-theme-alpine ag-grid-custom">
         <AgGridReact
           reactNext
           gridOptions={gridOptions}

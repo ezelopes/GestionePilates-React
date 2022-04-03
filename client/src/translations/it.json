@@ -105,7 +105,8 @@
     "deleteReceiptHeader": "Elimina Ricevuta",
     "updateTeacherHeader": "Aggiorna Insegnante",
     "deleteTeacherHeader": "Elimina Insegnante",
-    "updateRegistrationDateHeader": "Aggiorna Data Iscrizione"
+    "updateRegistrationDateHeader": "Aggiorna Data Iscrizione",
+    "deleteConfirmationBody": "Sei sicura di voler eliminare {{ fullname }}?"
   },
   "common": {
     "pilart": "PilArt",

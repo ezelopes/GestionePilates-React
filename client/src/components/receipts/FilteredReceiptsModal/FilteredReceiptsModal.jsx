@@ -40,14 +40,14 @@ const FilteredReceiptsModal = ({
           />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="filtered-receipt-modal">
+      <Modal.Body>
         <Translation
           value="receiptFilterForm.totalAmount"
           replace={{
             totalAmount: filteredAmountPaid,
           }}
         />
-        <div className="ag-theme-balham filtered-receipt-grid">
+        <div className="ag-theme-alpine ag-grid-custom">
           <AgGridReact reactNext gridOptions={gridOptionsFilteredReceipts} columnDefs={columnDefs} rowData={filteredReceipts} />
         </div>
       </Modal.Body>

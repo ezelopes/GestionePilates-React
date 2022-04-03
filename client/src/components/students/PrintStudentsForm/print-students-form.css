@@ -1,0 +1,9 @@
+.print-students-form {
+  margin-top: 2em;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: left;
+  align-items: center;
+  gap: 1em;
+}

@@ -1,193 +1,83 @@
-/*
-Colors:
- Purple: #422970
- Blue: #009ED5
- White: #000
-*/
-
-.toggle {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-
-  margin-bottom: 1rem !important;
-  background: #f3f4f6;
-  border-radius: 10px;
-  width: fit-content;
+:root {
+  --background: #dcdcdc;
+  --purple: #422970;
+  --blue: #009ed5;
+  --white: #f3f4f6;
+  --grey: #e8e8e8;
+  --gold: #8a6d3b;
+  --bootstrap-input-border-color: #ced4da;
+  --bootstrap-black: #495057;
+  --default-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  --ag-grid-height: 40em;
+  --border-radius: 0.625rem;
 }
 
-.toggle-option {
-  all: unset;
-  display: block;
-  padding: 0.5rem 1rem;
-  color: black;
-  font-weight: 600;
-  border-radius: 10px;
-  text-decoration: none;
-}
-
-.toggle-option:focus {
-  outline: none;
-}
-
-.toggle-option-active {
-  background-color: #bdc3c7;
-  color: #218838;
-}
-
-.tab-content {
-  background: #f3f4f6;
-  padding: 1em;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  margin-bottom: 2em;
-}
-
+/* OVERWRTING DEFAULT HTML TAGS */
 body {
-  background-color: #dcdcdc;
+  background-color: var(--background);
 }
 
-.navbar {
-  font-size: 1.2rem;
-  height: 5rem;
-}
-
-.nav-link {
-  color: white !important;
-}
-
-.homepage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.logoStyle {
-  max-width: 50%;
-  margin-top: 3em;
+main {
+  margin: 2em 3vw;
 }
 
 label {
-  padding-right: 1em;
   font-weight: bold;
 }
 
-input[type='text']:focus {
+input[type='text']:focus,
+input[type='date']:focus {
   outline: none;
-  border-color: #6eb3ea;
 }
 
 input[type='date'] {
-  font-size: 1em;
-  height: 2.5em;
-  border: 1px solid #ced4da;
+  color: var(--bootstrap-black);
+  border: 1px solid var(--bootstrap-input-border-color);
   border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   padding: 0.375rem 0.75rem;
-  color: #495057;
 }
 
-.filter-form {
-  display: flex;
-  justify-content: left;
-  align-items: center;
+/* BOOTSTRAP MODAL AND CARD */
+.modal-body {
+  background-color: var(--white);
 }
 
-.filter-form > * {
-  margin-right: 1em;
+.modal-footer {
+  background-color: var(--grey);
 }
 
-.filter-form > .btn {
-  margin-top: 1.5em;
+.modal-header {
+  background-color: var(--grey);
 }
 
-.green-pass-form {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  margin-top: 2em;
-  width: fit-content;
+.card {
+  border-radius: 1em;
 }
 
-.green-pass-form > * {
-  margin-right: 1em;
+.card-body {
+  border-radius: inherit;
+  background-color: var(--white);
 }
 
-.green-pass-form > form-control {
-  width: auto;
+.container-fluid {
+  padding: 1.5em 1em;
+  border: 1px solid var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--default-box-shadow);
+  background-color: var(--white);
+  margin-bottom: 2em;
 }
 
-.create-receipt-form-wrapper {
-  width: 80vw;
-  margin-left: 0vw;
+/* Always centering spinner in the middle of the page */
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
-.create-receipt-form {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1vw;
-}
-
-.create-receipt-form input[type='date'] {
-  width: 15vw;
-}
-
-.print-receipt-form-wrapper {
-  display: grid;
-  justify-content: flex-start;
-  align-items: center;
-  grid-template-columns: 0.2fr 0.5fr 1fr;
-  gap: 1vw;
-  margin-top: 2em;
-  width: 30vw;
-}
-
-.print-receipt-form-wrapper > label {
-  margin-bottom: 0;
-}
-
-.flex-element {
-  flex: 1 3 15vw;
-  margin-top: 0.7vw;
-}
-
-.user-form {
-  display: grid;
-  grid-template-columns: 20% 25% 20% 25%;
-  align-items: center;
-  justify-content: center;
-  row-gap: 0.5em;
-  column-gap: 1vw;
-}
-
-.user-form > label {
-  margin-top: 0.7vw;
-}
-
-.user-form > input,
-select,
-option,
-form-control {
-  min-width: 0;
-}
-
-.update-student-modal {
-  width: 60vw;
-  max-width: 60vw;
-}
-
-.page-body {
-  margin: 2em 5em;
-  padding-bottom: 5em;
-}
-
+/* AG GRID STYLING */
 .ag-pivot-off .ag-header-cell-label {
-  color: #8a6d3b;
+  color: var(--gold);
   font-size: 1.3em;
 }
 
@@ -206,163 +96,56 @@ form-control {
   overflow-y: scroll;
 }
 
-.form-wrapper {
-  border: 2px solid #dcdcdc;
-  border-radius: 5px;
-  padding: 1.5em 1em 1.5em 1em;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  background-color: #f3f4f6;
-}
-
-.update-registration-date {
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.delete-student-teacher-modal-body {
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-}
-
-.update-student-teacher-modal-body {
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-}
-
-.update-teacher-modal {
-  width: 60vw;
-  max-width: 60vw;
-}
-
-.ag-theme-balham {
-  margin-top: 1em;
-}
-
-.card {
-  border-radius: 1em;
-}
-
-.card-body {
-  border-radius: inherit;
-  background-color: #f3f4f6;
-}
-
-.teacher-card-wrapper {
-  border-radius: 2em;
-  height: fit-content;
-  font-size: 14px;
-  margin-right: 2.5em;
-  margin-top: 1.5em;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-}
-
-.teachers-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.teachers-container > * {
-  flex: 1 1 auto;
-}
-
-.student-name-title {
-  background-color: #f3f4f6;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
-  margin: auto;
-  line-height: 1.2;
-  padding: 0.7em;
-  width: fit-content;
-  font-size: 2em;
-  font-weight: 600;
-  border: 2px solid #dcdcdc;
-  border-radius: 15px;
-  margin-bottom: 0.5em;
-}
-
-.buttons-container .btn {
-  margin-top: 1em;
-  margin-right: 1em;
-}
-
-.modal-body {
-  background-color: #f3f4f6;
-}
-
-.modal-footer {
-  background-color: #e8e8e8;
-}
-
-.modal-header {
-  background-color: #e8e8e8;
-}
-
-.filtered-receipt-grid {
-  height: 40em;
-  width: 100%;
-}
-
-.filtered-receipt-modal {
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-}
-
-.receipts-grid {
-  height: 40em;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  margin-top: 2em;
-}
-
-.student-receipt-list {
-  margin-top: 2em;
-  height: 20em;
-  width: 90%;
-  margin-bottom: 2em;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-}
-
-.student-list-grid {
-  height: 45vh;
-}
-
-.subscription-form {
-  width: 80vw;
-  margin-left: 10vw;
-  margin-top: 2em;
-  padding-bottom: 2em;
-  margin-bottom: 2em;
-}
-
-.subscription-form-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2em;
-  gap: 2em;
-}
-
 /* Creatable Dropdown */
 .css-2b097c-container {
   max-width: 16em;
 }
 
-.spinnerWrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* Custom styling for ag-grid */
+.ag-grid-custom {
+  height: var(--ag-grid-height);
+  max-height: var(--ag-grid-height);
+  margin-top: 1em;
 }
 
-.not-found-page {
-  display: flex;
-  justify-content: center;
+/* General styling for modals used to update users or receipts */
+.update-modal {
+  width: fit-content;
+  max-width: 100vw;
+  padding: 0 5vw;
+}
+
+.form-wrapper {
+  width: fit-content;
+  padding: 1.5em 1em;
+  border: 1px solid var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--default-box-shadow);
+  background-color: var(--white);
+  margin-bottom: 2em;
+}
+
+.filter-form {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-content: left;
   align-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-  text-align: center;
-  height: 80vh;
   gap: 1em;
+}
+
+.filter-form > .btn {
+  margin-top: 1em;
+}
+
+.subscription-form {
+  width: 80vw;
+  margin: auto;
+}
+
+.buttons-container {
+  display: flex;
+  margin-top: 1em;
+  gap: 1em;
+  flex-wrap: wrap;
 }

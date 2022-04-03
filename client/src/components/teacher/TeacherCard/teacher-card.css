@@ -1,0 +1,6 @@
+.teacher-card {
+  border-radius: 2em;
+  height: fit-content;
+  font-size: 1em;
+  box-shadow: var(--default-box-shadow);
+}

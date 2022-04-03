@@ -86,8 +86,10 @@ const FilterStudentsForm = ({ filterColumn, clearColumns }) => {
         </Form.Control>
       </Form.Group>
 
-      <Button variant="danger" onClick={clearFilters} style={{ marginTop: '1em' }}>
-        <Translation value="buttons.removeFilters" />
+      <Button variant="danger" onClick={clearFilters}>
+        <span role="img" aria-label="remove-filters">
+          🗑️ <Translation value="buttons.removeFilters" />
+        </span>
       </Button>
     </div>
   );

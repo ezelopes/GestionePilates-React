@@ -82,15 +82,15 @@ const StudentReceiptsList = () => {
   };
 
   return (
-    <div className="tab-content">
-      <div className="ag-theme-balham student-receipt-list">
+    <div className="container-fluid">
+      <div className="ag-theme-alpine">
         <AgGridReact
           reactNext
           gridOptions={gridOptions}
           columnDefs={columnsDefinition}
           rowData={rowData}
           onSelectionChanged={onReceiptSelectionChanged}
-          scrollbarWidth={8}
+          domLayout="autoHeight"
         />
       </div>
 
@@ -133,7 +133,7 @@ const StudentReceiptsList = () => {
       <Modal
         show={showUpdateReceiptModal}
         onHide={() => setShowUpdateReceiptModal(false)}
-        dialogClassName="update-student-modal"
+        dialogClassName="update-modal"
         centered
       >
         <Modal.Header closeButton>
@@ -141,7 +141,7 @@ const StudentReceiptsList = () => {
             <Translation value="modalsContent.updateReceiptHeader" />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="update-student-modal-body">
+        <Modal.Body>
           <UpsertReceiptForm receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
         </Modal.Body>
         <Modal.Footer>
@@ -162,7 +162,7 @@ const StudentReceiptsList = () => {
             <Translation value="modalsContent.deleteReceiptHeader" />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="filtered-receipt-modal">
+        <Modal.Body>
           <Translation value="modalsContent.deleteReceiptBody" />
         </Modal.Body>
         <Modal.Footer>

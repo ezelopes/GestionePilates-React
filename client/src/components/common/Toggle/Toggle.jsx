@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
+import './toggle.css';
+
 const Toggle = ({ optionOne, optionTwo, callback }) => {
   const optionOneButton = useRef();
   const optionTwoButton = useRef();

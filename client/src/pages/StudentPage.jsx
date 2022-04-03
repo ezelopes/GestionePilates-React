@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Modal, Button, Spinner } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import NotFoundPage from './NotFoundPage';
@@ -16,6 +16,8 @@ import Translation from '../components/common/Translation';
 import { updateStudent, updateRegistrationDate, deleteStudent, createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 import toastConfig from '../commondata/toast.config';
 import { printRegistrationForm } from '../helpers/printPDF';
+
+import '../styles/student-page.css';
 
 // TODO: EXPORT MODALS INTO NEW COMPONENTS?
 
@@ -78,14 +80,10 @@ const StudentPage = ({ match }) => {
   return (
     <>
       {loading ? (
-        <div className="spinnerWrapper">
-          <Spinner animation="border" role="status">
-            <span className="sr-only" />
-          </Spinner>
-        </div>
+        <Spinner animation="border" role="status" className="spinner" />
       ) : (
         <StudentProvider studentInfo={studentInfo} studentReceipts={studentReceipts} setStudentReceipts={setStudentReceipts}>
-          <div className="page-body">
+          <>
             <div className="student-name-title">
               {studentInfo.Name} {studentInfo.Surname}
             </div>
@@ -128,18 +126,18 @@ const StudentPage = ({ match }) => {
 
             <Divider double />
 
-            <div className="form-wrapper create-receipt-form-wrapper">
+            <div className="form-wrapper">
               <UpsertReceiptForm isForCreating callback={createReceipt} />
             </div>
-          </div>
+          </>
           <Modal show={showRegistrationDateModal} onHide={() => setShowRegistrationDateModal(false)} centered>
             <Modal.Header closeButton>
               <Modal.Title>
                 <Translation value="modalsContent.updateRegistrationDateHeader" />
               </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="update-registration-date">
-              <input
+            <Modal.Body>
+              <Form.Control
                 type="date"
                 defaultValue={studentInfo?.RegistrationDate}
                 onChange={({ target }) => setNewRegistrationDate(target.value)}
@@ -166,8 +164,11 @@ const StudentPage = ({ match }) => {
                 <Translation value="modalsContent.deleteStudentHeader" />
               </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="delete-student-teacher-modal-body">
-              Sei sicura di voler eliminare {studentInfo.Name} {studentInfo.Surname}?
+            <Modal.Body>
+              <Translation
+                value="modalsContent.deleteConfirmationBody"
+                replace={{ fullname: `${studentInfo.Name} ${studentInfo.Surname}` }}
+              />
             </Modal.Body>
             <Modal.Footer>
               <Button variant="danger" onClick={handleStudentDeletion}>
@@ -187,7 +188,7 @@ const StudentPage = ({ match }) => {
           <Modal
             show={showUpdateStudentModal}
             onHide={() => setShowUpdateStudentModal(false)}
-            dialogClassName="update-student-modal"
+            dialogClassName="update-modal"
             centered
           >
             <Modal.Header closeButton>
@@ -195,7 +196,7 @@ const StudentPage = ({ match }) => {
                 <Translation value="modalsContent.updateStudentHeader" />
               </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="update-student-modal-body">
+            <Modal.Body>
               <UpsertUserForm
                 personInfo={studentInfo}
                 isStudent
@@ -204,7 +205,16 @@ const StudentPage = ({ match }) => {
                 setUserInfo={setStudentInfo}
               />
             </Modal.Body>
-            <Modal.Footer />
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShowUpdateStudentModal(false);
+                }}
+              >
+                <Translation value="buttons.close" />
+              </Button>
+            </Modal.Footer>
           </Modal>
         </StudentProvider>
       )}

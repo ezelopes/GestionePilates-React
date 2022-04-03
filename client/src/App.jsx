@@ -8,7 +8,7 @@ import NavBar from './components/common/Navbar';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
-import Student from './pages/StudentPage';
+import StudentPage from './pages/StudentPage';
 import StudentsPage from './pages/StudentsPage';
 import StudentSubscription from './pages/StudentSubscriptionPage';
 
@@ -21,20 +21,20 @@ const App = () => (
   <>
     <ToastContainer />
     <Router>
-      <div className="App">
+      <div>
         <NavBar />
-        <div>
+        <main>
           <Switch>
             <Route path="/" component={HomePage} exact />
             <Route path="/paginaallieve" component={StudentsPage} exact />
             <Route path="/paginaricevute" component={ReceiptsPage} exact />
-            <Route path="/paginaallieve/:TaxCode" component={Student} exact />
+            <Route path="/paginaallieve/:TaxCode" component={StudentPage} exact />
             <Route path="/iscrizioneallieve" component={StudentSubscription} exact />
             <Route path="/iscrizioneinsegnanti" component={TeacherSubscription} exact />
             <Route path="/paginainsegnanti" component={TeachersPage} exact />
             <Route component={NotFoundPage} />
           </Switch>
-        </div>
+        </main>
       </div>
     </Router>
   </>

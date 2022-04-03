@@ -7,13 +7,15 @@ import Translation from '../../common/Translation';
 import { printExpiringStudents } from '../../../helpers/printPDF';
 import { years } from '../../../commondata';
 
+import './print-expiring-receipts-form.css';
+
 const PrintExpiringReceiptsForm = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const { currentReceipts } = useReceipt();
 
   return (
-    <div className="print-receipt-form-wrapper">
+    <div className="print-receipt-form">
       <Form.Label>
         <Translation value="common.year" />
       </Form.Label>

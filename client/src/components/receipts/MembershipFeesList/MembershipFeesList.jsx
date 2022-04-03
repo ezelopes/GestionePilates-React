@@ -24,14 +24,14 @@ const MembershipFeesList = () => {
   const [gridOptions] = useState(gridOptionsDefaultMembershipFee);
 
   return (
-    <div className="tab-content">
+    <div className="container-fluid">
       <FilterReceiptsForm
         allReceipts={allMembershipFees}
         setCurrentReceipts={setCurrentReceipts}
         gridOptions={gridOptions}
         isMembershipFee
       />
-      <div className="ag-theme-balham receipts-grid">
+      <div className="ag-theme-alpine ag-grid-custom">
         <AgGridReact reactNext gridOptions={gridOptions} columnDefs={columnsDefinition} rowData={currentReceipts} />
       </div>
     </div>

@@ -3,6 +3,8 @@ import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import Translation from '../Translation';
 
+import './navbar.css';
+
 const NavBar = () => (
   <>
     <Navbar bg="dark" variant="dark" expanded="false" className="navbar">

@@ -161,16 +161,14 @@ const FilterReceiptsForm = ({
           <Form.Label>
             <Translation value="common.from" />
           </Form.Label>
-          <br />
-          <input ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
+          <Form.Control ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
         </Form.Group>
 
         <Form.Group>
           <Form.Label>
             <Translation value="common.to" />
           </Form.Label>
-          <br />
-          <input ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
+          <Form.Control ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
         </Form.Group>
       </div>
       <div className="buttons-container">
