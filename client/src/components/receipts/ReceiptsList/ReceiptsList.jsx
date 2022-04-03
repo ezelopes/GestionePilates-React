@@ -68,26 +68,26 @@ const ReceiptsList = () => {
   }, [currentReceipts]);
 
   return (
-    <div className="container-fluid">
-      <FilterReceiptsForm
-        allReceipts={allReceipts}
-        receiptsForAmountSummary={receiptsForAmountSummary}
-        setCurrentReceipts={setCurrentReceipts}
-        setReceiptsForAmountSummary={setReceiptsForAmountSummary}
-        gridOptions={gridOptions}
-      />
-      <div className="ag-theme-alpine ag-grid-custom">
-        <AgGridReact
-          reactNext
+    <>
+      <div className="container-fluid">
+        <FilterReceiptsForm
+          allReceipts={allReceipts}
+          receiptsForAmountSummary={receiptsForAmountSummary}
+          setCurrentReceipts={setCurrentReceipts}
+          setReceiptsForAmountSummary={setReceiptsForAmountSummary}
           gridOptions={gridOptions}
-          columnDefs={columnsDefinition}
-          rowData={currentReceipts}
-          onSelectionChanged={onReceiptSelectionChanged}
         />
-      </div>
+        <div className="ag-theme-alpine ag-grid-custom">
+          <AgGridReact
+            reactNext
+            gridOptions={gridOptions}
+            columnDefs={columnsDefinition}
+            rowData={currentReceipts}
+            onSelectionChanged={onReceiptSelectionChanged}
+          />
+        </div>
 
-      <div className="buttons-container">
-        <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)}>
+        <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)} style={{ marginTop: '1em' }}>
           <span role="img" aria-label="print-selected">
             🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
           </span>
@@ -95,7 +95,7 @@ const ReceiptsList = () => {
       </div>
 
       <PrintExpiringReceiptsForm />
-    </div>
+    </>
   );
 };
 

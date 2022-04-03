@@ -15,7 +15,7 @@ const PrintExpiringReceiptsForm = () => {
   const { currentReceipts } = useReceipt();
 
   return (
-    <div className="print-receipt-form">
+    <div className="form-wrapper print-receipt-form">
       <Form.Label>
         <Translation value="common.year" />
       </Form.Label>

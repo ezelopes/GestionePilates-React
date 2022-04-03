@@ -10,7 +10,7 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import './index.css';
+import './styles/index.css';
 
 ReactDOM.render(
   <BrowserRouter>
