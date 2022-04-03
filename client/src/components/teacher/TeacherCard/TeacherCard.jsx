@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Modal } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import UpsertUserForm from '../../user/UpsertUserForm';
 import { TeacherProvider } from '../TeacherContext';
 import Translation from '../../common/Translation';
 
-import { updateTeacher, deleteTeacher } from '../../../helpers/apiCalls';
+import { deleteTeacher } from '../../../helpers/apiCalls';
 import { printTeacherRegistrationForm } from '../../../helpers/printPDF';
 import toastConfig from '../../../commondata/toast.config';
 
 import './teacher-card.css';
-
-// TODO: EXPORT MODALS INTO NEW COMPONENTS?
+import UpdateTeacherModal from '../UpdateTeacherModal/UpdateTeacherModal';
+import DeleteTeacherModal from '../DeleteTeacherModal';
 
 const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   const [teacherInfo, setTeacherInfo] = useState(teacherInitialInfo);
@@ -39,7 +38,7 @@ const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
   };
 
   return (
-    <TeacherProvider teacherInfo={teacherInfo}>
+    <TeacherProvider teacherInfo={teacherInfo} setTeacherInfo={setTeacherInfo}>
       <Card className="teacher-card">
         <Card.Body>
           <Card.Title>
@@ -80,7 +79,8 @@ const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
               <Translation value="form.placeAndDOB" />
               :&nbsp;
             </b>
-            {teacherInfo.BirthPlace} -{teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
+            {teacherInfo.BirthPlace} -&nbsp;
+            {teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
             <b>
@@ -153,54 +153,13 @@ const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
         </Card.Body>
       </Card>
 
-      <Modal
-        show={showUpdateTeacherModal}
-        onHide={() => setShowUpdateTeacherModal(false)}
-        dialogClassName="update-modal"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Translation value="modalsContent.updateTeacherHeader" />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <UpsertUserForm
-            personInfo={teacherInfo}
-            callback={updateTeacher}
-            handleModal={setShowUpdateTeacherModal}
-            setUserInfo={setTeacherInfo}
-          />
-        </Modal.Body>
-        <Modal.Footer />
-      </Modal>
+      <UpdateTeacherModal isOpen={showUpdateTeacherModal} closeModal={() => setShowUpdateTeacherModal(false)} />
 
-      <Modal show={showDeleteTeacherModal} onHide={() => setShowDeleteTeacherModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Translation value="modalsContent.deleteTeacherHeader" />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Translation
-            value="modalsContent.deleteConfirmationBody"
-            replace={{ fullname: `${teacherInfo.Name} ${teacherInfo.Surname}` }}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleTeacherDeletion}>
-            <Translation value="buttons.teacher.deleteTeacher" />
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setShowDeleteTeacherModal(false);
-            }}
-          >
-            <Translation value="buttons.close" />
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteTeacherModal
+        isOpen={showDeleteTeacherModal}
+        closeModal={() => setShowDeleteTeacherModal(false)}
+        handleTeacherDeletion={handleTeacherDeletion}
+      />
     </TeacherProvider>
   );
 };

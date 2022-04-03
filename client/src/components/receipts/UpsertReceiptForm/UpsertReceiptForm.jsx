@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 
 import Translation from '../../common/Translation';
 import { getTranslation } from '../../common/Translation/helpers';
-import Divider from '../../common/Divider';
 
 import { useStudent } from '../../student/StudentContext';
 
@@ -261,9 +260,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
           </div>
         </div>
 
-        <Divider double />
-
-        <Button type="submit" variant="success">
+        <Button type="submit" variant="success" style={{ marginTop: '2em' }}>
           {isForCreating ? (
             <span role="img" aria-label="create">
               🆕&nbsp;

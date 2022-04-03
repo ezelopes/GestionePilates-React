@@ -55,12 +55,12 @@ input[type='date'] {
 /* Using container fluid for wrapping ag grids and form wrapper for anything else */
 .container-fluid,
 .form-wrapper {
+  margin: 2em 0;
   padding: 1.5em 1em;
   border: 1px solid var(--white);
   border-radius: var(--border-radius);
   box-shadow: var(--default-box-shadow);
   background-color: var(--white);
-  margin-bottom: 2em;
 }
 
 .form-wrapper {

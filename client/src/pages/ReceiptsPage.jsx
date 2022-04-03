@@ -8,6 +8,7 @@ import { getAllReceipts } from '../helpers/apiCalls';
 import { isMembershipFee } from '../commondata';
 import Toggle from '../components/common/Toggle';
 import { ReceiptProvider } from '../components/receipts/ReceiptContext';
+import { getTranslation } from '../components/common/Translation/helpers';
 
 const ReceiptsPage = () => {
   const [allReceipts, setAllReceipts] = useState([]);
@@ -45,8 +46,8 @@ const ReceiptsPage = () => {
   return (
     <>
       <Toggle
-        optionOne={{ title: 'Ricevute', name: 'receipt' }}
-        optionTwo={{ title: 'Quote Associative', name: 'receiptsWithMembershipFee' }}
+        optionOne={{ title: getTranslation('common.receipts'), name: 'receipt' }}
+        optionTwo={{ title: getTranslation('common.membershipFee'), name: 'receiptsWithMembershipFee' }}
         callback={onToggleChanged}
       />
 

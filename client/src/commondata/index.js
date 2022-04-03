@@ -41,6 +41,7 @@ const courses = [
 const receiptTypes = [
   { id: 0, type: 'Quota' },
   { id: 1, type: 'Quota Associativa' },
+  // { id: 2, type: 'Quota Saggio' },
 ];
 
 const paymentMethods = [
@@ -86,6 +87,8 @@ const isAdult = (age) => age === ages[0].age;
 
 const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
 
+// Const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].type;
+
 export {
   ages,
   disciplines,
@@ -100,4 +103,5 @@ export {
   getMonthFromId,
   isAdult,
   isMembershipFee,
+  // IsDanceRecitalFee,
 };
