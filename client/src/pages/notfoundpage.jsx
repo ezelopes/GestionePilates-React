@@ -11,7 +11,7 @@ const NotFoundPage = () => (
       <Translation value="notFoundPage.title" />
     </h1>
     <div>
-      <Button href="/paginaallieve" size="lg">
+      <Button href="/students" size="lg">
         <Translation value="buttons.notFoundPage" />
       </Button>
     </div>

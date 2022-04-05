@@ -13,22 +13,22 @@ const NavBar = () => (
       </Navbar.Brand>
       <Nav className="mr-auto">
         <NavDropdown title="Allieve" id="navbarScrollingDropdown">
-          <NavDropdown.Item href="/paginaallieve">
+          <NavDropdown.Item href="/students">
             <Translation value="navbar.studentsList" />
           </NavDropdown.Item>
-          <NavDropdown.Item href="/iscrizioneallieve">
+          <NavDropdown.Item href="/subscription/student">
             <Translation value="navbar.studentsSubscription" />
           </NavDropdown.Item>
         </NavDropdown>
         <NavDropdown title="Insegnanti" id="navbarScrollingDropdown">
-          <NavDropdown.Item href="/paginainsegnanti">
+          <NavDropdown.Item href="/teachers">
             <Translation value="navbar.teachersList" />
           </NavDropdown.Item>
-          <NavDropdown.Item href="/iscrizioneinsegnanti">
+          <NavDropdown.Item href="/subscription/teacher">
             <Translation value="navbar.teachersSubscription" />
           </NavDropdown.Item>
         </NavDropdown>
-        <Nav.Link href="/paginaricevute">
+        <Nav.Link href="/receipts">
           <Translation value="navbar.receiptsList" />
         </Nav.Link>
       </Nav>

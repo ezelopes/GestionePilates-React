@@ -21,21 +21,19 @@ const App = () => (
   <>
     <ToastContainer />
     <Router>
-      <div>
-        <NavBar />
-        <main>
-          <Switch>
-            <Route path="/" component={HomePage} exact />
-            <Route path="/paginaallieve" component={StudentsPage} exact />
-            <Route path="/paginaricevute" component={ReceiptsPage} exact />
-            <Route path="/paginaallieve/:TaxCode" component={StudentPage} exact />
-            <Route path="/iscrizioneallieve" component={StudentSubscription} exact />
-            <Route path="/iscrizioneinsegnanti" component={TeacherSubscription} exact />
-            <Route path="/paginainsegnanti" component={TeachersPage} exact />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </main>
-      </div>
+      <NavBar />
+      <main>
+        <Switch>
+          <Route path="/" component={HomePage} exact />
+          <Route path="/students" component={StudentsPage} exact />
+          <Route path="/receipts" component={ReceiptsPage} exact />
+          <Route path="/students/:TaxCode" component={StudentPage} exact />
+          <Route path="/subscription/student" component={StudentSubscription} exact />
+          <Route path="/subscription/teacher" component={TeacherSubscription} exact />
+          <Route path="/teachers" component={TeachersPage} exact />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </main>
     </Router>
   </>
 );

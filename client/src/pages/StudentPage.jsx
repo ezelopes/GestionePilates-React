@@ -66,7 +66,7 @@ const StudentPage = ({ match }) => {
     if (response.status === 200) {
       setShowDeleteStudentModal(false);
       toast.success(response.message, toastConfig);
-      return history.push('/paginaallieve');
+      return history.push('/students');
     }
 
     return toast.error(response.message, toastConfig);
