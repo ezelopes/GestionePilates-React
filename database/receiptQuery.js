@@ -4,8 +4,9 @@ const { mappingReceipt, mappingReceiptsWithStudentInfo } = require('./helpers/ma
 const { receiptResponseMessages } = require('./helpers/responses');
 
 const receiptTypes = {
-  paymentFee: 'QUOTA',
+  subscriptionFee: 'QUOTA',
   membershipFee: 'QUOTA ASSOCIATIVA',
+  danceRecitalFee: 'QUOTA SAGGIO',
 };
 
 const STUDENT_TABLE = 'allieva';
@@ -39,19 +40,19 @@ const getAllReceipts = async () => {
 
 const createReceipt = async (receiptInfo) => {
   try {
-    const isMembershipFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.membershipFee;
+    const isSubscriptionFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.subscriptionFee;
 
     const newReceiptID = await knex(RECEIPT_TABLE).insert({
       NumeroRicevuta: receiptInfo.ReceiptNumber,
       TipoPagamento: receiptInfo.PaymentMethod,
       TipoRicevuta: receiptInfo.ReceiptType,
       DataRicevuta: getFormattedDate(receiptInfo.ReceiptDate),
-      DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
-      DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
+      DataInizioCorso: isSubscriptionFee ? getFormattedDate(receiptInfo.CourseStartDate) : null,
+      DataScadenzaCorso: isSubscriptionFee ? getFormattedDate(receiptInfo.CourseEndDate) : null,
       SommaEuro: receiptInfo.AmountPaid,
       FK_CodiceFiscale: receiptInfo.TaxCode,
       FK_AllievaID: receiptInfo.StudentID,
-      IncludeQuotaAssociativa: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
+      IncludeQuotaAssociativa: isSubscriptionFee ? receiptInfo.IncludeMembershipFee : false,
     });
 
     if (receiptInfo.RegistrationDate === true) {
@@ -70,7 +71,7 @@ const createReceipt = async (receiptInfo) => {
 
 const updateReceipt = async (receiptInfo) => {
   try {
-    const isMembershipFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.membershipFee;
+    const isSubscriptionFee = receiptInfo.ReceiptType?.toUpperCase() === receiptTypes.subscriptionFee;
 
     await knex(RECEIPT_TABLE)
       .where({ RicevutaID: receiptInfo.ReceiptID })
@@ -79,10 +80,10 @@ const updateReceipt = async (receiptInfo) => {
         TipoPagamento: receiptInfo.PaymentMethod,
         TipoRicevuta: receiptInfo.ReceiptType,
         DataRicevuta: getFormattedDate(receiptInfo.ReceiptDate),
-        DataInizioCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseStartDate),
-        DataScadenzaCorso: isMembershipFee ? null : getFormattedDate(receiptInfo.CourseEndDate),
+        DataInizioCorso: isSubscriptionFee ? getFormattedDate(receiptInfo.CourseStartDate) : null,
+        DataScadenzaCorso: isSubscriptionFee ? getFormattedDate(receiptInfo.CourseEndDate) : null,
         SommaEuro: receiptInfo.AmountPaid,
-        IncludeQuotaAssociativa: isMembershipFee ? false : receiptInfo.IncludeMembershipFee,
+        IncludeQuotaAssociativa: isSubscriptionFee ? receiptInfo.IncludeMembershipFee : false,
       });
 
     return { message: receiptResponseMessages.ok.update };

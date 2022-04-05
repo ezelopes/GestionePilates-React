@@ -14,6 +14,12 @@ const columnDefs = [
     cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
+  {
+    headerName: 'Include Quota Associativa',
+    field: 'IncludeMembershipFee',
+    cellRenderer: (params) => (params.value ? '✅' : ''),
+    cellClass: 'ag-grid-cell-centered',
+  },
 ];
 
 const FilteredReceiptsModal = ({

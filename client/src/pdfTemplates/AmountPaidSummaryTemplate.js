@@ -10,13 +10,16 @@ const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filter
       { text: 'Numero Ricevuta', bold: true },
       { text: 'Data Ricevuta', bold: true },
       { text: 'Importo in €', bold: true },
+      { text: 'Include Quota Associativa', bold: true },
     ],
   ];
+
   receiptList.forEach((receipt) =>
     tableBody.push([
       receipt.ReceiptNumber,
       receipt.ReceiptDate ? formatDate(new Date(receipt.ReceiptDate)) : BLANK_DATE,
       receipt.AmountPaid,
+      receipt.IncludeMembershipFee ? '√' : '',
     ])
   );
 
@@ -102,7 +105,7 @@ const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filter
       },
       table: {
         headerRows: 1,
-        widths: ['33.3%', '33.3%', '33.3%'],
+        widths: ['25%', '25%', '25%', '25%'],
 
         body: tableBody,
       },

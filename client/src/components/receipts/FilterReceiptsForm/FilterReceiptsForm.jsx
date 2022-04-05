@@ -10,7 +10,7 @@ import formatDate from '../../../helpers/formatDateForInputDate';
 import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBasedOnReceiptNumber';
 import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../../helpers/printPDF';
 import toastConfig from '../../../commondata/toast.config';
-import { BLANK_DATE } from '../../../commondata';
+import { BLANK_DATE, isSubscriptionFee } from '../../../commondata';
 
 const paymentMethods = [null, 'Contanti', 'Assegno', 'Bonifico'];
 const filterFields = [
@@ -74,6 +74,7 @@ const FilterReceiptsForm = ({
     return setCurrentReceipts(receiptsWithPaymentAndDateFilters);
   };
 
+  // Only consider subscription receipts.
   const calculateAmountBetweenDatesAndByPaymentMethod = () => {
     if (filterByField !== 'receipt_date') {
       return toast.error(getTranslation('toast.error.noEligibleFilter'), toastConfig);
@@ -84,8 +85,10 @@ const FilterReceiptsForm = ({
     }
 
     const receipts = allReceipts.filter(
-      ({ ReceiptDate, PaymentMethod }) =>
-        validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate) && PaymentMethod.includes(filteredPaymentMethod)
+      ({ ReceiptDate, PaymentMethod, ReceiptType }) =>
+        validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
+        PaymentMethod.includes(filteredPaymentMethod) &&
+        isSubscriptionFee(ReceiptType)
     );
 
     const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);

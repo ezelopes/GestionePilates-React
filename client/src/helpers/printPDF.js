@@ -6,12 +6,15 @@ import { getTranslation } from '../components/common/Translation/helpers';
 
 import toastConfig from '../commondata/toast.config';
 
-import { getMonthFromId, isAdult, isMembershipFee } from '../commondata';
+import { getMonthFromId, isAdult, isDanceRecitalFee, isMembershipFee, isSubscriptionFee } from '../commondata';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
 const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
+
+const DanceRecitalFeeTemplateAdult = require('../pdfTemplates/DanceRecitalFeeTemplateAdult');
+const DanceRecitalFeeTemplateUnderAge = require('../pdfTemplates/DanceRecitalFeeTemplateUnderAge');
 
 const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
 const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
@@ -71,18 +74,24 @@ const printSelectedReceipts = async (selectedReceipts) => {
         CourseEndDate: data.CourseEndDate,
       };
 
-      if (isAdult(studentInfo.IsAdult) && !isMembershipFee(receiptInfo.ReceiptType)) {
+      if (isAdult(studentInfo.IsAdult) && isSubscriptionFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await ReceiptTemplateAdult.default(studentInfo, receiptInfo);
       } else if (isAdult(studentInfo.IsAdult) && isMembershipFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
-      } else if (!isAdult(studentInfo.IsAdult) && !isMembershipFee(receiptInfo.ReceiptType)) {
+      } else if (isAdult(studentInfo.IsAdult) && isDanceRecitalFee(receiptInfo.ReceiptType)) {
+        // eslint-disable-next-line no-await-in-loop
+        documentDefinition = await DanceRecitalFeeTemplateAdult.default(studentInfo, receiptInfo);
+      } else if (!isAdult(studentInfo.IsAdult) && isSubscriptionFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
       } else if (!isAdult(studentInfo.IsAdult) && isMembershipFee(receiptInfo.ReceiptType)) {
         // eslint-disable-next-line no-await-in-loop
         documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
+      } else if (!isAdult(studentInfo.IsAdult) && isDanceRecitalFee(receiptInfo.ReceiptType)) {
+        // eslint-disable-next-line no-await-in-loop
+        documentDefinition = await DanceRecitalFeeTemplateUnderAge.default(studentInfo, receiptInfo);
       }
 
       if (index % 2 === 1) {
@@ -109,14 +118,18 @@ const printStudentReceipt = async (selectedReceipt, studentInfo) => {
 
     let documentDefinition;
 
-    if (isAdult(studentInfo.IsAdult) && !isMembershipFee(selectedReceipt.ReceiptType)) {
+    if (isAdult(studentInfo.IsAdult) && isSubscriptionFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
     } else if (isAdult(studentInfo.IsAdult) && isMembershipFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-    } else if (!isAdult(studentInfo.IsAdult) && !isMembershipFee(selectedReceipt.ReceiptType)) {
+    } else if (isAdult(studentInfo.IsAdult) && isDanceRecitalFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = await DanceRecitalFeeTemplateAdult.default(studentInfo, selectedReceipt);
+    } else if (!isAdult(studentInfo.IsAdult) && isSubscriptionFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
     } else if (!isAdult(studentInfo.IsAdult) && isMembershipFee(selectedReceipt.ReceiptType)) {
       documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
+    } else if (!isAdult(studentInfo.IsAdult) && isDanceRecitalFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = await DanceRecitalFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
     }
 
     pdfMake.createPdf(documentDefinition).open();

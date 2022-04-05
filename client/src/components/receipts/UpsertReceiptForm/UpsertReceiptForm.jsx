@@ -14,7 +14,14 @@ import { useStudent } from '../../student/StudentContext';
 import toastConfig from '../../../commondata/toast.config';
 import formatDate from '../../../helpers/formatDateForInputDate';
 
-import { receiptTypes, paymentMethods, defaultAmounts, isMembershipFee } from '../../../commondata';
+import {
+  receiptTypes,
+  paymentMethods,
+  defaultAmounts,
+  isMembershipFee,
+  isSubscriptionFee,
+  isDanceRecitalFee,
+} from '../../../commondata';
 
 import './upsert-receipt-form.css';
 
@@ -51,7 +58,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
     IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
   };
 
-  if (isMembershipFee(newReceiptType)) {
+  if (!isSubscriptionFee(newReceiptType)) {
     defaultValues.CourseStartDate = null;
     defaultValues.CourseEndDate = null;
   }
@@ -93,12 +100,12 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
   };
 
   const onReceiptTypeChange = (value) => {
-    if (isMembershipFee(value)) {
-      setValue('CourseStartDate', null);
-      setValue('CourseEndDate', null);
-    } else {
+    if (isSubscriptionFee(value)) {
       setValue('CourseStartDate', receiptInfo?.CourseStartDate || today);
       setValue('CourseEndDate', receiptInfo?.CourseEndDate || today);
+    } else {
+      setValue('CourseStartDate', null);
+      setValue('CourseEndDate', null);
     }
   };
 
@@ -163,16 +170,11 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
                 onReceiptTypeChange(e.target.value);
               }}
             >
-              <option key={`select_${receiptTypes[0].type}`} value={receiptTypes[0].type}>
-                {receiptTypes[0].type}
-              </option>
-              <option
-                key={`select_${receiptTypes[1].type}`}
-                value={receiptTypes[1].type}
-                disabled={!isMembershipFee(newReceiptType) && disableIncludeMembershipFee}
-              >
-                {receiptTypes[1].type}
-              </option>
+              {receiptTypes.map((receiptType) => (
+                <option key={`select_${receiptType.type}`} value={receiptType.type}>
+                  {receiptType.type}
+                </option>
+              ))}
             </Form.Control>
           </div>
 
@@ -221,7 +223,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             <Form.Control type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
           </div>
 
-          {!isMembershipFee(newReceiptType) && (
+          {isSubscriptionFee(newReceiptType) && (
             <>
               <div>
                 <Form.Label>
@@ -240,7 +242,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
           )}
 
           <div className="checkbox-container">
-            {isForCreating && (
+            {isForCreating && !isDanceRecitalFee(newReceiptType) && (
               <Form.Check
                 label={<Translation value="receiptForm.isRegistrationDate" />}
                 type="checkbox"
@@ -248,7 +250,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
               />
             )}
 
-            {!isMembershipFee(newReceiptType) && (
+            {isSubscriptionFee(newReceiptType) && (
               <Form.Check
                 label={<Translation value="receiptForm.includeMembershipFee" />}
                 type="checkbox"

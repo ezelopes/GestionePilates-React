@@ -97,6 +97,7 @@ input[type='date'] {
 
 /* CREATABLE SELECT */
 .css-2b097c-container {
+  min-width: 10vw;
   max-width: 20vw;
 }
 

@@ -41,7 +41,7 @@ const courses = [
 const receiptTypes = [
   { id: 0, type: 'Quota' },
   { id: 1, type: 'Quota Associativa' },
-  // { id: 2, type: 'Quota Saggio' },
+  { id: 2, type: 'Quota Saggio' },
 ];
 
 const paymentMethods = [
@@ -85,9 +85,11 @@ const getMonthFromId = (monthId) => months.find(({ id }) => id === monthId);
 
 const isAdult = (age) => age === ages[0].age;
 
+const isSubscriptionFee = (receiptType) => receiptType === receiptTypes[0].type;
+
 const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
 
-// Const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].type;
+const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].type;
 
 export {
   ages,
@@ -102,6 +104,7 @@ export {
   BLANK_DATE,
   getMonthFromId,
   isAdult,
+  isSubscriptionFee,
   isMembershipFee,
-  // IsDanceRecitalFee,
+  isDanceRecitalFee,
 };
