@@ -1,5 +1,5 @@
-import formatDate from '../helpers/formatDateForInputDate';
 import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
+import { formatDate } from '../helpers/dates';
 
 const StudentsDataTemplate = async (studentsList, registrationMonth, registrationYear) => {
   let docTitle = 'INFORMAZIONI ALLIEVE';

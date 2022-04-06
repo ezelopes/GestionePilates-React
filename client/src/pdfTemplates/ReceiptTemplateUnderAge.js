@@ -1,5 +1,5 @@
 import convertNumberIntoWord from '../helpers/convertNumberIntoWord';
-import formatDate from '../helpers/formatDateForInputDate';
+import { formatDate } from '../helpers/dates';
 
 import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 

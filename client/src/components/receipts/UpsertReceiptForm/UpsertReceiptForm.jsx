@@ -12,7 +12,7 @@ import { getTranslation } from '../../common/Translation/helpers';
 import { useStudent } from '../../student/StudentContext';
 
 import toastConfig from '../../../commondata/toast.config';
-import formatDate from '../../../helpers/formatDateForInputDate';
+import { formatDate } from '../../../helpers/dates';
 
 import {
   receiptTypes,
@@ -183,9 +183,9 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
               <Translation value="receiptForm.paymentType" />
             </Form.Label>
             <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
-              {paymentMethods.map((currentType) => (
-                <option key={`select_${currentType.type}`} value={currentType.type}>
-                  {currentType.type}
+              {paymentMethods.map((currentMethod) => (
+                <option key={`select_${currentMethod.type}`} value={currentMethod.type}>
+                  {currentMethod.type}
                 </option>
               ))}
             </Form.Control>

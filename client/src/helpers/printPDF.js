@@ -7,6 +7,7 @@ import { getTranslation } from '../components/common/Translation/helpers';
 import toastConfig from '../commondata/toast.config';
 
 import { getMonthFromId, isAdult, isDanceRecitalFee, isMembershipFee, isSubscriptionFee } from '../commondata';
+import { formatDate, isDateBetweenTwoDates } from './dates';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -141,12 +142,23 @@ const printStudentReceipt = async (selectedReceipt, studentInfo) => {
   }
 };
 
-const printMembershipFeeSummaryTemplate = async (studentMembershipFeeList, fromData, toDate) => {
+const printMembershipFeeSummaryTemplate = async (membershipFeeList, fromDate, toDate) => {
   try {
-    if (studentMembershipFeeList.length < 1) {
+    if (membershipFeeList.length < 1) {
       return toast.error(getTranslation('toast.error.noMembershipFeeFound'), toastConfig);
     }
-    const documentDefinition = await MembershipFeeSummaryTemplate.default(studentMembershipFeeList, fromData, toDate);
+
+    const membershipFeeListFiltered = membershipFeeList.filter(({ ReceiptDate }) =>
+      ReceiptDate
+        ? isDateBetweenTwoDates(
+            formatDate(new Date(fromDate), true),
+            formatDate(new Date(toDate), true),
+            formatDate(new Date(ReceiptDate), true)
+          )
+        : false
+    );
+
+    const documentDefinition = await MembershipFeeSummaryTemplate.default(membershipFeeListFiltered, fromDate, toDate);
 
     pdfMake.createPdf(documentDefinition).open();
 

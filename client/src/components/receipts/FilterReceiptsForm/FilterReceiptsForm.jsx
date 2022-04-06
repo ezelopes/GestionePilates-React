@@ -6,31 +6,16 @@ import { toast } from 'react-toastify';
 import Translation from '../../common/Translation';
 import { getTranslation } from '../../common/Translation/helpers';
 import FilteredReceiptsModal from '../FilteredReceiptsModal';
-import formatDate from '../../../helpers/formatDateForInputDate';
+import { validateCourseBetweenTwoDates, isDateBetweenTwoDates, formatDate } from '../../../helpers/dates';
 import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBasedOnReceiptNumber';
 import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../../helpers/printPDF';
 import toastConfig from '../../../commondata/toast.config';
-import { BLANK_DATE, isSubscriptionFee } from '../../../commondata';
+import { BLANK_DATE, isSubscriptionFee, paymentMethods } from '../../../commondata';
 
-const paymentMethods = [null, 'Contanti', 'Assegno', 'Bonifico'];
 const filterFields = [
   { field: 'receipt_date', description: 'Data Ricevuta' },
   { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
 ];
-
-const validateDateBetweenTwoDates = (fromDateValidation, toDateValidation, givenDate) =>
-  givenDate ? new Date(givenDate) <= new Date(toDateValidation) && new Date(givenDate) >= new Date(fromDateValidation) : null;
-
-const validateCourseDatesBetweenTwoDates = (fromDateValidation, toDateValidation, CourseStartDate, CourseEndDate) =>
-  CourseStartDate && CourseEndDate
-    ? new Date(CourseStartDate) >= new Date(fromDateValidation) && new Date(CourseEndDate) <= new Date(toDateValidation)
-    : null;
-
-const printMembershipFeeSummaryByMonth = (allReceipts, fromDate, toDate) => {
-  const receipts = allReceipts.filter(({ ReceiptDate }) => validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate));
-
-  return printMembershipFeeSummaryTemplate(receipts, formatDate(new Date(fromDate)), formatDate(new Date(toDate)));
-};
 
 const FilterReceiptsForm = ({
   allReceipts,
@@ -59,8 +44,8 @@ const FilterReceiptsForm = ({
   const filterReceipts = () => {
     const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate, CourseStartDate, CourseEndDate }) =>
       filterByField === 'receipt_date'
-        ? validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
-        : validateCourseDatesBetweenTwoDates(fromDate, toDate, CourseStartDate, CourseEndDate)
+        ? isDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
+        : validateCourseBetweenTwoDates(fromDate, toDate, CourseStartDate, CourseEndDate)
     );
 
     if (!filteredPaymentMethod) {
@@ -86,7 +71,7 @@ const FilterReceiptsForm = ({
 
     const receipts = allReceipts.filter(
       ({ ReceiptDate, PaymentMethod, ReceiptType }) =>
-        validateDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
+        isDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
         PaymentMethod.includes(filteredPaymentMethod) &&
         isSubscriptionFee(ReceiptType)
     );
@@ -151,9 +136,12 @@ const FilterReceiptsForm = ({
               as="select"
               onChange={({ target }) => setFilteredPaymentMethod(target.value)}
             >
-              {paymentMethods.map((method) => (
-                <option key={`select_${method}`} value={method}>
-                  {method}
+              <option key={null} value={null}>
+                {null}
+              </option>
+              {paymentMethods.map((currentMethod) => (
+                <option key={`select_${currentMethod.type}`} value={currentMethod.type}>
+                  {currentMethod.type}
                 </option>
               ))}
             </Form.Control>
@@ -186,7 +174,7 @@ const FilterReceiptsForm = ({
             </span>
           </Button>
         ) : (
-          <Button variant="success" onClick={() => printMembershipFeeSummaryByMonth(allReceipts, fromDate, toDate)}>
+          <Button variant="success" onClick={() => printMembershipFeeSummaryTemplate(allReceipts, fromDate, toDate)}>
             <span role="img" aria-label="summary">
               🖨️ <Translation value="buttons.receipt.printMembershipFeeSummary" />
             </span>
