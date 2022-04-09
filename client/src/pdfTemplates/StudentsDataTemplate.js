@@ -1,5 +1,6 @@
 import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
+import { BLANK_DATE } from '../commondata';
 
 const StudentsDataTemplate = async (studentsList, registrationMonth, registrationYear) => {
   let docTitle = 'INFORMAZIONI ALLIEVE';
@@ -9,7 +10,6 @@ const StudentsDataTemplate = async (studentsList, registrationMonth, registratio
   }
 
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const BLANK_DATE = '____-____-________';
 
   const tableBody = [
     [

@@ -80,6 +80,7 @@ const years = [
 ];
 
 const BLANK_DATE = '______-______-________';
+const BLANK_SPACE = '___________________________';
 
 const getMonthFromId = (monthId) => months.find(({ id }) => id === monthId);
 
@@ -102,6 +103,7 @@ export {
   months,
   years,
   BLANK_DATE,
+  BLANK_SPACE,
   getMonthFromId,
   isAdult,
   isSubscriptionFee,

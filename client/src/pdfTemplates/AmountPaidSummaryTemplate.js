@@ -1,9 +1,9 @@
 import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
+import { BLANK_DATE } from '../commondata';
 
 const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filteredPaymentMethod, fromDate, toDate) => {
   const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const BLANK_DATE = '____-____-________';
 
   const tableBody = [
     [
