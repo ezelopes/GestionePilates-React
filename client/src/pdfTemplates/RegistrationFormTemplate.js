@@ -1,9 +1,7 @@
-import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
 import { BLANK_DATE, BLANK_SPACE } from '../commondata';
 
-const RegistrationFormTemplate = async (studentInfo) => {
-  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
+export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
   const docDefinition = {
     info: {
       title: `${studentInfo.Name}_${studentInfo.Surname}_Modulo_Iscrizione`,
@@ -202,5 +200,3 @@ const RegistrationFormTemplate = async (studentInfo) => {
 
   return docDefinition;
 };
-
-export default RegistrationFormTemplate;

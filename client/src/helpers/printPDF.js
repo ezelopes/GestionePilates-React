@@ -2,31 +2,30 @@ import { toast } from 'react-toastify';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
+import { formatDate, isDateBetweenTwoDates } from './dates';
+import getBase64ImageFromURL from './getBase64ImageFromURL';
+
 import { getTranslation } from '../components/common/Translation/helpers';
 
 import toastConfig from '../commondata/toast.config';
-
 import { getMonthFromId, isAdult, isDanceRecitalFee, isMembershipFee, isSubscriptionFee } from '../commondata';
-import { formatDate, isDateBetweenTwoDates } from './dates';
+
+import {
+  ReceiptTemplateAdult,
+  ReceiptTemplateUnderAge,
+  DanceRecitalFeeTemplateAdult,
+  DanceRecitalFeeTemplateUnderAge,
+  MembershipFeeTemplateAdult,
+  MembershipFeeTemplateUnderAge,
+  AmountPaidSummaryTemplate,
+  MembershipFeeSummaryTemplate,
+  StudentsDataTemplate,
+  StudentsDataGreenPassTemplate,
+  StudentsExpiringCourseTemplate,
+  RegistrationFormTemplate,
+} from '../pdfTemplates';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-const ReceiptTemplateAdult = require('../pdfTemplates/ReceiptTemplateAdult');
-const ReceiptTemplateUnderAge = require('../pdfTemplates/ReceiptTemplateUnderAge');
-
-const DanceRecitalFeeTemplateAdult = require('../pdfTemplates/DanceRecitalFeeTemplateAdult');
-const DanceRecitalFeeTemplateUnderAge = require('../pdfTemplates/DanceRecitalFeeTemplateUnderAge');
-
-const MembershipFeeTemplateAdult = require('../pdfTemplates/MembershipFeeTemplateAdult');
-const MembershipFeeTemplateUnderAge = require('../pdfTemplates/MembershipFeeTemplateUnderAge');
-const AmountPaidSummaryTemplate = require('../pdfTemplates/AmountPaidSummaryTemplate');
-
-const MembershipFeeSummaryTemplate = require('../pdfTemplates/MembershipFeeSummaryTemplate');
-
-const StudentsDataTemplate = require('../pdfTemplates/StudentsDataTemplate');
-const StudentsDataGreenPassTemplate = require('../pdfTemplates/StudentsDataGreenPassTemplate');
-const StudentsExpiringCourseTemplate = require('../pdfTemplates/StudentsExpiringCourseTemplate');
-const RegistrationFormTemplate = require('../pdfTemplates/RegistrationFormTemplate');
 
 const printSelectedReceipts = async (selectedReceipts) => {
   try {
@@ -40,67 +39,67 @@ const printSelectedReceipts = async (selectedReceipts) => {
       content: [],
     };
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [index, data] of selectedReceipts.entries()) {
-      let documentDefinition;
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+    const signature = await getBase64ImageFromURL('Signature.png');
+    const stamp = await getBase64ImageFromURL('Stamp.png');
+
+    selectedReceipts.map((receipt, index) => {
+      let page;
 
       const studentInfo = {
-        IsAdult: data.IsAdult,
-        TaxCode: data.TaxCode,
-        Name: data.Name,
-        Surname: data.Surname,
-        City: data.City,
-        Address: data.Address,
-        MobilePhone: data.MobilePhone,
-        Email: data.Email,
-        RegistrationDate: data.RegistrationDate,
-        CertificateExpirationDate: data.CertificateExpirationDate,
-        DOB: data.DOB,
-        BirthPlace: data.BirthPlace,
-        Discipline: data.Discipline,
-        Course: data.Course,
-        School: data.School,
-        ParentName: data.ParentName,
-        ParentSurname: data.ParentSurname,
-        ParentTaxCode: data.ParentTaxCode,
+        IsAdult: receipt.IsAdult,
+        TaxCode: receipt.TaxCode,
+        Name: receipt.Name,
+        Surname: receipt.Surname,
+        City: receipt.City,
+        Address: receipt.Address,
+        MobilePhone: receipt.MobilePhone,
+        Email: receipt.Email,
+        RegistrationDate: receipt.RegistrationDate,
+        CertificateExpirationDate: receipt.CertificateExpirationDate,
+        DOB: receipt.DOB,
+        BirthPlace: receipt.BirthPlace,
+        Discipline: receipt.Discipline,
+        Course: receipt.Course,
+        School: receipt.School,
+        ParentName: receipt.ParentName,
+        ParentSurname: receipt.ParentSurname,
+        ParentTaxCode: receipt.ParentTaxCode,
       };
 
       const receiptInfo = {
-        ReceiptNumber: data.ReceiptNumber,
-        AmountPaid: data.AmountPaid,
-        PaymentMethod: data.PaymentMethod,
-        ReceiptType: data.ReceiptType,
-        ReceiptDate: data.ReceiptDate,
-        CourseStartDate: data.CourseStartDate,
-        CourseEndDate: data.CourseEndDate,
+        ReceiptNumber: receipt.ReceiptNumber,
+        AmountPaid: receipt.AmountPaid,
+        PaymentMethod: receipt.PaymentMethod,
+        ReceiptType: receipt.ReceiptType,
+        ReceiptDate: receipt.ReceiptDate,
+        CourseStartDate: receipt.CourseStartDate,
+        CourseEndDate: receipt.CourseEndDate,
       };
 
-      if (isAdult(studentInfo.IsAdult) && isSubscriptionFee(receiptInfo.ReceiptType)) {
-        // eslint-disable-next-line no-await-in-loop
-        documentDefinition = await ReceiptTemplateAdult.default(studentInfo, receiptInfo);
-      } else if (isAdult(studentInfo.IsAdult) && isMembershipFee(receiptInfo.ReceiptType)) {
-        // eslint-disable-next-line no-await-in-loop
-        documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, receiptInfo);
-      } else if (isAdult(studentInfo.IsAdult) && isDanceRecitalFee(receiptInfo.ReceiptType)) {
-        // eslint-disable-next-line no-await-in-loop
-        documentDefinition = await DanceRecitalFeeTemplateAdult.default(studentInfo, receiptInfo);
-      } else if (!isAdult(studentInfo.IsAdult) && isSubscriptionFee(receiptInfo.ReceiptType)) {
-        // eslint-disable-next-line no-await-in-loop
-        documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, receiptInfo);
-      } else if (!isAdult(studentInfo.IsAdult) && isMembershipFee(receiptInfo.ReceiptType)) {
-        // eslint-disable-next-line no-await-in-loop
-        documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, receiptInfo);
-      } else if (!isAdult(studentInfo.IsAdult) && isDanceRecitalFee(receiptInfo.ReceiptType)) {
-        // eslint-disable-next-line no-await-in-loop
-        documentDefinition = await DanceRecitalFeeTemplateUnderAge.default(studentInfo, receiptInfo);
+      const isStudentAdult = isAdult(studentInfo.IsAdult);
+
+      if (isStudentAdult && isSubscriptionFee(receiptInfo.ReceiptType)) {
+        page = ReceiptTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
+      } else if (isStudentAdult && isMembershipFee(receiptInfo.ReceiptType)) {
+        page = MembershipFeeTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
+      } else if (isStudentAdult && isDanceRecitalFee(receiptInfo.ReceiptType)) {
+        page = DanceRecitalFeeTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
+      } else if (!isStudentAdult && isSubscriptionFee(receiptInfo.ReceiptType)) {
+        page = ReceiptTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
+      } else if (!isStudentAdult && isMembershipFee(receiptInfo.ReceiptType)) {
+        page = MembershipFeeTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
+      } else if (!isStudentAdult && isDanceRecitalFee(receiptInfo.ReceiptType)) {
+        page = DanceRecitalFeeTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
       }
 
       if (index % 2 === 1) {
-        documentDefinition.content[documentDefinition.content.length - 1].pageBreak = 'after';
-        documentDefinition.content[documentDefinition.content.length - 1].canvas = [];
+        page.content[page.content.length - 1].pageBreak = 'after';
+        page.content[page.content.length - 1].canvas = [];
       }
-      Array.prototype.push.apply(finalDocumentDefinition.content, documentDefinition.content);
-    }
+
+      return Array.prototype.push.apply(finalDocumentDefinition.content, page.content);
+    });
 
     pdfMake.createPdf(finalDocumentDefinition).open();
 
@@ -117,20 +116,26 @@ const printStudentReceipt = async (selectedReceipt, studentInfo) => {
       return toast.error(getTranslation('toast.error.noReceiptSelected'), toastConfig);
     }
 
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+    const signature = await getBase64ImageFromURL('Signature.png');
+    const stamp = await getBase64ImageFromURL('Stamp.png');
+
     let documentDefinition;
 
-    if (isAdult(studentInfo.IsAdult) && isSubscriptionFee(selectedReceipt.ReceiptType)) {
-      documentDefinition = await ReceiptTemplateAdult.default(studentInfo, selectedReceipt);
-    } else if (isAdult(studentInfo.IsAdult) && isMembershipFee(selectedReceipt.ReceiptType)) {
-      documentDefinition = await MembershipFeeTemplateAdult.default(studentInfo, selectedReceipt);
-    } else if (isAdult(studentInfo.IsAdult) && isDanceRecitalFee(selectedReceipt.ReceiptType)) {
-      documentDefinition = await DanceRecitalFeeTemplateAdult.default(studentInfo, selectedReceipt);
-    } else if (!isAdult(studentInfo.IsAdult) && isSubscriptionFee(selectedReceipt.ReceiptType)) {
-      documentDefinition = await ReceiptTemplateUnderAge.default(studentInfo, selectedReceipt);
-    } else if (!isAdult(studentInfo.IsAdult) && isMembershipFee(selectedReceipt.ReceiptType)) {
-      documentDefinition = await MembershipFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
-    } else if (!isAdult(studentInfo.IsAdult) && isDanceRecitalFee(selectedReceipt.ReceiptType)) {
-      documentDefinition = await DanceRecitalFeeTemplateUnderAge.default(studentInfo, selectedReceipt);
+    const isStudentAdult = isAdult(studentInfo.IsAdult);
+
+    if (isStudentAdult && isSubscriptionFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = ReceiptTemplateAdult(studentInfo, selectedReceipt, labelLogo, signature, stamp);
+    } else if (isStudentAdult && isMembershipFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = MembershipFeeTemplateAdult(studentInfo, selectedReceipt, labelLogo, signature, stamp);
+    } else if (isStudentAdult && isDanceRecitalFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = DanceRecitalFeeTemplateAdult(studentInfo, selectedReceipt, labelLogo, signature, stamp);
+    } else if (!isStudentAdult && isSubscriptionFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = ReceiptTemplateUnderAge(studentInfo, selectedReceipt, labelLogo, signature, stamp);
+    } else if (!isStudentAdult && isMembershipFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = MembershipFeeTemplateUnderAge(studentInfo, selectedReceipt, labelLogo, signature, stamp);
+    } else if (!isStudentAdult && isDanceRecitalFee(selectedReceipt.ReceiptType)) {
+      documentDefinition = DanceRecitalFeeTemplateUnderAge(studentInfo, selectedReceipt, labelLogo, signature, stamp);
     }
 
     pdfMake.createPdf(documentDefinition).open();
@@ -158,7 +163,8 @@ const printMembershipFeeSummaryTemplate = async (membershipFeeList, fromDate, to
         : false
     );
 
-    const documentDefinition = await MembershipFeeSummaryTemplate.default(membershipFeeListFiltered, fromDate, toDate);
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+    const documentDefinition = MembershipFeeSummaryTemplate(membershipFeeListFiltered, fromDate, toDate, labelLogo);
 
     pdfMake.createPdf(documentDefinition).open();
 
@@ -171,12 +177,15 @@ const printMembershipFeeSummaryTemplate = async (membershipFeeList, fromDate, to
 
 const printReceiptsDetails = async (filteredReceipts, filteredAmountPaid, filteredPaymentMethod, fromDate, toDate) => {
   try {
-    const documentDefinition = await AmountPaidSummaryTemplate.default(
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = AmountPaidSummaryTemplate(
       filteredReceipts,
       filteredAmountPaid,
       filteredPaymentMethod,
       fromDate,
-      toDate
+      toDate,
+      labelLogo
     );
     pdfMake.createPdf(documentDefinition).open();
 
@@ -227,7 +236,9 @@ const printExpiringStudents = async (studentsReceiptsList, selectedYear) => {
         return accumulator;
       }, {});
 
-    const documentDefinition = await StudentsExpiringCourseTemplate.default(studentsReceiptsListByMonth);
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = StudentsExpiringCourseTemplate(studentsReceiptsListByMonth, labelLogo);
 
     pdfMake.createPdf(documentDefinition).open();
 
@@ -240,7 +251,9 @@ const printExpiringStudents = async (studentsReceiptsList, selectedYear) => {
 
 const printRegistrationForm = async (studentInfo) => {
   try {
-    const documentDefinition = await RegistrationFormTemplate.default(studentInfo);
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = RegistrationFormTemplate(studentInfo, labelLogo);
 
     pdfMake.createPdf(documentDefinition).open();
 
@@ -255,9 +268,13 @@ const printSelectedStudents = async (selectedStudents) => {
     if (selectedStudents.length === 0) {
       return toast.error(getTranslation('toast.error.noStudentsSelected'), toastConfig);
     }
-    const documentDefinition = await StudentsDataTemplate.default(selectedStudents);
+
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = StudentsDataTemplate(selectedStudents, null, null, labelLogo);
 
     pdfMake.createPdf(documentDefinition).open();
+
     return toast.success(getTranslation('toast.success.general'), toastConfig);
   } catch (err) {
     return toast.error(getTranslation('toast.error.general'), toastConfig);
@@ -284,13 +301,17 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
     const { month } = getMonthFromId(selectedMonth);
 
     if (studentsWithExpiringGreenPass.length > 0) {
-      const documentDefinition = await StudentsDataTemplate.default(
+      const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+      const documentDefinition = StudentsDataTemplate(
         studentsWithExpiringGreenPass,
         month.toUpperCase(),
-        selectedYearGreenPass
+        selectedYearGreenPass,
+        labelLogo
       );
 
       pdfMake.createPdf(documentDefinition).open();
+
       return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
@@ -305,6 +326,7 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
     const studentsWithExpiringGreenPass = students.filter(({ GreenPassExpirationDate }) => {
       if (GreenPassExpirationDate) {
         const GreenPassExpirationDateFormatted = new Date(GreenPassExpirationDate);
+
         return (
           GreenPassExpirationDateFormatted.getMonth() === selectedMonth &&
           GreenPassExpirationDateFormatted.getFullYear() === selectedYearGreenPass
@@ -317,13 +339,17 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
     const { month } = getMonthFromId(selectedMonth);
 
     if (studentsWithExpiringGreenPass.length > 0) {
-      const documentDefinition = await StudentsDataGreenPassTemplate.default(
+      const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+      const documentDefinition = StudentsDataGreenPassTemplate(
         studentsWithExpiringGreenPass,
         month.toUpperCase(),
-        selectedYearGreenPass
+        selectedYearGreenPass,
+        labelLogo
       );
 
       pdfMake.createPdf(documentDefinition).open();
+
       return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
@@ -335,7 +361,10 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
 
 const printTeacherRegistrationForm = async (teacherInfo) => {
   try {
-    const documentDefinition = await RegistrationFormTemplate.default(teacherInfo);
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = RegistrationFormTemplate(teacherInfo, labelLogo);
+
     pdfMake.createPdf(documentDefinition).open();
 
     return toast.success(getTranslation('toast.success.general'), toastConfig);

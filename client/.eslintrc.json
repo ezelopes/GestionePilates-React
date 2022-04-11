@@ -29,6 +29,7 @@
     "no-unneeded-ternary": "warn",
     "no-useless-return": "warn",
     "no-var": "warn",
+    "import/prefer-default-export": "off",
     "no-console": [
       "warn",
       {

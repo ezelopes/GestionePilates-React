@@ -1,10 +1,7 @@
-import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
 import { BLANK_DATE } from '../commondata';
 
-const StudentsExpiringCourseTemplate = async (studentsReceiptsListByMonth) => {
-  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-
+export const StudentsExpiringCourseTemplate = (studentsReceiptsListByMonth, labelLogo) => {
   const allTablesWithTitle = [];
 
   Object.keys(studentsReceiptsListByMonth).forEach((month) => {
@@ -88,5 +85,3 @@ const StudentsExpiringCourseTemplate = async (studentsReceiptsListByMonth) => {
 
   return docDefinition;
 };
-
-export default StudentsExpiringCourseTemplate;

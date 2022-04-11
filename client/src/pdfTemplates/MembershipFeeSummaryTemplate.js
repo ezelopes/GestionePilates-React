@@ -1,10 +1,7 @@
-import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
 import { BLANK_DATE } from '../commondata';
 
-const MembershipFeeSummaryTemplate = async (studentReceiptList, fromDate, toDate) => {
-  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-
+export const MembershipFeeSummaryTemplate = (studentReceiptList, fromDate, toDate, labelLogo) => {
   const tableBody = [
     [
       { text: 'Allieva', bold: true },
@@ -82,5 +79,3 @@ const MembershipFeeSummaryTemplate = async (studentReceiptList, fromDate, toDate
 
   return docDefinition;
 };
-
-export default MembershipFeeSummaryTemplate;

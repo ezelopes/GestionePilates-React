@@ -1,10 +1,14 @@
-import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
 import { BLANK_DATE } from '../commondata';
 
-const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filteredPaymentMethod, fromDate, toDate) => {
-  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-
+export const AmountPaidSummaryTemplate = (
+  receiptList,
+  filteredAmountPaid,
+  filteredPaymentMethod,
+  fromDate,
+  toDate,
+  labelLogo
+) => {
   const tableBody = [
     [
       { text: 'Numero Ricevuta', bold: true },
@@ -124,5 +128,3 @@ const AmountPaidSummaryTemplate = async (receiptList, filteredAmountPaid, filter
 
   return docDefinition;
 };
-
-export default AmountPaidSummaryTemplate;

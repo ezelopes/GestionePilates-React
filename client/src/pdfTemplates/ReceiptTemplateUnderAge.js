@@ -2,13 +2,7 @@ import convertNumberIntoWord from '../helpers/convertNumberIntoWord';
 import { formatDate } from '../helpers/dates';
 import { BLANK_DATE, BLANK_SPACE } from '../commondata';
 
-import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
-
-const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
-  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
-  const signature = await getBase64ImageFromURL('../images/Signature.png');
-  const stamp = await getBase64ImageFromURL('../images/Stamp.png');
-
+export const ReceiptTemplateUnderAge = (studentInfo, receiptInfo, labelLogo, signature, stamp) => {
   const amountPaid = receiptInfo.AmountPaid.replace('.', ',');
   const euroAndCents = amountPaid.split(',');
   const euro = euroAndCents[0];
@@ -146,5 +140,3 @@ const ReceiptTemplateUnderAge = async (studentInfo, receiptInfo) => {
 
   return docDefinition;
 };
-
-export default ReceiptTemplateUnderAge;

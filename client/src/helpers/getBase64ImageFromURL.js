@@ -14,10 +14,7 @@ const getBase64ImageFromURL = (url) =>
     img.onerror = (error) => {
       reject(error);
     };
-    img.src = url;
+    img.src = `../images/${url}`;
   });
 
 export default getBase64ImageFromURL;
-
-// TODO:
-// https://stackoverflow.com/questions/36280818/how-to-convert-file-to-base64-in-javascript

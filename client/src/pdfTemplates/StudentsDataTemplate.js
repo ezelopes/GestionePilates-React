@@ -1,15 +1,12 @@
-import getBase64ImageFromURL from '../helpers/getBase64ImageFromURL';
 import { formatDate } from '../helpers/dates';
 import { BLANK_DATE } from '../commondata';
 
-const StudentsDataTemplate = async (studentsList, registrationMonth, registrationYear) => {
+export const StudentsDataTemplate = (studentsList, registrationMonth, registrationYear, labelLogo) => {
   let docTitle = 'INFORMAZIONI ALLIEVE';
 
   if (registrationMonth && registrationYear) {
     docTitle += ` ISCRITTE NEL ${registrationMonth} ${registrationYear}`;
   }
-
-  const labelLogo = await getBase64ImageFromURL('../images/PILATES_LOGO.png');
 
   const tableBody = [
     [
@@ -78,5 +75,3 @@ const StudentsDataTemplate = async (studentsList, registrationMonth, registratio
 
   return docDefinition;
 };
-
-export default StudentsDataTemplate;
