@@ -21,31 +21,29 @@ const TeachersPage = () => {
     fetchData();
   }, []);
 
+  if (loading) {
+    return <Spinner animation="border" role="status" className="spinner" />;
+  }
+
   return (
-    <>
-      {loading ? (
-        <Spinner animation="border" role="status" className="spinner" />
+    <Row>
+      {teachersList?.length === 0 ? (
+        <h2 className="center">
+          <Translation value="common.teachersNotFound" />
+        </h2>
       ) : (
-        <Row>
-          {teachersList?.length === 0 ? (
-            <h2 className="center">
-              <Translation value="common.teachersNotFound" />
-            </h2>
-          ) : (
-            <div className="teachers-container">
-              {teachersList?.map((currentTeacher) => (
-                <TeacherCard
-                  teacherInitialInfo={currentTeacher}
-                  teachersList={teachersList}
-                  setTeachersList={setTeachersList}
-                  key={currentTeacher.TaxCode}
-                />
-              ))}
-            </div>
-          )}
-        </Row>
+        <div className="teachers-container">
+          {teachersList?.map((currentTeacher) => (
+            <TeacherCard
+              teacherInitialInfo={currentTeacher}
+              teachersList={teachersList}
+              setTeachersList={setTeachersList}
+              key={currentTeacher.TaxCode}
+            />
+          ))}
+        </div>
       )}
-    </>
+    </Row>
   );
 };
 
