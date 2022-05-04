@@ -1,12 +1,30 @@
-import React from 'react';
-import Logo from '../images/PILATES_LOGO.png';
+import React, { useEffect, useState } from 'react';
+import StudentCountChart from '../components/charts/StudentCountChart';
+import { getAllReceipts } from '../helpers/apiCalls';
+import { isMembershipFee } from '../commondata';
 
 import '../styles/home-page.css';
 
-const HomePage = () => (
-  <div className="homepage">
-    <img src={Logo} alt="Pilates Logo" />
-  </div>
-);
+const HomePage = () => {
+  const [receiptsWithStudentInfo, setReceiptsWithStudentInfo] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { receipts } = await getAllReceipts();
+
+      const filteredReceipts = receipts.filter(({ ReceiptType }) => !isMembershipFee(ReceiptType));
+
+      setReceiptsWithStudentInfo(filteredReceipts);
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <StudentCountChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+    </div>
+  );
+};
 
 export default HomePage;
