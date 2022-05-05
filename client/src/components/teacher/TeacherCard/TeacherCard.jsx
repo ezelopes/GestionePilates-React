@@ -49,35 +49,30 @@ const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
           <Card.Text>
             <b>
               <Translation value="form.taxCode" />
-              :&nbsp;
             </b>
             {teacherInfo.TaxCode}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.cityAndAddress" />
-              :&nbsp;
             </b>
             {teacherInfo.City} - {teacherInfo.Address}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.phone" />
-              :&nbsp;
             </b>
             {teacherInfo.MobilePhone}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.email" />
-              :&nbsp;
             </b>
             {teacherInfo.Email}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.placeAndDOB" />
-              :&nbsp;
             </b>
             {teacherInfo.BirthPlace} -&nbsp;
             {teacherInfo.DOB !== null ? new Date(teacherInfo.DOB).toLocaleDateString() : 'Non Definito'}
@@ -85,35 +80,30 @@ const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
           <Card.Text>
             <b>
               <Translation value="form.registrationDate" />
-              :&nbsp;
             </b>
             {teacherInfo.RegistrationDate !== null ? new Date(teacherInfo.RegistrationDate).toLocaleDateString() : 'Non Definito'}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.school" />
-              :&nbsp;
             </b>
             {teacherInfo.School}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.discipline" />
-              :&nbsp;
             </b>
             {teacherInfo.Discipline}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.course" />
-              :&nbsp;
             </b>
             {teacherInfo.Course}
           </Card.Text>
           <Card.Text>
             <b>
               <Translation value="form.certificateExpirationDate" />
-              :&nbsp;
             </b>
             {teacherInfo.CertificateExpirationDate !== null ? (
               new Date(teacherInfo.CertificateExpirationDate).toLocaleDateString()
@@ -124,7 +114,6 @@ const TeacherCard = ({ teacherInitialInfo, teachersList, setTeachersList }) => {
           <Card.Text>
             <b>
               <Translation value="form.greenPassExpirationDate" />
-              :&nbsp;
             </b>
             {teacherInfo.GreenPassExpirationDate !== null ? (
               new Date(teacherInfo.GreenPassExpirationDate).toLocaleDateString()

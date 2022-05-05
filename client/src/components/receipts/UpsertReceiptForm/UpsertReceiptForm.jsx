@@ -240,29 +240,28 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
               </div>
             </>
           )}
+        </div>
+        <div className="checkbox-container">
+          {isForCreating && !isDanceRecitalFee(newReceiptType) && (
+            <Form.Check
+              label={<Translation value="receiptForm.isRegistrationDate" />}
+              type="checkbox"
+              {...register('RegistrationDate')}
+            />
+          )}
 
-          <div className="checkbox-container">
-            {isForCreating && !isDanceRecitalFee(newReceiptType) && (
-              <Form.Check
-                label={<Translation value="receiptForm.isRegistrationDate" />}
-                type="checkbox"
-                {...register('RegistrationDate')}
-              />
-            )}
-
-            {isSubscriptionFee(newReceiptType) && (
-              <Form.Check
-                label={<Translation value="receiptForm.includeMembershipFee" />}
-                type="checkbox"
-                {...register('IncludeMembershipFee')}
-                defaultChecked={receiptInfo?.IncludeMembershipFee || false}
-                disabled={!receiptInfo?.IncludeMembershipFee && disableIncludeMembershipFee}
-              />
-            )}
-          </div>
+          {isSubscriptionFee(newReceiptType) && (
+            <Form.Check
+              label={<Translation value="receiptForm.includeMembershipFee" />}
+              type="checkbox"
+              {...register('IncludeMembershipFee')}
+              defaultChecked={receiptInfo?.IncludeMembershipFee || false}
+              disabled={!receiptInfo?.IncludeMembershipFee && disableIncludeMembershipFee}
+            />
+          )}
         </div>
 
-        <Button type="submit" variant="success" style={{ marginTop: '2em' }}>
+        <Button type="submit" variant="success">
           {isForCreating ? (
             <span role="img" aria-label="create">
               🆕&nbsp;

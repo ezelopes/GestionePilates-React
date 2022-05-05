@@ -26,11 +26,13 @@ const TeachersPage = () => {
   }
 
   return (
-    <Row>
+    <>
       {teachersList?.length === 0 ? (
-        <h2 className="center">
-          <Translation value="common.teachersNotFound" />
-        </h2>
+        <Row>
+          <h2 className="center">
+            <Translation value="common.teachersNotFound" />
+          </h2>
+        </Row>
       ) : (
         <div className="teachers-container">
           {teachersList?.map((currentTeacher) => (
@@ -43,7 +45,7 @@ const TeachersPage = () => {
           ))}
         </div>
       )}
-    </Row>
+    </>
   );
 };
 

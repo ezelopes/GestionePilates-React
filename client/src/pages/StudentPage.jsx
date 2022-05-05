@@ -55,21 +55,21 @@ const StudentPage = ({ match }) => {
       newRegistrationDate={newRegistrationDate}
       setNewRegistrationDate={setNewRegistrationDate}
     >
-      <div>
-        <Button variant="secondary" onClick={history.goBack}>
-          <span role="img" aria-label="back">
-            🔙 <Translation value="common.back" />
-          </span>
-        </Button>
+      <Button variant="secondary" onClick={history.goBack} className="backButton">
+        <span role="img" aria-label="back">
+          🔙 <Translation value="common.back" />
+        </span>
+      </Button>
 
+      <div className="student-page">
         <StudentCard />
-
-        <StudentReceiptsList />
 
         <div className="form-wrapper">
           <UpsertReceiptForm isForCreating callback={createReceipt} />
         </div>
       </div>
+
+      <StudentReceiptsList />
     </StudentProvider>
   );
 };

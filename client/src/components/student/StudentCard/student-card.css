@@ -1,7 +1,7 @@
 .student-name-title {
   background-color: var(--white);
   box-shadow: var(--default-box-shadow);
-  margin: 0.5em auto;
+  margin: 1em auto;
   line-height: 1.2;
   padding: 0.7em;
   width: fit-content;
@@ -9,4 +9,16 @@
   font-weight: 600;
   border: 1px solid var(--white);
   border-radius: var(--border-radius);
+  text-align: center;
+  height: -webkit-fill-available;
+}
+
+.student-card-button {
+  justify-content: center;
+  grid-gap: 0.5em !important;
+}
+
+.student-card-button > button {
+  padding: 1em;
+  width: 100%;
 }

@@ -4,3 +4,7 @@
   font-size: 1em;
   box-shadow: var(--default-box-shadow);
 }
+
+.teacher-card b {
+  display: block;
+}

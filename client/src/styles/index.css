@@ -90,9 +90,20 @@ input[type='date'] {
   justify-content: center !important;
 }
 
+/* AG GRID SCROLLBAR STYLING */
 .ag-body-viewport-wrapper.ag-layout-normal {
   overflow-x: scroll;
   overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 /* CREATABLE SELECT */
@@ -129,6 +140,7 @@ input[type='date'] {
   justify-content: left;
   align-items: center;
   gap: 1em;
+  padding-right: 1em;
 }
 
 .filter-form > .btn {
@@ -136,6 +148,37 @@ input[type='date'] {
 }
 
 .subscription-form {
-  width: 80vw;
+  width: 90vw;
   margin: auto;
+}
+
+@media screen and (max-width: 992px) {
+  .filter-form {
+    grid-template-columns: 50% 50%;
+    column-gap: 1em;
+    width: 100%;
+  }
+
+  .filter-form > .btn {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .filter-form {
+    grid-template-columns: 100%;
+    gap: 0;
+    width: 100%;
+    padding-right: 0;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .form-wrapper {
+    width: 100%;
+  }
+
+  .buttons-container > button {
+    width: 100%;
+  }
 }
