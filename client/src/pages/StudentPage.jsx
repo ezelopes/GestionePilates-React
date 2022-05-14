@@ -7,13 +7,13 @@ import NotFoundPage from './NotFoundPage';
 
 import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
+import StudentCard from '../components/student/StudentCard';
 import UpsertReceiptForm from '../components/receipts/UpsertReceiptForm';
 import Translation from '../components/common/Translation';
 
 import { createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 
 import '../styles/student-page.css';
-import StudentCard from '../components/student/StudentCard';
 
 const StudentPage = ({ match }) => {
   const [loading, setLoading] = useState(true);
