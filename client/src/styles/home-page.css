@@ -1,8 +1,0 @@
-.homepage {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  gap: 3em;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-}

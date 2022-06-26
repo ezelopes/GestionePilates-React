@@ -9,6 +9,12 @@
   align-items: center;
 }
 
+.create-receipt-form {
+  display: flex;
+  align-items: center;
+  height: -webkit-fill-available;
+}
+
 @media screen and (max-width: 768px) {
   .student-page {
     display: flex;

@@ -57,6 +57,11 @@ const defaultAmounts = [
   { value: '150', label: '150' },
 ];
 
+const timePeriods = [
+  { id: 0, period: 'Per Mese' },
+  { id: 1, period: 'Per Trimestre' },
+];
+
 const months = [
   { id: 0, month: 'Gennaio' },
   { id: 1, month: 'Febbraio' },
@@ -94,6 +99,12 @@ const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
 
 const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].type;
 
+const isFitnessCourse = (courseType) => courseType === disciplines[0].discipline;
+
+const isDanceCourse = (courseType) => courseType === disciplines[1].discipline;
+
+const isTrimester = (timePeriod) => timePeriod === timePeriods[1].period;
+
 export {
   ages,
   disciplines,
@@ -102,6 +113,7 @@ export {
   receiptTypes,
   paymentMethods,
   defaultAmounts,
+  timePeriods,
   months,
   years,
   BLANK_DATE,
@@ -111,4 +123,7 @@ export {
   isSubscriptionFee,
   isMembershipFee,
   isDanceRecitalFee,
+  isFitnessCourse,
+  isDanceCourse,
+  isTrimester,
 };

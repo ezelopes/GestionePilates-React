@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import StudentCountChart from '../components/charts/StudentCountChart';
 import { getAllStudents, getAllReceipts } from '../helpers/apiCalls';
 import { isMembershipFee } from '../commondata';
 
 import IncomePerCourseChart from '../components/charts/IncomePerCourseChart';
 import ExpiringStudentsList from '../components/charts/ExpiringStudentsList';
-
-import '../styles/home-page.css';
+import { isDateBetweenTwoDates } from '../helpers/dates';
 
 const HomePage = () => {
   const [receiptsWithStudentInfo, setReceiptsWithStudentInfo] = useState([]);
@@ -29,12 +29,47 @@ const HomePage = () => {
     fetchData();
   }, []);
 
+  const today = new Date();
+
+  const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1));
+
+  const { expiringStudents } = students.reduce(
+    (accumulator, student) => {
+      if (isDateBetweenTwoDates(today, nextMonth, new Date(student.CertificateExpirationDate))) {
+        accumulator.expiringStudents.push({ ...student, hasExpired: false });
+      }
+
+      if (today > new Date(student.CertificateExpirationDate)) {
+        accumulator.expiringStudents.push({ ...student, hasExpired: true });
+      }
+
+      return accumulator;
+    },
+    {
+      expiringStudents: [],
+    }
+  );
+
+  const sortedExpiringStudents = expiringStudents.sort(
+    (a, b) => new Date(b.CertificateExpirationDate) - new Date(a.CertificateExpirationDate)
+  );
+
   return (
-    <div className="homepage">
-      <StudentCountChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
-      <IncomePerCourseChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
-      <ExpiringStudentsList students={students} />
-    </div>
+    <Container>
+      <Row>
+        <Col>
+          <StudentCountChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+        </Col>
+        <Col>
+          <IncomePerCourseChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ExpiringStudentsList students={sortedExpiringStudents} />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

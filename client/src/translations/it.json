@@ -87,7 +87,8 @@
     "close": "Chiudi",
     "resetForm": "Reset Form",
     "removeFilters": "Rimuovi Filtri",
-    "notFoundPage": "Torna alla Lista delle Allieve"
+    "notFoundPage": "Torna alla Lista delle Allieve",
+    "loadMore": "Mostra altro"
   },
   "navbar": {
     "studentsList": "Lista Allieve",
@@ -149,5 +150,25 @@
   },
   "notFoundPage": {
     "title": "Oops! Ti sei persa?"
+  },
+  "chart": {
+    "studentCount": {
+      "selectYear": "Seleziona anno",
+      "selectPeriodType": "Seleziona tipologia",
+      "title": "Numero di allieve iscritte {{ period }} nel {{ year }}/{{ yearPlusOne }}"
+    },
+    "incomePerCourse": {
+      "selectYear": "Seleziona anno",
+      "selectDiscipline": "Seleziona disciplina",
+      "title": "Incasso totale dei corsi di {{ discipline }}: {{ total }}€"
+    },
+    "expiringStudentsList": {
+      "title": "Allieve con certificato in scadenza o scaduto",
+      "table": {
+        "name": "Nome",
+        "certificateExpirationDate": "Data Scadenza Certificato",
+        "status": "Stato"
+      }
+    }
   }
 }

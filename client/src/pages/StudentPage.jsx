@@ -55,7 +55,7 @@ const StudentPage = ({ match }) => {
       newRegistrationDate={newRegistrationDate}
       setNewRegistrationDate={setNewRegistrationDate}
     >
-      <Button variant="secondary" onClick={history.goBack} className="backButton">
+      <Button variant="warning" onClick={history.goBack} className="backButton">
         <span role="img" aria-label="back">
           🔙 <Translation value="common.back" />
         </span>
@@ -64,7 +64,7 @@ const StudentPage = ({ match }) => {
       <div className="student-page">
         <StudentCard />
 
-        <div className="form-wrapper">
+        <div className="form-wrapper create-receipt-form">
           <UpsertReceiptForm isForCreating callback={createReceipt} />
         </div>
       </div>
