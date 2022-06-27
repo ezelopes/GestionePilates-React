@@ -167,7 +167,9 @@
       "table": {
         "name": "Nome",
         "certificateExpirationDate": "Data Scadenza Certificato",
-        "status": "Stato"
+        "status": "Stato",
+        "expired": "Scaduto",
+        "expiring": "In Scadenza"
       }
     }
   }

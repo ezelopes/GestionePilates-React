@@ -1,53 +1,53 @@
 const ages = [
-  { id: 0, age: 'Maggiorenne' },
-  { id: 1, age: 'Minorenne' },
+  { id: 'adult', age: 'Maggiorenne' },
+  { id: 'underage', age: 'Minorenne' },
 ];
 
 const disciplines = [
-  { id: 0, discipline: 'Fitness' },
-  { id: 1, discipline: 'Danza Sportiva' },
+  { id: 'sports_dance', discipline: 'Danza Sportiva' },
+  { id: 'fitness', discipline: 'Fitness' },
 ];
 
 const schools = [
-  { id: 0, school: 'Stezzano' },
-  { id: 1, school: 'Osio Sotto' },
+  { id: 'osio_sotto', school: 'Osio Sotto' },
+  { id: 'stezzano', school: 'Stezzano' },
 ];
 
 const courses = [
-  { id: 0, course: '' },
-  { id: 1, course: 'Giocodanza I' },
-  { id: 2, course: 'Giocodanza II' },
-  { id: 3, course: 'Tecnica Propedeutica I' },
-  { id: 4, course: 'Tecnica Propedeutica II' },
-  { id: 5, course: 'I Corso Danza Classica' },
-  { id: 6, course: 'Corso Pre-Accademico' },
-  { id: 7, course: 'I Corso Accademico' },
-  { id: 8, course: 'Propedeutica Danza Moderna' },
-  { id: 9, course: 'Danza Moderna Principianti' },
-  { id: 10, course: 'Danza Moderna Intermedio' },
-  { id: 11, course: 'Danza Moderna Avanzato' },
-  { id: 12, course: 'Hip Hop Break Baby' },
-  { id: 13, course: 'Hip Hop Break Children' },
-  { id: 14, course: 'Hip Hop Principianti' },
-  { id: 15, course: 'Hip Hop Intermedio' },
-  { id: 16, course: 'Hip Hop Avanzato' },
-  { id: 17, course: 'Cheerleader Senior' },
-  { id: 18, course: 'Cheerleader Peewe' },
-  { id: 19, course: 'Cheerleader Mini' },
-  { id: 20, course: 'Musical Children' },
-  { id: 21, course: 'Musiscal Teens' },
+  { id: 'none', course: '' },
+  { id: 'senior_cheerleader', course: 'Cheerleader Senior' },
+  { id: 'peewe_cheerleader', course: 'Cheerleader Peewe' },
+  { id: 'mini_cheerleader', course: 'Cheerleader Mini' },
+  { id: 'ballet_danceI', course: 'I Corso Danza Classica' },
+  { id: 'pre_academic_course', course: 'Corso Pre-Accademico' },
+  { id: 'academic_course', course: 'I Corso Accademico' },
+  { id: 'beginner_modern_dance', course: 'Danza Moderna Principianti' },
+  { id: 'intermediate_modern_dance', course: 'Danza Moderna Intermedio' },
+  { id: 'advance_modern_dance', course: 'Danza Moderna Avanzato' },
+  { id: 'baby_danceI', course: 'Giocodanza I' },
+  { id: 'baby_danceII', course: 'Giocodanza II' },
+  { id: 'baby_hip_hop', course: 'Hip Hop Break Baby' },
+  { id: 'children_hip_hop', course: 'Hip Hop Break Children' },
+  { id: 'beginner_hip_hop', course: 'Hip Hop Principianti' },
+  { id: 'intermediate_hip_hop', course: 'Hip Hop Intermedio' },
+  { id: 'advance_hip_hop', course: 'Hip Hop Avanzato' },
+  { id: 'children_musical', course: 'Musical Children' },
+  { id: 'teen_musical', course: 'Musiscal Teens' },
+  { id: 'preparatory_modern_dance', course: 'Propedeutica Danza Moderna' },
+  { id: 'preparatory_danceI', course: 'Tecnica Propedeutica I' },
+  { id: 'preparatory_danceII', course: 'Tecnica Propedeutica II' },
 ];
 
 const receiptTypes = [
-  { id: 0, type: 'Quota' },
-  { id: 1, type: 'Quota Associativa' },
-  { id: 2, type: 'Quota Saggio' },
+  { id: 'subscription_fee', type: 'Quota' },
+  { id: 'membership_fee', type: 'Quota Associativa' },
+  { id: 'dance_recital_fee', type: 'Quota Saggio' },
 ];
 
 const paymentMethods = [
-  { id: 0, type: 'Contanti' },
-  { id: 1, type: 'Assegno' },
-  { id: 2, type: 'Bonifico Bancario' },
+  { id: 'check', type: 'Assegno' },
+  { id: 'bank_transfer', type: 'Bonifico Bancario' },
+  { id: 'cash', type: 'Contanti' },
 ];
 
 const defaultAmounts = [
@@ -58,8 +58,8 @@ const defaultAmounts = [
 ];
 
 const timePeriods = [
-  { id: 0, period: 'Per Mese' },
-  { id: 1, period: 'Per Trimestre' },
+  { id: 'month', period: 'Per Mese' },
+  { id: 'trimester', period: 'Per Trimestre' },
 ];
 
 const months = [
@@ -99,9 +99,9 @@ const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
 
 const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].type;
 
-const isFitnessCourse = (courseType) => courseType === disciplines[0].discipline;
+const isDanceCourse = (courseType) => courseType === disciplines[0].discipline;
 
-const isDanceCourse = (courseType) => courseType === disciplines[1].discipline;
+const isFitnessCourse = (courseType) => courseType === disciplines[1].discipline;
 
 const isTrimester = (timePeriod) => timePeriod === timePeriods[1].period;
 

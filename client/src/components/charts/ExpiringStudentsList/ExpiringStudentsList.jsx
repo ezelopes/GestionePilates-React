@@ -46,7 +46,13 @@ const ExpiringStudentsList = ({ students }) => {
                   <Link to={`/students/${student.TaxCode}`}>{`${student.Name} ${student.Surname}`}</Link>
                 </td>
                 <td>{formatDate(new Date(student.CertificateExpirationDate))}</td>
-                <td>{student.hasExpired ? 'Scaduto' : 'In Scadenza'}</td>
+                <td>
+                  {student.hasExpired ? (
+                    <Translation value="chart.expiringStudentsList.table.expired" />
+                  ) : (
+                    <Translation value="chart.expiringStudentsList.table.expiring" />
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

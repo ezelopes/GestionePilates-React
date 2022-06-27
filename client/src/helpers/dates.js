@@ -25,6 +25,10 @@ const validateCourseBetweenTwoDates = (fromDate, toDate, CourseStartDate, Course
 
 const isValidDate = (d) => d instanceof Date;
 
+const academicYearStart = (year) => `${year}-09-01`;
+
+const academicYearEnd = (year) => `${year}-08-31`;
+
 const formatDate = (date, reversed) => {
   if (!isValidDate(date)) {
     return null;
@@ -41,4 +45,11 @@ const formatDate = (date, reversed) => {
   return `${day}-${month}-${year}`;
 };
 
-export { isDateBetweenTwoDates, validateCourseBetweenTwoDates, formatDate, getMonthsBetweenDates };
+export {
+  isDateBetweenTwoDates,
+  validateCourseBetweenTwoDates,
+  formatDate,
+  getMonthsBetweenDates,
+  academicYearStart,
+  academicYearEnd,
+};
