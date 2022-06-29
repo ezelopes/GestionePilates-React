@@ -160,7 +160,8 @@
     "incomePerCourse": {
       "selectYear": "Seleziona anno",
       "selectDiscipline": "Seleziona disciplina",
-      "title": "Incasso totale dei corsi di {{ discipline }}: {{ total }}€"
+      "title": "Incasso totale dei corsi di {{ discipline }}: {{ total }}€",
+      "subtitle": "(di cui {{ total }}€ senza corso)"
     },
     "expiringStudentsList": {
       "title": "Allieve con certificato in scadenza o scaduto",

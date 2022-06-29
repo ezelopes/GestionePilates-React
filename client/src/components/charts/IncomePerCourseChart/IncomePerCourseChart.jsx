@@ -5,7 +5,7 @@ import { Col, Container, Form, Row } from 'react-bootstrap';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
-import { years, disciplines, isFitnessCourse } from '../../../commondata';
+import { years, disciplines, isFitnessCourse, isDanceCourse } from '../../../commondata';
 import { chartColors, doughnutOptions } from '../../../commondata/charts.config';
 import Translation from '../../common/Translation';
 import useAmountPaidPerCourse from './useAmountPaidPerCourse';
@@ -16,15 +16,16 @@ const IncomePerCourseChart = ({ receiptsWithStudentInfo }) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear() - 1);
   const [selectedDiscipline, setSelectedDiscipline] = useState(disciplines[0].discipline);
 
-  const { amountPaidPerCourse, fitnessTotal, danceCoursesTotal } = useAmountPaidPerCourse(receiptsWithStudentInfo, selectedYear);
+  const { amountPaidPerCourse, fitnessTotal, danceCoursesTotal, unassignedDanceCoursesTotal } = useAmountPaidPerCourse(
+    receiptsWithStudentInfo,
+    selectedYear
+  );
 
   const data = {
-    labels: Object.keys(amountPaidPerCourse).map((courseAmount) => courseAmount),
+    labels: amountPaidPerCourse.map(({ label }) => label),
     datasets: [
       {
-        data: isFitnessCourse(selectedDiscipline)
-          ? [fitnessTotal]
-          : Object.keys(amountPaidPerCourse).map((courseAmount) => amountPaidPerCourse[courseAmount]),
+        data: isFitnessCourse(selectedDiscipline) ? [fitnessTotal] : amountPaidPerCourse.map(({ amount }) => amount),
         backgroundColor: chartColors,
         maxBarThickness: 80,
       },
@@ -72,10 +73,21 @@ const IncomePerCourseChart = ({ receiptsWithStudentInfo }) => {
           <Translation
             value="chart.incomePerCourse.title"
             replace={{
-              total: isFitnessCourse(selectedDiscipline) ? fitnessTotal : danceCoursesTotal,
               discipline: selectedDiscipline.toLowerCase(),
+              total: isFitnessCourse(selectedDiscipline) ? fitnessTotal : danceCoursesTotal,
             }}
           />
+          {isDanceCourse(selectedDiscipline) && (
+            <>
+              &nbsp;
+              <Translation
+                value="chart.incomePerCourse.subtitle"
+                replace={{
+                  total: unassignedDanceCoursesTotal,
+                }}
+              />
+            </>
+          )}
         </b>
         <div>
           <Doughnut data={data} options={doughnutOptions} />

@@ -7,11 +7,15 @@ const useAmountPaidPerCourse = (receipts, selectedYear) =>
   useMemo(() => {
     let fitnessTotal = 0;
     let danceCoursesTotal = 0;
+    let unassignedDanceCoursesTotal = 0;
 
     const defaultCourseAmount = courses
       .filter(({ course }) => course !== '')
       .reduce((json, { course }) => {
-        json[course] = 0;
+        json[course] = {
+          label: course,
+          amount: 0,
+        };
 
         return json;
       }, {});
@@ -30,7 +34,9 @@ const useAmountPaidPerCourse = (receipts, selectedYear) =>
 
         if (isDanceCourse(receipt.Discipline)) {
           if (receipt.Course) {
-            accumulator[receipt.Course] += parseInt(receipt.AmountPaid, 10);
+            accumulator[receipt.Course].amount += parseInt(receipt.AmountPaid, 10);
+          } else {
+            unassignedDanceCoursesTotal += parseInt(receipt.AmountPaid, 10);
           }
 
           danceCoursesTotal += parseInt(receipt.AmountPaid, 10);
@@ -42,7 +48,14 @@ const useAmountPaidPerCourse = (receipts, selectedYear) =>
       return accumulator;
     }, defaultCourseAmount);
 
-    return { amountPaidPerCourse, fitnessTotal, danceCoursesTotal };
+    const amountPaidPerCourseSorted = Object.keys(amountPaidPerCourse)
+      .map((key) => ({
+        label: amountPaidPerCourse[key].label,
+        amount: amountPaidPerCourse[key].amount,
+      }))
+      .sort((a, b) => b.amount - a.amount);
+
+    return { amountPaidPerCourse: amountPaidPerCourseSorted, fitnessTotal, danceCoursesTotal, unassignedDanceCoursesTotal };
   }, [receipts, selectedYear]);
 
 export default useAmountPaidPerCourse;
