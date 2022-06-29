@@ -21,7 +21,7 @@ const ExpiringStudentsList = ({ students }) => {
     <Container fluid>
       <div className="title">
         <h3>
-          <Translation value="chart.expiringStudentsList.title" />
+          <Translation value="chart.expiringStudentsList.title" replace={{ total: students.length }} />
         </h3>
       </div>
       <div>
@@ -59,7 +59,7 @@ const ExpiringStudentsList = ({ students }) => {
         </table>
       </div>
       <div className="load-more-button">
-        <Button variant="primary" onClick={() => setNext(next + PAGINATION)}>
+        <Button variant="primary" onClick={() => setNext(next + PAGINATION)} disabled={studentsToShow.length === students.length}>
           <Translation value="buttons.loadMore" />
         </Button>
       </div>

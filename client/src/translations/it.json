@@ -164,7 +164,7 @@
       "subtitle": "(di cui {{ total }}€ senza corso)"
     },
     "expiringStudentsList": {
-      "title": "Allieve con certificato in scadenza o scaduto",
+      "title": "Allieve con certificato in scadenza o scaduto (totale: {{ total }})",
       "table": {
         "name": "Nome",
         "certificateExpirationDate": "Data Scadenza Certificato",
