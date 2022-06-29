@@ -17,38 +17,27 @@ const useCountByMonth = (receiptsWithStudentInfo, selectedYear) =>
           res.forEach(({ month, year }) => {
             if (month === 0 && year === selectedYear + 1) {
               accumulator.january += 1;
-            }
-            if (month === 1 && year === selectedYear + 1) {
+            } else if (month === 1 && year === selectedYear + 1) {
               accumulator.february += 1;
-            }
-            if (month === 2 && year === selectedYear + 1) {
+            } else if (month === 2 && year === selectedYear + 1) {
               accumulator.march += 1;
-            }
-            if (month === 3 && year === selectedYear + 1) {
+            } else if (month === 3 && year === selectedYear + 1) {
               accumulator.april += 1;
-            }
-            if (month === 4 && year === selectedYear + 1) {
+            } else if (month === 4 && year === selectedYear + 1) {
               accumulator.may += 1;
-            }
-            if (month === 5 && year === selectedYear + 1) {
+            } else if (month === 5 && year === selectedYear + 1) {
               accumulator.june += 1;
-            }
-            if (month === 6 && year === selectedYear + 1) {
+            } else if (month === 6 && year === selectedYear + 1) {
               accumulator.july += 1;
-            }
-            if (month === 7 && year === selectedYear + 1) {
+            } else if (month === 7 && year === selectedYear + 1) {
               accumulator.august += 1;
-            }
-            if (month === 8 && year === selectedYear) {
+            } else if (month === 8 && year === selectedYear) {
               accumulator.september += 1;
-            }
-            if (month === 9 && year === selectedYear) {
+            } else if (month === 9 && year === selectedYear) {
               accumulator.october += 1;
-            }
-            if (month === 10 && year === selectedYear) {
+            } else if (month === 10 && year === selectedYear) {
               accumulator.november += 1;
-            }
-            if (month === 11 && year === selectedYear) {
+            } else if (month === 11 && year === selectedYear) {
               accumulator.december += 1;
             }
           });
