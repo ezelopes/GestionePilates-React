@@ -132,7 +132,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="upsert-receipt-form">
+        <div className={isSubscriptionFee(newReceiptType) ? 'upsert-receipt-form' : 'upsert-membership-fee-form'}>
           <div>
             <Form.Label>
               <Translation value="receiptForm.receiptNumber" />

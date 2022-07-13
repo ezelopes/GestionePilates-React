@@ -12,6 +12,19 @@
   width: 15vw;
 }
 
+.upsert-membership-fee-form {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: left;
+  align-items: center;
+  gap: 1em 3em;
+}
+
+.upsert-membership-fee-form input[type='date'] {
+  width: 15vw;
+}
+
 .checkbox-container {
   margin: 1em auto;
   display: flex;
@@ -24,6 +37,23 @@
   .upsert-receipt-form {
     grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(4, auto);
+  }
+
+  .upsert-membership-fee-form {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .upsert-membership-fee-form > * {
+    width: 100%;
+  }
+
+  .upsert-membership-fee-form input[type='date'] {
+    width: 100%;
+  }
+
+  .upsert-membership-fee-form > div > .css-2b097c-container {
+    max-width: 100%;
   }
 }
 
@@ -42,6 +72,6 @@
   }
 
   .upsert-receipt-form > div > .css-2b097c-container {
-    width: 100%;
+    max-width: 100%;
   }
 }

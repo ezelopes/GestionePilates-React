@@ -13,6 +13,7 @@
   display: flex;
   align-items: center;
   height: -webkit-fill-available;
+  width: auto !important;
 }
 
 @media screen and (max-width: 768px) {
