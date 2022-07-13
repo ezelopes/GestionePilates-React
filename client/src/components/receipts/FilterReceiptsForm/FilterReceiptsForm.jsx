@@ -11,6 +11,7 @@ import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBas
 import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../../helpers/printPDF';
 import toastConfig from '../../../commondata/toast.config';
 import { BLANK_DATE, isSubscriptionFee, paymentMethods } from '../../../commondata';
+import isTemporaryReceipt from '../../../helpers/isTemporaryReceipt';
 
 const filterFields = [
   { field: 'receipt_date', description: 'Data Ricevuta' },
@@ -70,10 +71,11 @@ const FilterReceiptsForm = ({
     }
 
     const receipts = allReceipts.filter(
-      ({ ReceiptDate, PaymentMethod, ReceiptType }) =>
+      ({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) =>
         isDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
         PaymentMethod.includes(filteredPaymentMethod) &&
-        isSubscriptionFee(ReceiptType)
+        isSubscriptionFee(ReceiptType) &&
+        !isTemporaryReceipt(ReceiptNumber)
     );
 
     const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);

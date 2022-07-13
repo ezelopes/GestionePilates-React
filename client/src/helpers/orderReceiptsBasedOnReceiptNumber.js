@@ -1,6 +1,8 @@
+import isTemporaryReceipt from './isTemporaryReceipt';
+
 const orderReceiptsBasedOnReceiptNumber = (receipts) => {
   const orderedReceipts = receipts.sort((a, b) => {
-    if (a.ReceiptNumber === '') {
+    if (a.ReceiptNumber === '' || isTemporaryReceipt(a.ReceiptNumber)) {
       return -1;
     }
 
