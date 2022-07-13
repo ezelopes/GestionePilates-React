@@ -56,6 +56,7 @@ const ReceiptsPage = () => {
         allMembershipFees={allMembershipFees}
         currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
+        setAllReceipts={setAllReceipts}
       >
         {isMembershipFeeSelected ? <MembershipFeesList /> : <ReceiptsList />}
       </ReceiptProvider>

@@ -1,5 +1,12 @@
 const { Router } = require('express');
-const { getStudentReceipts, getAllReceipts, createReceipt, updateReceipt, deleteReceipt } = require('../database/receiptQuery');
+const {
+  getStudentReceipts,
+  getAllReceipts,
+  createReceipt,
+  updateReceipt,
+  deleteReceipt,
+  deleteReceipts,
+} = require('../database/receiptQuery');
 
 const receiptRouter = new Router();
 
@@ -53,10 +60,22 @@ const deleteReceiptEndpoint = async (req, res) => {
   }
 };
 
+const deleteReceiptsEndpoint = async (req, res) => {
+  try {
+    const { ReceiptIDs } = req.body;
+    const { message } = await deleteReceipts(ReceiptIDs);
+
+    res.status(200).send({ message });
+  } catch (e) {
+    res.status(500).send({ message: e.message });
+  }
+};
+
 receiptRouter.get('/getStudentReceipts/:TaxCode', getStudentReceiptsEndpoint);
 receiptRouter.get('/getAllReceipts', getAllReceiptsEndpoint);
 receiptRouter.put('/createReceipt', createReceiptEndpoint);
 receiptRouter.post('/updateReceipt', updateReceiptEndpoint);
 receiptRouter.delete('/deleteReceipt', deleteReceiptEndpoint);
+receiptRouter.delete('/deleteReceipts', deleteReceiptsEndpoint);
 
 module.exports = receiptRouter;

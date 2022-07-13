@@ -20,6 +20,7 @@ const receiptResponseMessages = {
     create: 'Ricevuta Inserita Correttamente!',
     update: 'Ricevuta Aggiornata Correttamente!',
     delete: 'Ricevuta Eliminata Correttamente!',
+    deleteMultiple: 'Ricevute Eliminate Correttamente!',
   },
   error: {
     getMultiple: 'Errore nel recuperare le ricevute!',

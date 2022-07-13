@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 
+import { toast } from 'react-toastify';
 import { useReceipt } from '../ReceiptContext';
 import FilterReceiptsForm from '../FilterReceiptsForm';
 import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
@@ -9,6 +10,8 @@ import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
 import Translation from '../../common/Translation';
 import { printSelectedReceipts } from '../../../helpers/printPDF';
 import { gridOptionsDefaultReceipts } from '../../../commondata/grid.config';
+import { deleteReceipts } from '../../../helpers/apiCalls';
+import toastConfig from '../../../commondata/toast.config';
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
@@ -40,13 +43,13 @@ const columnsDefinition = [
 ];
 
 const ReceiptsList = () => {
-  const { allReceipts, currentReceipts, setCurrentReceipts } = useReceipt();
+  const { allReceipts, currentReceipts, setCurrentReceipts, setAllReceipts } = useReceipt();
 
   const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
   const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
-
   const [selectedReceipts, setSelectedReceipts] = useState([]);
+  const [showDeleteReceiptsModal, setShowDeleteReceiptsModal] = useState(false);
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
@@ -60,6 +63,26 @@ const ReceiptsList = () => {
     });
 
     return setSelectedReceipts(receipts);
+  };
+
+  const handleReceiptDelete = async () => {
+    const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
+
+    const { status, message } = await deleteReceipts(receiptIDs);
+
+    if (status === 200) {
+      setCurrentReceipts(currentReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
+
+      setAllReceipts(allReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
+
+      setSelectedReceipts([]);
+
+      toast.success(message, toastConfig);
+    } else {
+      toast.error(message, toastConfig);
+    }
+
+    setShowDeleteReceiptsModal(false);
   };
 
   useEffect(() => {
@@ -87,14 +110,56 @@ const ReceiptsList = () => {
           />
         </div>
 
-        <Button variant="success" onClick={() => printSelectedReceipts(selectedReceipts)} style={{ marginTop: '1em' }}>
-          <span role="img" aria-label="print-selected">
-            🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
-          </span>
-        </Button>
+        <div className="buttons-container">
+          <Button
+            variant="success"
+            onClick={() => printSelectedReceipts(selectedReceipts)}
+            disabled={selectedReceipts.length < 1}
+          >
+            <span role="img" aria-label="print-selected">
+              🖨️ <Translation value="buttons.receipt.printSelectedReceipts" />
+            </span>
+          </Button>
+
+          <Button
+            variant="danger"
+            onClick={() => {
+              setShowDeleteReceiptsModal(true);
+            }}
+            disabled={selectedReceipts.length < 1}
+          >
+            <span role="img" aria-label="delete-selected">
+              🗑️ <Translation value="buttons.receipt.deleteSelectedReceipts" />
+            </span>
+          </Button>
+        </div>
       </div>
 
       <PrintExpiringReceiptsForm />
+
+      <Modal
+        show={showDeleteReceiptsModal}
+        onHide={() => setShowDeleteReceiptsModal(false)}
+        dialogClassName="update-modal"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <Translation value="modalsContent.deleteReceiptsHeader" />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Translation value="modalsContent.deleteReceiptsBody" />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleReceiptDelete}>
+            <Translation value="buttons.receipt.deleteReceipts" />
+          </Button>
+          <Button variant="secondary" onClick={() => setShowDeleteReceiptsModal(false)}>
+            <Translation value="buttons.close" />
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

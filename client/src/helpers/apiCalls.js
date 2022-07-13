@@ -166,6 +166,18 @@ const deleteReceipt = async (ReceiptID) => {
   return { status: response.status, message: responseParsed.message };
 };
 
+const deleteReceipts = async (ReceiptIDs) => {
+  const response = await fetch('/api/receipt/deleteReceipts', {
+    method: 'DELETE',
+    headers,
+    body: JSON.stringify({ ReceiptIDs }),
+  });
+
+  const responseParsed = await response.json();
+
+  return { status: response.status, message: responseParsed.message };
+};
+
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
@@ -220,6 +232,7 @@ export {
   updateReceipt,
   deleteStudent,
   deleteReceipt,
+  deleteReceipts,
   deleteTeacher,
   getAllStudents,
   getAllTeachers,
