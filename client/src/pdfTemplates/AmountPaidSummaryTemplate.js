@@ -18,14 +18,20 @@ export const AmountPaidSummaryTemplate = (
     ],
   ];
 
-  receiptList.forEach((receipt) =>
+  let totalMembershipFee = 0;
+
+  receiptList.forEach((receipt) => {
+    if (receipt.IncludeMembershipFee) {
+      totalMembershipFee += 10;
+    }
+
     tableBody.push([
       receipt.ReceiptNumber,
       receipt.ReceiptDate ? formatDate(new Date(receipt.ReceiptDate)) : BLANK_DATE,
       receipt.AmountPaid,
       receipt.IncludeMembershipFee ? '√' : '',
-    ])
-  );
+    ]);
+  });
 
   const content = [
     {
@@ -47,7 +53,7 @@ export const AmountPaidSummaryTemplate = (
           text: 'Metodo Pagamento: ',
         },
         {
-          text: `${filteredPaymentMethod.toUpperCase()}`,
+          text: `${filteredPaymentMethod ? filteredPaymentMethod.toUpperCase() : 'Assegno, Bonifico e Contanti'}`,
           bold: true,
         },
       ],
@@ -83,6 +89,34 @@ export const AmountPaidSummaryTemplate = (
         },
         {
           text: `${filteredAmountPaid}€`,
+          bold: true,
+        },
+      ],
+      lineHeight: 1.5,
+      fontSize: 12,
+      margin: [0, 0, 0, 10],
+    },
+    {
+      text: [
+        {
+          text: 'Totale quote associative: ',
+        },
+        {
+          text: `${totalMembershipFee}€`,
+          bold: true,
+        },
+      ],
+      lineHeight: 1.5,
+      fontSize: 12,
+      margin: [0, 0, 0, 10],
+    },
+    {
+      text: [
+        {
+          text: 'Totale senza quote associative: ',
+        },
+        {
+          text: `${filteredAmountPaid - totalMembershipFee}€`,
           bold: true,
         },
       ],

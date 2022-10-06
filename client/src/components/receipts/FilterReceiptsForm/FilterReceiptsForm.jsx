@@ -11,6 +11,7 @@ import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBas
 import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../../helpers/printPDF';
 import toastConfig from '../../../commondata/toast.config';
 import { BLANK_DATE, isSubscriptionFee, paymentMethods } from '../../../commondata';
+import isTemporaryReceipt from '../../../helpers/isTemporaryReceipt';
 
 const filterFields = [
   { field: 'receipt_date', description: 'Data Ricevuta' },
@@ -65,16 +66,18 @@ const FilterReceiptsForm = ({
       return toast.error(getTranslation('toast.error.noEligibleFilter'), toastConfig);
     }
 
-    if (!filteredPaymentMethod) {
-      return toast.error(getTranslation('toast.error.noPaymentMethodSelected'), toastConfig);
-    }
-
-    const receipts = allReceipts.filter(
-      ({ ReceiptDate, PaymentMethod, ReceiptType }) =>
+    const receipts = allReceipts.filter(({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) => {
+      const isValid =
         isDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
-        PaymentMethod.includes(filteredPaymentMethod) &&
-        isSubscriptionFee(ReceiptType)
-    );
+        isSubscriptionFee(ReceiptType) &&
+        !isTemporaryReceipt(ReceiptNumber);
+
+      if (filteredPaymentMethod) {
+        return isValid && PaymentMethod.includes(filteredPaymentMethod);
+      }
+
+      return isValid;
+    });
 
     const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
 
@@ -167,7 +170,7 @@ const FilterReceiptsForm = ({
           <Button
             variant="success"
             onClick={calculateAmountBetweenDatesAndByPaymentMethod}
-            disabled={filterByField !== 'receipt_date' || !filteredPaymentMethod}
+            disabled={filterByField !== 'receipt_date'}
           >
             <span role="img" aria-label="summary">
               🧾 <Translation value="buttons.receipt.calculateTotalAmount" />

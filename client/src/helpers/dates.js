@@ -1,3 +1,22 @@
+const getMonthsBetweenDates = (fromDate, toDate) => {
+  const fromYear = fromDate.getFullYear();
+  const fromMonth = fromDate.getMonth();
+  const toYear = toDate.getFullYear();
+  const toMonth = toDate.getMonth();
+  const months = [];
+
+  for (let year = fromYear; year <= toYear; year += 1) {
+    let month = year === fromYear ? fromMonth : 0;
+    const monthLimit = year === toYear ? toMonth : 11;
+
+    for (; month <= monthLimit; month += 1) {
+      months.push({ year, month });
+    }
+  }
+
+  return months;
+};
+
 const isDateBetweenTwoDates = (fromDate, toDate, givenDate) =>
   new Date(givenDate) >= new Date(fromDate) && new Date(givenDate) <= new Date(toDate);
 
@@ -5,6 +24,10 @@ const validateCourseBetweenTwoDates = (fromDate, toDate, CourseStartDate, Course
   new Date(CourseStartDate) >= new Date(fromDate) && new Date(CourseEndDate) <= new Date(toDate);
 
 const isValidDate = (d) => d instanceof Date;
+
+const academicYearStart = (year) => `${year}-09-01`;
+
+const academicYearEnd = (year) => `${year}-08-31`;
 
 const formatDate = (date, reversed) => {
   if (!isValidDate(date)) {
@@ -22,4 +45,11 @@ const formatDate = (date, reversed) => {
   return `${day}-${month}-${year}`;
 };
 
-export { isDateBetweenTwoDates, validateCourseBetweenTwoDates, formatDate };
+export {
+  isDateBetweenTwoDates,
+  validateCourseBetweenTwoDates,
+  formatDate,
+  getMonthsBetweenDates,
+  academicYearStart,
+  academicYearEnd,
+};

@@ -7,13 +7,13 @@ import NotFoundPage from './NotFoundPage';
 
 import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
+import StudentCard from '../components/student/StudentCard';
 import UpsertReceiptForm from '../components/receipts/UpsertReceiptForm';
 import Translation from '../components/common/Translation';
 
 import { createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
 
 import '../styles/student-page.css';
-import StudentCard from '../components/student/StudentCard';
 
 const StudentPage = ({ match }) => {
   const [loading, setLoading] = useState(true);
@@ -55,21 +55,21 @@ const StudentPage = ({ match }) => {
       newRegistrationDate={newRegistrationDate}
       setNewRegistrationDate={setNewRegistrationDate}
     >
-      <div>
-        <Button variant="secondary" onClick={history.goBack}>
-          <span role="img" aria-label="back">
-            🔙 <Translation value="common.back" />
-          </span>
-        </Button>
+      <Button variant="warning" onClick={history.goBack} className="backButton">
+        <span role="img" aria-label="back">
+          🔙 <Translation value="common.back" />
+        </span>
+      </Button>
 
+      <div className="student-page">
         <StudentCard />
 
-        <StudentReceiptsList />
-
-        <div className="form-wrapper">
+        <div className="form-wrapper create-receipt-form">
           <UpsertReceiptForm isForCreating callback={createReceipt} />
         </div>
       </div>
+
+      <StudentReceiptsList />
     </StudentProvider>
   );
 };

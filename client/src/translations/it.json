@@ -71,6 +71,8 @@
       "createReceipt": "Crea Ricevuta",
       "updateReceipt": "Aggiorna Ricevuta",
       "deleteReceipt": "Elimina Ricevuta",
+      "deleteReceipts": "Elimina Ricevute",
+      "deleteSelectedReceipts": "Elimina Ricevute Selezionate",
       "printReceipt": "Stampa Ricevuta",
       "printSelectedReceipts": "Stampa Ricevute Selezionate",
       "printMembershipFeeSummary": "Stampa Riepilogo Quote Associative",
@@ -87,7 +89,8 @@
     "close": "Chiudi",
     "resetForm": "Reset Form",
     "removeFilters": "Rimuovi Filtri",
-    "notFoundPage": "Torna alla Lista delle Allieve"
+    "notFoundPage": "Torna alla Lista delle Allieve",
+    "loadMore": "Mostra altro"
   },
   "navbar": {
     "studentsList": "Lista Allieve",
@@ -103,6 +106,8 @@
     "updateReceiptHeader": "Aggiorna Ricevuta",
     "deleteReceiptBody": "Sei sicura di voler eliminare la ricevuta selezionata?",
     "deleteReceiptHeader": "Elimina Ricevuta",
+    "deleteReceiptsHeader": "Elimina Ricevute",
+    "deleteReceiptsBody": "Sei sicura di voler eliminare le ricevute selezionate?",
     "updateTeacherHeader": "Aggiorna Insegnante",
     "deleteTeacherHeader": "Elimina Insegnante",
     "updateRegistrationDateHeader": "Aggiorna Data Iscrizione",
@@ -149,5 +154,28 @@
   },
   "notFoundPage": {
     "title": "Oops! Ti sei persa?"
+  },
+  "chart": {
+    "studentCount": {
+      "selectYear": "Seleziona anno",
+      "selectPeriodType": "Seleziona tipologia",
+      "title": "Numero di allieve iscritte {{ period }} nel {{ year }}/{{ yearPlusOne }}"
+    },
+    "incomePerCourse": {
+      "selectYear": "Seleziona anno",
+      "selectDiscipline": "Seleziona disciplina",
+      "title": "Incasso totale dei corsi di {{ discipline }}: {{ total }}€",
+      "subtitle": "(di cui {{ total }}€ senza corso)"
+    },
+    "expiringStudentsList": {
+      "title": "Allieve con certificato in scadenza o scaduto (totale: {{ total }})",
+      "table": {
+        "name": "Nome",
+        "certificateExpirationDate": "Data Scadenza Certificato",
+        "status": "Stato",
+        "expired": "Scaduto",
+        "expiring": "In Scadenza"
+      }
+    }
   }
 }

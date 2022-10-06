@@ -3,10 +3,16 @@
   justify-content: left;
   align-items: center;
   grid-template-columns: repeat(3, auto);
-  gap: 1vw;
+  gap: 1em;
   margin-top: 2em;
 }
 
 .print-receipt-form > label {
   margin-bottom: 0;
+}
+
+@media screen and (max-width: 576px) {
+  .print-receipt-form {
+    grid-template-columns: 100%;
+  }
 }

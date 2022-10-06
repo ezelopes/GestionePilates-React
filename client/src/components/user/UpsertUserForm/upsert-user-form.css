@@ -14,3 +14,9 @@
   margin-top: 2em;
   gap: 2em;
 }
+
+@media screen and (max-width: 992px) {
+  .user-form {
+    grid-template-columns: 40% 50%;
+  }
+}

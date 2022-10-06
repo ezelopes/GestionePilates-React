@@ -70,6 +70,7 @@ const mappingReceiptsWithStudentInfo = (rows) =>
     ParentSurname: row.CognomeGenitore,
     ParentTaxCode: row.CodiceFiscaleGenitore,
 
+    ReceiptID: row.RicevutaID,
     ReceiptNumber: row.NumeroRicevuta,
     AmountPaid: row.SommaEuro,
     PaymentMethod: row.TipoPagamento,

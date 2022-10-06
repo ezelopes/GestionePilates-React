@@ -56,18 +56,10 @@ const PrintStudentsForm = ({ students }) => {
             ))}
           </Form.Control>
         </Form.Group>
-        <Button
-          variant="success"
-          onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYear)}
-          style={{ marginTop: '1em' }}
-        >
+        <Button variant="success" onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYear)}>
           🖨️ <Translation value="buttons.student.printExpiringGreenPass" />
         </Button>
-        <Button
-          variant="success"
-          onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYear)}
-          style={{ marginTop: '1em' }}
-        >
+        <Button variant="success" onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYear)}>
           🖨️ <Translation value="buttons.student.printBasedOnRegistrationDate" />
         </Button>
       </div>

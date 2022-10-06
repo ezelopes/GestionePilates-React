@@ -54,7 +54,7 @@ const StudentCard = () => {
         {studentInfo.Name} {studentInfo.Surname}
       </div>
 
-      <div className="buttons-container">
+      <div className="buttons-container student-card-button">
         <Button onClick={() => printRegistrationForm(studentInfo)}>
           <span role="img" aria-label="module">
             🖨️ <Translation value="buttons.student.printRegistrationForm" />

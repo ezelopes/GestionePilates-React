@@ -7,3 +7,23 @@
   align-items: center;
   gap: 1em;
 }
+
+.print-students-form > button {
+  margin-top: 1em;
+}
+
+@media screen and (max-width: 768px) {
+  .print-students-form {
+    grid-template-columns: repeat(2, auto);
+  }
+
+  .print-students-form > button {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .print-students-form {
+    grid-template-columns: repeat(1, auto);
+  }
+}

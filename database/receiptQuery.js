@@ -106,10 +106,23 @@ const deleteReceipt = async (ReceiptID) => {
   }
 };
 
+const deleteReceipts = async (ReceiptIDs) => {
+  try {
+    await knex(RECEIPT_TABLE).whereIn('RicevutaID', ReceiptIDs).del();
+
+    return { message: receiptResponseMessages.ok.deleteMultiple };
+  } catch (error) {
+    console.log(error);
+
+    return { message: receiptResponseMessages.error.delete };
+  }
+};
+
 module.exports = {
   getStudentReceipts,
   getAllReceipts,
   createReceipt,
   updateReceipt,
   deleteReceipt,
+  deleteReceipts,
 };

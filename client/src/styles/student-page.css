@@ -1,0 +1,25 @@
+.backButton {
+  box-shadow: var(--default-box-shadow);
+}
+
+.student-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2em;
+  align-items: center;
+}
+
+.create-receipt-form {
+  display: flex;
+  align-items: center;
+  height: -webkit-fill-available;
+  width: auto !important;
+}
+
+@media screen and (max-width: 768px) {
+  .student-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+}
