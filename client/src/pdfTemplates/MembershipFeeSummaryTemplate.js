@@ -13,6 +13,9 @@ export const MembershipFeeSummaryTemplate = (studentReceiptList, fromDate, toDat
     tableBody.push([`${Name} ${Surname}`, ReceiptDate ? formatDate(new Date(ReceiptDate)) : BLANK_DATE])
   );
 
+  // 10 is the cost of each membership fee
+  const membershipFeeTotal = studentReceiptList.length * 10;
+
   const content = [
     {
       image: labelLogo,
@@ -39,6 +42,20 @@ export const MembershipFeeSummaryTemplate = (studentReceiptList, fromDate, toDat
       ],
       lineHeight: 1.5,
       fontSize: 16,
+      margin: [0, 0, 0, 10],
+    },
+    {
+      text: [
+        {
+          text: 'Totale quote associative: ',
+        },
+        {
+          text: `${membershipFeeTotal}€`,
+          bold: true,
+        },
+      ],
+      lineHeight: 1.5,
+      fontSize: 12,
       margin: [0, 0, 0, 5],
     },
     {

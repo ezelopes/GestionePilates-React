@@ -11,6 +11,8 @@ import { barChartOptions, chartColors } from '../../../commondata/charts.config'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+// TODO: Export these
+
 const monthLabels = [
   'Settembre',
   'Ottobre',

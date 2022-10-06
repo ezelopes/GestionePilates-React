@@ -66,17 +66,18 @@ const FilterReceiptsForm = ({
       return toast.error(getTranslation('toast.error.noEligibleFilter'), toastConfig);
     }
 
-    if (!filteredPaymentMethod) {
-      return toast.error(getTranslation('toast.error.noPaymentMethodSelected'), toastConfig);
-    }
-
-    const receipts = allReceipts.filter(
-      ({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) =>
+    const receipts = allReceipts.filter(({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) => {
+      const isValid =
         isDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
-        PaymentMethod.includes(filteredPaymentMethod) &&
         isSubscriptionFee(ReceiptType) &&
-        !isTemporaryReceipt(ReceiptNumber)
-    );
+        !isTemporaryReceipt(ReceiptNumber);
+
+      if (filteredPaymentMethod) {
+        return isValid && PaymentMethod.includes(filteredPaymentMethod);
+      }
+
+      return isValid;
+    });
 
     const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
 
@@ -169,7 +170,7 @@ const FilterReceiptsForm = ({
           <Button
             variant="success"
             onClick={calculateAmountBetweenDatesAndByPaymentMethod}
-            disabled={filterByField !== 'receipt_date' || !filteredPaymentMethod}
+            disabled={filterByField !== 'receipt_date'}
           >
             <span role="img" aria-label="summary">
               🧾 <Translation value="buttons.receipt.calculateTotalAmount" />
