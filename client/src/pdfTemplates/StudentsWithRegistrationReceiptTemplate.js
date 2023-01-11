@@ -1,5 +1,5 @@
 export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, year, labelLogo) => {
-  const docTitle = `ALLIEVE ISCRITTE NEL ${year}`;
+  const docTitle = `ALLIEVE ISCRITTE NEL ${year} (dal 01-09-${year} al 30-06-${parseInt(year, 10) + 1})`;
 
   const tableBody = [
     [

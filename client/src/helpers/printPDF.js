@@ -382,6 +382,10 @@ const printStudentsWithRegistrationReceipt = async (year) => {
 
     const studentsWithRegistrationReceipt = await getStudentsWithRegistrationReceipt(year);
 
+    if (!studentsWithRegistrationReceipt.length) {
+      return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
+    }
+
     const documentDefinition = StudentsWithRegistrationReceiptTemplate(studentsWithRegistrationReceipt, year, labelLogo);
 
     pdfMake.createPdf(documentDefinition).open();

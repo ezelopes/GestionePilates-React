@@ -60,6 +60,7 @@
       "createStudent": "Crea Allieva",
       "updateStudent": "Aggiorna Allieva",
       "deleteStudent": "Elimina Allieva",
+      "printStudents": "Stampa Allieve",
       "updateRegistrationDate": "Aggiorna Data Iscrizione",
       "printSelectedStudents": "Stampa Allieve Selezionate",
       "printExpiringStudents": "Stampa Lista Allieve In Scadenza",
@@ -176,6 +177,10 @@
         "expired": "Scaduto",
         "expiring": "In Scadenza"
       }
+    },
+    "reportSummary": {
+      "title": "Allieve con data iscrizione per anno",
+      "selectYear": "Seleziona anno"
     }
   }
 }

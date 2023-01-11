@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import StudentCountChart from '../components/charts/StudentCountChart';
 import { getAllStudents, getAllReceipts } from '../helpers/apiCalls';
 import { isMembershipFee } from '../commondata';
@@ -7,7 +7,7 @@ import { isMembershipFee } from '../commondata';
 import IncomePerCourseChart from '../components/charts/IncomePerCourseChart';
 import ExpiringStudentsList from '../components/charts/ExpiringStudentsList';
 import { isDateBetweenTwoDates } from '../helpers/dates';
-import { printStudentsWithRegistrationReceipt } from '../helpers/printPDF';
+import ReportSummary from '../components/charts/ReportSummary';
 
 const HomePage = () => {
   const [receiptsWithStudentInfo, setReceiptsWithStudentInfo] = useState([]);
@@ -59,19 +59,15 @@ const HomePage = () => {
     <Container>
       <Row>
         <Col>
-          <Container fluid>
-            <div className="buttons-container mt-0">
-              <Button onClick={() => printStudentsWithRegistrationReceipt(2021)}>Hello</Button>
-            </div>
-          </Container>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
           <StudentCountChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
         </Col>
         <Col>
           <IncomePerCourseChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ReportSummary />
         </Col>
       </Row>
       <Row>
