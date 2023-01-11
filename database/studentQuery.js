@@ -1,6 +1,6 @@
 const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/dates');
-const { mappingStudents, mappingReceipt } = require('./helpers/mapDatabaseEntries');
+const { mappingStudents, mappingReceipt, mappingReceiptsWithStudentInfo } = require('./helpers/mapDatabaseEntries');
 const { studentResponseMessages } = require('./helpers/responses');
 
 const STUDENT_TABLE = 'allieva';
@@ -46,6 +46,47 @@ const getStudentWithReceipts = async (TaxCode) => {
     console.log(error);
 
     return { message: studentResponseMessages.error.getSingle };
+  }
+};
+
+const getStudentsWithRegistrationReceipt = async (year) => {
+  try {
+    const from = `${year}-09-01`;
+    const to = `${year + 1}-06-30`; // ? `${year + 1}-08-31`
+
+    const studentWithReceipts = await knex(`${STUDENT_TABLE} as a`)
+      .select(
+        'a.CodiceFiscale',
+        'a.Nome',
+        'a.Cognome',
+        'a.Citta',
+        'a.Indirizzo',
+        'a.DataNascita',
+        'a.LuogoNascita',
+        'r.DataRicevuta',
+        'r.NumeroRicevuta'
+      )
+      .join(
+        `${RECEIPT_TABLE} as r`,
+        `r.FK_AllievaID`,
+        '=',
+        knex.raw(
+          `(SELECT ric.FK_AllievaID
+            FROM ricevuta AS ric
+            WHERE a.AllievaID = ric.FK_AllievaID
+            AND r.NumeroRicevuta NOT LIKE 'C%'
+            AND (r.DataRicevuta BETWEEN '${from}' AND '${to}')
+            ORDER BY ric.DataRicevuta LIMIT 1)`
+        )
+      )
+      .groupBy(`a.CodiceFiscale`)
+      .orderBy(`r.DataRicevuta`, 's.Nome', 's.Cognome');
+
+    return mappingReceiptsWithStudentInfo(studentWithReceipts);
+  } catch (error) {
+    console.log(error);
+
+    return { message: studentResponseMessages.error.getMultiple };
   }
 };
 
@@ -148,6 +189,7 @@ module.exports = {
   getStudents,
   getStudent,
   getStudentWithReceipts,
+  getStudentsWithRegistrationReceipt,
   createStudent,
   updateStudent,
   updateRegistrationDate,

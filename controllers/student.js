@@ -3,6 +3,7 @@ const {
   getStudents,
   getStudent,
   getStudentWithReceipts,
+  getStudentsWithRegistrationReceipt,
   createStudent,
   updateStudent,
   updateRegistrationDate,
@@ -38,6 +39,23 @@ const getStudentWithReceiptsEndpoint = async (req, res) => {
     const { student, receipts } = await getStudentWithReceipts(TaxCode);
 
     res.status(200).send({ student, receipts });
+  } catch (e) {
+    res.status(500).send({ message: e.message });
+  }
+};
+
+const getStudentsWithRegistrationReceiptEndpoint = async (req, res) => {
+  try {
+    const { Year } = req.params;
+    const yearParsed = parseInt(Year, 10);
+
+    if (Number.isNaN(yearParsed)) {
+      res.status(400).send({ message: `${Year} is not a number` });
+    }
+
+    const studentsWithRegistrationReceipt = await getStudentsWithRegistrationReceipt(yearParsed);
+
+    res.status(200).send({ studentsWithRegistrationReceipt });
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
@@ -93,6 +111,7 @@ const deleteStudentEndpoint = async (req, res) => {
 studentRouter.get('/getStudents', getStudentsEndpoint);
 studentRouter.get('/getStudent/:TaxCode', getStudentEndpoint);
 studentRouter.get('/getStudentWithReceipts/:TaxCode', getStudentWithReceiptsEndpoint);
+studentRouter.get('/getStudentsWithRegistrationReceipt/:Year', getStudentsWithRegistrationReceiptEndpoint);
 studentRouter.put('/createStudent', createStudentEndpoint);
 studentRouter.post('/updateStudent', updateStudentEndpoint);
 studentRouter.post('/updateRegistrationDate', updateRegistrationDateEndpoint);

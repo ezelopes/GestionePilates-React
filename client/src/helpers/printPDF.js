@@ -24,6 +24,8 @@ import {
   StudentsExpiringCourseTemplate,
   RegistrationFormTemplate,
 } from '../pdfTemplates';
+import { getStudentsWithRegistrationReceipt } from './apiCalls';
+import { StudentsWithRegistrationReceiptTemplate } from '../pdfTemplates/StudentsWithRegistrationReceiptTemplate';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -374,6 +376,23 @@ const printTeacherRegistrationForm = async (teacherInfo) => {
   }
 };
 
+const printStudentsWithRegistrationReceipt = async (year) => {
+  try {
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const studentsWithRegistrationReceipt = await getStudentsWithRegistrationReceipt(year);
+
+    const documentDefinition = StudentsWithRegistrationReceiptTemplate(studentsWithRegistrationReceipt, year, labelLogo);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
+  }
+};
+
 export {
   printSelectedReceipts,
   printStudentReceipt,
@@ -385,4 +404,5 @@ export {
   printStudentsBasedOnRegistrationDate,
   printStudentsWithExpiringGreenPass,
   printTeacherRegistrationForm,
+  printStudentsWithRegistrationReceipt,
 };
