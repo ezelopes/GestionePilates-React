@@ -63,22 +63,11 @@ const getStudentsWithRegistrationReceipt = async (year) => {
         'a.Indirizzo',
         'a.DataNascita',
         'a.LuogoNascita',
-        'r.DataRicevuta',
-        'r.NumeroRicevuta'
+        'r.DataRicevuta'
       )
-      .join(
-        `${RECEIPT_TABLE} as r`,
-        `r.FK_AllievaID`,
-        '=',
-        knex.raw(
-          `(SELECT ric.FK_AllievaID
-            FROM ricevuta AS ric
-            WHERE a.AllievaID = ric.FK_AllievaID
-            AND r.NumeroRicevuta NOT LIKE 'C%'
-            AND (r.DataRicevuta BETWEEN '${from}' AND '${to}')
-            ORDER BY ric.DataRicevuta LIMIT 1)`
-        )
-      )
+      .join(`${RECEIPT_TABLE} as r`, `r.FK_AllievaID`, '=', 'a.AllievaID')
+      .andWhereBetween('r.DataRicevuta', [from, to])
+      .andWhere('r.NumeroRicevuta', 'not like', '%C%')
       .groupBy(`a.CodiceFiscale`)
       .orderBy(`r.DataRicevuta`, 's.Nome', 's.Cognome');
 
