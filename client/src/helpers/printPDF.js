@@ -378,15 +378,13 @@ const printTeacherRegistrationForm = async (teacherInfo) => {
 
 const printStudentsWithRegistrationReceipt = async (year) => {
   try {
-    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
-
     const studentsWithRegistrationReceipt = await getStudentsWithRegistrationReceipt(year);
 
     if (!studentsWithRegistrationReceipt.length) {
       return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
     }
 
-    const documentDefinition = StudentsWithRegistrationReceiptTemplate(studentsWithRegistrationReceipt, year, labelLogo);
+    const documentDefinition = StudentsWithRegistrationReceiptTemplate(studentsWithRegistrationReceipt, year);
 
     pdfMake.createPdf(documentDefinition).open();
 

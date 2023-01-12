@@ -3,7 +3,6 @@ import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import FilterStudentsForm from '../components/students/FilterStudentsForm';
-import PrintStudentsForm from '../components/students/PrintStudentsForm';
 
 import { getAllStudents } from '../helpers/apiCalls';
 import { printSelectedStudents } from '../helpers/printPDF';
@@ -134,7 +133,8 @@ const StudentsPage = () => {
         </div>
       </div>
 
-      {students && <PrintStudentsForm students={students} />}
+      {/* DISABLING AS THIS FEATURE IS NOT CURRENTLY NEEDED. */}
+      {/* {students && <PrintStudentsForm students={students} />} */}
     </>
   );
 };

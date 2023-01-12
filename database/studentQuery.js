@@ -51,11 +51,14 @@ const getStudentWithReceipts = async (TaxCode) => {
 
 const getStudentsWithRegistrationReceipt = async (year) => {
   try {
-    const from = `${year}-09-01`;
-    const to = `${year + 1}-06-30`; // ? `${year + 1}-08-31`
+    const from = `${year - 1}-09-01`;
+    const to = `${year}-08-31`;
+
+    // TODO: Get teachers with Registration Date within the above range
 
     const studentWithReceipts = await knex(`${STUDENT_TABLE} as a`)
       .select(
+        'a.Maggiorenne',
         'a.CodiceFiscale',
         'a.Nome',
         'a.Cognome',

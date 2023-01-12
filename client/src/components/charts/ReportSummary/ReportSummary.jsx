@@ -25,7 +25,7 @@ const ReportSummary = () => {
         <input
           id="registration_year"
           type="number"
-          defaultValue={new Date().getFullYear() - 1}
+          defaultValue={new Date().getFullYear()}
           min="2018"
           className="form-control w-25"
           ref={yearRef}
