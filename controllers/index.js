@@ -16,4 +16,7 @@ router.use('/', (req, res) => {
   });
 });
 
+// TODO: Endpoint to backup DB?
+// https://www.npmjs.com/package/knex-dump
+
 module.exports = router;

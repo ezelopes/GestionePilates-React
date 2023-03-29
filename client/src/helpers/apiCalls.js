@@ -229,6 +229,13 @@ const getStudentsWithRegistrationReceipt = async (Year) => {
   return studentsWithRegistrationReceipt;
 };
 
+const getTeachersWithRegistrationReceipt = async (Year) => {
+  const response = await fetch(`/api/teacher/getTeachersWithRegistrationDate/${Year}`);
+  const teachers = await response.json();
+
+  return teachers;
+};
+
 export {
   createStudent,
   createReceipt,
@@ -246,4 +253,5 @@ export {
   getAllReceipts,
   getStudentWithReceipts,
   getStudentsWithRegistrationReceipt,
+  getTeachersWithRegistrationReceipt,
 };

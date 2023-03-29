@@ -24,7 +24,7 @@ import {
   StudentsExpiringCourseTemplate,
   RegistrationFormTemplate,
 } from '../pdfTemplates';
-import { getStudentsWithRegistrationReceipt } from './apiCalls';
+import { getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt } from './apiCalls';
 import { StudentsWithRegistrationReceiptTemplate } from '../pdfTemplates/StudentsWithRegistrationReceiptTemplate';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -380,11 +380,17 @@ const printStudentsWithRegistrationReceipt = async (year) => {
   try {
     const studentsWithRegistrationReceipt = await getStudentsWithRegistrationReceipt(year);
 
-    if (!studentsWithRegistrationReceipt.length) {
+    const teachersWithRegistrationReceipt = await getTeachersWithRegistrationReceipt(year);
+
+    if (!studentsWithRegistrationReceipt.length && !teachersWithRegistrationReceipt.length) {
       return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
     }
 
-    const documentDefinition = StudentsWithRegistrationReceiptTemplate(studentsWithRegistrationReceipt, year);
+    const documentDefinition = StudentsWithRegistrationReceiptTemplate(
+      studentsWithRegistrationReceipt,
+      teachersWithRegistrationReceipt,
+      year
+    );
 
     pdfMake.createPdf(documentDefinition).open();
 

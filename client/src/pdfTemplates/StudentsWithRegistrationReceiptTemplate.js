@@ -1,8 +1,9 @@
 import { isAdult } from '../commondata';
 import { formatDate } from '../helpers/dates';
 
-export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, year) => {
-  const docTitle = `ALLIEVE ISCRITTE NEL ${parseInt(year, 10) - 1} (dal 01-09-${parseInt(year, 10) - 1} al 31-08-${year})`;
+// TODO: Rename template to something like "Libro Soci"
+export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, teachersWithRegistrationReceipt, year) => {
+  const docTitle = `STAGIONE SPORTIVA ${parseInt(year, 10) - 1}`;
 
   const tableBody = [
     [
@@ -17,7 +18,7 @@ export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, ye
     ],
   ];
 
-  studentsWithReceipts.forEach((student) => {
+  studentsWithReceipts.forEach((student) =>
     tableBody.push([
       { text: `${student.Surname} ${student.Name}`, fontSize: 9 },
       { text: `${student.Address} ${student.City}`, fontSize: 9 },
@@ -27,8 +28,21 @@ export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, ye
       { text: formatDate(new Date(student.ReceiptDate)), fontSize: 9 },
       { text: `Anno ${new Date(student.ReceiptDate).getFullYear()}`, fontSize: 9 },
       { text: `${isAdult(student.IsAdult) ? 'Associatio Ordinario' : 'Associatio Junior'}`, fontSize: 9 },
-    ]);
-  });
+    ])
+  );
+
+  teachersWithRegistrationReceipt.forEach((teacher) =>
+    tableBody.push([
+      { text: `${teacher.Surname} ${teacher.Name}`, fontSize: 9 },
+      { text: `${teacher.Address} ${teacher.City}`, fontSize: 9 },
+      { text: formatDate(new Date(teacher.DOB)), fontSize: 9 },
+      { text: teacher.BirthPlace, fontSize: 9 },
+      { text: teacher.TaxCode, fontSize: 9 },
+      { text: formatDate(new Date(teacher.RegistrationDate)), fontSize: 9 }, // This is the only different field.
+      { text: `Anno ${new Date(teacher.RegistrationDate).getFullYear()}`, fontSize: 9 },
+      { text: 'Associatio Ordinario', fontSize: 9 },
+    ])
+  );
 
   const content = [
     {
