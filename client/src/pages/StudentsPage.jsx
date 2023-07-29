@@ -9,6 +9,7 @@ import { printSelectedStudents } from '../helpers/printPDF';
 import { gridOptionsDefaultStudents } from '../commondata/grid.config';
 
 import Translation from '../components/common/Translation';
+import PrintStudentsForm from '../components/students/PrintStudentsForm/PrintStudentsForm';
 
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
@@ -66,7 +67,7 @@ const StudentsPage = () => {
       setStudents(allStudents);
     };
 
-    if (!sessionStorage.getItem('studentsList') || sessionStorage.getItem('studentsList') === []) {
+    if (!sessionStorage.getItem('studentsList') || sessionStorage.getItem('studentsList').length === 0) {
       fetchData();
     } else {
       const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
@@ -133,8 +134,7 @@ const StudentsPage = () => {
         </div>
       </div>
 
-      {/* DISABLING AS THIS FEATURE IS NOT CURRENTLY NEEDED. */}
-      {/* {students && <PrintStudentsForm students={students} />} */}
+      {students && <PrintStudentsForm students={students} />}
     </>
   );
 };

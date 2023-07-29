@@ -1,8 +1,9 @@
 import { isAdult } from '../commondata';
 import { formatDate } from '../helpers/dates';
+import { founderMembers } from './constants';
 
-export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, year) => {
-  const docTitle = `ALLIEVE ISCRITTE NEL ${parseInt(year, 10) - 1} (dal 01-09-${parseInt(year, 10) - 1} al 31-08-${year})`;
+export const MembersRegisterTemplate = (studentsWithReceipts, teachersWithRegistrationReceipt, year) => {
+  const docTitle = `STAGIONE SPORTIVA ${parseInt(year, 10)}`;
 
   const tableBody = [
     [
@@ -17,7 +18,33 @@ export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, ye
     ],
   ];
 
-  studentsWithReceipts.forEach((student) => {
+  founderMembers.forEach((founder) =>
+    tableBody.push([
+      { text: `${founder.surname} ${founder.name}`, fontSize: 9 },
+      { text: `${founder.address} ${founder.city}`, fontSize: 9 },
+      { text: formatDate(new Date(founder.DOB)), fontSize: 9 },
+      { text: founder.birthPlace, fontSize: 9 },
+      { text: founder.taxCode, fontSize: 9 },
+      { text: `${formatDate(new Date(year - 1, 8, 1))}`, fontSize: 9 }, // 1st September of the year
+      { text: `Anno ${year - 1}`, fontSize: 9 },
+      { text: 'Associato Fondatore', fontSize: 9 },
+    ])
+  );
+
+  teachersWithRegistrationReceipt.forEach((teacher) =>
+    tableBody.push([
+      { text: `${teacher.Surname} ${teacher.Name}`, fontSize: 9 },
+      { text: `${teacher.Address} ${teacher.City}`, fontSize: 9 },
+      { text: formatDate(new Date(teacher.DOB)), fontSize: 9 },
+      { text: teacher.BirthPlace, fontSize: 9 },
+      { text: teacher.TaxCode, fontSize: 9 },
+      { text: formatDate(new Date(teacher.RegistrationDate)), fontSize: 9 }, // This is the only different field.
+      { text: `Anno ${new Date(teacher.RegistrationDate).getFullYear()}`, fontSize: 9 },
+      { text: 'Associato Ordinario', fontSize: 9 },
+    ])
+  );
+
+  studentsWithReceipts.forEach((student) =>
     tableBody.push([
       { text: `${student.Surname} ${student.Name}`, fontSize: 9 },
       { text: `${student.Address} ${student.City}`, fontSize: 9 },
@@ -26,9 +53,9 @@ export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, ye
       { text: student.TaxCode, fontSize: 9 },
       { text: formatDate(new Date(student.ReceiptDate)), fontSize: 9 },
       { text: `Anno ${new Date(student.ReceiptDate).getFullYear()}`, fontSize: 9 },
-      { text: `${isAdult(student.IsAdult) ? 'Associatio Ordinario' : 'Associatio Junior'}`, fontSize: 9 },
-    ]);
-  });
+      { text: `${isAdult(student.IsAdult) ? 'Associato Ordinario' : 'Associato Junior'}`, fontSize: 9 },
+    ])
+  );
 
   const content = [
     {
@@ -64,7 +91,7 @@ export const StudentsWithRegistrationReceiptTemplate = (studentsWithReceipts, ye
 
   const docDefinition = {
     info: {
-      title: docTitle,
+      title: `${docTitle}`,
       author: 'Roxana Carro',
       subject: 'Iscrizione allieve per anno',
     },

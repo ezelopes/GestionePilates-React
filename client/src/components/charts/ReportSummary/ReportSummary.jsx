@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import Translation from '../../common/Translation';
 
-import { printStudentsWithRegistrationReceipt } from '../../../helpers/printPDF';
+import { printMembersRegister } from '../../../helpers/printPDF';
 
 const ReportSummary = () => {
   const yearRef = useRef(null);
@@ -10,7 +10,7 @@ const ReportSummary = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    printStudentsWithRegistrationReceipt(yearRef.current.value);
+    printMembersRegister(yearRef.current.value);
   };
 
   return (

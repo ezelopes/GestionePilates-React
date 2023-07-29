@@ -70,7 +70,6 @@ const getStudentsWithRegistrationReceipt = async (year) => {
       )
       .join(`${RECEIPT_TABLE} as r`, `r.FK_AllievaID`, '=', 'a.AllievaID')
       .andWhereBetween('r.DataRicevuta', [from, to])
-      .andWhere('r.NumeroRicevuta', 'not like', '%C%')
       .groupBy(`a.CodiceFiscale`)
       .orderBy(`r.DataRicevuta`, 's.Nome', 's.Cognome');
 
