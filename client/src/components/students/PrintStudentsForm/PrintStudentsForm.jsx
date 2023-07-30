@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 
 import Translation from '../../common/Translation';
-import { printStudentsBasedOnRegistrationDate } from '../../../helpers/printPDF';
+import { printAssemblyBook, printStudentsBasedOnRegistrationDate } from '../../../helpers/printPDF';
 
 import { months, years } from '../../../commondata';
 
@@ -56,12 +56,11 @@ const PrintStudentsForm = ({ students }) => {
             ))}
           </Form.Control>
         </Form.Group>
-        {/* Green Pass not needed anymore */}
-        {/* <Button variant="success" onClick={() => printStudentsWithExpiringGreenPass(students, selectedMonth, selectedYear)}>
-          🖨️ <Translation value="buttons.student.printExpiringGreenPass" />
-        </Button> */}
         <Button variant="success" onClick={() => printStudentsBasedOnRegistrationDate(students, selectedMonth, selectedYear)}>
           🖨️ <Translation value="buttons.student.printBasedOnRegistrationDate" />
+        </Button>
+        <Button variant="success" onClick={() => printAssemblyBook(students, selectedMonth, selectedYear)}>
+          🖨️ <Translation value="buttons.student.printAssemblyBook" />
         </Button>
       </div>
     </div>
