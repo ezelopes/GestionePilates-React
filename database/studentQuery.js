@@ -1,6 +1,6 @@
 const { knex } = require('./connection');
 const { getFormattedDate } = require('./helpers/dates');
-const { mappingStudents, mappingReceipt } = require('./helpers/mapDatabaseEntries');
+const { mappingStudents, mappingReceipt, mappingReceiptsWithStudentInfo } = require('./helpers/mapDatabaseEntries');
 const { studentResponseMessages } = require('./helpers/responses');
 
 const STUDENT_TABLE = 'allieva';
@@ -46,6 +46,38 @@ const getStudentWithReceipts = async (TaxCode) => {
     console.log(error);
 
     return { message: studentResponseMessages.error.getSingle };
+  }
+};
+
+const getStudentsWithRegistrationReceipt = async (year) => {
+  try {
+    const from = `${year - 1}-09-01`;
+    const to = `${year}-08-31`;
+
+    // TODO: Get teachers with Registration Date within the above range
+
+    const studentWithReceipts = await knex(`${STUDENT_TABLE} as a`)
+      .select(
+        'a.Maggiorenne',
+        'a.CodiceFiscale',
+        'a.Nome',
+        'a.Cognome',
+        'a.Citta',
+        'a.Indirizzo',
+        'a.DataNascita',
+        'a.LuogoNascita',
+        'r.DataRicevuta'
+      )
+      .join(`${RECEIPT_TABLE} as r`, `r.FK_AllievaID`, '=', 'a.AllievaID')
+      .andWhereBetween('r.DataRicevuta', [from, to])
+      .groupBy(`a.CodiceFiscale`)
+      .orderBy(`r.DataRicevuta`, 's.Nome', 's.Cognome');
+
+    return mappingReceiptsWithStudentInfo(studentWithReceipts);
+  } catch (error) {
+    console.log(error);
+
+    return { message: studentResponseMessages.error.getMultiple };
   }
 };
 
@@ -148,6 +180,7 @@ module.exports = {
   getStudents,
   getStudent,
   getStudentWithReceipts,
+  getStudentsWithRegistrationReceipt,
   createStudent,
   updateStudent,
   updateRegistrationDate,

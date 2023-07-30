@@ -24,6 +24,8 @@ import {
   StudentsExpiringCourseTemplate,
   RegistrationFormTemplate,
 } from '../pdfTemplates';
+import { getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt } from './apiCalls';
+import { MembersRegisterTemplate } from '../pdfTemplates/MembersRegisterTemplate';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -281,17 +283,16 @@ const printSelectedStudents = async (selectedStudents) => {
   }
 };
 
-const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, selectedYearGreenPass) => {
+const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, selectedYear) => {
   try {
-    const studentsWithExpiringGreenPass = students.filter(({ RegistrationDate, GreenPassExpirationDate, IsAdult }) => {
+    const studentsWithinRange = students.filter(({ RegistrationDate, IsAdult }) => {
       if (RegistrationDate) {
         const RegistrationDateFormatted = new Date(RegistrationDate);
 
         return (
           RegistrationDateFormatted.getMonth() === selectedMonth &&
-          RegistrationDateFormatted.getFullYear() === selectedYearGreenPass &&
-          isAdult(IsAdult) &&
-          !!GreenPassExpirationDate
+          RegistrationDateFormatted.getFullYear() === selectedYear &&
+          isAdult(IsAdult)
         );
       }
 
@@ -300,22 +301,17 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
 
     const { month } = getMonthFromId(selectedMonth);
 
-    if (studentsWithExpiringGreenPass.length > 0) {
+    if (studentsWithinRange.length > 0) {
       const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
 
-      const documentDefinition = StudentsDataTemplate(
-        studentsWithExpiringGreenPass,
-        month.toUpperCase(),
-        selectedYearGreenPass,
-        labelLogo
-      );
+      const documentDefinition = StudentsDataTemplate(studentsWithinRange, month.toUpperCase(), selectedYear, labelLogo);
 
       pdfMake.createPdf(documentDefinition).open();
 
       return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
-    return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYearGreenPass}`, toastConfig);
+    return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYear}`, toastConfig);
   } catch (err) {
     return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
@@ -374,6 +370,27 @@ const printTeacherRegistrationForm = async (teacherInfo) => {
   }
 };
 
+const printMembersRegister = async (year) => {
+  try {
+    const studentsWithRegistrationReceipt = await getStudentsWithRegistrationReceipt(year);
+
+    const teachersWithRegistrationReceipt = await getTeachersWithRegistrationReceipt(year);
+
+    if (!studentsWithRegistrationReceipt.length && !teachersWithRegistrationReceipt.length) {
+      return toast.error(getTranslation('toast.error.noStudentFound'), toastConfig);
+    }
+
+    const documentDefinition = MembersRegisterTemplate(studentsWithRegistrationReceipt, teachersWithRegistrationReceipt, year);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
+  } catch (error) {
+    console.error(error);
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
+  }
+};
+
 export {
   printSelectedReceipts,
   printStudentReceipt,
@@ -385,4 +402,5 @@ export {
   printStudentsBasedOnRegistrationDate,
   printStudentsWithExpiringGreenPass,
   printTeacherRegistrationForm,
+  printMembersRegister,
 };

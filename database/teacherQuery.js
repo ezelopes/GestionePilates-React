@@ -29,6 +29,24 @@ const getTeacher = async (TaxCode) => {
   }
 };
 
+const getTeachersWithRegistrationDate = async (year) => {
+  try {
+    const from = `${year - 1}-09-01`;
+    const to = `${year}-08-31`;
+
+    const teachers = await knex(TEACHER_TABLE)
+      .select()
+      .whereBetween(`${TEACHER_TABLE}.DataIscrizione`, [from, to])
+      .orderBy(`${TEACHER_TABLE}.DataIscrizione`, `${TEACHER_TABLE}.Nome`, `${TEACHER_TABLE}.Cognome`);
+
+    return mappingTeachers(teachers);
+  } catch (error) {
+    console.log(error);
+
+    return { message: teacherResponseMessages.error.getSingle };
+  }
+};
+
 const createTeacher = async (teacherInfo) => {
   try {
     const newTeacherID = await knex(TEACHER_TABLE).insert({
@@ -102,6 +120,7 @@ const deleteTeacher = async (TeacherID) => {
 module.exports = {
   getTeachers,
   getTeacher,
+  getTeachersWithRegistrationDate,
   createTeacher,
   updateTeacher,
   deleteTeacher,

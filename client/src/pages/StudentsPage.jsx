@@ -3,13 +3,13 @@ import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import FilterStudentsForm from '../components/students/FilterStudentsForm';
-import PrintStudentsForm from '../components/students/PrintStudentsForm';
 
 import { getAllStudents } from '../helpers/apiCalls';
 import { printSelectedStudents } from '../helpers/printPDF';
 import { gridOptionsDefaultStudents } from '../commondata/grid.config';
 
 import Translation from '../components/common/Translation';
+import PrintStudentsForm from '../components/students/PrintStudentsForm/PrintStudentsForm';
 
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
@@ -67,7 +67,7 @@ const StudentsPage = () => {
       setStudents(allStudents);
     };
 
-    if (!sessionStorage.getItem('studentsList') || sessionStorage.getItem('studentsList') === []) {
+    if (!sessionStorage.getItem('studentsList') || sessionStorage.getItem('studentsList').length === 0) {
       fetchData();
     } else {
       const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));

@@ -7,6 +7,7 @@ import { isMembershipFee } from '../commondata';
 import IncomePerCourseChart from '../components/charts/IncomePerCourseChart';
 import ExpiringStudentsList from '../components/charts/ExpiringStudentsList';
 import { isDateBetweenTwoDates } from '../helpers/dates';
+import ReportSummary from '../components/charts/ReportSummary';
 
 const HomePage = () => {
   const [receiptsWithStudentInfo, setReceiptsWithStudentInfo] = useState([]);
@@ -62,6 +63,11 @@ const HomePage = () => {
         </Col>
         <Col>
           <IncomePerCourseChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ReportSummary />
         </Col>
       </Row>
       <Row>
