@@ -1,68 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import React from 'react';
+import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
+import axios from 'axios';
+import { useQuery } from 'react-query';
 import StudentCountChart from '../components/charts/StudentCountChart';
-import { getAllStudents, getAllReceipts } from '../helpers/apiCalls';
-import { isMembershipFee } from '../commondata';
+import { isSubscriptionFee } from '../commondata';
 
 import IncomePerCourseChart from '../components/charts/IncomePerCourseChart';
 import ExpiringStudentsList from '../components/charts/ExpiringStudentsList';
-import { isDateBetweenTwoDates } from '../helpers/dates';
 import ReportSummary from '../components/charts/ReportSummary';
+import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
 
 const HomePage = () => {
-  const [receiptsWithStudentInfo, setReceiptsWithStudentInfo] = useState([]);
+  const cachedStudents = JSON.parse(sessionStorage.getItem('studentsList'));
 
-  const [students, setStudents] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { receipts } = await getAllReceipts();
-
-      const { allStudents } = await getAllStudents();
-
-      setStudents(allStudents);
-
-      const filteredReceipts = receipts.filter(({ ReceiptType }) => !isMembershipFee(ReceiptType));
-
-      setReceiptsWithStudentInfo(filteredReceipts);
-    };
-
-    fetchData();
-  }, []);
-
-  const today = new Date();
-
-  const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1));
-
-  const { expiringStudents } = students.reduce(
-    (accumulator, student) => {
-      if (isDateBetweenTwoDates(today, nextMonth, new Date(student.CertificateExpirationDate))) {
-        accumulator.expiringStudents.push({ ...student, hasExpired: false });
-      }
-
-      if (today > new Date(student.CertificateExpirationDate)) {
-        accumulator.expiringStudents.push({ ...student, hasExpired: true });
-      }
-
-      return accumulator;
+  const {
+    data: students,
+    isLoading: isStudentsLoading,
+    isError: isStudentsError,
+  } = useQuery(['students'], async () => (await axios.get('/api/student/getStudents')).data, {
+    enabled: !cachedStudents || cachedStudents.length === 0,
+    // We don't want to ever re-fetch this query automatically
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    onSuccess: (data) => {
+      sessionStorage.setItem('studentsList', JSON.stringify(data));
     },
-    {
-      expiringStudents: [],
-    }
-  );
+  });
 
-  const sortedExpiringStudents = expiringStudents.sort(
-    (a, b) => new Date(b.CertificateExpirationDate) - new Date(a.CertificateExpirationDate)
-  );
+  const {
+    data: receipts,
+    isLoading: isReceiptsLoading,
+    isError: isReceiptsError,
+  } = useQuery(['receipts'], async () => (await axios.get('/api/receipt/getAllReceipts')).data, {
+    // We don't want to ever re-fetch this query automatically
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  // TODO: Make API call that returns only Subscription Fees
+  // Only subscription fees are needed for statistics
+  const filteredReceipts = receipts?.filter(({ ReceiptType }) => isSubscriptionFee(ReceiptType));
+
+  if (isStudentsLoading || isReceiptsLoading) {
+    return <Spinner animation="border" role="status" className="spinner" />;
+  }
+
+  if (isStudentsError || isReceiptsError) {
+    return <Alert variant="danger">An error has occured</Alert>;
+  }
 
   return (
     <Container>
       <Row>
         <Col>
-          <StudentCountChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+          <StudentCountChart receiptsWithStudentInfo={filteredReceipts} />
         </Col>
         <Col>
-          <IncomePerCourseChart receiptsWithStudentInfo={receiptsWithStudentInfo} />
+          <IncomePerCourseChart receiptsWithStudentInfo={filteredReceipts} />
         </Col>
       </Row>
       <Row>
@@ -72,11 +68,11 @@ const HomePage = () => {
       </Row>
       <Row>
         <Col>
-          <ExpiringStudentsList students={sortedExpiringStudents} />
+          <ExpiringStudentsList students={cachedStudents || students} />
         </Col>
       </Row>
     </Container>
   );
 };
 
-export default HomePage;
+export default withReactQuery(HomePage);
