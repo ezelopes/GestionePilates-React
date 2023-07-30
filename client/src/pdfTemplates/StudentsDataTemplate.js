@@ -2,11 +2,7 @@ import { formatDate } from '../helpers/dates';
 import { BLANK_DATE } from '../commondata';
 
 export const StudentsDataTemplate = (studentsList, registrationMonth, registrationYear, labelLogo) => {
-  let docTitle = 'INFORMAZIONI ALLIEVE';
-
-  if (registrationMonth && registrationYear) {
-    docTitle += ` ISCRITTE NEL ${registrationMonth} ${registrationYear}`;
-  }
+  const docTitle = `ALLIEVE ISCRITTE - ${registrationMonth} ${registrationYear}`;
 
   const tableBody = [
     [
@@ -15,6 +11,7 @@ export const StudentsDataTemplate = (studentsList, registrationMonth, registrati
       { text: 'Numero Cellulare', bold: true },
     ],
   ];
+
   studentsList.forEach((student) =>
     tableBody.push([
       `${student.Name} ${student.Surname}`,

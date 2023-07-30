@@ -26,6 +26,7 @@ import {
 } from '../pdfTemplates';
 import { getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt } from './apiCalls';
 import { MembersRegisterTemplate } from '../pdfTemplates/MembersRegisterTemplate';
+import { AssemblyBookTemplate } from '../pdfTemplates/AssemblyBookTemplate';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -285,19 +286,12 @@ const printSelectedStudents = async (selectedStudents) => {
 
 const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, selectedYear) => {
   try {
-    const studentsWithinRange = students.filter(({ RegistrationDate, IsAdult }) => {
-      if (RegistrationDate) {
-        const RegistrationDateFormatted = new Date(RegistrationDate);
-
-        return (
-          RegistrationDateFormatted.getMonth() === selectedMonth &&
-          RegistrationDateFormatted.getFullYear() === selectedYear &&
-          isAdult(IsAdult)
-        );
-      }
-
-      return false;
-    });
+    const studentsWithinRange = students.filter(
+      ({ RegistrationDate }) =>
+        RegistrationDate &&
+        new Date(RegistrationDate).getMonth() === selectedMonth &&
+        new Date(RegistrationDate).getFullYear() === selectedYear
+    );
 
     const { month } = getMonthFromId(selectedMonth);
 
@@ -311,7 +305,36 @@ const printStudentsBasedOnRegistrationDate = async (students, selectedMonth, sel
       return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
-    return toast.error(`Nessuna Allieva Maggiorenne iscritta nel ${month} ${selectedYear}`, toastConfig);
+    return toast.error(`Nessun allievo iscritto nel ${month} ${selectedYear}`, toastConfig);
+  } catch (err) {
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
+  }
+};
+
+// Print name only in two/three columns (only one title at the top)
+const printAssemblyBook = async (students, selectedMonth, selectedYear) => {
+  try {
+    // Only get students with registration date within range
+    const studentsWithinRange = students.filter(
+      ({ RegistrationDate }) =>
+        RegistrationDate &&
+        new Date(RegistrationDate).getMonth() === selectedMonth &&
+        new Date(RegistrationDate).getFullYear() === selectedYear
+    );
+
+    const { month } = getMonthFromId(selectedMonth);
+
+    if (studentsWithinRange.length > 0) {
+      const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+      const documentDefinition = AssemblyBookTemplate(studentsWithinRange, month.toUpperCase(), selectedYear, labelLogo);
+
+      pdfMake.createPdf(documentDefinition).open();
+
+      return toast.success(getTranslation('toast.success.general'), toastConfig);
+    }
+
+    return toast.error(`Nessun allievo iscritto nel ${month} ${selectedYear}`, toastConfig);
   } catch (err) {
     return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
@@ -349,7 +372,7 @@ const printStudentsWithExpiringGreenPass = async (students, selectedMonth, selec
       return toast.success(getTranslation('toast.success.general'), toastConfig);
     }
 
-    return toast.error(`Nessuna allieva con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`, toastConfig);
+    return toast.error(`Nessun allievo con Scadenza Green Pass nel ${month} ${selectedYearGreenPass}`, toastConfig);
   } catch (err) {
     return toast.error(getTranslation('toast.error.general'), toastConfig);
   }
@@ -400,6 +423,7 @@ export {
   printRegistrationForm,
   printSelectedStudents,
   printStudentsBasedOnRegistrationDate,
+  printAssemblyBook,
   printStudentsWithExpiringGreenPass,
   printTeacherRegistrationForm,
   printMembersRegister,

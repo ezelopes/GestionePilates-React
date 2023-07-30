@@ -65,7 +65,7 @@
       "printSelectedStudents": "Stampa Allieve Selezionate",
       "printExpiringStudents": "Stampa Lista Allieve In Scadenza",
       "printRegistrationForm": "Stampa Modulo Iscrizione",
-      "printExpiringGreenPass": "Scadenza Green Pass",
+      "printAssemblyBook": "Libro Assemblea",
       "printBasedOnRegistrationDate": "In base alla Data Iscrizione"
     },
     "receipt": {
