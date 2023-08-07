@@ -130,7 +130,8 @@
     "to": "A",
     "printStudentsFormTitle": "Stampa Allieve",
     "teachersNotFound": "Nessun insegnante trovato.",
-    "undefined": "Non Definito"
+    "undefined": "Non Definito",
+    "requestFailed": "La richiesta non e' andata a buon fine. Riprova piu' tardi."
   },
   "toast": {
     "success": {

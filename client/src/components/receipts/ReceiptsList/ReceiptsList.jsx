@@ -43,7 +43,7 @@ const columnsDefinition = [
 ];
 
 const ReceiptsList = () => {
-  const { allReceipts, currentReceipts, setCurrentReceipts, setAllReceipts } = useReceipt();
+  const { allReceipts, currentReceipts, setCurrentReceipts, refetchReceipts } = useReceipt();
 
   const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
@@ -73,7 +73,8 @@ const ReceiptsList = () => {
     if (status === 200) {
       setCurrentReceipts(currentReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
 
-      setAllReceipts(allReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
+      // SetAllReceipts(allReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
+      refetchReceipts();
 
       setSelectedReceipts([]);
 

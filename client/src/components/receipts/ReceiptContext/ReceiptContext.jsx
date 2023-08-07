@@ -11,7 +11,7 @@ ReceiptProvider.propTypes = {
   allReceipts: PropTypes.array.isRequired,
   currentReceipts: PropTypes.array.isRequired,
   setCurrentReceipts: PropTypes.func.isRequired,
-  setAllReceipts: PropTypes.func.isRequired,
+  refetchReceipts: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 

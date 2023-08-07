@@ -9,6 +9,7 @@ import IncomePerCourseChart from '../components/charts/IncomePerCourseChart';
 import ExpiringStudentsList from '../components/charts/ExpiringStudentsList';
 import ReportSummary from '../components/charts/ReportSummary';
 import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
+import Translation from '../components/common/Translation';
 
 const HomePage = () => {
   const cachedStudents = JSON.parse(sessionStorage.getItem('studentsList'));
@@ -19,7 +20,6 @@ const HomePage = () => {
     isError: isStudentsError,
   } = useQuery(['students'], async () => (await axios.get('/api/student/getStudents')).data, {
     enabled: !cachedStudents || cachedStudents.length === 0,
-    // We don't want to ever re-fetch this query automatically
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -33,7 +33,6 @@ const HomePage = () => {
     isLoading: isReceiptsLoading,
     isError: isReceiptsError,
   } = useQuery(['receipts'], async () => (await axios.get('/api/receipt/getAllReceipts')).data, {
-    // We don't want to ever re-fetch this query automatically
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -43,12 +42,17 @@ const HomePage = () => {
   // Only subscription fees are needed for statistics
   const filteredReceipts = receipts?.filter(({ ReceiptType }) => isSubscriptionFee(ReceiptType));
 
+  // TODO: Apply spinner in the corresponding places rather than on the whole page.
   if (isStudentsLoading || isReceiptsLoading) {
     return <Spinner animation="border" role="status" className="spinner" />;
   }
 
   if (isStudentsError || isReceiptsError) {
-    return <Alert variant="danger">An error has occured</Alert>;
+    return (
+      <Alert variant="danger">
+        <Translation value="common.requestFailed" />
+      </Alert>
+    );
   }
 
   return (

@@ -13,6 +13,8 @@ import toastConfig from '../../../commondata/toast.config';
 import { BLANK_DATE, isSubscriptionFee, paymentMethods } from '../../../commondata';
 import isTemporaryReceipt from '../../../helpers/isTemporaryReceipt';
 
+// TODO: useForm here and create two forms (one for all receipts and one for subscriptions).
+
 const filterFields = [
   { field: 'receipt_date', description: 'Data Ricevuta' },
   { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },

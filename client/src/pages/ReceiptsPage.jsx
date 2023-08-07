@@ -1,40 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import { Alert, Spinner } from 'react-bootstrap';
 import ReceiptsList from '../components/receipts/ReceiptsList';
 import MembershipFeesList from '../components/receipts/MembershipFeesList';
-
-import orderReceiptsBasedOnReceiptNumber from '../helpers/orderReceiptsBasedOnReceiptNumber';
-import { getAllReceipts } from '../helpers/apiCalls';
-
 import { isMembershipFee } from '../commondata';
 import Toggle from '../components/common/Toggle';
 import { ReceiptProvider } from '../components/receipts/ReceiptContext';
 import { getTranslation } from '../components/common/Translation/helpers';
+import Translation from '../components/common/Translation';
+import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
 
 const ReceiptsPage = () => {
-  const [allReceipts, setAllReceipts] = useState([]);
   const [currentReceipts, setCurrentReceipts] = useState([]);
 
   const [allMembershipFees, setAllMembershipFees] = useState([]);
 
   const [isMembershipFeeSelected, setIsMembershipFeeSelected] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { receipts } = await getAllReceipts();
-
-      const orderedReceipts = orderReceiptsBasedOnReceiptNumber(receipts);
-
-      const receiptsWithMembershipFee = orderedReceipts.filter(
+  const {
+    data: allReceipts,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery(['receipts'], async () => (await axios.get('/api/receipt/getAllReceipts')).data, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    onSuccess: (receipts) => {
+      const receiptsWithMembershipFee = receipts.filter(
         ({ IncludeMembershipFee, ReceiptType }) => IncludeMembershipFee || isMembershipFee(ReceiptType)
       );
 
-      setAllReceipts(orderedReceipts);
       setAllMembershipFees(receiptsWithMembershipFee);
 
-      setCurrentReceipts(orderedReceipts);
-    };
-    fetchData();
-  }, []);
+      setCurrentReceipts(receipts);
+    },
+  });
 
   const onToggleChanged = (receiptTypeSelected) => {
     // Reset state
@@ -42,6 +44,19 @@ const ReceiptsPage = () => {
 
     setIsMembershipFeeSelected(receiptTypeSelected !== 'receipt');
   };
+
+  // TODO: Apply spinner in the corresponding places (AG Grid) rather than on the whole page.
+  if (isLoading) {
+    return <Spinner animation="border" role="status" className="spinner" />;
+  }
+
+  if (isError) {
+    return (
+      <Alert variant="danger">
+        <Translation value="common.requestFailed" />
+      </Alert>
+    );
+  }
 
   return (
     <>
@@ -56,7 +71,7 @@ const ReceiptsPage = () => {
         allMembershipFees={allMembershipFees}
         currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
-        setAllReceipts={setAllReceipts}
+        refetchReceipts={refetch}
       >
         {isMembershipFeeSelected ? <MembershipFeesList /> : <ReceiptsList />}
       </ReceiptProvider>
@@ -64,4 +79,4 @@ const ReceiptsPage = () => {
   );
 };
 
-export default ReceiptsPage;
+export default withReactQuery(ReceiptsPage);
