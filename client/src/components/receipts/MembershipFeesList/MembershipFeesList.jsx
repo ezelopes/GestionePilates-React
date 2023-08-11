@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 
-import FilterReceiptsForm from '../FilterReceiptsForm';
 import { useReceipt } from '../ReceiptContext';
 
 import { gridOptionsDefaultMembershipFee } from '../../../commondata/grid.config';
+import FilterSubscriptionFeesForm from './FilterSubscriptionFeesForm';
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -19,20 +19,24 @@ const columnsDefinition = [
 ];
 
 const MembershipFeesList = () => {
-  const { allMembershipFees, currentReceipts, setCurrentReceipts } = useReceipt();
+  const { allMembershipFees } = useReceipt();
 
-  const [gridOptions] = useState(gridOptionsDefaultMembershipFee);
+  const [currentReceipts, setCurrentReceipts] = useState(allMembershipFees);
 
   return (
     <div className="container-fluid">
-      <FilterReceiptsForm
-        allReceipts={allMembershipFees}
+      <FilterSubscriptionFeesForm
+        allMembershipFees={allMembershipFees}
+        currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
-        gridOptions={gridOptions}
-        isMembershipFee
       />
       <div className="ag-theme-alpine ag-grid-custom">
-        <AgGridReact reactNext gridOptions={gridOptions} columnDefs={columnsDefinition} rowData={currentReceipts} />
+        <AgGridReact
+          reactNext
+          gridOptions={gridOptionsDefaultMembershipFee}
+          columnDefs={columnsDefinition}
+          rowData={currentReceipts}
+        />
       </div>
     </div>
   );

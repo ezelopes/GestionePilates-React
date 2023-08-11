@@ -167,7 +167,12 @@ const printMembershipFeeSummaryTemplate = async (membershipFeeList, fromDate, to
     );
 
     const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
-    const documentDefinition = MembershipFeeSummaryTemplate(membershipFeeListFiltered, fromDate, toDate, labelLogo);
+    const documentDefinition = MembershipFeeSummaryTemplate(
+      membershipFeeListFiltered,
+      formatDate(new Date(fromDate), false),
+      formatDate(new Date(toDate), false),
+      labelLogo
+    );
 
     pdfMake.createPdf(documentDefinition).open();
 
