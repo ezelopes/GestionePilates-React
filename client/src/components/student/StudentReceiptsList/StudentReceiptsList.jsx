@@ -9,6 +9,7 @@ import { gridOptionsDefaultStudentReceipts } from '../../../commondata/grid.conf
 import { useStudent } from '../StudentContext';
 import UpdateReceiptButton from './UpdateReceiptButton/UpdateReceiptButton';
 import DeleteReceiptButton from './DeleteReceiptButton/DeleteReceiptButton';
+import { getPaymentMethodLabelFromValue } from '../../../commondata';
 
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
@@ -29,7 +30,11 @@ const columnsDefinition = [
     cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
-  { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
+  {
+    headerName: 'Tipo Pagamento',
+    field: 'PaymentMethod',
+    cellRenderer: (params) => getPaymentMethodLabelFromValue(params.value),
+  },
   {
     headerName: 'Include Quota Associativa',
     field: 'IncludeMembershipFee',
