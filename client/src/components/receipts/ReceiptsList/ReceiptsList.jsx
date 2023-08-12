@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-import { toast } from 'react-toastify';
 import { useReceipt } from '../ReceiptContext';
 import FilterReceiptsForm from '../FilterReceiptsForm';
 import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
@@ -10,8 +9,7 @@ import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
 import Translation from '../../common/Translation';
 import { printSelectedReceipts } from '../../../helpers/printPDF';
 import { gridOptionsDefaultReceipts } from '../../../commondata/grid.config';
-import { deleteReceipts } from '../../../helpers/apiCalls';
-import toastConfig from '../../../commondata/toast.config';
+import DeleteReceiptsButton from './DeleteReceiptsButton';
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
@@ -48,45 +46,16 @@ const ReceiptsList = () => {
   const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
   const [selectedReceipts, setSelectedReceipts] = useState([]);
-  const [showDeleteReceiptsModal, setShowDeleteReceiptsModal] = useState(false);
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
-    if (selectedNodes.length === 0) {
-      return setSelectedReceipts([]);
-    }
 
-    const receipts = [];
-    selectedNodes.forEach((node) => {
-      receipts.push(node.data);
-    });
+    const receipts = selectedNodes.map(({ data }) => data);
 
     return setSelectedReceipts(receipts);
   };
 
-  const handleReceiptDelete = async () => {
-    const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
-
-    const { status, message } = await deleteReceipts(receiptIDs);
-
-    if (status === 200) {
-      setCurrentReceipts(currentReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
-
-      refetchReceipts();
-
-      setSelectedReceipts([]);
-
-      toast.success(message, toastConfig);
-    } else {
-      toast.error(message, toastConfig);
-    }
-
-    setShowDeleteReceiptsModal(false);
-  };
-
-  useEffect(() => {
-    setSelectedReceipts([]);
-  }, [currentReceipts]);
+  const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
 
   return (
     <>
@@ -113,45 +82,18 @@ const ReceiptsList = () => {
             </span>
           </Button>
 
-          <Button
-            variant="danger"
-            onClick={() => {
-              setShowDeleteReceiptsModal(true);
+          <DeleteReceiptsButton
+            receiptIDs={receiptIDs}
+            onDelete={() => {
+              refetchReceipts();
+
+              setSelectedReceipts([]);
             }}
-            disabled={selectedReceipts.length < 1}
-          >
-            <span role="img" aria-label="delete-selected">
-              🗑️ <Translation value="buttons.receipt.deleteSelectedReceipts" />
-            </span>
-          </Button>
+          />
         </div>
       </div>
 
       <PrintExpiringReceiptsForm />
-
-      <Modal
-        show={showDeleteReceiptsModal}
-        onHide={() => setShowDeleteReceiptsModal(false)}
-        dialogClassName="update-modal"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Translation value="modalsContent.deleteReceiptsHeader" />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Translation value="modalsContent.deleteReceiptsBody" />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleReceiptDelete}>
-            <Translation value="buttons.receipt.deleteReceipts" />
-          </Button>
-          <Button variant="secondary" onClick={() => setShowDeleteReceiptsModal(false)}>
-            <Translation value="buttons.close" />
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };

@@ -166,18 +166,6 @@ const deleteReceipt = async (ReceiptID) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const deleteReceipts = async (ReceiptIDs) => {
-  const response = await fetch('/api/receipt/deleteReceipts', {
-    method: 'DELETE',
-    headers,
-    body: JSON.stringify({ ReceiptIDs }),
-  });
-
-  const responseParsed = await response.json();
-
-  return { status: response.status, message: responseParsed.message };
-};
-
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
@@ -206,13 +194,6 @@ const getAllTeachers = async () => {
   const body = await result.json();
 
   return { teachers: body };
-};
-
-const getAllReceipts = async () => {
-  const result = await fetch('/api/receipt/getAllReceipts');
-  const body = await result.json();
-
-  return { receipts: body };
 };
 
 const getStudentWithReceipts = async (TaxCode) => {
@@ -246,11 +227,9 @@ export {
   updateReceipt,
   deleteStudent,
   deleteReceipt,
-  deleteReceipts,
   deleteTeacher,
   getAllStudents,
   getAllTeachers,
-  getAllReceipts,
   getStudentWithReceipts,
   getStudentsWithRegistrationReceipt,
   getTeachersWithRegistrationReceipt,
