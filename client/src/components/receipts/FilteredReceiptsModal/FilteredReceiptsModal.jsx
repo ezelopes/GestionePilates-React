@@ -4,7 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap';
 
 import Translation from '../../common/Translation';
-import { gridOptionsFilteredReceipts } from '../../../commondata/grid.config';
+import { gridOptionsFilteredReceipts as gridOptions } from '../../../commondata/grid.config';
 import { printReceiptsDetails } from '../../../helpers/printPDF';
 
 const columnDefs = [
@@ -46,7 +46,7 @@ const FilteredReceiptsModal = ({ receipts, amount, showModal, toggleShowModal, p
           }}
         />
         <div className="ag-theme-alpine ag-grid-custom">
-          <AgGridReact reactNext gridOptions={gridOptionsFilteredReceipts} columnDefs={columnDefs} rowData={receipts} />
+          <AgGridReact reactNext gridOptions={gridOptions} columnDefs={columnDefs} rowData={receipts} />
         </div>
       </Modal.Body>
       <Modal.Footer>

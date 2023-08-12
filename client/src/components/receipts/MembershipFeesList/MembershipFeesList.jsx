@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 
-import { gridOptionsDefaultMembershipFee } from '../../../commondata/grid.config';
+import { gridOptionsDefaultMembershipFee as gridOptions } from '../../../commondata/grid.config';
 import FilterSubscriptionFeesForm from './FilterSubscriptionFeesForm';
 
 const columnsDefinition = [
@@ -28,12 +28,7 @@ const MembershipFeesList = ({ receipts }) => {
         setCurrentReceipts={setCurrentReceipts}
       />
       <div className="ag-theme-alpine ag-grid-custom">
-        <AgGridReact
-          reactNext
-          gridOptions={gridOptionsDefaultMembershipFee}
-          columnDefs={columnsDefinition}
-          rowData={currentReceipts}
-        />
+        <AgGridReact reactNext gridOptions={gridOptions} columnDefs={columnsDefinition} rowData={currentReceipts} />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
 
 import Translation from '../../common/Translation';
 import { printSelectedReceipts } from '../../../helpers/printPDF';
-import { gridOptionsDefaultReceipts } from '../../../commondata/grid.config';
+import { gridOptionsDefaultReceipts as gridOptions } from '../../../commondata/grid.config';
 import DeleteReceiptsButton from './DeleteReceiptsButton';
 
 const columnsDefinition = [
@@ -42,8 +42,6 @@ const columnsDefinition = [
 
 const ReceiptsList = ({ receipts, refetchReceipts }) => {
   const [currentReceipts, setCurrentReceipts] = useState(receipts);
-
-  const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
   const [selectedReceipts, setSelectedReceipts] = useState([]);
 
