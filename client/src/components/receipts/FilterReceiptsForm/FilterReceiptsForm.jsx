@@ -1,35 +1,37 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 
 import { FormProvider, useForm } from 'react-hook-form';
 import Translation from '../../common/Translation';
-import { getTranslation } from '../../common/Translation/helpers';
 import FilteredReceiptsModal from '../FilteredReceiptsModal';
 import { validateCourseBetweenTwoDates, isDateBetweenTwoDates, formatDate } from '../../../helpers/dates';
-import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBasedOnReceiptNumber';
-import { printReceiptsDetails } from '../../../helpers/printPDF';
-import toastConfig from '../../../commondata/toast.config';
-import { BLANK_DATE, isSubscriptionFee, paymentMethods } from '../../../commondata';
+import { getPaymentMethodLabelFromValue, isSubscriptionFee, paymentMethods } from '../../../commondata';
 import isTemporaryReceipt from '../../../helpers/isTemporaryReceipt';
 import ControlledFormDateField from '../../form/ControlledFormDateField';
 import ControlledFormSelectField from '../../form/ControlledFormSelectField/ControlledFormSelectField';
+import { useToggle } from '../../common/useToggle';
 
-const filterFields = [
+const FILTER_BY_FIELDS = [
   { value: 'receipt_date', label: 'Data Ricevuta' },
   { value: 'course_date', label: 'Data Inizio - Scadenza Corso' },
 ];
 
-const paymentMethodFields = [{ value: 'all', label: '' }, ...paymentMethods];
+const PAYMENT_METHODS_FIELDS = [{ value: 'all', label: '' }, ...paymentMethods];
 
-const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts, receiptsForAmountSummary, setReceiptsForAmountSummary }) => {
+const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts }) => {
   const today = formatDate(new Date(), true);
+
+  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
+
+  const [totalAmountPaid, setTotalAmountPaid] = useState(0);
+
+  const [showModal, toggleShowModal] = useToggle();
 
   const form = useForm({
     defaultValues: {
-      filterBy: filterFields[0].value,
-      paymentMethod: paymentMethodFields[0].value,
+      filterBy: FILTER_BY_FIELDS[0].value,
+      paymentMethod: PAYMENT_METHODS_FIELDS[0].value,
       fromDate: today,
       toDate: today,
     },
@@ -39,28 +41,20 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts, receiptsForAmount
 
   const watchedFields = watch();
 
-  const [totalAmountPaid, setTotalAmountPaid] = useState(0);
-
-  // TODO: Create `useToggle` here.
-  const [showFilteredAmountModal, setShowFilteredAmountModal] = useState(false);
-
-  const filterReceipts = (formData) => {
+  const filterReceipts = ({ filterBy, fromDate, toDate, paymentMethod }) => {
+    // First filter by date.
     const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate, CourseStartDate, CourseEndDate }) =>
-      formData.filterBy === 'receipt_date'
-        ? isDateBetweenTwoDates(formData.fromDate, formData.toDate, ReceiptDate)
-        : validateCourseBetweenTwoDates(formData.fromDate, formData.toDate, CourseStartDate, CourseEndDate)
+      filterBy === 'receipt_date'
+        ? isDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
+        : validateCourseBetweenTwoDates(fromDate, toDate, CourseStartDate, CourseEndDate)
     );
 
-    if (formData.paymentMethod === 'all') {
+    if (paymentMethod === 'all') {
       return receiptsWithDateFilter;
     }
 
-    // TODO: formData.paymentMethod is either `cash`, `bank_transfer` or `check`. It needs to match the label here though.
-    const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ PaymentMethod }) =>
-      PaymentMethod.includes(formData.paymentMethod)
-    );
-
-    return receiptsWithPaymentAndDateFilters;
+    // Filter by payment method too.
+    return receiptsWithDateFilter.filter(({ PaymentMethod }) => PaymentMethod === getPaymentMethodLabelFromValue(paymentMethod));
   };
 
   const handleFilter = (formData) => {
@@ -69,34 +63,29 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts, receiptsForAmount
     setCurrentReceipts(filteredReceiptList);
   };
 
-  // Only consider subscription receipts.
-  const calculateAmountBetweenDatesAndByPaymentMethod = (formData) => {
-    if (formData.filterBy !== 'receipt_date') {
-      return toast.error(getTranslation('toast.error.noEligibleFilter'), toastConfig);
-    }
-
-    const receipts = allReceipts.filter(({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) => {
+  const filterReceiptsForPaymentSummary = ({ fromDate, toDate, paymentMethod }) =>
+    allReceipts.filter(({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) => {
       const isValid =
-        isDateBetweenTwoDates(formData.fromDate, formData.toDate, ReceiptDate) &&
+        isDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
+        // Only consider subscription receipts.
         isSubscriptionFee(ReceiptType) &&
         !isTemporaryReceipt(ReceiptNumber);
 
-      if (formData.paymentMethod !== 'all') {
-        return isValid && PaymentMethod.includes(formData.paymentMethod);
-      }
-
-      return isValid;
+      return paymentMethod === 'all' ? isValid : isValid && PaymentMethod === getPaymentMethodLabelFromValue(paymentMethod);
     });
 
-    const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
+  const calculateAmountBetweenDatesAndByPaymentMethod = (formData) => {
+    if (formData.filterBy !== 'receipt_date') {
+      return;
+    }
 
-    const copy = [...receipts];
-    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy);
+    const receipts = filterReceiptsForPaymentSummary(formData);
+    const total = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
 
-    setReceiptsForAmountSummary(orderedReceipts);
-    setTotalAmountPaid(filteredAmount);
+    setReceiptsForAmountSummary(receipts);
+    setTotalAmountPaid(total);
 
-    return setShowFilteredAmountModal(true);
+    toggleShowModal();
   };
 
   const clearFilters = () => {
@@ -114,13 +103,13 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts, receiptsForAmount
             <ControlledFormSelectField
               name="filterBy"
               label={<Translation value="receiptFilterForm.filterBy" />}
-              options={filterFields}
+              options={FILTER_BY_FIELDS}
             />
 
             <ControlledFormSelectField
               name="paymentMethod"
               label={<Translation value="receiptFilterForm.selectPaymentMethod" />}
-              options={paymentMethodFields}
+              options={PAYMENT_METHODS_FIELDS}
             />
 
             <ControlledFormDateField name="fromDate" label={<Translation value="common.from" />} />
@@ -152,22 +141,13 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts, receiptsForAmount
           </div>
 
           <FilteredReceiptsModal
-            showFilteredAmountModal={showFilteredAmountModal}
-            setShowFilteredAmountModal={setShowFilteredAmountModal}
-            filteredAmountPaid={totalAmountPaid}
-            filteredReceipts={receiptsForAmountSummary}
-            fromDate={formatDate(new Date(watchedFields.fromDate)) || BLANK_DATE}
-            toDate={formatDate(new Date(watchedFields.toDate)) || BLANK_DATE}
-            filteredPaymentMethod={watchedFields.paymentMethod}
-            printReceipts={() =>
-              printReceiptsDetails(
-                receiptsForAmountSummary,
-                totalAmountPaid,
-                watchedFields.paymentMethod,
-                formatDate(new Date(watchedFields.fromDate)),
-                formatDate(new Date(watchedFields.toDate))
-              )
-            }
+            showModal={showModal}
+            toggleShowModal={toggleShowModal}
+            amount={totalAmountPaid}
+            receipts={receiptsForAmountSummary}
+            fromDate={formatDate(new Date(watchedFields.fromDate))}
+            toDate={formatDate(new Date(watchedFields.toDate))}
+            paymentMethod={getPaymentMethodLabelFromValue(watchedFields.paymentMethod)}
           />
         </form>
       </FormProvider>
@@ -177,16 +157,7 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts, receiptsForAmount
 
 FilterReceiptsForm.propTypes = {
   allReceipts: PropTypes.array.isRequired,
-  receiptsForAmountSummary: PropTypes.array,
-  setReceiptsForAmountSummary: PropTypes.func,
   setCurrentReceipts: PropTypes.func.isRequired,
-  isMembershipFee: PropTypes.bool,
-};
-
-FilterReceiptsForm.defaultProps = {
-  receiptsForAmountSummary: [],
-  setReceiptsForAmountSummary: () => {},
-  isMembershipFee: false,
 };
 
 export default FilterReceiptsForm;

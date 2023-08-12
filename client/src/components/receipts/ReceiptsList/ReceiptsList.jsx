@@ -47,7 +47,6 @@ const ReceiptsList = () => {
 
   const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
-  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
   const [selectedReceipts, setSelectedReceipts] = useState([]);
   const [showDeleteReceiptsModal, setShowDeleteReceiptsModal] = useState(false);
 
@@ -73,7 +72,6 @@ const ReceiptsList = () => {
     if (status === 200) {
       setCurrentReceipts(currentReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
 
-      // SetAllReceipts(allReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
       refetchReceipts();
 
       setSelectedReceipts([]);
@@ -88,18 +86,12 @@ const ReceiptsList = () => {
 
   useEffect(() => {
     setSelectedReceipts([]);
-    setReceiptsForAmountSummary([]);
   }, [currentReceipts]);
 
   return (
     <>
       <div className="container-fluid">
-        <FilterReceiptsForm
-          allReceipts={allReceipts}
-          receiptsForAmountSummary={receiptsForAmountSummary}
-          setCurrentReceipts={setCurrentReceipts}
-          setReceiptsForAmountSummary={setReceiptsForAmountSummary}
-        />
+        <FilterReceiptsForm allReceipts={allReceipts} setCurrentReceipts={setCurrentReceipts} />
         <div className="ag-theme-alpine ag-grid-custom">
           <AgGridReact
             reactNext

@@ -50,6 +50,12 @@ const paymentMethods = [
   { value: 'cash', label: 'Contanti' },
 ];
 
+const getPaymentMethodLabelFromValue = (value) => {
+  const method = paymentMethods.find((paymentMethod) => paymentMethod.value === value);
+
+  return method?.label;
+};
+
 const defaultAmounts = [
   { value: '10', label: '10' },
   { value: '90', label: '90' },
@@ -119,6 +125,7 @@ export {
   BLANK_DATE,
   BLANK_SPACE,
   getMonthFromId,
+  getPaymentMethodLabelFromValue,
   isAdult,
   isSubscriptionFee,
   isMembershipFee,
