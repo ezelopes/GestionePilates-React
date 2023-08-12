@@ -42,10 +42,10 @@ const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
   return existingMembershipFeeYears.includes(selectedReceiptDateYear);
 };
 
-const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false, handleModal = () => {} }) => {
+const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false }) => {
   const today = formatDate(new Date(), true);
 
-  const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
+  const { studentInfo, studentReceipts } = useStudent();
 
   const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptTypes[0].type);
   const [disableIncludeMembershipFee, setDisableIncludeMembershipFee] = useState(false);
@@ -79,24 +79,10 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
     const response = await callback(receiptData);
 
     if (response.status === 200) {
-      if (!isForCreating) {
-        const updatedStudentReceipts = [...studentReceipts];
-
-        const receiptIndex = updatedStudentReceipts.findIndex((receipt) => receipt.ReceiptID === defaultValues.ReceiptID);
-        updatedStudentReceipts[receiptIndex] = response.receipt;
-
-        setStudentReceipts(updatedStudentReceipts);
-
-        handleModal(false);
-      } else {
-        setStudentReceipts([...studentReceipts, response.receipt]);
-      }
-
       reset();
-      return toast.success(response.message, toastConfig);
     }
 
-    return toast.error(response.message, toastConfig);
+    return toast.error(response?.message, toastConfig);
   };
 
   const onReceiptTypeChange = (value) => {
@@ -293,14 +279,12 @@ UpsertReceiptForm.propTypes = {
   callback: PropTypes.func.isRequired,
   isForCreating: PropTypes.bool,
   setUserInfo: PropTypes.func,
-  handleModal: PropTypes.func,
 };
 
 UpsertReceiptForm.defaultProps = {
   receiptInfo: {},
   isForCreating: false,
   setUserInfo: () => {},
-  handleModal: () => {},
 };
 
 export default UpsertReceiptForm;

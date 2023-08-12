@@ -56,6 +56,9 @@ const UpsertUserForm = ({
       if (!isForCreating) {
         handleModal(false);
       }
+
+      // RefetchUser();
+
       setUserInfo(data);
 
       reset();

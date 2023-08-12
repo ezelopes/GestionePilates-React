@@ -51,6 +51,8 @@ const updateReceiptEndpoint = async (req, res) => {
 
 const deleteReceiptEndpoint = async (req, res) => {
   try {
+    console.log(req.body);
+
     const { ReceiptID } = req.body;
     const { message } = await deleteReceipt(ReceiptID);
 

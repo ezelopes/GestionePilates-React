@@ -30,26 +30,6 @@ const createStudent = async (newStudent) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const createReceipt = async (newReceipt) => {
-  const response = await fetch('/api/receipt/createReceipt', {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify(newReceipt),
-  });
-
-  const responseParsed = await response.json();
-
-  if (response.status === 200) {
-    const receiptWithID = produce(newReceipt, (draft) => {
-      draft.ReceiptID = responseParsed.ReceiptID;
-    });
-
-    return { status: response.status, message: responseParsed.message, receipt: receiptWithID };
-  }
-
-  return { status: response.status, message: responseParsed.message };
-};
-
 const createTeacher = async (newTeacher) => {
   const response = await fetch('/api/teacher/createTeacher', {
     method: 'PUT',
@@ -124,17 +104,6 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const updateReceipt = async (updatedReceipt) => {
-  const response = await fetch('/api/receipt/updateReceipt', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(updatedReceipt),
-  });
-  const responseParsed = await response.json();
-
-  return { status: response.status, message: responseParsed.message, receipt: updatedReceipt };
-};
-
 const deleteStudent = async (StudentID) => {
   const response = await fetch('/api/student/deleteStudent', {
     method: 'DELETE',
@@ -148,18 +117,6 @@ const deleteStudent = async (StudentID) => {
 
     sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
   }
-
-  const responseParsed = await response.json();
-
-  return { status: response.status, message: responseParsed.message };
-};
-
-const deleteReceipt = async (ReceiptID) => {
-  const response = await fetch('/api/receipt/deleteReceipt', {
-    method: 'DELETE',
-    headers,
-    body: JSON.stringify({ ReceiptID }),
-  });
 
   const responseParsed = await response.json();
 
@@ -210,14 +167,11 @@ const getTeachersWithRegistrationReceipt = async (Year) => {
 
 export {
   createStudent,
-  createReceipt,
   createTeacher,
   updateStudent,
   updateRegistrationDate,
   updateTeacher,
-  updateReceipt,
   deleteStudent,
-  deleteReceipt,
   deleteTeacher,
   getAllTeachers,
   getStudentWithReceipts,

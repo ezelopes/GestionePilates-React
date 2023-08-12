@@ -29,6 +29,8 @@ const StudentCard = () => {
     if (response.status === 200) {
       setStudentInfo(response.updatedStudent);
 
+      // RefetchStudent();
+
       toast.success(response.message, toastConfig);
     } else {
       toast.error(response.message, toastConfig);
