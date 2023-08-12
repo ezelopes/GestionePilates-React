@@ -6,17 +6,15 @@ import ReceiptsList from '../components/receipts/ReceiptsList';
 import MembershipFeesList from '../components/receipts/MembershipFeesList';
 import { isMembershipFee } from '../commondata';
 import Toggle from '../components/common/Toggle';
-import { ReceiptProvider } from '../components/receipts/ReceiptContext';
 import { getTranslation } from '../components/common/Translation/helpers';
 import Translation from '../components/common/Translation';
 import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
+import { useToggle } from '../components/common/useToggle';
 
 const ReceiptsPage = () => {
-  const [currentReceipts, setCurrentReceipts] = useState([]);
-
   const [allMembershipFees, setAllMembershipFees] = useState([]);
 
-  const [isMembershipFeeSelected, setIsMembershipFeeSelected] = useState(false);
+  const [isMembershipFeeSelected, toggleIsMembershipFeeSelected] = useToggle();
 
   const {
     data: allReceipts,
@@ -33,16 +31,19 @@ const ReceiptsPage = () => {
       );
 
       setAllMembershipFees(receiptsWithMembershipFee);
-
-      setCurrentReceipts(receipts);
     },
   });
 
   const onToggleChanged = (receiptTypeSelected) => {
-    // Reset state
-    setCurrentReceipts(receiptTypeSelected === 'receipt' ? allReceipts : allMembershipFees);
+    // Don't do anything if toggle hasn't changed.
+    if (
+      (receiptTypeSelected === 'receipt' && !isMembershipFeeSelected) ||
+      (receiptTypeSelected === 'receiptsWithMembershipFee' && isMembershipFeeSelected)
+    ) {
+      return;
+    }
 
-    setIsMembershipFeeSelected(receiptTypeSelected !== 'receipt');
+    toggleIsMembershipFeeSelected();
   };
 
   if (isLoading) {
@@ -65,16 +66,11 @@ const ReceiptsPage = () => {
         callback={onToggleChanged}
       />
 
-      <ReceiptProvider
-        allReceipts={allReceipts}
-        allMembershipFees={allMembershipFees}
-        currentReceipts={currentReceipts}
-        setCurrentReceipts={setCurrentReceipts}
-        refetchReceipts={refetch}
-        isLoading={isLoading}
-      >
-        {isMembershipFeeSelected ? <MembershipFeesList /> : <ReceiptsList />}
-      </ReceiptProvider>
+      {isMembershipFeeSelected ? (
+        <MembershipFeesList receipts={allMembershipFees} />
+      ) : (
+        <ReceiptsList receipts={allReceipts} refetchReceipts={refetch} />
+      )}
     </>
   );
 };

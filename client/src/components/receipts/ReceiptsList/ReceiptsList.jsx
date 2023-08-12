@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { Button } from 'react-bootstrap';
 
-import { useReceipt } from '../ReceiptContext';
 import FilterReceiptsForm from '../FilterReceiptsForm';
 import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
 
@@ -40,8 +40,8 @@ const columnsDefinition = [
   },
 ];
 
-const ReceiptsList = () => {
-  const { allReceipts, currentReceipts, setCurrentReceipts, refetchReceipts } = useReceipt();
+const ReceiptsList = ({ receipts, refetchReceipts }) => {
+  const [currentReceipts, setCurrentReceipts] = useState(receipts);
 
   const [gridOptions] = useState(gridOptionsDefaultReceipts);
 
@@ -50,9 +50,9 @@ const ReceiptsList = () => {
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
 
-    const receipts = selectedNodes.map(({ data }) => data);
+    const receiptsData = selectedNodes.map(({ data }) => data);
 
-    return setSelectedReceipts(receipts);
+    return setSelectedReceipts(receiptsData);
   };
 
   const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
@@ -60,7 +60,7 @@ const ReceiptsList = () => {
   return (
     <>
       <div className="container-fluid">
-        <FilterReceiptsForm allReceipts={allReceipts} setCurrentReceipts={setCurrentReceipts} />
+        <FilterReceiptsForm allReceipts={receipts} setCurrentReceipts={setCurrentReceipts} />
         <div className="ag-theme-alpine ag-grid-custom">
           <AgGridReact
             reactNext
@@ -93,9 +93,20 @@ const ReceiptsList = () => {
         </div>
       </div>
 
-      <PrintExpiringReceiptsForm />
+      <PrintExpiringReceiptsForm receipts={receipts} />
     </>
   );
+};
+
+ReceiptsList.propTypes = {
+  /**
+   * List of all receipts.
+   */
+  receipts: PropTypes.array.isRequired,
+  /**
+   * Callback to refetch receipts from server.
+   */
+  refetchReceipts: PropTypes.func.isRequired,
 };
 
 export default ReceiptsList;

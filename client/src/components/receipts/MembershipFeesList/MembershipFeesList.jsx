@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-
-import { useReceipt } from '../ReceiptContext';
 
 import { gridOptionsDefaultMembershipFee } from '../../../commondata/grid.config';
 import FilterSubscriptionFeesForm from './FilterSubscriptionFeesForm';
@@ -18,15 +17,13 @@ const columnsDefinition = [
   { headerName: 'Somma Euro', field: 'AmountPaid' },
 ];
 
-const MembershipFeesList = () => {
-  const { allMembershipFees } = useReceipt();
-
-  const [currentReceipts, setCurrentReceipts] = useState(allMembershipFees);
+const MembershipFeesList = ({ receipts }) => {
+  const [currentReceipts, setCurrentReceipts] = useState(receipts);
 
   return (
     <div className="container-fluid">
       <FilterSubscriptionFeesForm
-        allMembershipFees={allMembershipFees}
+        allMembershipFees={receipts}
         currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
       />
@@ -40,6 +37,13 @@ const MembershipFeesList = () => {
       </div>
     </div>
   );
+};
+
+MembershipFeesList.propTypes = {
+  /**
+   * List of all membership receipts.
+   */
+  receipts: PropTypes.array.isRequired,
 };
 
 export default MembershipFeesList;
