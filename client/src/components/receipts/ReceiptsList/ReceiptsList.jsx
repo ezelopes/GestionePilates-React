@@ -55,6 +55,16 @@ const ReceiptsList = ({ receipts, refetchReceipts }) => {
 
   const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
 
+  const onDelete = async () => {
+    const { data, isSuccess } = await refetchReceipts();
+
+    if (isSuccess) {
+      gridOptions.api.setRowData(data);
+
+      setSelectedReceipts([]);
+    }
+  };
+
   return (
     <>
       <div className="container-fluid">
@@ -80,14 +90,7 @@ const ReceiptsList = ({ receipts, refetchReceipts }) => {
             </span>
           </Button>
 
-          <DeleteReceiptsButton
-            receiptIDs={receiptIDs}
-            onDelete={() => {
-              refetchReceipts();
-
-              setSelectedReceipts([]);
-            }}
-          />
+          <DeleteReceiptsButton receiptIDs={receiptIDs} onDelete={onDelete} />
         </div>
       </div>
 

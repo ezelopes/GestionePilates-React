@@ -23,7 +23,7 @@ const DeleteReceiptsButton = ({ receiptIDs, onDelete }) => {
 
         toast.success(data.message, toastConfig);
 
-        onDelete(receiptIDs);
+        onDelete();
       },
       onError: (err) => toast.error(err?.message, toastConfig),
     }
