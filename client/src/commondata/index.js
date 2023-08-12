@@ -45,9 +45,9 @@ const receiptTypes = [
 ];
 
 const paymentMethods = [
-  { id: 'check', type: 'Assegno' },
-  { id: 'bank_transfer', type: 'Bonifico Bancario' },
-  { id: 'cash', type: 'Contanti' },
+  { value: 'check', label: 'Assegno' },
+  { value: 'bank_transfer', label: 'Bonifico Bancario' },
+  { value: 'cash', label: 'Contanti' },
 ];
 
 const defaultAmounts = [

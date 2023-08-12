@@ -183,9 +183,9 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
               <Translation value="receiptForm.paymentType" />
             </Form.Label>
             <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
-              {paymentMethods.map((currentMethod) => (
-                <option key={`select_${currentMethod.type}`} value={currentMethod.type}>
-                  {currentMethod.type}
+              {paymentMethods.map(({ value, label }) => (
+                <option key={`select_${value}`} value={value}>
+                  {label}
                 </option>
               ))}
             </Form.Control>

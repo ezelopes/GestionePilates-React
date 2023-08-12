@@ -99,7 +99,6 @@ const ReceiptsList = () => {
           receiptsForAmountSummary={receiptsForAmountSummary}
           setCurrentReceipts={setCurrentReceipts}
           setReceiptsForAmountSummary={setReceiptsForAmountSummary}
-          gridOptions={gridOptions}
         />
         <div className="ag-theme-alpine ag-grid-custom">
           <AgGridReact

@@ -45,7 +45,6 @@ const ReceiptsPage = () => {
     setIsMembershipFeeSelected(receiptTypeSelected !== 'receipt');
   };
 
-  // TODO: Apply spinner in the corresponding places (AG Grid) rather than on the whole page.
   if (isLoading) {
     return <Spinner animation="border" role="status" className="spinner" />;
   }
@@ -72,6 +71,7 @@ const ReceiptsPage = () => {
         currentReceipts={currentReceipts}
         setCurrentReceipts={setCurrentReceipts}
         refetchReceipts={refetch}
+        isLoading={isLoading}
       >
         {isMembershipFeeSelected ? <MembershipFeesList /> : <ReceiptsList />}
       </ReceiptProvider>
