@@ -180,15 +180,6 @@ const deleteTeacher = async (TeacherID) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const getAllStudents = async () => {
-  const result = await fetch('/api/student/getStudents');
-  const body = await result.json();
-
-  sessionStorage.setItem('studentsList', JSON.stringify(body));
-
-  return { allStudents: body };
-};
-
 const getAllTeachers = async () => {
   const result = await fetch('/api/teacher/getTeachers');
   const body = await result.json();
@@ -228,7 +219,6 @@ export {
   deleteStudent,
   deleteReceipt,
   deleteTeacher,
-  getAllStudents,
   getAllTeachers,
   getStudentWithReceipts,
   getStudentsWithRegistrationReceipt,
