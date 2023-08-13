@@ -46,7 +46,7 @@ ControlledFormCheckbox.propTypes = {
   /**
    * Optional default input value when it's `undefined` or `null`.
    */
-  defaultValue: PropTypes.object,
+  defaultValue: PropTypes.bool,
   /**
    * Optional on change callback. If passed, the on change callback will receive the current
    * field state and form state.
@@ -60,7 +60,7 @@ ControlledFormCheckbox.propTypes = {
 
 ControlledFormCheckbox.defaultProps = {
   rules: undefined,
-  defaultValue: undefined,
+  defaultValue: false,
   onChange: undefined,
   label: undefined,
 };

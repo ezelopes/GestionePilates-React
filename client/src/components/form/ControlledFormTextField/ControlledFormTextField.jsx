@@ -28,7 +28,6 @@ const ControlledFormTextField = ({ name, rules, defaultValue, onChange, label, .
             {...renderFieldProps}
             {...props}
             type="text"
-            defaultValue={defaultValue}
             onChange={(e) => {
               renderOnChange(e);
 

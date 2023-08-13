@@ -12,32 +12,18 @@ import { useStudent } from '../../student/StudentContext';
 import ControlledFormDateField from '../../form/ControlledFormDateField';
 import ControlledFormTextField from '../../form/ControlledFormTextField/ControlledFormTextField';
 import ControlledFormSelectField from '../../form/ControlledFormSelectField/ControlledFormSelectField';
+import ControlledFormCreatableSelectField from '../../form/ControlledFormCreatableSelectField';
+import ControlledFormCheckbox from '../../form/ControlledFormCheckbox/ControlledFormCheckbox';
 
 import toastConfig from '../../../commondata/toast.config';
 import { formatDate } from '../../../helpers/dates';
 
-import {
-  receiptTypes,
-  paymentMethods,
-  defaultAmounts,
-  isMembershipFee,
-  isSubscriptionFee,
-  isDanceRecitalFee,
-} from '../../../commondata';
+import { receiptTypes, paymentMethods, defaultAmounts, isSubscriptionFee, isDanceRecitalFee } from '../../../commondata';
+import hasMembershipFeeForSelectedSolarYear from '../../../helpers/hasMembershipFeeForSelectedSolarYear';
 
 import './upsert-receipt-form.css';
-import ControlledFormCreatableSelectField from '../../form/ControlledFormCreatableSelectField';
-import ControlledFormCheckbox from '../../form/ControlledFormCheckbox/ControlledFormCheckbox';
 
 const RECEIPT_TYPE_FIELDS = receiptTypes.map(({ type }) => ({ value: type, label: type }));
-
-const hasMembershipFeeForSelectedSolarYear = (year, receipts) => {
-  const existingMembershipFeeYears = receipts
-    .filter(({ ReceiptType, IncludeMembershipFee }) => isMembershipFee(ReceiptType) || IncludeMembershipFee)
-    .map(({ ReceiptDate }) => new Date(ReceiptDate).getFullYear());
-
-  return existingMembershipFeeYears.includes(year);
-};
 
 const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }) => {
   const today = formatDate(new Date(), true);

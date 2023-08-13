@@ -25,7 +25,6 @@ const ControlledFormDateField = ({ name, rules, defaultValue, onChange, label, .
             {...renderFieldProps}
             {...props}
             type="date"
-            defaultValue={defaultValue}
             onChange={(e) => {
               renderOnChange(e);
 

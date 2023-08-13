@@ -22,7 +22,6 @@ const ControlledFormCreatableSelectField = ({ name, rules, defaultValue, onChang
             {...props}
             options={options}
             value={{ value, label: value }}
-            defaultValue={value}
             onChange={(selectedOption) => {
               renderOnChange(selectedOption?.value || null);
 
@@ -49,7 +48,7 @@ ControlledFormCreatableSelectField.propTypes = {
   /**
    * Optional default input value when it's `undefined` or `null`.
    */
-  defaultValue: PropTypes.object,
+  defaultValue: PropTypes.string,
   /**
    * Optional on change callback. If passed, the on change callback will receive the current
    * field state and form state.
