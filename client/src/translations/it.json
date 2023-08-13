@@ -40,8 +40,9 @@
   },
   "receiptForm": {
     "receiptNumber": "Numero Ricevuta",
+    "receiptNumberError": "Inserisci numero ricevuta!",
     "receiptType": "Tipo Ricevuta",
-    "paymentType": "Tipo Pagamento",
+    "paymentMethod": "Tipo Pagamento",
     "amountPaid": "Importo",
     "receiptDate": "Data Ricevuta",
     "courseStartDate": "Data Inizio Corso",

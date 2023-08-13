@@ -1,36 +1,33 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 
 import { Controller, useFormContext } from 'react-hook-form';
-
-import { Form } from 'react-bootstrap';
+import CreatableSelect from 'react-select/creatable';
 import { isFunction } from 'is-what';
+import { Form } from 'react-bootstrap';
 
-/**
- * Controlled form date field.
- */
-const ControlledFormDateField = ({ name, rules, defaultValue, onChange, label, ...props }) => {
+const ControlledFormCreatableSelectField = ({ name, rules, defaultValue, onChange, label, options, ...props }) => {
   const { control } = useFormContext();
 
   return (
     <Controller
-      control={control}
       name={name}
-      defaultValue={defaultValue || undefined}
-      rules={rules}
-      render={({ field: { onChange: renderOnChange, ...renderFieldProps } }) => (
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field: { value, onChange: renderOnChange, ...renderFieldProps } }) => (
         <Form.Group>
           {label && <Form.Label>{label}</Form.Label>}
-          <Form.Control
+          <CreatableSelect
             {...renderFieldProps}
             {...props}
-            type="date"
-            defaultValue={defaultValue}
-            onChange={(e) => {
-              renderOnChange(e);
+            options={options}
+            value={{ value, label: value }}
+            defaultValue={value}
+            onChange={(selectedOption) => {
+              renderOnChange(selectedOption?.value || null);
 
               if (isFunction(onChange)) {
-                onChange();
+                onChange(selectedOption?.value || null);
               }
             }}
           />
@@ -40,7 +37,7 @@ const ControlledFormDateField = ({ name, rules, defaultValue, onChange, label, .
   );
 };
 
-ControlledFormDateField.propTypes = {
+ControlledFormCreatableSelectField.propTypes = {
   /**
    * Input name.
    */
@@ -52,23 +49,27 @@ ControlledFormDateField.propTypes = {
   /**
    * Optional default input value when it's `undefined` or `null`.
    */
-  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  defaultValue: PropTypes.object,
   /**
    * Optional on change callback. If passed, the on change callback will receive the current
    * field state and form state.
    */
   onChange: PropTypes.func,
   /**
+   * Dropdown options.
+   */
+  options: PropTypes.arrayOf(object).isRequired,
+  /**
    * Optional label for the form field.
    */
   label: PropTypes.node,
 };
 
-ControlledFormDateField.defaultProps = {
+ControlledFormCreatableSelectField.defaultProps = {
   rules: undefined,
   defaultValue: undefined,
   onChange: undefined,
   label: undefined,
 };
 
-export default ControlledFormDateField;
+export default ControlledFormCreatableSelectField;

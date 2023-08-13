@@ -1,15 +1,17 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
-import CreatableSelect from 'react-select/creatable';
-import { useForm, Controller, FormProvider } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
+import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Translation from '../../common/Translation';
 import { getTranslation } from '../../common/Translation/helpers';
 
 import { useStudent } from '../../student/StudentContext';
+
+import ControlledFormDateField from '../../form/ControlledFormDateField';
+import ControlledFormTextField from '../../form/ControlledFormTextField/ControlledFormTextField';
+import ControlledFormSelectField from '../../form/ControlledFormSelectField/ControlledFormSelectField';
 
 import toastConfig from '../../../commondata/toast.config';
 import { formatDate } from '../../../helpers/dates';
@@ -24,7 +26,9 @@ import {
 } from '../../../commondata';
 
 import './upsert-receipt-form.css';
-import ControlledFormDateField from '../../form/ControlledFormDateField';
+import ControlledFormCreatableSelectField from '../../form/ControlledFormCreatableSelectField';
+
+const RECEIPT_TYPE_FIELDS = receiptTypes.map(({ type }) => ({ value: type, label: type }));
 
 // TODO: Export this function into a helper file
 const hasMembershipFeeForSelectedSolarYear = (year, receipts) => {
@@ -35,7 +39,6 @@ const hasMembershipFeeForSelectedSolarYear = (year, receipts) => {
   return existingMembershipFeeYears.includes(year);
 };
 
-// TODO: Controlled components here.
 const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }) => {
   const today = formatDate(new Date(), true);
 
@@ -44,50 +47,30 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
   const defaultValues = {
     TaxCode: studentInfo.TaxCode,
     StudentID: studentInfo.StudentID,
-    ReceiptType: receiptInfo?.ReceiptType || receiptTypes[0].type,
+    ReceiptNumber: receiptInfo?.ReceiptNumber || '',
+    ReceiptType: receiptInfo?.ReceiptType || RECEIPT_TYPE_FIELDS[0].value,
+    PaymentMethod: receiptInfo?.PaymentMethod || paymentMethods[0].value,
     ReceiptID: receiptInfo?.ReceiptID,
     AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
     IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
     ReceiptDate: receiptInfo?.ReceiptDate || today,
-    // TODO: Maybe I should always send this date and the back end decides whether to ignore it or not based on receipt type!
-    // || isSubscriptionFee(receiptInfo?.ReceiptType || receiptTypes[0].type) ? today : null,
-    CourseStartDate: receiptInfo?.CourseStartDate,
-    // || isSubscriptionFee(receiptInfo?.ReceiptType || receiptTypes[0].type) ? today : null,
-    CourseEndDate: receiptInfo?.CourseEndDate,
+    CourseStartDate: receiptInfo?.CourseStartDate || today,
+    CourseEndDate: receiptInfo?.CourseEndDate || today,
   };
 
   const form = useForm({ defaultValues });
 
-  const {
-    register,
-    watch,
-    handleSubmit,
-    reset,
-    setValue,
-    control,
-    formState: { errors },
-  } = form;
-
-  const receiptTypeField = register('ReceiptType');
+  const { register, watch, handleSubmit, reset, formState } = form;
 
   const onSubmit = async (receiptData) => {
     const response = await mutate(receiptData);
 
     if (response.status === 200) {
-      reset();
+      // TODO: Refetch receipts?
+      return reset();
     }
 
     return toast.error(response?.message, toastConfig);
-  };
-
-  const onReceiptTypeChange = (value) => {
-    if (isSubscriptionFee(value)) {
-      setValue('CourseStartDate', receiptInfo?.CourseStartDate || today);
-      setValue('CourseEndDate', receiptInfo?.CourseEndDate || today);
-    } else {
-      setValue('CourseStartDate', null);
-      setValue('CourseEndDate', null);
-    }
   };
 
   const watchedReceiptType = watch('ReceiptType');
@@ -103,95 +86,33 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={isSubscriptionFee(watchedReceiptType) ? 'upsert-receipt-form' : 'upsert-membership-fee-form'}>
-          <div>
-            <Form.Label>
-              <Translation value="receiptForm.receiptNumber" />
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={getTranslation('placeholder.receiptNumber')}
-              defaultValue={receiptInfo?.ReceiptNumber}
-              {...register('ReceiptNumber', { required: 'Numero Ricevuta non puo essere vuoto!' })}
-            />
-            <div style={{ display: 'none' }}>
-              <ErrorMessage
-                errors={errors}
-                name="ReceiptNumber"
-                render={({ message }) => {
-                  if (errors?.ReceiptNumber?.type === 'required') {
-                    return toast.error(message, toastConfig);
-                  }
-                  return null;
-                }}
-              />
-            </div>
-          </div>
+          <ControlledFormTextField
+            name="ReceiptNumber"
+            label={<Translation value="receiptForm.receiptNumber" />}
+            placeholder={getTranslation('placeholder.receiptNumber')}
+            rules={{ required: getTranslation('receiptForm.receiptNumberError') }}
+            errors={formState.errors}
+          />
 
-          <div>
-            <Form.Label>
-              <Translation value="receiptForm.receiptType" />
-            </Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue={receiptInfo?.ReceiptType}
-              {...receiptTypeField}
-              onChange={(e) => {
-                receiptTypeField.onChange(e);
-                onReceiptTypeChange(e.target.value);
-              }}
-            >
-              {receiptTypes.map((receiptType) => (
-                <option key={`select_${receiptType.type}`} value={receiptType.type}>
-                  {receiptType.type}
-                </option>
-              ))}
-            </Form.Control>
-          </div>
+          <ControlledFormSelectField
+            name="ReceiptType"
+            label={<Translation value="receiptForm.receiptType" />}
+            options={RECEIPT_TYPE_FIELDS}
+          />
 
-          <div>
-            <Form.Label>
-              <Translation value="receiptForm.paymentType" />
-            </Form.Label>
-            <Form.Control as="select" defaultValue={receiptInfo?.PaymentMethod} {...register('PaymentMethod')}>
-              {paymentMethods.map(({ value, label }) => (
-                <option key={`select_${value}`} value={value}>
-                  {label}
-                </option>
-              ))}
-            </Form.Control>
-          </div>
+          <ControlledFormSelectField
+            name="PaymentMethod"
+            label={<Translation value="receiptForm.paymentMethod" />}
+            options={paymentMethods}
+          />
 
-          <div>
-            <Form.Label>
-              <Translation value="receiptForm.amountPaid" />
-            </Form.Label>
-            <Controller
-              name="AmountPaid"
-              control={control}
-              defaultValue={{
-                value: receiptInfo?.AmountPaid || defaultAmounts[0].value,
-                label: receiptInfo?.AmountPaid || defaultAmounts[0].label,
-              }}
-              render={({ field }) => (
-                <CreatableSelect
-                  {...field}
-                  options={defaultAmounts}
-                  value={{ value: field.value, label: field.value }}
-                  defaultValue={field.value}
-                  onChange={(e) => {
-                    field.onChange(e.value);
-                  }}
-                />
-              )}
-            />
-          </div>
+          <ControlledFormCreatableSelectField
+            name="AmountPaid"
+            label={<Translation value="receiptForm.amountPaid" />}
+            options={defaultAmounts}
+          />
 
-          <div>
-            <Form.Label>
-              <Translation value="receiptForm.receiptDate" />
-            </Form.Label>
-            <Form.Control type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
-          </div>
+          <ControlledFormDateField name="ReceiptDate" label={<Translation value="receiptForm.receiptDate" />} />
 
           {isSubscriptionFee(watchedReceiptType) && (
             <>
@@ -221,14 +142,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
         </div>
 
         <Button type="submit" variant="success">
-          {isForCreating ? (
-            <span role="img" aria-label="create">
-              🆕&nbsp;
-              <Translation value="buttons.receipt.createReceipt" />
-            </span>
-          ) : (
-            <Translation value="buttons.receipt.updateReceipt" />
-          )}
+          <Translation value={isForCreating ? 'buttons.receipt.createReceipt' : 'buttons.receipt.updateReceipt'} />
         </Button>
       </form>
     </FormProvider>

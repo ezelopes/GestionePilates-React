@@ -7,16 +7,16 @@ import { Form } from 'react-bootstrap';
 import { isFunction } from 'is-what';
 
 /**
- * Controlled form date field.
+ * Controlled form text field.
  */
-const ControlledFormDateField = ({ name, rules, defaultValue, onChange, label, ...props }) => {
+const ControlledFormTextField = ({ name, rules, defaultValue, onChange, label, errors, ...props }) => {
   const { control } = useFormContext();
 
   return (
     <Controller
       control={control}
       name={name}
-      defaultValue={defaultValue || undefined}
+      defaultValue={defaultValue}
       rules={rules}
       render={({ field: { onChange: renderOnChange, ...renderFieldProps } }) => (
         <Form.Group>
@@ -24,7 +24,7 @@ const ControlledFormDateField = ({ name, rules, defaultValue, onChange, label, .
           <Form.Control
             {...renderFieldProps}
             {...props}
-            type="date"
+            type="text"
             defaultValue={defaultValue}
             onChange={(e) => {
               renderOnChange(e);
@@ -34,13 +34,14 @@ const ControlledFormDateField = ({ name, rules, defaultValue, onChange, label, .
               }
             }}
           />
+          {errors[name]?.message && <Form.Text className="text-danger font-weight-bold">{errors[name]?.message}</Form.Text>}
         </Form.Group>
       )}
     />
   );
 };
 
-ControlledFormDateField.propTypes = {
+ControlledFormTextField.propTypes = {
   /**
    * Input name.
    */
@@ -62,13 +63,18 @@ ControlledFormDateField.propTypes = {
    * Optional label for the form field.
    */
   label: PropTypes.node,
+  /**
+   * Optional label for the form field.
+   */
+  errors: PropTypes.object,
 };
 
-ControlledFormDateField.defaultProps = {
+ControlledFormTextField.defaultProps = {
   rules: undefined,
   defaultValue: undefined,
   onChange: undefined,
   label: undefined,
+  errors: undefined,
 };
 
-export default ControlledFormDateField;
+export default ControlledFormTextField;
