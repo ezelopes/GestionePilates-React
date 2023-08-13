@@ -21,7 +21,7 @@ const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
     async () => axios.delete('/api/receipt/deleteReceipt', { data: { ReceiptID: receipt.ReceiptID } }),
     {
       onSuccess: (response) => {
-        const updatedList = studentReceipts.filter((r) => r.ReceiptID === receipt.ReceiptID);
+        const updatedList = studentReceipts.filter((r) => r.ReceiptID !== receipt.ReceiptID);
 
         setStudentReceipts(updatedList);
 
