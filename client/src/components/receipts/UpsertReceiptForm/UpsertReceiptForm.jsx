@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -27,10 +27,10 @@ import {
 
 import './upsert-receipt-form.css';
 import ControlledFormCreatableSelectField from '../../form/ControlledFormCreatableSelectField';
+import ControlledFormCheckbox from '../../form/ControlledFormCheckbox/ControlledFormCheckbox';
 
 const RECEIPT_TYPE_FIELDS = receiptTypes.map(({ type }) => ({ value: type, label: type }));
 
-// TODO: Export this function into a helper file
 const hasMembershipFeeForSelectedSolarYear = (year, receipts) => {
   const existingMembershipFeeYears = receipts
     .filter(({ ReceiptType, IncludeMembershipFee }) => isMembershipFee(ReceiptType) || IncludeMembershipFee)
@@ -47,25 +47,27 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
   const defaultValues = {
     TaxCode: studentInfo.TaxCode,
     StudentID: studentInfo.StudentID,
+    ReceiptID: receiptInfo?.ReceiptID,
     ReceiptNumber: receiptInfo?.ReceiptNumber || '',
     ReceiptType: receiptInfo?.ReceiptType || RECEIPT_TYPE_FIELDS[0].value,
     PaymentMethod: receiptInfo?.PaymentMethod || paymentMethods[0].value,
-    ReceiptID: receiptInfo?.ReceiptID,
     AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
-    IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
     ReceiptDate: receiptInfo?.ReceiptDate || today,
     CourseStartDate: receiptInfo?.CourseStartDate || today,
     CourseEndDate: receiptInfo?.CourseEndDate || today,
+    RegistrationDate: receiptInfo?.RegistrationDate || false,
+    IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
   };
 
   const form = useForm({ defaultValues });
 
-  const { register, watch, handleSubmit, reset, formState } = form;
+  const { watch, handleSubmit, reset, formState } = form;
 
   const onSubmit = async (receiptData) => {
     const response = await mutate(receiptData);
 
     if (response.status === 200) {
+      // TODO: If new receipt is submitted and its ReceiptDate is used as `RegistrationDate`, then refetch patient data.
       // TODO: Refetch receipts?
       return reset();
     }
@@ -123,19 +125,13 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
         </div>
         <div className="checkbox-container">
           {isForCreating && !isDanceRecitalFee(watchedReceiptType) && (
-            <Form.Check
-              label={<Translation value="receiptForm.isRegistrationDate" />}
-              type="checkbox"
-              {...register('RegistrationDate')}
-            />
+            <ControlledFormCheckbox name="RegistrationDate" label={<Translation value="receiptForm.isRegistrationDate" />} />
           )}
 
           {isSubscriptionFee(watchedReceiptType) && (
-            <Form.Check
+            <ControlledFormCheckbox
+              name="IncludeMembershipFee"
               label={<Translation value="receiptForm.includeMembershipFee" />}
-              type="checkbox"
-              {...register('IncludeMembershipFee')}
-              defaultChecked={receiptInfo?.IncludeMembershipFee || false}
               disabled={!receiptInfo?.IncludeMembershipFee && hasMembershipFeeForCurrentYear}
             />
           )}
