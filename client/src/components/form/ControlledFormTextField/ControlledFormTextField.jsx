@@ -9,8 +9,11 @@ import { isFunction } from 'is-what';
 /**
  * Controlled form text field.
  */
-const ControlledFormTextField = ({ name, rules, defaultValue, onChange, label, errors, ...props }) => {
-  const { control } = useFormContext();
+const ControlledFormTextField = ({ name, rules, defaultValue, onChange, label, ...props }) => {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <Controller
@@ -66,7 +69,7 @@ ControlledFormTextField.propTypes = {
   /**
    * Optional label for the form field.
    */
-  errors: PropTypes.object,
+  // errors: PropTypes.object,
 };
 
 ControlledFormTextField.defaultProps = {
@@ -74,7 +77,7 @@ ControlledFormTextField.defaultProps = {
   defaultValue: undefined,
   onChange: undefined,
   label: undefined,
-  errors: undefined,
+  // Errors: undefined,
 };
 
 export default ControlledFormTextField;

@@ -61,7 +61,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
 
   const form = useForm({ defaultValues });
 
-  const { watch, handleSubmit, reset, formState } = form;
+  const { watch, handleSubmit, reset } = form;
 
   const onSubmit = async (receiptData) => {
     const response = await mutate(receiptData);
@@ -93,7 +93,6 @@ const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }
             label={<Translation value="receiptForm.receiptNumber" />}
             placeholder={getTranslation('placeholder.receiptNumber')}
             rules={{ required: getTranslation('receiptForm.receiptNumberError') }}
-            errors={formState.errors}
           />
 
           <ControlledFormSelectField
