@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { Controller, useFormContext } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
@@ -58,7 +58,7 @@ ControlledFormCreatableSelectField.propTypes = {
   /**
    * Dropdown options.
    */
-  options: PropTypes.arrayOf(object).isRequired,
+  options: PropTypes.arrayOf(PropTypes.object).isRequired,
   /**
    * Optional label for the form field.
    */
