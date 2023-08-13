@@ -66,10 +66,11 @@ const createReceipt = async (receiptInfo) => {
       IncludeQuotaAssociativa: isSubscriptionFee ? receiptInfo.IncludeMembershipFee : false,
     });
 
+    // Use Receipt Date as Registration Date
     if (receiptInfo.RegistrationDate === true) {
       await knex(STUDENT_TABLE)
         .where({ AllievaID: receiptInfo.StudentID })
-        .update({ DataIscrizione: getFormattedDate(receiptInfo.CourseStartDate) });
+        .update({ DataIscrizione: getFormattedDate(receiptInfo.ReceiptDate) });
     }
 
     return { ReceiptID: newReceiptID[0], message: receiptResponseMessages.ok.create };
