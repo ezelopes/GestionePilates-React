@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, FormProvider } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { toast } from 'react-toastify';
 
@@ -24,44 +24,39 @@ import {
 } from '../../../commondata';
 
 import './upsert-receipt-form.css';
+import ControlledFormDateField from '../../form/ControlledFormDateField';
 
-const checkMembershipFeePerSolarYear = (selectedReceiptDateYear, receipts) => {
-  const existingMembershipFeeYearsArray = receipts.reduce((accumulator, { ReceiptDate, ReceiptType, IncludeMembershipFee }) => {
-    if (!isMembershipFee(ReceiptType) && !IncludeMembershipFee) {
-      return accumulator;
-    }
+// TODO: Export this function into a helper file
+const hasMembershipFeeForSelectedSolarYear = (year, receipts) => {
+  const existingMembershipFeeYears = receipts
+    .filter(({ ReceiptType, IncludeMembershipFee }) => isMembershipFee(ReceiptType) || IncludeMembershipFee)
+    .map(({ ReceiptDate }) => new Date(ReceiptDate).getFullYear());
 
-    const currentMembershipYear = new Date(ReceiptDate).getFullYear();
-    accumulator.push(currentMembershipYear);
-
-    return accumulator;
-  }, []);
-
-  const existingMembershipFeeYears = [...new Set(existingMembershipFeeYearsArray)];
-
-  return existingMembershipFeeYears.includes(selectedReceiptDateYear);
+  return existingMembershipFeeYears.includes(year);
 };
 
-const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false }) => {
+// TODO: Controlled components here.
+const UpsertReceiptForm = ({ receiptInfo = null, mutate, isForCreating = false }) => {
   const today = formatDate(new Date(), true);
 
   const { studentInfo, studentReceipts } = useStudent();
 
-  const [newReceiptType, setNewReceiptType] = useState(receiptInfo?.ReceiptType || receiptTypes[0].type);
-  const [disableIncludeMembershipFee, setDisableIncludeMembershipFee] = useState(false);
-
   const defaultValues = {
     TaxCode: studentInfo.TaxCode,
     StudentID: studentInfo.StudentID,
+    ReceiptType: receiptInfo?.ReceiptType || receiptTypes[0].type,
     ReceiptID: receiptInfo?.ReceiptID,
     AmountPaid: receiptInfo?.AmountPaid || defaultAmounts[0].value,
     IncludeMembershipFee: receiptInfo?.IncludeMembershipFee || false,
+    ReceiptDate: receiptInfo?.ReceiptDate || today,
+    // TODO: Maybe I should always send this date and the back end decides whether to ignore it or not based on receipt type!
+    // || isSubscriptionFee(receiptInfo?.ReceiptType || receiptTypes[0].type) ? today : null,
+    CourseStartDate: receiptInfo?.CourseStartDate,
+    // || isSubscriptionFee(receiptInfo?.ReceiptType || receiptTypes[0].type) ? today : null,
+    CourseEndDate: receiptInfo?.CourseEndDate,
   };
 
-  if (!isSubscriptionFee(newReceiptType)) {
-    defaultValues.CourseStartDate = null;
-    defaultValues.CourseEndDate = null;
-  }
+  const form = useForm({ defaultValues });
 
   const {
     register,
@@ -71,12 +66,12 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
     setValue,
     control,
     formState: { errors },
-  } = useForm({ defaultValues });
+  } = form;
 
   const receiptTypeField = register('ReceiptType');
 
   const onSubmit = async (receiptData) => {
-    const response = await callback(receiptData);
+    const response = await mutate(receiptData);
 
     if (response.status === 200) {
       reset();
@@ -95,30 +90,19 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
     }
   };
 
-  useEffect(() => {
-    const membershipFeeExitsInSelectedYear = checkMembershipFeePerSolarYear(
-      new Date(receiptInfo?.ReceiptDate || today).getFullYear(),
-      studentReceipts
-    );
+  const watchedReceiptType = watch('ReceiptType');
 
-    setDisableIncludeMembershipFee(membershipFeeExitsInSelectedYear);
-  }, [receiptInfo, studentReceipts, today]);
+  const watchedReceiptDate = watch('ReceiptDate');
 
-  watch((data) => {
-    setNewReceiptType(data.ReceiptType);
-
-    const membershipFeeExitsInSelectedYear = checkMembershipFeePerSolarYear(
-      new Date(data.ReceiptDate).getFullYear(),
-      studentReceipts
-    );
-
-    setDisableIncludeMembershipFee(membershipFeeExitsInSelectedYear);
-  });
+  const hasMembershipFeeForCurrentYear = useMemo(
+    () => hasMembershipFeeForSelectedSolarYear(new Date(watchedReceiptDate || today).getFullYear(), studentReceipts),
+    [watchedReceiptDate, studentReceipts, today]
+  );
 
   return (
-    <>
+    <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={isSubscriptionFee(newReceiptType) ? 'upsert-receipt-form' : 'upsert-membership-fee-form'}>
+        <div className={isSubscriptionFee(watchedReceiptType) ? 'upsert-receipt-form' : 'upsert-membership-fee-form'}>
           <div>
             <Form.Label>
               <Translation value="receiptForm.receiptNumber" />
@@ -209,26 +193,15 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             <Form.Control type="date" defaultValue={receiptInfo?.ReceiptDate || today} {...register('ReceiptDate')} />
           </div>
 
-          {isSubscriptionFee(newReceiptType) && (
+          {isSubscriptionFee(watchedReceiptType) && (
             <>
-              <div>
-                <Form.Label>
-                  <Translation value="receiptForm.courseStartDate" />
-                </Form.Label>
-                <Form.Control type="date" defaultValue={receiptInfo?.CourseStartDate || today} {...register('CourseStartDate')} />
-              </div>
-
-              <div>
-                <Form.Label>
-                  <Translation value="receiptForm.courseEndDate" />
-                </Form.Label>
-                <Form.Control type="date" defaultValue={receiptInfo?.CourseEndDate || today} {...register('CourseEndDate')} />
-              </div>
+              <ControlledFormDateField name="CourseStartDate" label={<Translation value="receiptForm.courseStartDate" />} />
+              <ControlledFormDateField name="CourseEndDate" label={<Translation value="receiptForm.courseEndDate" />} />
             </>
           )}
         </div>
         <div className="checkbox-container">
-          {isForCreating && !isDanceRecitalFee(newReceiptType) && (
+          {isForCreating && !isDanceRecitalFee(watchedReceiptType) && (
             <Form.Check
               label={<Translation value="receiptForm.isRegistrationDate" />}
               type="checkbox"
@@ -236,13 +209,13 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
             />
           )}
 
-          {isSubscriptionFee(newReceiptType) && (
+          {isSubscriptionFee(watchedReceiptType) && (
             <Form.Check
               label={<Translation value="receiptForm.includeMembershipFee" />}
               type="checkbox"
               {...register('IncludeMembershipFee')}
               defaultChecked={receiptInfo?.IncludeMembershipFee || false}
-              disabled={!receiptInfo?.IncludeMembershipFee && disableIncludeMembershipFee}
+              disabled={!receiptInfo?.IncludeMembershipFee && hasMembershipFeeForCurrentYear}
             />
           )}
         </div>
@@ -258,7 +231,7 @@ const UpsertReceiptForm = ({ receiptInfo = null, callback, isForCreating = false
           )}
         </Button>
       </form>
-    </>
+    </FormProvider>
   );
 };
 
@@ -276,7 +249,7 @@ UpsertReceiptForm.propTypes = {
     CourseEndDate: PropTypes.string,
     IncludeMembershipFee: PropTypes.bool,
   }),
-  callback: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   isForCreating: PropTypes.bool,
   setUserInfo: PropTypes.func,
 };

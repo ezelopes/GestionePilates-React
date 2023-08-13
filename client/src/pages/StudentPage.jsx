@@ -81,7 +81,7 @@ const StudentPage = ({ match }) => {
         <StudentCard />
 
         <div className="form-wrapper create-receipt-form">
-          <UpsertReceiptForm isForCreating callback={createReceiptMutation} />
+          <UpsertReceiptForm isForCreating mutate={createReceiptMutation} />
         </div>
       </div>
 

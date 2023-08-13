@@ -61,7 +61,7 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <UpsertReceiptForm receiptInfo={receipt} callback={updateReceiptMutation} />
+          <UpsertReceiptForm receiptInfo={receipt} mutate={updateReceiptMutation} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={toggleShowUpdateReceiptModal}>
