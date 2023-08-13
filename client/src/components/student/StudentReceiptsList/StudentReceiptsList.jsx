@@ -33,7 +33,7 @@ const columnsDefinition = [
   {
     headerName: 'Tipo Pagamento',
     field: 'PaymentMethod',
-    cellRenderer: (params) => getPaymentMethodLabelFromValue(params.value),
+    cellRenderer: (params) => getPaymentMethodLabelFromValue(params.value) || '',
   },
   {
     headerName: 'Include Quota Associativa',
