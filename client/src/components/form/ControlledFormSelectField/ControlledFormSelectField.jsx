@@ -16,7 +16,7 @@ const ControlledFormSelectField = ({ name, rules, defaultValue, onChange, label,
     <Controller
       control={control}
       name={name}
-      // DefaultValue={defaultValue === undefined ? null : defaultValue}
+      defaultValue={defaultValue === undefined ? null : defaultValue}
       rules={rules}
       render={({ field: { onChange: renderOnChange, ...renderFieldProps } }) => (
         <Form.Group>
@@ -25,12 +25,11 @@ const ControlledFormSelectField = ({ name, rules, defaultValue, onChange, label,
             {...renderFieldProps}
             {...props}
             as="select"
-            defaultValue={defaultValue}
             onChange={(e) => {
               renderOnChange(e);
 
               if (isFunction(onChange)) {
-                onChange();
+                onChange(e.target.value);
               }
             }}
           >
