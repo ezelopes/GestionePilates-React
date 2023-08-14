@@ -6,37 +6,58 @@ import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 import { Button, Modal } from 'react-bootstrap';
 import { isFunction } from 'is-what';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useStudent } from '../../StudentContext';
 import { getTranslation } from '../../../common/Translation/helpers';
 import toastConfig from '../../../../commondata/toast.config';
 import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
-import UpsertReceiptForm from '../../../receipts/UpsertReceiptForm';
+import ReceiptForm from '../../../receipts/UpsertReceiptForm/ReceiptForm';
+import { isSubscriptionFee } from '../../../../commondata';
 
 const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
-  const { studentReceipts, setStudentReceipts } = useStudent();
+  const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
 
   const [showUpdateReceiptModal, toggleShowUpdateReceiptModal] = useToggle(false);
 
-  const { mutateAsync: updateReceiptMutation } = useMutation(
-    async (updatedReceipt) => axios.post('/api/receipt/updateReceipt', updatedReceipt),
-    {
-      onSuccess: (response, variables) => {
-        const updatedList = studentReceipts.map((r) => (r.ReceiptID === variables.ReceiptID ? variables : r));
+  const defaultValues = {
+    TaxCode: studentInfo.TaxCode,
+    StudentID: studentInfo.StudentID,
+    ...receipt,
+  };
 
-        setStudentReceipts(updatedList);
+  const form = useForm({ defaultValues });
 
-        toggleShowUpdateReceiptModal();
+  const { handleSubmit, reset } = form;
 
-        if (isFunction(onUpdateCallback)) {
-          onUpdateCallback();
+  const { mutateAsync } = useMutation(async (updatedReceipt) => axios.post('/api/receipt/updateReceipt', updatedReceipt), {
+    onSuccess: (response, submittedReceipt) => {
+      const updatedList = studentReceipts.map((r) => {
+        if (r.ReceiptID === submittedReceipt.ReceiptID) {
+          // When changing from Subscription Fee to any other type, make sure some fields are ignore so they
+          // don't come up in the grid (since there's no refetch happening).
+          return isSubscriptionFee(submittedReceipt.ReceiptType)
+            ? submittedReceipt
+            : { ...submittedReceipt, CourseStartDate: null, CourseEndDate: null };
         }
 
-        toast.success(response.data.message, toastConfig);
-      },
-      onError: (err) => toast.error(err?.message, toastConfig),
-    }
-  );
+        return r;
+      });
+
+      setStudentReceipts(updatedList);
+
+      toggleShowUpdateReceiptModal();
+
+      if (isFunction(onUpdateCallback)) {
+        onUpdateCallback();
+      }
+
+      reset();
+
+      toast.success(response.data.message, toastConfig);
+    },
+    onError: (err) => toast.error(err?.message, toastConfig),
+  });
 
   const onUpdate = () => {
     if (!receipt) {
@@ -48,7 +69,7 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
 
   return (
     <>
-      <Button variant="warning" onClick={onUpdate}>
+      <Button variant="warning" onClick={onUpdate} disabled={!receipt}>
         <span role="img" aria-label="update">
           🔄 <Translation value="buttons.receipt.updateReceipt" />
         </span>
@@ -60,14 +81,21 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
             <Translation value="modalsContent.updateReceiptHeader" />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <UpsertReceiptForm receiptInfo={receipt} mutate={updateReceiptMutation} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={toggleShowUpdateReceiptModal}>
-            <Translation value="buttons.close" />
-          </Button>
-        </Modal.Footer>
+        <FormProvider {...form}>
+          <form onSubmit={handleSubmit(mutateAsync)}>
+            <Modal.Body>
+              <ReceiptForm key={receipt?.id} defaultValues={defaultValues} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="success">
+                <Translation value="buttons.receipt.updateReceipt" />
+              </Button>
+              <Button variant="secondary" onClick={toggleShowUpdateReceiptModal}>
+                <Translation value="buttons.close" />
+              </Button>
+            </Modal.Footer>
+          </form>
+        </FormProvider>
       </Modal>
     </>
   );
@@ -79,7 +107,7 @@ UpdateReceiptButton.propTypes = {
 };
 
 UpdateReceiptButton.defaultProps = {
-  receipt: {},
+  receipt: undefined,
   onUpdateCallback: () => {},
 };
 

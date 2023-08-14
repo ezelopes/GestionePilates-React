@@ -48,7 +48,7 @@ const StudentReceiptsList = () => {
   const [gridOptions] = useState(gridOptionsDefaultStudentReceipts);
   const [rowData, setRowData] = useState(studentReceipts);
 
-  const [selectedReceipt, setSelectedReceipt] = useState();
+  const [selectedReceipt, setSelectedReceipt] = useState(null);
 
   useEffect(() => {
     setRowData(studentReceipts);
@@ -80,7 +80,11 @@ const StudentReceiptsList = () => {
           </span>
         </Button>
 
-        <UpdateReceiptButton receipt={selectedReceipt} onUpdateCallback={() => setSelectedReceipt(null)} />
+        <UpdateReceiptButton
+          key={selectedReceipt?.ReceiptID}
+          receipt={selectedReceipt}
+          onUpdateCallback={() => setSelectedReceipt(null)}
+        />
 
         <DeleteReceiptButton receipt={selectedReceipt} />
       </div>
