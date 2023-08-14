@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 
 import axios from 'axios';
@@ -16,7 +15,7 @@ import CreateReceiptForm from '../components/receipts/CreateReceiptForm';
 
 import '../styles/student-page.css';
 
-const StudentPage = ({ match }) => {
+const StudentPage = () => {
   const [student, setStudent] = useState({});
 
   const [studentReceipts, setStudentReceipts] = useState([]);
@@ -25,13 +24,12 @@ const StudentPage = ({ match }) => {
 
   const history = useHistory();
 
-  const { isLoading, isError } = useQuery(
-    ['student'],
-    async () => (await axios.get(`/api/student/getStudentWithReceipts/${match.params.TaxCode}`)).data,
+  const studentTaxCode = useLocation().pathname?.split('/').pop();
+
+  const { isSuccess, isLoading, isError } = useQuery(
+    [studentTaxCode],
+    async () => (await axios.get(`/api/student/getStudentWithReceipts/${studentTaxCode}`)).data,
     {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
       onSuccess: (data) => {
         setStudent(data.student);
 
@@ -43,12 +41,11 @@ const StudentPage = ({ match }) => {
   const onReceiptCreate = (receiptData, receiptId) => {
     setStudentReceipts([...studentReceipts, { ...receiptData, ReceiptID: receiptId, FK_StudentID: student.StudentID }]);
 
-    // TODO: Set RegistrationDate with `setStudent` if receipt has been updated with `variables.RegistrationDate: true`
+    // If receipt date is created with "RegistrationDate" flag set to true, then update registration date of the student.
+    if (receiptData.RegistrationDate) {
+      setStudent((s) => ({ ...s, RegistrationDate: receiptData.ReceiptDate }));
+    }
   };
-
-  if (isLoading) {
-    return <Spinner animation="border" role="status" className="spinner" />;
-  }
 
   if (isError) {
     return <NotFoundPage />;
@@ -69,31 +66,21 @@ const StudentPage = ({ match }) => {
         </span>
       </Button>
 
-      <div className="student-page">
-        <StudentCard />
+      {isLoading && <Spinner animation="border" role="status" className="spinner" />}
 
-        <CreateReceiptForm student={student} onCreateCallback={onReceiptCreate} />
-      </div>
+      {isSuccess && (
+        <>
+          <div className="student-page">
+            <StudentCard key={`${studentTaxCode}-actions`} />
 
-      <StudentReceiptsList />
+            <CreateReceiptForm key={`${studentTaxCode}-receipt-form`} student={student} onCreateCallback={onReceiptCreate} />
+          </div>
+
+          <StudentReceiptsList key={`${studentTaxCode}-receipt-list`} />
+        </>
+      )}
     </StudentProvider>
   );
-};
-
-StudentPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      TaxCode: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};
-
-StudentPage.defaultValue = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      TaxCode: '',
-    }),
-  }),
 };
 
 export default withReactQuery(StudentPage);
