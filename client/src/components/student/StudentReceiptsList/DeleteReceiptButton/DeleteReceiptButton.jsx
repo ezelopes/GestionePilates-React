@@ -31,7 +31,7 @@ const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
 
         toggleShowDeleteReceiptModal();
 
-        toast.success(response.message, toastConfig);
+        toast.success(response.data.message, toastConfig);
       },
     }
   );
