@@ -6,15 +6,18 @@ import { Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'react-toastify';
-import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
+import { FormProvider, useForm } from 'react-hook-form';
 import NotFoundPage from './NotFoundPage';
+import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
 
 import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
 import StudentCard from '../components/student/StudentCard';
-import UpsertReceiptForm from '../components/receipts/UpsertReceiptForm';
+import ReceiptForm from '../components/receipts/UpsertReceiptForm/ReceiptForm';
 import Translation from '../components/common/Translation';
 import toastConfig from '../commondata/toast.config';
+
+import { receiptFactory } from '../helpers/receipts';
 
 import '../styles/student-page.css';
 
@@ -42,11 +45,23 @@ const StudentPage = ({ match }) => {
     }
   );
 
-  const { mutateAsync: createReceiptMutation } = useMutation(
-    async (newReceipt) => axios.put('/api/receipt/createReceipt', newReceipt),
+  const form = useForm({ defaultValues: receiptFactory() });
+
+  const { handleSubmit, reset } = form;
+
+  const { mutateAsync } = useMutation(
+    async (newReceipt) =>
+      axios.put('/api/receipt/createReceipt', { ...newReceipt, TaxCode: student.TaxCode, StudentID: student.StudentID }),
     {
       onSuccess: (response, variables) => {
-        setStudentReceipts([...studentReceipts, { ReceiptID: response.ReceiptID, ...variables }]);
+        setStudentReceipts([
+          ...studentReceipts,
+          { ...variables, ReceiptID: response.data.ReceiptID, FK_StudentID: student.StudentID },
+        ]);
+
+        // TODO: Set RegistrationDate with `setStudent` if receipt has been updated with `variables.RegistrationDate: true`
+
+        reset();
 
         toast.success(response.data.message, toastConfig);
       },
@@ -81,7 +96,15 @@ const StudentPage = ({ match }) => {
         <StudentCard />
 
         <div className="form-wrapper create-receipt-form">
-          <UpsertReceiptForm isForCreating mutate={createReceiptMutation} />
+          <FormProvider {...form}>
+            <form onSubmit={handleSubmit(mutateAsync)}>
+              <ReceiptForm idPrefix="create" />
+
+              <Button type="submit" variant="success">
+                <Translation value="buttons.receipt.createReceipt" />
+              </Button>
+            </form>
+          </FormProvider>
         </div>
       </div>
 
