@@ -38,9 +38,13 @@ const getStudentWithReceiptsEndpoint = async (req, res) => {
     const { TaxCode } = req.params;
     const { student, receipts } = await getStudentWithReceipts(TaxCode);
 
-    res.status(200).send({ student, receipts });
+    if (!student) {
+      return res.status(404).send({ message: 'Allieva non trovata' });
+    }
+
+    return res.status(200).send({ student, receipts });
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    return res.status(500).send({ message: e.message });
   }
 };
 
