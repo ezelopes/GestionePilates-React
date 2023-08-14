@@ -18,11 +18,11 @@ import { receiptTypes, paymentMethods, defaultAmounts, isSubscriptionFee, isDanc
 import hasMembershipFeeForSelectedSolarYear from '../../../helpers/hasMembershipFeeForSelectedSolarYear';
 import { formatDate } from '../../../helpers/dates';
 
-import './upsert-receipt-form.css';
+import './receipt-form-fields.css';
 
 const RECEIPT_TYPE_FIELDS = receiptTypes.map(({ type }) => ({ value: type, label: type }));
 
-const ReceiptForm = ({ idPrefix, defaultValues, isEdit = false, children }) => {
+const ReceiptFormFields = ({ idPrefix, defaultValues, isEdit = false, children }) => {
   const today = formatDate(new Date(), true);
 
   const { studentReceipts } = useStudent();
@@ -48,7 +48,7 @@ const ReceiptForm = ({ idPrefix, defaultValues, isEdit = false, children }) => {
 
   const form = (
     <>
-      <div className={isSubscriptionFee(watchedReceiptType) ? 'upsert-receipt-form' : 'upsert-membership-fee-form'}>
+      <div className={isSubscriptionFee(watchedReceiptType) ? 'receipt-form' : 'membership-fee-form'}>
         <ControlledFormTextField
           id={`${idPrefix}-receipt-number`}
           name="ReceiptNumber"
@@ -137,17 +137,17 @@ const ReceiptForm = ({ idPrefix, defaultValues, isEdit = false, children }) => {
   return form;
 };
 
-ReceiptForm.propTypes = {
+ReceiptFormFields.propTypes = {
   idPrefix: PropTypes.string,
   defaultValues: PropTypes.object,
   isEdit: PropTypes.bool,
   children: PropTypes.oneOf([PropTypes.node, PropTypes.func]),
 };
 
-ReceiptForm.defaultProps = {
+ReceiptFormFields.defaultProps = {
   defaultValues: {},
   isEdit: false,
   children: undefined,
 };
 
-export default ReceiptForm;
+export default ReceiptFormFields;

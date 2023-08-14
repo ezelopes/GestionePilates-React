@@ -1,4 +1,4 @@
-.upsert-receipt-form {
+.receipt-form {
   width: fit-content;
   display: grid;
   grid-template-columns: repeat(4, auto);
@@ -8,11 +8,11 @@
   gap: 1em 3em;
 }
 
-.upsert-receipt-form input[type='date'] {
+.receipt-form input[type='date'] {
   width: 15vw;
 }
 
-.upsert-membership-fee-form {
+.membership-fee-form {
   width: fit-content;
   display: grid;
   grid-template-columns: repeat(3, auto);
@@ -21,7 +21,7 @@
   gap: 1em 3em;
 }
 
-.upsert-membership-fee-form input[type='date'] {
+.membership-fee-form input[type='date'] {
   width: 15vw;
 }
 
@@ -34,44 +34,44 @@
 }
 
 @media screen and (max-width: 992px) {
-  .upsert-receipt-form {
+  .receipt-form {
     grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(4, auto);
   }
 
-  .upsert-membership-fee-form {
+  .membership-fee-form {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .upsert-membership-fee-form > * {
+  .membership-fee-form > * {
     width: 100%;
   }
 
-  .upsert-membership-fee-form input[type='date'] {
+  .membership-fee-form input[type='date'] {
     width: 100%;
   }
 
-  .upsert-membership-fee-form > div > .css-2b097c-container {
+  .membership-fee-form > div > .css-2b097c-container {
     max-width: 100%;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .upsert-receipt-form {
+  .receipt-form {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .upsert-receipt-form > * {
+  .receipt-form > * {
     width: 100%;
   }
 
-  .upsert-receipt-form input[type='date'] {
+  .receipt-form input[type='date'] {
     width: 100%;
   }
 
-  .upsert-receipt-form > div > .css-2b097c-container {
+  .receipt-form > div > .css-2b097c-container {
     max-width: 100%;
   }
 }

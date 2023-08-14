@@ -13,7 +13,7 @@ import { withReactQuery } from '../components/common/withReactQuery/withReactQue
 import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
 import StudentCard from '../components/student/StudentCard';
-import ReceiptForm from '../components/receipts/UpsertReceiptForm/ReceiptForm';
+import ReceiptFormFields from '../components/receipts/ReceiptFormFields';
 import Translation from '../components/common/Translation';
 import toastConfig from '../commondata/toast.config';
 
@@ -98,7 +98,7 @@ const StudentPage = ({ match }) => {
         <div className="form-wrapper create-receipt-form">
           <FormProvider {...form}>
             <form onSubmit={handleSubmit(mutateAsync)}>
-              <ReceiptForm idPrefix="create" />
+              <ReceiptFormFields idPrefix="create" />
 
               <Button type="submit" variant="success">
                 <Translation value="buttons.receipt.createReceipt" />
