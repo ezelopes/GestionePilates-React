@@ -22,14 +22,14 @@ import './upsert-receipt-form.css';
 
 const RECEIPT_TYPE_FIELDS = receiptTypes.map(({ type }) => ({ value: type, label: type }));
 
-const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
+const ReceiptForm = ({ idPrefix, defaultValues, isEdit = false, children }) => {
   const today = formatDate(new Date(), true);
 
   const { studentReceipts } = useStudent();
 
   const { setValue, watch } = useFormContext();
 
-  const watchedReceiptType = watch('ReceiptType') || defaultValues?.ReceiptType;
+  const watchedReceiptType = watch('ReceiptType') || defaultValues?.ReceiptType || RECEIPT_TYPE_FIELDS[0].value;
 
   const watchedReceiptDate = watch('ReceiptDate') || defaultValues?.ReceiptDate;
 
@@ -50,7 +50,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
     <>
       <div className={isSubscriptionFee(watchedReceiptType) ? 'upsert-receipt-form' : 'upsert-membership-fee-form'}>
         <ControlledFormTextField
-          id={`${key}-receipt-number`}
+          id={`${idPrefix}-receipt-number`}
           name="ReceiptNumber"
           defaultValue={defaultValues?.ReceiptNumber || ''}
           label={<Translation value="receiptForm.receiptNumber" />}
@@ -59,7 +59,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
         />
 
         <ControlledFormSelectField
-          id={`${key}-receipt-type`}
+          id={`${idPrefix}-receipt-type`}
           name="ReceiptType"
           defaultValue={defaultValues?.ReceiptType || RECEIPT_TYPE_FIELDS[0].value}
           label={<Translation value="receiptForm.receiptType" />}
@@ -68,7 +68,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
         />
 
         <ControlledFormSelectField
-          id={`${key}-payment-method`}
+          id={`${idPrefix}-payment-method`}
           name="PaymentMethod"
           defaultValue={defaultValues?.PaymentMethod || paymentMethods[0].value}
           label={<Translation value="receiptForm.paymentMethod" />}
@@ -76,7 +76,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
         />
 
         <ControlledFormCreatableSelectField
-          id={`${key}-amount-paid`}
+          id={`${idPrefix}-amount-paid`}
           name="AmountPaid"
           defaultValue={defaultValues?.AmountPaid || defaultAmounts[0].value}
           label={<Translation value="receiptForm.amountPaid" />}
@@ -84,7 +84,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
         />
 
         <ControlledFormDateField
-          id={`${key}-receipt-date`}
+          id={`${idPrefix}-receipt-date`}
           name="ReceiptDate"
           defaultValue={defaultValues?.ReceiptDate || today}
           label={<Translation value="receiptForm.receiptDate" />}
@@ -93,17 +93,15 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
         {isSubscriptionFee(watchedReceiptType) && (
           <>
             <ControlledFormDateField
-              id={`${key}-course-start-date`}
+              id={`${idPrefix}-course-start-date`}
               name="CourseStartDate"
               defaultValue={defaultValues?.CourseStartDate || today}
-              value={defaultValues?.CourseStartDate || today}
               label={<Translation value="receiptForm.courseStartDate" />}
             />
             <ControlledFormDateField
-              id={`${key}-course-end-date`}
+              id={`${idPrefix}-course-end-date`}
               name="CourseEndDate"
               defaultValue={defaultValues?.CourseEndDate || today}
-              value={defaultValues?.CourseEndDate || today}
               label={<Translation value="receiptForm.courseEndDate" />}
             />
           </>
@@ -112,7 +110,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
       <div className="checkbox-container">
         {!isEdit && !isDanceRecitalFee(watchedReceiptType) && (
           <ControlledFormCheckbox
-            id={`${key}-registration-date`}
+            id={`${idPrefix}-registration-date`}
             name="RegistrationDate"
             defaultValue={defaultValues?.RegistrationDate || false}
             label={<Translation value="receiptForm.isRegistrationDate" />}
@@ -121,7 +119,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
 
         {isSubscriptionFee(watchedReceiptType) && (
           <ControlledFormCheckbox
-            id={`${key}-include-membership-fee`}
+            id={`${idPrefix}-include-membership-fee`}
             name="IncludeMembershipFee"
             label={<Translation value="receiptForm.includeMembershipFee" />}
             defaultValue={defaultValues?.IncludeMembershipFee || false}
@@ -140,6 +138,7 @@ const ReceiptForm = ({ key, defaultValues, isEdit = false, children }) => {
 };
 
 ReceiptForm.propTypes = {
+  idPrefix: PropTypes.string,
   defaultValues: PropTypes.object,
   isEdit: PropTypes.bool,
   children: PropTypes.oneOf([PropTypes.node, PropTypes.func]),

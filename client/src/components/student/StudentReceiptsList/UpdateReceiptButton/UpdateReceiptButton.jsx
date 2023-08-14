@@ -84,7 +84,7 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(mutateAsync)}>
             <Modal.Body>
-              <ReceiptForm key={receipt?.id} defaultValues={defaultValues} />
+              <ReceiptForm idPrefix={`${receipt?.ReceiptID}`} defaultValues={defaultValues} isEdit />
             </Modal.Body>
             <Modal.Footer>
               <Button type="submit" variant="success">
