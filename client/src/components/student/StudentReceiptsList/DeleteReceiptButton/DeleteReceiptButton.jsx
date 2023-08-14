@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { isFunction } from 'is-what';
 import { useStudent } from '../../StudentContext';
 import { getTranslation } from '../../../common/Translation/helpers';
@@ -17,7 +17,7 @@ const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
 
   const [showDeleteReceiptModal, toggleShowDeleteReceiptModal] = useToggle(false);
 
-  const { mutateAsync: updateReceiptMutation } = useMutation(
+  const { mutateAsync: updateReceiptMutation, isLoading } = useMutation(
     async () => axios.delete('/api/receipt/deleteReceipt', { data: { ReceiptID: receipt.ReceiptID } }),
     {
       onSuccess: (response) => {
@@ -36,17 +36,16 @@ const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
     }
   );
 
+  const onDelete = () => {
+    if (!receipt) {
+      return toast.error(getTranslation('toast.error.noReceiptSelectedForDelete'), toastConfig);
+    }
+    return toggleShowDeleteReceiptModal();
+  };
+
   return (
     <>
-      <Button
-        variant="danger"
-        onClick={() => {
-          if (!receipt) {
-            return toast.error(getTranslation('toast.error.noReceiptSelectedForDelete'), toastConfig);
-          }
-          return toggleShowDeleteReceiptModal();
-        }}
-      >
+      <Button variant="danger" onClick={onDelete} disabled={!receipt}>
         <span role="img" aria-label="bin">
           🗑️ <Translation value="buttons.receipt.deleteReceipt" />
         </span>
@@ -61,8 +60,12 @@ const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
           <Translation value="modalsContent.deleteReceiptBody" />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={updateReceiptMutation}>
-            <Translation value="buttons.receipt.deleteReceipt" />
+          <Button variant="danger" onClick={updateReceiptMutation} disabled={isLoading}>
+            {isLoading ? (
+              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+            ) : (
+              <Translation value="buttons.receipt.deleteReceipt" />
+            )}
           </Button>
           <Button variant="secondary" onClick={toggleShowDeleteReceiptModal}>
             <Translation value="buttons.close" />

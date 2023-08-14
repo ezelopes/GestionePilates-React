@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 
 import axios from 'axios';
 import { useMutation } from 'react-query';
@@ -16,7 +16,7 @@ const CreateReceiptForm = ({ student, onCreateCallback }) => {
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync } = useMutation(
+  const { mutateAsync, isLoading } = useMutation(
     async (newReceipt) =>
       axios.put('/api/receipt/createReceipt', { ...newReceipt, TaxCode: student.TaxCode, StudentID: student.StudentID }),
     {
@@ -37,8 +37,12 @@ const CreateReceiptForm = ({ student, onCreateCallback }) => {
         <form onSubmit={handleSubmit(mutateAsync)}>
           <ReceiptFormFields idPrefix="create" />
 
-          <Button type="submit" variant="success">
-            <Translation value="buttons.receipt.createReceipt" />
+          <Button type="submit" variant="success" disabled={isLoading}>
+            {isLoading ? (
+              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+            ) : (
+              <Translation value="buttons.receipt.createReceipt" />
+            )}
           </Button>
         </form>
       </FormProvider>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { isFunction } from 'is-what';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useStudent } from '../../StudentContext';
@@ -31,34 +31,37 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync } = useMutation(async (updatedReceipt) => axios.post('/api/receipt/updateReceipt', updatedReceipt), {
-    onSuccess: (response, submittedReceipt) => {
-      const updatedList = studentReceipts.map((r) => {
-        if (r.ReceiptID === submittedReceipt.ReceiptID) {
-          // When changing from Subscription Fee to any other type, make sure some fields are ignore so they
-          // don't come up in the grid (since there's no refetch happening).
-          return isSubscriptionFee(submittedReceipt.ReceiptType)
-            ? submittedReceipt
-            : { ...submittedReceipt, CourseStartDate: null, CourseEndDate: null };
+  const { mutateAsync, isLoading } = useMutation(
+    async (updatedReceipt) => axios.post('/api/receipt/updateReceipt', updatedReceipt),
+    {
+      onSuccess: (response, submittedReceipt) => {
+        const updatedList = studentReceipts.map((r) => {
+          if (r.ReceiptID === submittedReceipt.ReceiptID) {
+            // When changing from Subscription Fee to any other type, make sure some fields are ignore so they
+            // don't come up in the grid (since there's no refetch happening).
+            return isSubscriptionFee(submittedReceipt.ReceiptType)
+              ? submittedReceipt
+              : { ...submittedReceipt, CourseStartDate: null, CourseEndDate: null };
+          }
+
+          return r;
+        });
+
+        setStudentReceipts(updatedList);
+
+        toggleShowUpdateReceiptModal();
+
+        if (isFunction(onUpdateCallback)) {
+          onUpdateCallback();
         }
 
-        return r;
-      });
+        reset();
 
-      setStudentReceipts(updatedList);
-
-      toggleShowUpdateReceiptModal();
-
-      if (isFunction(onUpdateCallback)) {
-        onUpdateCallback();
-      }
-
-      reset();
-
-      toast.success(response.data.message, toastConfig);
-    },
-    onError: (err) => toast.error(err?.message, toastConfig),
-  });
+        toast.success(response.data.message, toastConfig);
+      },
+      onError: (err) => toast.error(err?.message, toastConfig),
+    }
+  );
 
   const onUpdate = () => {
     if (!receipt) {
@@ -94,8 +97,12 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
               <ReceiptFormFields idPrefix={`${receipt?.ReceiptID}`} defaultValues={defaultValues} isEdit />
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" variant="success">
-                <Translation value="buttons.receipt.updateReceipt" />
+              <Button type="submit" variant="success" disabled={isLoading}>
+                {isLoading ? (
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                ) : (
+                  <Translation value="buttons.receipt.updateReceipt" />
+                )}
               </Button>
               <Button variant="secondary" onClick={onModalClose}>
                 <Translation value="buttons.close" />
