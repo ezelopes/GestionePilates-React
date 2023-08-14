@@ -4,20 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 
 import axios from 'axios';
-import { useMutation, useQuery } from 'react-query';
-import { toast } from 'react-toastify';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useQuery } from 'react-query';
 import NotFoundPage from './NotFoundPage';
-import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
+import { withReactQuery } from '../components/common/withReactQuery';
+import Translation from '../components/common/Translation';
 
 import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
 import StudentCard from '../components/student/StudentCard';
-import ReceiptFormFields from '../components/receipts/ReceiptFormFields';
-import Translation from '../components/common/Translation';
-import toastConfig from '../commondata/toast.config';
-
-import { receiptFactory } from '../helpers/receipts';
+import CreateReceiptForm from '../components/receipts/CreateReceiptForm';
 
 import '../styles/student-page.css';
 
@@ -45,29 +40,11 @@ const StudentPage = ({ match }) => {
     }
   );
 
-  const form = useForm({ defaultValues: receiptFactory() });
+  const onReceiptCreate = (receiptData, receiptId) => {
+    setStudentReceipts([...studentReceipts, { ...receiptData, ReceiptID: receiptId, FK_StudentID: student.StudentID }]);
 
-  const { handleSubmit, reset } = form;
-
-  const { mutateAsync } = useMutation(
-    async (newReceipt) =>
-      axios.put('/api/receipt/createReceipt', { ...newReceipt, TaxCode: student.TaxCode, StudentID: student.StudentID }),
-    {
-      onSuccess: (response, variables) => {
-        setStudentReceipts([
-          ...studentReceipts,
-          { ...variables, ReceiptID: response.data.ReceiptID, FK_StudentID: student.StudentID },
-        ]);
-
-        // TODO: Set RegistrationDate with `setStudent` if receipt has been updated with `variables.RegistrationDate: true`
-
-        reset();
-
-        toast.success(response.data.message, toastConfig);
-      },
-      onError: (err) => toast.error(err?.message, toastConfig),
-    }
-  );
+    // TODO: Set RegistrationDate with `setStudent` if receipt has been updated with `variables.RegistrationDate: true`
+  };
 
   if (isLoading) {
     return <Spinner animation="border" role="status" className="spinner" />;
@@ -95,17 +72,7 @@ const StudentPage = ({ match }) => {
       <div className="student-page">
         <StudentCard />
 
-        <div className="form-wrapper create-receipt-form">
-          <FormProvider {...form}>
-            <form onSubmit={handleSubmit(mutateAsync)}>
-              <ReceiptFormFields idPrefix="create" />
-
-              <Button type="submit" variant="success">
-                <Translation value="buttons.receipt.createReceipt" />
-              </Button>
-            </form>
-          </FormProvider>
-        </div>
+        <CreateReceiptForm student={student} onCreateCallback={onReceiptCreate} />
       </div>
 
       <StudentReceiptsList />
