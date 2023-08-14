@@ -18,8 +18,7 @@ const columnsDefinition = [
   {
     headerName: 'Codice Fiscale',
     field: 'TaxCode',
-    // eslint-disable-next-line react/prop-types
-    cellRendererFramework: ({ data, value }) => <Link to={`/students/${data.TaxCode}`}>{value}</Link>,
+    cellRenderer: ({ data, value }) => <Link to={`/students/${data.TaxCode}`}>{value}</Link>,
   },
   { headerName: 'Età', field: 'IsAdult' },
   { headerName: 'Nome', field: 'Name' },
