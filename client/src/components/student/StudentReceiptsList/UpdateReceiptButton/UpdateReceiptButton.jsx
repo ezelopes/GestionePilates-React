@@ -12,7 +12,7 @@ import { getTranslation } from '../../../common/Translation/helpers';
 import toastConfig from '../../../../commondata/toast.config';
 import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
-import ReceiptForm from '../../../receipts/UpsertReceiptForm/ReceiptForm';
+import ReceiptFormFields from '../../../receipts/ReceiptFormFields';
 import { isSubscriptionFee } from '../../../../commondata';
 import { receiptFactory } from '../../../../helpers/receipts';
 
@@ -68,6 +68,12 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
     return toggleShowUpdateReceiptModal();
   };
 
+  const onModalClose = () => {
+    reset();
+
+    toggleShowUpdateReceiptModal();
+  };
+
   return (
     <>
       <Button variant="warning" onClick={onUpdate} disabled={!receipt}>
@@ -76,7 +82,7 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
         </span>
       </Button>
 
-      <Modal show={showUpdateReceiptModal} onHide={() => toggleShowUpdateReceiptModal()} dialogClassName="update-modal" centered>
+      <Modal show={showUpdateReceiptModal} onHide={onModalClose} dialogClassName="update-modal" centered>
         <Modal.Header closeButton>
           <Modal.Title>
             <Translation value="modalsContent.updateReceiptHeader" />
@@ -85,13 +91,13 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(mutateAsync)}>
             <Modal.Body>
-              <ReceiptForm idPrefix={`${receipt?.ReceiptID}`} defaultValues={defaultValues} isEdit />
+              <ReceiptFormFields idPrefix={`${receipt?.ReceiptID}`} defaultValues={defaultValues} isEdit />
             </Modal.Body>
             <Modal.Footer>
               <Button type="submit" variant="success">
                 <Translation value="buttons.receipt.updateReceipt" />
               </Button>
-              <Button variant="secondary" onClick={toggleShowUpdateReceiptModal}>
+              <Button variant="secondary" onClick={onModalClose}>
                 <Translation value="buttons.close" />
               </Button>
             </Modal.Footer>
