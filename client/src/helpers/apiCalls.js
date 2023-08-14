@@ -144,13 +144,6 @@ const getAllTeachers = async () => {
   return { teachers: body };
 };
 
-const getStudentWithReceipts = async (TaxCode) => {
-  const response = await fetch(`/api/student/getStudentWithReceipts/${TaxCode}`);
-  const studentWithReceipts = await response.json();
-
-  return { student: studentWithReceipts.student, receipts: studentWithReceipts.receipts };
-};
-
 const getStudentsWithRegistrationReceipt = async (Year) => {
   const response = await fetch(`/api/student/getStudentsWithRegistrationReceipt/${Year}`);
   const { studentsWithRegistrationReceipt } = await response.json();
@@ -174,7 +167,6 @@ export {
   deleteStudent,
   deleteTeacher,
   getAllTeachers,
-  getStudentWithReceipts,
   getStudentsWithRegistrationReceipt,
   getTeachersWithRegistrationReceipt,
 };
