@@ -14,6 +14,7 @@ import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
 import ReceiptForm from '../../../receipts/UpsertReceiptForm/ReceiptForm';
 import { isSubscriptionFee } from '../../../../commondata';
+import { receiptFactory } from '../../../../helpers/receipts';
 
 const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
@@ -23,7 +24,7 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
   const defaultValues = {
     TaxCode: studentInfo.TaxCode,
     StudentID: studentInfo.StudentID,
-    ...receipt,
+    ...receiptFactory(receipt),
   };
 
   const form = useForm({ defaultValues });
