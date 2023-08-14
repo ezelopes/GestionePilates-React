@@ -9,10 +9,10 @@ import { getTranslation } from '../../common/Translation/helpers';
 import { useStudent } from '../../student/StudentContext';
 
 import ControlledFormDateField from '../../form/ControlledFormDateField';
-import ControlledFormTextField from '../../form/ControlledFormTextField/ControlledFormTextField';
-import ControlledFormSelectField from '../../form/ControlledFormSelectField/ControlledFormSelectField';
+import ControlledFormTextField from '../../form/ControlledFormTextField';
+import ControlledFormSelectField from '../../form/ControlledFormSelectField';
 import ControlledFormCreatableSelectField from '../../form/ControlledFormCreatableSelectField';
-import ControlledFormCheckbox from '../../form/ControlledFormCheckbox/ControlledFormCheckbox';
+import ControlledFormCheckbox from '../../form/ControlledFormCheckbox';
 
 import { receiptTypes, paymentMethods, defaultAmounts, isSubscriptionFee, isDanceRecitalFee } from '../../../commondata';
 import hasMembershipFeeForSelectedSolarYear from '../../../helpers/hasMembershipFeeForSelectedSolarYear';
