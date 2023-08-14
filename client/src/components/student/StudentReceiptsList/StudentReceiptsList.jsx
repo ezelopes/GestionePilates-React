@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 
@@ -46,13 +46,10 @@ const StudentReceiptsList = () => {
   const { studentInfo, studentReceipts } = useStudent();
 
   const [gridOptions] = useState(gridOptionsDefaultStudentReceipts);
-  const [rowData, setRowData] = useState(studentReceipts);
+
+  const rowData = useMemo(() => studentReceipts, [studentReceipts]);
 
   const [selectedReceipt, setSelectedReceipt] = useState(null);
-
-  useEffect(() => {
-    setRowData(studentReceipts);
-  }, [studentReceipts]);
 
   const onReceiptSelectionChanged = () => {
     const selectedNode = gridOptions.api.getSelectedNodes();
