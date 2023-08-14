@@ -81,12 +81,12 @@ const StudentReceiptsList = () => {
         </Button>
 
         <UpdateReceiptButton
-          key={selectedReceipt?.ReceiptID}
+          key={`update-${selectedReceipt?.ReceiptID}`}
           receipt={selectedReceipt}
           onUpdateCallback={() => setSelectedReceipt(null)}
         />
 
-        <DeleteReceiptButton receipt={selectedReceipt} />
+        <DeleteReceiptButton key={`delete-${selectedReceipt?.ReceiptID}`} receipt={selectedReceipt} />
       </div>
     </div>
   );
