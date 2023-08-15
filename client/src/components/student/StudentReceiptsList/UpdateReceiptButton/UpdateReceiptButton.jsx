@@ -19,7 +19,7 @@ import { receiptFactory } from '../../../../helpers/receipts';
 const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
 
-  const [showUpdateReceiptModal, toggleShowUpdateReceiptModal] = useToggle(false);
+  const [showUpdateReceiptModal, toggleShowUpdateReceiptModal] = useToggle();
 
   const defaultValues = {
     TaxCode: studentInfo.TaxCode,

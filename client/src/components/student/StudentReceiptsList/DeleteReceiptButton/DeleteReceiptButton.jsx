@@ -15,7 +15,7 @@ import Translation from '../../../common/Translation';
 const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
   const { studentReceipts, setStudentReceipts } = useStudent();
 
-  const [showDeleteReceiptModal, toggleShowDeleteReceiptModal] = useToggle(false);
+  const [showDeleteReceiptModal, toggleShowDeleteReceiptModal] = useToggle();
 
   const { mutateAsync: updateReceiptMutation, isLoading } = useMutation(
     async () => axios.delete('/api/receipt/deleteReceipt', { data: { ReceiptID: receipt.ReceiptID } }),
