@@ -20,8 +20,6 @@ const StudentPage = () => {
 
   const [studentReceipts, setStudentReceipts] = useState([]);
 
-  const [newRegistrationDate, setNewRegistrationDate] = useState(null);
-
   const history = useHistory();
 
   const studentTaxCode = useLocation().pathname?.split('/').pop();
@@ -57,8 +55,6 @@ const StudentPage = () => {
       studentReceipts={studentReceipts}
       setStudentInfo={setStudent}
       setStudentReceipts={setStudentReceipts}
-      newRegistrationDate={newRegistrationDate}
-      setNewRegistrationDate={setNewRegistrationDate}
     >
       <Button variant="warning" onClick={history.goBack} className="backButton">
         <span role="img" aria-label="back">
