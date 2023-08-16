@@ -93,11 +93,15 @@ const updateRegistrationDateEndpoint = async (req, res) => {
   try {
     const { StudentID, RegistrationDate } = req.body;
 
+    if (!StudentID || !RegistrationDate) {
+      return res.status(400).send({ message: 'Registration Date or Student ID missing in the request' });
+    }
+
     const { message } = await updateRegistrationDate(StudentID, RegistrationDate);
 
-    res.status(200).send({ message });
+    return res.status(200).send({ message });
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    return res.status(500).send({ message: e.message });
   }
 };
 
