@@ -1,17 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, Button } from 'react-bootstrap';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { isFunction } from 'is-what';
+import { toast } from 'react-toastify';
+import { Modal, Button, Spinner } from 'react-bootstrap';
 
 import { useStudent } from '../StudentContext';
 
 import Translation from '../../common/Translation';
+import toastConfig from '../../../commondata/toast.config';
 
-const DeleteStudentModal = ({ isOpen, closeModal, handleStudentDeletion }) => {
+const STUDENT_LIST_KEY = 'studentsList';
+
+const DeleteStudentModal = ({ id, isOpen, onClose, onDeleteCallback }) => {
   const { studentInfo } = useStudent();
 
+  const { mutateAsync, isLoading } = useMutation(
+    async () => axios.delete('/api/student/deleteStudent', { data: { StudentID: id } }),
+    {
+      onSuccess: (response) => {
+        const studentListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
+
+        const updatedStudentList = studentListCached.filter((student) => student.StudentID !== id);
+
+        sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(updatedStudentList));
+
+        if (isFunction(onDeleteCallback)) {
+          onDeleteCallback();
+        }
+
+        onClose();
+
+        toast.success(response.data.message, toastConfig);
+      },
+      onError: (err) => toast.error(err.message, toastConfig),
+    }
+  );
+
   return (
-    <Modal show={isOpen} onHide={closeModal} dialogClassName="update-modal" centered>
+    <Modal show={isOpen} onHide={onClose} dialogClassName="update-modal" centered>
       <Modal.Header closeButton>
         <Modal.Title>
           <Translation value="modalsContent.deleteStudentHeader" />
@@ -24,10 +53,14 @@ const DeleteStudentModal = ({ isOpen, closeModal, handleStudentDeletion }) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={handleStudentDeletion}>
-          <Translation value="buttons.student.deleteStudent" />
+        <Button variant="danger" onClick={mutateAsync}>
+          {isLoading ? (
+            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+          ) : (
+            <Translation value="buttons.student.deleteStudent" />
+          )}
         </Button>
-        <Button variant="secondary" onClick={closeModal}>
+        <Button variant="secondary" onClick={onClose}>
           <Translation value="buttons.close" />
         </Button>
       </Modal.Footer>
@@ -36,9 +69,14 @@ const DeleteStudentModal = ({ isOpen, closeModal, handleStudentDeletion }) => {
 };
 
 DeleteStudentModal.propTypes = {
+  id: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired,
-  handleStudentDeletion: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onDeleteCallback: PropTypes.func,
+};
+
+DeleteStudentModal.defaultProps = {
+  onDeleteCallback: () => {},
 };
 
 export default DeleteStudentModal;

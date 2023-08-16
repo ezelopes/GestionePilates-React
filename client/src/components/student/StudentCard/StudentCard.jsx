@@ -9,11 +9,12 @@ import UpdateRegistrationDateModal from '../UpdateRegistrationDateModal';
 import UpdateStudentModal from '../UpdateStudentModal';
 import DeleteStudentModal from '../DeleteStudentModal';
 
-import { updateRegistrationDate, deleteStudent } from '../../../helpers/apiCalls';
+import { updateRegistrationDate } from '../../../helpers/apiCalls';
 
 import toastConfig from '../../../commondata/toast.config';
 
 import './student-card.css';
+import { useToggle } from '../../common/useToggle';
 
 const StudentCard = () => {
   const history = useHistory();
@@ -21,7 +22,8 @@ const StudentCard = () => {
 
   const [showUpdateStudentModal, setShowUpdateStudentModal] = useState(false);
   const [showRegistrationDateModal, setShowRegistrationDateModal] = useState(false);
-  const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
+
+  const [showDeleteStudentModal, toggleShowDeleteStudentModal] = useToggle();
 
   const handleRegistrationDateUpdate = async () => {
     const response = await updateRegistrationDate(studentInfo.StudentID, newRegistrationDate);
@@ -36,18 +38,6 @@ const StudentCard = () => {
       toast.error(response.message, toastConfig);
     }
     setShowRegistrationDateModal(false);
-  };
-
-  const handleStudentDeletion = async () => {
-    const response = await deleteStudent(studentInfo.StudentID);
-
-    if (response.status === 200) {
-      setShowDeleteStudentModal(false);
-      toast.success(response.message, toastConfig);
-      return history.push('/students');
-    }
-
-    return toast.error(response.message, toastConfig);
   };
 
   return (
@@ -75,7 +65,7 @@ const StudentCard = () => {
           </span>
         </Button>
 
-        <Button variant="danger" onClick={() => setShowDeleteStudentModal(true)}>
+        <Button variant="danger" onClick={() => toggleShowDeleteStudentModal()}>
           <span role="img" aria-label="bin">
             🗑️ <Translation value="buttons.student.deleteStudent" />
           </span>
@@ -91,9 +81,10 @@ const StudentCard = () => {
       />
 
       <DeleteStudentModal
+        id={studentInfo.StudentID}
         isOpen={showDeleteStudentModal}
-        closeModal={() => setShowDeleteStudentModal(false)}
-        handleStudentDeletion={handleStudentDeletion}
+        onClose={() => toggleShowDeleteStudentModal()}
+        onDeleteCallback={() => history.push('/students')}
       />
     </div>
   );

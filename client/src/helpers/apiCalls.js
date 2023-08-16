@@ -104,25 +104,6 @@ const updateRegistrationDate = async (StudentID, RegistrationDate) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const deleteStudent = async (StudentID) => {
-  const response = await fetch('/api/student/deleteStudent', {
-    method: 'DELETE',
-    headers,
-    body: JSON.stringify({ StudentID }),
-  });
-
-  if (response.status === 200) {
-    const removeIndex = studentListCached.findIndex((student) => student.StudentID === StudentID);
-    studentListCached.splice(removeIndex, 1);
-
-    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
-  }
-
-  const responseParsed = await response.json();
-
-  return { status: response.status, message: responseParsed.message };
-};
-
 const deleteTeacher = async (TeacherID) => {
   const response = await fetch('/api/teacher/deleteTeacher', {
     method: 'DELETE',
@@ -164,7 +145,6 @@ export {
   updateStudent,
   updateRegistrationDate,
   updateTeacher,
-  deleteStudent,
   deleteTeacher,
   getAllTeachers,
   getStudentsWithRegistrationReceipt,
