@@ -14,7 +14,7 @@ import toastConfig from '../../../commondata/toast.config';
 
 const STUDENT_LIST_KEY = 'studentsList';
 
-const DeleteStudentModal = ({ id, isOpen, onClose, onDeleteCallback }) => {
+const DeleteStudentModal = ({ id, isOpen, onClose, onDelete }) => {
   const { studentInfo } = useStudent();
 
   const { mutateAsync, isLoading } = useMutation(
@@ -27,8 +27,8 @@ const DeleteStudentModal = ({ id, isOpen, onClose, onDeleteCallback }) => {
 
         sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(updatedStudentList));
 
-        if (isFunction(onDeleteCallback)) {
-          onDeleteCallback();
+        if (isFunction(onDelete)) {
+          onDelete();
         }
 
         onClose();
@@ -72,11 +72,11 @@ DeleteStudentModal.propTypes = {
   id: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onDeleteCallback: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 DeleteStudentModal.defaultProps = {
-  onDeleteCallback: () => {},
+  onDelete: () => {},
 };
 
 export default DeleteStudentModal;
