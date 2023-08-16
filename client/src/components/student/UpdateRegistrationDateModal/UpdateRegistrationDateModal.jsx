@@ -15,7 +15,7 @@ import { updateStorageStudentRegistrationDate } from '../../../helpers/sessionSt
 
 import toastConfig from '../../../commondata/toast.config';
 
-const UpdateRegistrationDateModal = ({ id, defaultValue = undefined, isOpen, onClose, onUpdate }) => {
+const UpdateRegistrationDateModal = ({ id, defaultValue, isOpen, onClose, onUpdate }) => {
   const form = useForm({ defaultValues: { RegistrationDate: defaultValue } });
 
   const { handleSubmit, reset } = form;
