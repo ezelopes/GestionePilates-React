@@ -83,6 +83,10 @@ const getStudentsWithRegistrationReceipt = async (year) => {
 
 const createStudent = async (studentInfo) => {
   try {
+    if (!studentInfo.TaxCode) {
+      throw Error('Tax Code missing');
+    }
+
     const newStudentID = await knex(STUDENT_TABLE).insert({
       CodiceFiscale: studentInfo.TaxCode,
       Maggiorenne: studentInfo.IsAdult,
@@ -95,7 +99,7 @@ const createStudent = async (studentInfo) => {
       DataIscrizione: getFormattedDate(studentInfo.RegistrationDate),
       DataCertificato: getFormattedDate(studentInfo.CertificateExpirationDate),
       DataNascita: getFormattedDate(studentInfo.DOB),
-      DataGreenPass: getFormattedDate(studentInfo.GreenPassExpirationDate),
+      DataGreenPass: null,
       LuogoNascita: studentInfo.BirthPlace,
       Disciplina: studentInfo.Discipline,
       Corso: studentInfo.Course,
