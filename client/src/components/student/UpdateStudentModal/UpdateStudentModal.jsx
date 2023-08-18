@@ -8,17 +8,13 @@ import { Modal, Button, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { isFunction } from 'is-what';
 
-import { useStudent } from '../StudentContext';
-
 import Translation from '../../common/Translation';
 import UserFormFields from '../../user/UserFormFields/UserFormFields';
 import { updateStorageStudent } from '../../../helpers/sessionStorage';
 import toastConfig from '../../../commondata/toast.config';
 
-const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
-  const { studentInfo } = useStudent();
-
-  const form = useForm({ defaultValues: { ...studentInfo } });
+const UpdateStudentModal = ({ defaultValues, isOpen, onClose, onUpdate }) => {
+  const form = useForm({ defaultValues });
 
   const { handleSubmit, reset } = form;
 
@@ -52,8 +48,8 @@ const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
       </Modal.Header>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(mutateAsync)}>
-          <Modal.Body className="student-form">
-            <UserFormFields idPrefix={`${studentInfo?.StudentID}`} defaultValues={studentInfo} isStudent />
+          <Modal.Body className="update-student-form">
+            <UserFormFields idPrefix="update-student-form" defaultValues={defaultValues} isStudent />
           </Modal.Body>
           <Modal.Footer>
             <Button type="submit" variant="success" disabled={isLoading}>
@@ -74,6 +70,7 @@ const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
 };
 
 UpdateStudentModal.propTypes = {
+  defaultValues: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

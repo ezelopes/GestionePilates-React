@@ -64,7 +64,12 @@ const StudentCard = () => {
         </Button>
       </div>
 
-      <UpdateStudentModal isOpen={showUpdateStudentModal} onClose={toggleShowUpdateStudentModal} onUpdate={onStudentUpdate} />
+      <UpdateStudentModal
+        defaultValues={studentInfo}
+        isOpen={showUpdateStudentModal}
+        onClose={toggleShowUpdateStudentModal}
+        onUpdate={onStudentUpdate}
+      />
 
       <UpdateRegistrationDateModal
         id={studentInfo.StudentID}
