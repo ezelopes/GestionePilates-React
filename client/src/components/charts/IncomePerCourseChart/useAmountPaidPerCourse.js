@@ -10,10 +10,10 @@ const useAmountPaidPerCourse = (receipts, selectedYear) =>
     let unassignedDanceCoursesTotal = 0;
 
     const defaultCourseAmount = courses
-      .filter(({ course }) => course !== '')
-      .reduce((json, { course }) => {
-        json[course] = {
-          label: course,
+      .filter(({ value }) => value !== '')
+      .reduce((json, { label }) => {
+        json[label] = {
+          label,
           amount: 0,
         };
 

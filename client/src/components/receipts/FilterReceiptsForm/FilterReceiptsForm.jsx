@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Translation from '../../common/Translation';
 import FilteredReceiptsModal from '../FilteredReceiptsModal';
 import { validateCourseBetweenTwoDates, isDateBetweenTwoDates, formatDate } from '../../../helpers/dates';
-import { getPaymentMethodLabelFromValue, isSubscriptionFee, paymentMethods } from '../../../commondata';
+import { isSubscriptionFee, paymentMethods } from '../../../commondata';
 import isTemporaryReceipt from '../../../helpers/isTemporaryReceipt';
 import ControlledFormDateField from '../../form/ControlledFormDateField';
 import ControlledFormSelectField from '../../form/ControlledFormSelectField/ControlledFormSelectField';
@@ -54,7 +54,7 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts }) => {
     }
 
     // Filter by payment method too.
-    return receiptsWithDateFilter.filter(({ PaymentMethod }) => PaymentMethod === getPaymentMethodLabelFromValue(paymentMethod));
+    return receiptsWithDateFilter.filter(({ PaymentMethod }) => PaymentMethod === paymentMethod);
   };
 
   const handleFilter = (formData) => {
@@ -71,7 +71,7 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts }) => {
         isSubscriptionFee(ReceiptType) &&
         !isTemporaryReceipt(ReceiptNumber);
 
-      return paymentMethod === 'all' ? isValid : isValid && PaymentMethod === getPaymentMethodLabelFromValue(paymentMethod);
+      return paymentMethod === 'all' ? isValid : isValid && PaymentMethod === paymentMethod;
     });
 
   const calculateAmountBetweenDatesAndByPaymentMethod = (formData) => {
@@ -147,7 +147,7 @@ const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts }) => {
             receipts={receiptsForAmountSummary}
             fromDate={formatDate(new Date(watchedFields.fromDate))}
             toDate={formatDate(new Date(watchedFields.toDate))}
-            paymentMethod={getPaymentMethodLabelFromValue(watchedFields.paymentMethod)}
+            paymentMethod={watchedFields.paymentMethod}
           />
         </form>
       </FormProvider>

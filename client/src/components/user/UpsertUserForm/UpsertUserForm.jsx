@@ -25,7 +25,7 @@ const UpsertUserForm = ({
   setUserInfo = () => {},
   handleModal = () => {},
 }) => {
-  const [newIsAdult, setNewIsAdult] = useState(personInfo?.IsAdult || ages[0].age);
+  const [newIsAdult, setNewIsAdult] = useState(personInfo?.IsAdult || ages[0].value);
 
   const defaultValues = {};
 
@@ -82,8 +82,8 @@ const UpsertUserForm = ({
             </Form.Label>
             <Form.Control as="select" defaultValue={personInfo?.IsAdult} {...register('IsAdult')}>
               {ages.map((age) => (
-                <option key={`select_${age.id}`} value={age.age}>
-                  {age.age}
+                <option key={`select_${age.value}`} value={age.value}>
+                  {age.label}
                 </option>
               ))}
             </Form.Control>
@@ -198,8 +198,8 @@ const UpsertUserForm = ({
         </Form.Label>
         <Form.Control as="select" defaultValue={personInfo?.Discipline} {...register('Discipline')}>
           {disciplines.map((discipline) => (
-            <option key={`select_${discipline.id}`} value={discipline.discipline}>
-              {discipline.discipline}
+            <option key={`select_${discipline.value}`} value={discipline.value}>
+              {discipline.label}
             </option>
           ))}
         </Form.Control>
@@ -209,8 +209,8 @@ const UpsertUserForm = ({
         </Form.Label>
         <Form.Control as="select" defaultValue={personInfo?.Course} {...register('Course')}>
           {courses.map((course) => (
-            <option key={`select_${course.id}`} value={course.course}>
-              {course.course}
+            <option key={`select_${course.value}`} value={course.value}>
+              {course.label}
             </option>
           ))}
         </Form.Control>
@@ -220,8 +220,8 @@ const UpsertUserForm = ({
         </Form.Label>
         <Form.Control as="select" defaultValue={personInfo?.School} {...register('School')}>
           {schools.map((school) => (
-            <option key={`select_${school.id}`} value={school.school}>
-              {school.school}
+            <option key={`select_${school.value}`} value={school.value}>
+              {school.label}
             </option>
           ))}
         </Form.Control>

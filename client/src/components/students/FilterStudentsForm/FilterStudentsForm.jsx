@@ -6,7 +6,7 @@ import { getTranslation } from '../../common/Translation/helpers';
 
 import { ages } from '../../../commondata';
 
-const dropdownAges = [null, ages[0].age, ages[1].age];
+const dropdownAges = [null, ages[0].value, ages[1].value];
 
 const FilterStudentsForm = ({ filterColumn, clearColumns }) => {
   const filterNameRef = useRef();
