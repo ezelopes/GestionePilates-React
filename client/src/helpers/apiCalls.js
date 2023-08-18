@@ -1,33 +1,8 @@
-import produce from 'immer';
-
 const STUDENT_LIST_KEY = 'studentsList';
 const studentListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-};
-
-const createStudent = async (newStudent) => {
-  const response = await fetch('/api/student/createStudent', {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify(newStudent),
-  });
-
-  const responseParsed = await response.json();
-
-  if (response.status === 200) {
-    const { StudentID } = responseParsed;
-
-    const newStudentWithID = produce(newStudent, (draft) => {
-      draft.StudentID = StudentID;
-    });
-
-    studentListCached.push(newStudentWithID);
-    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
-  }
-
-  return { status: response.status, message: responseParsed.message };
 };
 
 const createTeacher = async (newTeacher) => {
@@ -115,7 +90,6 @@ const getTeachersWithRegistrationReceipt = async (Year) => {
 };
 
 export {
-  createStudent,
   createTeacher,
   updateRegistrationDate,
   updateTeacher,
