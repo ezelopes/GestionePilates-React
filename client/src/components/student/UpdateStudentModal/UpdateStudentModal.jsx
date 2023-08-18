@@ -20,7 +20,7 @@ const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
 
   const form = useForm({ defaultValues: { ...studentInfo } });
 
-  const { handleSubmit } = form;
+  const { handleSubmit, reset } = form;
 
   const { mutateAsync, isLoading } = useMutation(async (data) => axios.post('/api/student/updateStudent', data), {
     onSuccess: (response, variables) => {
@@ -37,8 +37,14 @@ const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
     onError: (err) => toast.error(err.message, toastConfig),
   });
 
+  const handleOnClose = () => {
+    reset();
+
+    onClose();
+  };
+
   return (
-    <Modal show={isOpen} onHide={onClose} size="lg" centered>
+    <Modal show={isOpen} onHide={handleOnClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>
           <Translation value="modalsContent.updateStudentHeader" />
@@ -57,7 +63,7 @@ const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
                 <Translation value="buttons.student.updateStudent" />
               )}
             </Button>
-            <Button variant="secondary" onClick={onClose}>
+            <Button variant="secondary" onClick={handleOnClose}>
               <Translation value="buttons.close" />
             </Button>
           </Modal.Footer>
