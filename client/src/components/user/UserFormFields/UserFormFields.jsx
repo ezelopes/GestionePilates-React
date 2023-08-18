@@ -36,7 +36,10 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
         name="TaxCode"
         defaultValue={defaultValues?.TaxCode || ''}
         // TODO: 'toast.error.taxCodeIncorrectFormat'
-        rules={{ required: 'toast.error.emptyTaxCode', pattern: { value: TAX_CODE_REGEX } }}
+        rules={{
+          required: getTranslation('form.taxCodeError'),
+          pattern: { value: TAX_CODE_REGEX, message: getTranslation('form.taxCodeFormatError') },
+        }}
         placeholder={getTranslation('placeholder.taxCode')}
         label={<Translation value="form.taxCode" />}
       />
@@ -50,7 +53,7 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
       />
 
       <ControlledFormTextField
-        id={`${idPrefix}-name`}
+        id={`${idPrefix}-surname`}
         name="Surname"
         defaultValue={defaultValues?.Surname || ''}
         label={isStudent ? <Translation value="form.studentSurname" /> : <Translation value="form.teacherSurname" />}
@@ -58,7 +61,7 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
       />
 
       <ControlledFormTextField
-        id={`${idPrefix}-name`}
+        id={`${idPrefix}-city`}
         name="City"
         defaultValue={defaultValues?.City || ''}
         label={<Translation value="form.city" />}
@@ -75,7 +78,7 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
 
       <ControlledFormTextField
         id={`${idPrefix}-phone`}
-        name="Phone"
+        name="MobilePhone"
         defaultValue={defaultValues?.MobilePhone || ''}
         label={<Translation value="form.phone" />}
         placeholder={getTranslation('placeholder.phone')}
@@ -108,7 +111,7 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
         id={`${idPrefix}-discipline`}
         name="Discipline"
         label={<Translation value="form.discipline" />}
-        defaultValue={defaultValues?.Discipline || disciplines[0].value} // || ''}
+        defaultValue={defaultValues?.Discipline || disciplines[0].value}
         options={disciplines}
       />
 
@@ -117,7 +120,7 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
         id={`${idPrefix}-course`}
         name="Course"
         label={<Translation value="form.course" />}
-        defaultValue={defaultValues?.Course || null} // || ''}
+        defaultValue={defaultValues?.Course || ''}
         options={courses}
       />
 
@@ -125,7 +128,7 @@ const UserFormFields = ({ idPrefix, defaultValues, isStudent = true, children })
         id={`${idPrefix}-school`}
         name="School"
         label={<Translation value="form.school" />}
-        defaultValue={defaultValues?.School || schools[0].value} // || ''}
+        defaultValue={defaultValues?.School || schools[0].value}
         options={schools}
       />
 
