@@ -14,7 +14,7 @@ const schools = [
 ];
 
 const courses = [
-  { value: 'none', label: '' },
+  { value: '', label: '' },
   { value: 'Cheerleader Senior', label: 'Cheerleader Senior' },
   { value: 'Cheerleader Peewe', label: 'Cheerleader Peewe' },
   { value: 'Cheerleader Mini', label: 'Cheerleader Mini' },
