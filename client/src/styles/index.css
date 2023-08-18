@@ -229,6 +229,12 @@ canvas {
   grid-gap: 40px;
 }
 
+.create-student-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0 15px;
+}
+
 @media screen and (max-width: 992px) {
   .filter-form {
     grid-template-columns: 50% 50%;
