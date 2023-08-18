@@ -10,9 +10,10 @@ import { Modal, Button, Spinner } from 'react-bootstrap';
 import { useStudent } from '../StudentContext';
 
 import Translation from '../../common/Translation';
-import toastConfig from '../../../commondata/toast.config';
 
-const STUDENT_LIST_KEY = 'studentsList';
+import { deleteStudentFromStorage } from '../../../helpers/sessionStorage';
+
+import toastConfig from '../../../commondata/toast.config';
 
 const DeleteStudentModal = ({ id, isOpen, onClose, onDelete }) => {
   const { studentInfo } = useStudent();
@@ -21,11 +22,7 @@ const DeleteStudentModal = ({ id, isOpen, onClose, onDelete }) => {
     async () => axios.delete('/api/student/deleteStudent', { data: { StudentID: id } }),
     {
       onSuccess: (response) => {
-        const studentListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
-
-        const updatedStudentList = studentListCached.filter((student) => student.StudentID !== id);
-
-        sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(updatedStudentList));
+        deleteStudentFromStorage(id);
 
         if (isFunction(onDelete)) {
           onDelete();
