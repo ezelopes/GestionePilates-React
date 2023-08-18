@@ -1,5 +1,3 @@
-const STUDENT_LIST_KEY = 'studentsList';
-const studentListCached = JSON.parse(sessionStorage.getItem(STUDENT_LIST_KEY));
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -25,32 +23,6 @@ const updateTeacher = async (updatedTeacherInfo) => {
 
   const responseParsed = await response.json();
 
-  return { status: response.status, message: responseParsed.message };
-};
-
-const updateRegistrationDate = async (StudentID, RegistrationDate) => {
-  const response = await fetch('/api/student/updateRegistrationDate', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ StudentID, RegistrationDate }),
-  });
-
-  const responseParsed = await response.json();
-
-  if (response.status === 200) {
-    let updatedStudent = null;
-
-    for (let i = 0; i < studentListCached.length; i += 1) {
-      if (StudentID === studentListCached[i].StudentID) {
-        studentListCached[i].RegistrationDate = RegistrationDate || null;
-        updatedStudent = studentListCached[i];
-        break;
-      }
-    }
-
-    sessionStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(studentListCached));
-    return { status: response.status, message: responseParsed.message, updatedStudent };
-  }
   return { status: response.status, message: responseParsed.message };
 };
 
@@ -91,7 +63,6 @@ const getTeachersWithRegistrationReceipt = async (Year) => {
 
 export {
   createTeacher,
-  updateRegistrationDate,
   updateTeacher,
   deleteTeacher,
   getAllTeachers,
