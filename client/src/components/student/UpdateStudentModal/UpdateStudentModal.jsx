@@ -1,46 +1,76 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, Button } from 'react-bootstrap';
+import axios from 'axios';
+import { useMutation } from 'react-query';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Modal, Button, Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { isFunction } from 'is-what';
 
-import UpsertUserForm from '../../user/UpsertUserForm';
-
-import { updateStudent } from '../../../helpers/apiCalls';
 import { useStudent } from '../StudentContext';
 
 import Translation from '../../common/Translation';
+import UserFormFields from '../../user/UserFormFields/UserFormFields';
+import { updateStorageStudent } from '../../../helpers/sessionStorage';
+import toastConfig from '../../../commondata/toast.config';
 
-const UpdateStudentModal = ({ isOpen, closeModal }) => {
-  const { studentInfo, setStudentInfo } = useStudent();
+const UpdateStudentModal = ({ isOpen, onClose, onUpdate }) => {
+  const { studentInfo } = useStudent();
+
+  const form = useForm({ defaultValues: { ...studentInfo } });
+
+  const { handleSubmit } = form;
+
+  const { mutateAsync, isLoading } = useMutation(async (data) => axios.post('/api/student/updateStudent', data), {
+    onSuccess: (response, variables) => {
+      updateStorageStudent(variables);
+
+      if (isFunction(onUpdate)) {
+        onUpdate(variables);
+      }
+
+      onClose();
+
+      toast.success(response.data.message, toastConfig);
+    },
+    onError: (err) => toast.error(err.message, toastConfig),
+  });
 
   return (
-    <Modal show={isOpen} onHide={closeModal} dialogClassName="update-modal" centered>
+    <Modal show={isOpen} onHide={onClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>
           <Translation value="modalsContent.updateStudentHeader" />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <UpsertUserForm
-          personInfo={studentInfo}
-          isStudent
-          callback={updateStudent}
-          handleModal={closeModal}
-          setUserInfo={setStudentInfo}
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={closeModal}>
-          <Translation value="buttons.close" />
-        </Button>
-      </Modal.Footer>
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(mutateAsync)}>
+          <Modal.Body className="student-form">
+            <UserFormFields idPrefix={`${studentInfo?.StudentID}`} defaultValues={studentInfo} isStudent />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type="submit" variant="success" disabled={isLoading}>
+              {isLoading ? (
+                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+              ) : (
+                <Translation value="buttons.student.updateStudent" />
+              )}
+            </Button>
+            <Button variant="secondary" onClick={onClose}>
+              <Translation value="buttons.close" />
+            </Button>
+          </Modal.Footer>
+        </form>
+      </FormProvider>
     </Modal>
   );
 };
 
 UpdateStudentModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default UpdateStudentModal;

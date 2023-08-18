@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { useStudent } from '../StudentContext';
@@ -15,13 +15,18 @@ import './student-card.css';
 
 const StudentCard = () => {
   const history = useHistory();
+
   const { studentInfo, setStudentInfo } = useStudent();
 
-  const [showUpdateStudentModal, setShowUpdateStudentModal] = useState(false);
+  const [showUpdateStudentModal, toggleShowUpdateStudentModal] = useToggle();
 
   const [showRegistrationDateModal, toggleShowRegistrationDateModal] = useToggle();
 
   const [showDeleteStudentModal, toggleShowDeleteStudentModal] = useToggle();
+
+  const onStudentUpdate = (newStudentInfo) => {
+    setStudentInfo(newStudentInfo);
+  };
 
   const onRegistrationDateUpdate = async (newStudentRegistrationDate) => {
     setStudentInfo((currentStudentInfo) => ({ ...currentStudentInfo, RegistrationDate: newStudentRegistrationDate }));
@@ -40,7 +45,7 @@ const StudentCard = () => {
           </span>
         </Button>
 
-        <Button variant="warning" onClick={() => setShowUpdateStudentModal(true)}>
+        <Button variant="warning" onClick={toggleShowUpdateStudentModal}>
           <span role="img" aria-label="update">
             🔄 <Translation value="buttons.student.updateStudent" />
           </span>
@@ -59,7 +64,7 @@ const StudentCard = () => {
         </Button>
       </div>
 
-      <UpdateStudentModal isOpen={showUpdateStudentModal} closeModal={() => setShowUpdateStudentModal(false)} />
+      <UpdateStudentModal isOpen={showUpdateStudentModal} onClose={toggleShowUpdateStudentModal} onUpdate={onStudentUpdate} />
 
       <UpdateRegistrationDateModal
         id={studentInfo.StudentID}
