@@ -20,16 +20,16 @@ import { formatDate } from '../../../helpers/dates';
 
 import './receipt-form-fields.css';
 
-const RECEIPT_TYPE_FIELDS = receiptTypes.map(({ type }) => ({ value: type, label: type }));
-
 const ReceiptFormFields = ({ idPrefix, defaultValues, isEdit = false, children }) => {
   const today = formatDate(new Date(), true);
 
+  // This sticks out, these fields are now dependent on the Student Context - it might be better to pass
+  // `hasMembershipFeeForCurrentYear` as a prop?
   const { studentReceipts } = useStudent();
 
   const { setValue, watch } = useFormContext();
 
-  const watchedReceiptType = watch('ReceiptType') || defaultValues?.ReceiptType || RECEIPT_TYPE_FIELDS[0].value;
+  const watchedReceiptType = watch('ReceiptType') || defaultValues?.ReceiptType || receiptTypes[0].value;
 
   const watchedReceiptDate = watch('ReceiptDate') || defaultValues?.ReceiptDate;
 
@@ -40,6 +40,7 @@ const ReceiptFormFields = ({ idPrefix, defaultValues, isEdit = false, children }
     [watchedReceiptDate, studentReceipts]
   );
 
+  // TODO: Change `null` to `undefined`?
   const onReceiptTypeChange = (type) => {
     setValue('CourseStartDate', isSubscriptionFee(type) ? today : null);
 
@@ -61,9 +62,9 @@ const ReceiptFormFields = ({ idPrefix, defaultValues, isEdit = false, children }
         <ControlledFormSelectField
           id={`${idPrefix}-receipt-type`}
           name="ReceiptType"
-          defaultValue={defaultValues?.ReceiptType || RECEIPT_TYPE_FIELDS[0].value}
+          defaultValue={defaultValues?.ReceiptType || receiptTypes[0].value}
           label={<Translation value="receiptForm.receiptType" />}
-          options={RECEIPT_TYPE_FIELDS}
+          options={receiptTypes}
           onChange={onReceiptTypeChange}
         />
 
