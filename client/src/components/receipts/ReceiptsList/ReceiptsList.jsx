@@ -40,7 +40,7 @@ const columnsDefinition = [
   },
 ];
 
-const ReceiptsList = ({ receipts, refetchReceipts }) => {
+const ReceiptsList = ({ receipts }) => {
   const [currentReceipts, setCurrentReceipts] = useState(receipts);
 
   const [selectedReceipts, setSelectedReceipts] = useState([]);
@@ -56,13 +56,11 @@ const ReceiptsList = ({ receipts, refetchReceipts }) => {
   const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
 
   const onDelete = async () => {
-    const { data, isSuccess } = await refetchReceipts();
+    const updatedList = currentReceipts.filter((r) => !receiptIDs.includes(r.ReceiptID));
 
-    if (isSuccess) {
-      gridOptions.api.setRowData(data);
+    setCurrentReceipts(updatedList);
 
-      setSelectedReceipts([]);
-    }
+    gridOptions.api.setRowData(updatedList);
   };
 
   return (
@@ -104,10 +102,6 @@ ReceiptsList.propTypes = {
    * List of all receipts.
    */
   receipts: PropTypes.array.isRequired,
-  /**
-   * Callback to refetch receipts from server.
-   */
-  refetchReceipts: PropTypes.func.isRequired,
 };
 
 export default ReceiptsList;

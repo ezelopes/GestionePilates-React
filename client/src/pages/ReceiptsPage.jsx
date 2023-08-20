@@ -21,7 +21,6 @@ const ReceiptsPage = () => {
     data: allReceipts,
     isLoading,
     isError,
-    refetch,
   } = useQuery(['receipts'], async () => (await axios.get(endpoints.receipt.getMultiple)).data, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -67,11 +66,7 @@ const ReceiptsPage = () => {
         callback={onToggleChanged}
       />
 
-      {isMembershipFeeSelected ? (
-        <MembershipFeesList receipts={allMembershipFees} />
-      ) : (
-        <ReceiptsList receipts={allReceipts} refetchReceipts={refetch} />
-      )}
+      {isMembershipFeeSelected ? <MembershipFeesList receipts={allMembershipFees} /> : <ReceiptsList receipts={allReceipts} />}
     </>
   );
 };

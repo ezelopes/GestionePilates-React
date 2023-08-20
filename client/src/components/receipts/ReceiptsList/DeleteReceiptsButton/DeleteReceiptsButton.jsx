@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import axios from 'axios';
 import { useMutation } from 'react-query';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
@@ -20,11 +20,11 @@ const DeleteReceiptsButton = ({ receiptIDs, onDelete }) => {
       }),
     {
       onSuccess: ({ data }) => {
+        onDelete();
+
         toggleShowModal();
 
         toast.success(data.message, toastConfig);
-
-        onDelete();
       },
       onError: (err) => toast.error(err?.message, toastConfig),
     }
@@ -48,7 +48,11 @@ const DeleteReceiptsButton = ({ receiptIDs, onDelete }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={mutate} disabled={isLoading}>
-            <Translation value="buttons.receipt.deleteReceipts" />
+            {isLoading ? (
+              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+            ) : (
+              <Translation value="buttons.receipt.deleteReceipts" />
+            )}
           </Button>
           <Button variant="secondary" onClick={toggleShowModal}>
             <Translation value="buttons.close" />
