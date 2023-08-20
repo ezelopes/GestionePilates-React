@@ -40,11 +40,10 @@ const ReceiptFormFields = ({ idPrefix, defaultValues, isEdit = false, children }
     [watchedReceiptDate, studentReceipts]
   );
 
-  // TODO: Change `null` to `undefined`?
   const onReceiptTypeChange = (type) => {
-    setValue('CourseStartDate', isSubscriptionFee(type) ? today : null);
+    setValue('CourseStartDate', isSubscriptionFee(type) ? defaultValues?.CourseStartDate || today : '');
 
-    setValue('CourseEndDate', isSubscriptionFee(type) ? today : null);
+    setValue('CourseEndDate', isSubscriptionFee(type) ? defaultValues?.CourseEndDate || today : '');
   };
 
   const form = (
