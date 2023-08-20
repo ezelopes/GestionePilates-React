@@ -242,6 +242,12 @@ canvas {
   grid-gap: 0 15px;
 }
 
+.create-teacher-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0 15px;
+}
+
 @media screen and (max-width: 992px) {
   .filter-form {
     grid-template-columns: 50% 50%;
@@ -265,6 +271,10 @@ canvas {
   .create-student-form {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .create-teacher-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -277,6 +287,10 @@ canvas {
   }
 
   .create-student-form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .create-teacher-form {
     grid-template-columns: repeat(1, 1fr);
   }
 
