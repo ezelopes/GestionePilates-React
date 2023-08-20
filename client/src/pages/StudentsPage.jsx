@@ -44,11 +44,6 @@ const columnsDefinition = [
     field: 'DOB',
     cellRenderer: (params) => (params.value !== null ? new Date(params.value).toLocaleDateString() : ''),
   },
-  {
-    headerName: 'Data Green Pass',
-    field: 'GreenPassExpirationDate',
-    cellRenderer: (params) => (params.value !== null ? new Date(params.value).toLocaleDateString() : ''),
-  },
   { headerName: 'Luogo Nascita', field: 'BirthPlace' },
   { headerName: 'Disciplina', field: 'Discipline' },
   { headerName: 'Corso', field: 'Course' },
