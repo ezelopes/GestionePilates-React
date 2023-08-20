@@ -14,13 +14,6 @@ const createTeacher = async (newTeacher) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const getAllTeachers = async () => {
-  const result = await fetch('/api/teacher/getTeachers');
-  const body = await result.json();
-
-  return { teachers: body };
-};
-
 const getStudentsWithRegistrationReceipt = async (Year) => {
   const response = await fetch(`/api/student/getStudentsWithRegistrationReceipt/${Year}`);
   const { studentsWithRegistrationReceipt } = await response.json();
@@ -35,4 +28,4 @@ const getTeachersWithRegistrationReceipt = async (Year) => {
   return teachers;
 };
 
-export { createTeacher, getAllTeachers, getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt };
+export { createTeacher, getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt };
