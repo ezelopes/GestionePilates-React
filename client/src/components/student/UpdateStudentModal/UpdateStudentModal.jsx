@@ -12,13 +12,14 @@ import Translation from '../../common/Translation';
 import UserFormFields from '../../user/UserFormFields/UserFormFields';
 import { updateStorageStudent } from '../../../helpers/sessionStorage';
 import toastConfig from '../../../commondata/toast.config';
+import endpoints from '../../../commondata/endpoints.config';
 
 const UpdateStudentModal = ({ defaultValues, isOpen, onClose, onUpdate }) => {
   const form = useForm({ defaultValues });
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync, isLoading } = useMutation(async (data) => axios.post('/api/student/updateStudent', data), {
+  const { mutateAsync, isLoading } = useMutation(async (data) => axios.post(endpoints.student.update, data), {
     onSuccess: (response, variables) => {
       updateStorageStudent(variables);
 

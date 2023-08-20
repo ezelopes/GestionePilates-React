@@ -12,6 +12,7 @@ import toastConfig from '../../../../commondata/toast.config';
 import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
 import UserFormFields from '../../../user/UserFormFields/UserFormFields';
+import endpoints from '../../../../commondata/endpoints.config';
 
 const UpdateTeacherButton = ({ defaultValues, onUpdate }) => {
   const [showModal, toggleShowModal] = useToggle();
@@ -20,7 +21,7 @@ const UpdateTeacherButton = ({ defaultValues, onUpdate }) => {
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync, isLoading } = useMutation(async (data) => axios.post('/api/teacher/updateTeacher', data), {
+  const { mutateAsync, isLoading } = useMutation(async (data) => axios.post(endpoints.teacher.update, data), {
     onSuccess: (response, variables) => {
       if (isFunction(onUpdate)) {
         onUpdate(variables);

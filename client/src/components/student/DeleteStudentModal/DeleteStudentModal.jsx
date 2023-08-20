@@ -14,12 +14,13 @@ import Translation from '../../common/Translation';
 import { deleteStudentFromStorage } from '../../../helpers/sessionStorage';
 
 import toastConfig from '../../../commondata/toast.config';
+import endpoints from '../../../commondata/endpoints.config';
 
 const DeleteStudentModal = ({ id, isOpen, onClose, onDelete }) => {
   const { studentInfo } = useStudent();
 
   const { mutateAsync, isLoading } = useMutation(
-    async () => axios.delete('/api/student/deleteStudent', { data: { StudentID: id } }),
+    async () => axios.delete(endpoints.student.delete, { data: { StudentID: id } }),
     {
       onSuccess: (response) => {
         deleteStudentFromStorage(id);

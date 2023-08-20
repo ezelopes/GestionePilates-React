@@ -10,6 +10,7 @@ import ExpiringStudentsList from '../components/charts/ExpiringStudentsList';
 import ReportSummary from '../components/charts/ReportSummary';
 import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
 import Translation from '../components/common/Translation';
+import endpoints from '../commondata/endpoints.config';
 
 const HomePage = () => {
   const cachedStudents = JSON.parse(sessionStorage.getItem('studentsList'));
@@ -18,7 +19,7 @@ const HomePage = () => {
     data: students,
     isLoading: isStudentsLoading,
     isError: isStudentsError,
-  } = useQuery(['students'], async () => (await axios.get('/api/student/getStudents')).data, {
+  } = useQuery(['students'], async () => (await axios.get(endpoints.student.getMultiple)).data, {
     enabled: !cachedStudents || cachedStudents.length === 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -32,7 +33,7 @@ const HomePage = () => {
     data: receipts,
     isLoading: isReceiptsLoading,
     isError: isReceiptsError,
-  } = useQuery(['receipts'], async () => (await axios.get('/api/receipt/getAllReceipts')).data, {
+  } = useQuery(['receipts'], async () => (await axios.get(endpoints.receipt.getMultiple)).data, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

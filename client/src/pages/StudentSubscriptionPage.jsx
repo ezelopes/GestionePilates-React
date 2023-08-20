@@ -13,6 +13,7 @@ import { addStudentToStorage } from '../helpers/sessionStorage';
 import { studentFactory } from '../helpers/studentFactory';
 
 import toastConfig from '../commondata/toast.config';
+import endpoints from '../commondata/endpoints.config';
 
 const StudentSubscriptionPage = () => {
   const defaultValues = studentFactory();
@@ -21,7 +22,7 @@ const StudentSubscriptionPage = () => {
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync, isLoading } = useMutation(async (data) => axios.put('/api/student/createStudent', data), {
+  const { mutateAsync, isLoading } = useMutation(async (data) => axios.put(endpoints.student.create, data), {
     onSuccess: (response, variables) => {
       const newStudent = { ...variables, StudentID: response.data.StudentID };
 

@@ -13,6 +13,8 @@ import Translation from '../components/common/Translation';
 import PrintStudentsForm from '../components/students/PrintStudentsForm/PrintStudentsForm';
 import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
 
+import endpoints from '../commondata/endpoints.config';
+
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
   {
@@ -65,7 +67,7 @@ const StudentsPage = () => {
     data,
     isLoading: isStudentsLoading,
     isError: isStudentsError,
-  } = useQuery(['students'], async () => (await axios.get('/api/student/getStudents')).data, {
+  } = useQuery(['students'], async () => (await axios.get(endpoints.student.getMultiple)).data, {
     enabled: !cachedStudents || cachedStudents.length === 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

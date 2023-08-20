@@ -8,13 +8,14 @@ import { toast } from 'react-toastify';
 import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
 import toastConfig from '../../../../commondata/toast.config';
+import endpoints from '../../../../commondata/endpoints.config';
 
 const DeleteReceiptsButton = ({ receiptIDs, onDelete }) => {
   const [showModal, toggleShowModal] = useToggle();
 
   const { mutate, isLoading } = useMutation(
     async () =>
-      axios.delete('/api/receipt/deleteReceipts', {
+      axios.delete(endpoints.receipt.deleteMultiple, {
         data: { ReceiptIDs: receiptIDs },
       }),
     {

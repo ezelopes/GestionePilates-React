@@ -11,6 +11,7 @@ import { getTranslation } from '../../../common/Translation/helpers';
 import toastConfig from '../../../../commondata/toast.config';
 import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
+import endpoints from '../../../../commondata/endpoints.config';
 
 const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
   const { studentReceipts, setStudentReceipts } = useStudent();
@@ -18,7 +19,7 @@ const DeleteReceiptButton = ({ receipt, onDeleteCallback }) => {
   const [showDeleteReceiptModal, toggleShowDeleteReceiptModal] = useToggle();
 
   const { mutateAsync: updateReceiptMutation, isLoading } = useMutation(
-    async () => axios.delete('/api/receipt/deleteReceipt', { data: { ReceiptID: receipt.ReceiptID } }),
+    async () => axios.delete(endpoints.receipt.delete, { data: { ReceiptID: receipt.ReceiptID } }),
     {
       onSuccess: (response) => {
         const updatedList = studentReceipts.filter((r) => r.ReceiptID !== receipt.ReceiptID);

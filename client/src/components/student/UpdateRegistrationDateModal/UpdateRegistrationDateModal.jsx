@@ -14,6 +14,7 @@ import Translation from '../../common/Translation';
 import { updateStorageStudentRegistrationDate } from '../../../helpers/sessionStorage';
 
 import toastConfig from '../../../commondata/toast.config';
+import endpoints from '../../../commondata/endpoints.config';
 
 const UpdateRegistrationDateModal = ({ id, defaultValue, isOpen, onClose, onUpdate }) => {
   const form = useForm({ defaultValues: { RegistrationDate: defaultValue } });
@@ -26,7 +27,7 @@ const UpdateRegistrationDateModal = ({ id, defaultValue, isOpen, onClose, onUpda
   }, [defaultValue, reset]);
 
   const { mutateAsync, isLoading } = useMutation(
-    async (RegistrationDate) => axios.post('/api/student/updateRegistrationDate', { StudentID: id, ...RegistrationDate }),
+    async (RegistrationDate) => axios.post(endpoints.student.updateRegistrationDate, { StudentID: id, ...RegistrationDate }),
     {
       onSuccess: (response, variables) => {
         // Session storage update

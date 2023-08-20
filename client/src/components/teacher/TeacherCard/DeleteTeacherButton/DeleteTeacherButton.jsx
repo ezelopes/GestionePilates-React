@@ -11,12 +11,13 @@ import { useToggle } from '../../../common/useToggle';
 import Translation from '../../../common/Translation';
 
 import toastConfig from '../../../../commondata/toast.config';
+import endpoints from '../../../../commondata/endpoints.config';
 
 const DeleteTeacherButton = ({ teacherInfo, onDelete }) => {
   const [showModal, toggleShowModal] = useToggle();
 
   const { mutateAsync, isLoading } = useMutation(
-    async () => axios.delete('/api/teacher/deleteTeacher', { data: { TeacherID: teacherInfo.TeacherID } }),
+    async () => axios.delete(endpoints.teacher.delete, { data: { TeacherID: teacherInfo.TeacherID } }),
     {
       onSuccess: (response) => {
         if (isFunction(onDelete)) {

@@ -12,6 +12,7 @@ import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
 import StudentCard from '../components/student/StudentCard';
 import CreateReceiptForm from '../components/receipts/CreateReceiptForm';
+import endpoints from '../commondata/endpoints.config';
 
 import '../styles/student-page.css';
 
@@ -26,7 +27,7 @@ const StudentPage = () => {
 
   const { isSuccess, isLoading, isError } = useQuery(
     [studentTaxCode],
-    async () => (await axios.get(`/api/student/getStudentWithReceipts/${studentTaxCode}`)).data,
+    async () => (await axios.get(`${endpoints.student.getSingleWithReceipts}/${studentTaxCode}`)).data,
     {
       onSuccess: (data) => {
         setStudent(data.student);

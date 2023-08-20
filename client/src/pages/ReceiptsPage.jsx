@@ -10,6 +10,7 @@ import { getTranslation } from '../components/common/Translation/helpers';
 import Translation from '../components/common/Translation';
 import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
 import { useToggle } from '../components/common/useToggle';
+import endpoints from '../commondata/endpoints.config';
 
 const ReceiptsPage = () => {
   const [allMembershipFees, setAllMembershipFees] = useState([]);
@@ -21,7 +22,7 @@ const ReceiptsPage = () => {
     isLoading,
     isError,
     refetch,
-  } = useQuery(['receipts'], async () => (await axios.get('/api/receipt/getAllReceipts')).data, {
+  } = useQuery(['receipts'], async () => (await axios.get(endpoints.receipt.getMultiple)).data, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

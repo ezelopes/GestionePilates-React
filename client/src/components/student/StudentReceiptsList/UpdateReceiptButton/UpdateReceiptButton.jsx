@@ -15,6 +15,7 @@ import Translation from '../../../common/Translation';
 import ReceiptFormFields from '../../../receipts/ReceiptFormFields';
 import { isSubscriptionFee } from '../../../../commondata';
 import { receiptFactory } from '../../../../helpers/receipts';
+import endpoints from '../../../../commondata/endpoints.config';
 
 const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
   const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
@@ -31,37 +32,34 @@ const UpdateReceiptButton = ({ receipt, onUpdateCallback }) => {
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync, isLoading } = useMutation(
-    async (updatedReceipt) => axios.post('/api/receipt/updateReceipt', updatedReceipt),
-    {
-      onSuccess: (response, submittedReceipt) => {
-        const updatedList = studentReceipts.map((r) => {
-          if (r.ReceiptID === submittedReceipt.ReceiptID) {
-            // When changing from Subscription Fee to any other type, make sure some fields are ignore so they
-            // don't come up in the grid (since there's no refetch happening).
-            return isSubscriptionFee(submittedReceipt.ReceiptType)
-              ? submittedReceipt
-              : { ...submittedReceipt, CourseStartDate: null, CourseEndDate: null };
-          }
-
-          return r;
-        });
-
-        setStudentReceipts(updatedList);
-
-        toggleShowUpdateReceiptModal();
-
-        if (isFunction(onUpdateCallback)) {
-          onUpdateCallback();
+  const { mutateAsync, isLoading } = useMutation(async (updatedReceipt) => axios.post(endpoints.receipt.update, updatedReceipt), {
+    onSuccess: (response, submittedReceipt) => {
+      const updatedList = studentReceipts.map((r) => {
+        if (r.ReceiptID === submittedReceipt.ReceiptID) {
+          // When changing from Subscription Fee to any other type, make sure some fields are ignore so they
+          // don't come up in the grid (since there's no refetch happening).
+          return isSubscriptionFee(submittedReceipt.ReceiptType)
+            ? submittedReceipt
+            : { ...submittedReceipt, CourseStartDate: null, CourseEndDate: null };
         }
 
-        reset();
+        return r;
+      });
 
-        toast.success(response.data.message, toastConfig);
-      },
-      onError: (err) => toast.error(err?.message, toastConfig),
-    }
-  );
+      setStudentReceipts(updatedList);
+
+      toggleShowUpdateReceiptModal();
+
+      if (isFunction(onUpdateCallback)) {
+        onUpdateCallback();
+      }
+
+      reset();
+
+      toast.success(response.data.message, toastConfig);
+    },
+    onError: (err) => toast.error(err?.message, toastConfig),
+  });
 
   const onUpdate = () => {
     if (!receipt) {

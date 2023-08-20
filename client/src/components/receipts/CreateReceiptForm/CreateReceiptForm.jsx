@@ -10,6 +10,7 @@ import { receiptFactory } from '../../../helpers/receipts';
 import ReceiptFormFields from '../ReceiptFormFields';
 import Translation from '../../common/Translation';
 import toastConfig from '../../../commondata/toast.config';
+import endpoints from '../../../commondata/endpoints.config';
 
 const CreateReceiptForm = ({ student, onCreateCallback }) => {
   const form = useForm({ defaultValues: receiptFactory() });
@@ -18,7 +19,7 @@ const CreateReceiptForm = ({ student, onCreateCallback }) => {
 
   const { mutateAsync, isLoading } = useMutation(
     async (newReceipt) =>
-      axios.put('/api/receipt/createReceipt', { ...newReceipt, TaxCode: student.TaxCode, StudentID: student.StudentID }),
+      axios.put(endpoints.receipt.create, { ...newReceipt, TaxCode: student.TaxCode, StudentID: student.StudentID }),
     {
       onSuccess: (response, variables) => {
         onCreateCallback(variables, response.data.ReceiptID);

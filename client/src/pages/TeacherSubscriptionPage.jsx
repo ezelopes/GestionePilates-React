@@ -12,6 +12,7 @@ import Translation from '../components/common/Translation';
 
 import toastConfig from '../commondata/toast.config';
 import { teacherFactory } from '../helpers/teacherFactory';
+import endpoints from '../commondata/endpoints.config';
 
 const TeacherSubscriptionPage = () => {
   const defaultValues = teacherFactory();
@@ -20,7 +21,7 @@ const TeacherSubscriptionPage = () => {
 
   const { handleSubmit, reset } = form;
 
-  const { mutateAsync, isLoading } = useMutation(async (data) => axios.put('/api/teacher/createTeacher', data), {
+  const { mutateAsync, isLoading } = useMutation(async (data) => axios.put(endpoints.teacher.create, data), {
     onSuccess: (response) => {
       reset();
 

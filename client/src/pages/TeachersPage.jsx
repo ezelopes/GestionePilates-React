@@ -8,6 +8,8 @@ import TeacherCard from '../components/teacher/TeacherCard';
 import Translation from '../components/common/Translation';
 import { withReactQuery } from '../components/common/withReactQuery';
 
+import endpoints from '../commondata/endpoints.config';
+
 import '../styles/teachers-page.css';
 
 const TeachersPage = () => {
@@ -19,7 +21,7 @@ const TeachersPage = () => {
     setTeachersList(updatedTeachersList);
   };
 
-  const { isLoading, isError } = useQuery(['teachers'], async () => (await axios.get('/api/teacher/getTeachers')).data, {
+  const { isLoading, isError } = useQuery(['teachers'], async () => (await axios.get(endpoints.teacher.getMultiple)).data, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
