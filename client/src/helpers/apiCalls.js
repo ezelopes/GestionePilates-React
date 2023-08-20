@@ -14,32 +14,6 @@ const createTeacher = async (newTeacher) => {
   return { status: response.status, message: responseParsed.message };
 };
 
-const updateTeacher = async (updatedTeacherInfo) => {
-  const response = await fetch('/api/teacher/updateTeacher', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(updatedTeacherInfo),
-  });
-
-  const responseParsed = await response.json();
-
-  return { status: response.status, message: responseParsed.message };
-};
-
-const deleteTeacher = async (TeacherID) => {
-  const response = await fetch('/api/teacher/deleteTeacher', {
-    method: 'DELETE',
-    headers,
-    body: JSON.stringify({
-      TeacherID,
-    }),
-  });
-
-  const responseParsed = await response.json();
-
-  return { status: response.status, message: responseParsed.message };
-};
-
 const getAllTeachers = async () => {
   const result = await fetch('/api/teacher/getTeachers');
   const body = await result.json();
@@ -61,11 +35,4 @@ const getTeachersWithRegistrationReceipt = async (Year) => {
   return teachers;
 };
 
-export {
-  createTeacher,
-  updateTeacher,
-  deleteTeacher,
-  getAllTeachers,
-  getStudentsWithRegistrationReceipt,
-  getTeachersWithRegistrationReceipt,
-};
+export { createTeacher, getAllTeachers, getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt };

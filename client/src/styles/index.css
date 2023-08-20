@@ -229,6 +229,13 @@ canvas {
   grid-gap: 40px;
 }
 
+.update-teacher-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 40px;
+  grid-gap: 40px;
+}
+
 .create-student-form {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -274,6 +281,10 @@ canvas {
   }
 
   .update-student-form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .update-teacher-form {
     grid-template-columns: repeat(1, 1fr);
   }
 }

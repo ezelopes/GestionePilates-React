@@ -3,6 +3,7 @@ import { Row, Spinner } from 'react-bootstrap';
 
 import TeacherCard from '../components/teacher/TeacherCard';
 import Translation from '../components/common/Translation';
+import { withReactQuery } from '../components/common/withReactQuery';
 
 import { getAllTeachers } from '../helpers/apiCalls';
 
@@ -25,6 +26,12 @@ const TeachersPage = () => {
     return <Spinner animation="border" role="status" className="spinner" />;
   }
 
+  const removeTeacherByIdFromList = (id) => {
+    const updatedTeachersList = teachersList.filter((current) => current.TeacherID !== id);
+
+    setTeachersList(updatedTeachersList);
+  };
+
   return (
     <>
       {teachersList?.length === 0 ? (
@@ -37,10 +44,9 @@ const TeachersPage = () => {
         <div className="teachers-container">
           {teachersList?.map((currentTeacher) => (
             <TeacherCard
-              teacherInitialInfo={currentTeacher}
-              teachersList={teachersList}
-              setTeachersList={setTeachersList}
               key={currentTeacher.TaxCode}
+              teacherInitialInfo={currentTeacher}
+              removeTeacherByIdFromList={removeTeacherByIdFromList}
             />
           ))}
         </div>
@@ -49,4 +55,4 @@ const TeachersPage = () => {
   );
 };
 
-export default TeachersPage;
+export default withReactQuery(TeachersPage);
