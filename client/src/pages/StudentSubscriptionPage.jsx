@@ -10,31 +10,12 @@ import UserFormFields from '../components/user/UserFormFields';
 import Translation from '../components/common/Translation';
 
 import { addStudentToStorage } from '../helpers/sessionStorage';
+import { studentFactory } from '../helpers/studentFactory';
 
-import { ages, disciplines, schools } from '../commondata';
 import toastConfig from '../commondata/toast.config';
 
 const StudentSubscriptionPage = () => {
-  const defaultValues = {
-    IsAdult: ages[0].value,
-    TaxCode: '',
-    Name: '',
-    Surname: '',
-    City: '',
-    Address: '',
-    MobilePhone: '',
-    Email: '',
-    BirthPlace: '',
-    DOB: undefined,
-    Discipline: disciplines[0].value,
-    Course: undefined,
-    School: schools[0].value,
-    RegistrationDate: undefined,
-    CertificateExpirationDate: undefined,
-    ParentTaxCode: '',
-    ParentName: '',
-    ParentSurname: '',
-  };
+  const defaultValues = studentFactory();
 
   const form = useForm({ defaultValues });
 
