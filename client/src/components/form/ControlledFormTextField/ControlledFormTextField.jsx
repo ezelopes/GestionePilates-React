@@ -65,10 +65,6 @@ ControlledFormTextField.propTypes = {
    * Optional label for the form field.
    */
   label: PropTypes.node,
-  /**
-   * Optional label for the form field.
-   */
-  // errors: PropTypes.object,
 };
 
 ControlledFormTextField.defaultProps = {
@@ -76,7 +72,6 @@ ControlledFormTextField.defaultProps = {
   defaultValue: undefined,
   onChange: undefined,
   label: undefined,
-  // Errors: undefined,
 };
 
 export default ControlledFormTextField;
