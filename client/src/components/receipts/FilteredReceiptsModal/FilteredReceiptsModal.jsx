@@ -4,7 +4,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button, Modal } from 'react-bootstrap';
 
 import Translation from '../../common/Translation';
-import { gridOptionsFilteredReceipts } from '../../../commondata/grid.config';
+import { gridOptionsFilteredReceipts as gridOptions } from '../../../commondata/grid.config';
+import { printReceiptsDetails } from '../../../helpers/printPDF';
 
 const columnDefs = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber' },
@@ -22,18 +23,9 @@ const columnDefs = [
   },
 ];
 
-const FilteredReceiptsModal = ({
-  filteredReceipts,
-  filteredAmountPaid,
-  showFilteredAmountModal,
-  setShowFilteredAmountModal,
-  filteredPaymentMethod,
-  fromDate,
-  toDate,
-  printReceipts,
-}) => (
+const FilteredReceiptsModal = ({ receipts, amount, showModal, toggleShowModal, paymentMethod, fromDate, toDate }) => (
   <>
-    <Modal show={showFilteredAmountModal} onHide={() => setShowFilteredAmountModal(false)} centered dialogClassName="modal-90vw">
+    <Modal show={showModal} onHide={toggleShowModal} centered dialogClassName="modal-90vw">
       <Modal.Header closeButton>
         <Modal.Title>
           <Translation
@@ -41,7 +33,7 @@ const FilteredReceiptsModal = ({
             replace={{
               fromDate,
               toDate,
-              paymentMethod: filteredPaymentMethod,
+              paymentMethod,
             }}
           />
         </Modal.Title>
@@ -50,25 +42,20 @@ const FilteredReceiptsModal = ({
         <Translation
           value="receiptFilterForm.totalAmount"
           replace={{
-            totalAmount: filteredAmountPaid,
+            totalAmount: amount,
           }}
         />
         <div className="ag-theme-alpine ag-grid-custom">
-          <AgGridReact reactNext gridOptions={gridOptionsFilteredReceipts} columnDefs={columnDefs} rowData={filteredReceipts} />
+          <AgGridReact reactNext gridOptions={gridOptions} columnDefs={columnDefs} rowData={receipts} />
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="success" onClick={printReceipts}>
+        <Button variant="success" onClick={() => printReceiptsDetails(receipts, amount, paymentMethod, fromDate, toDate)}>
           <span role="img" aria-label="print-selected">
             🖨️ <Translation value="buttons.print" />
           </span>
         </Button>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setShowFilteredAmountModal(false);
-          }}
-        >
+        <Button variant="secondary" onClick={toggleShowModal}>
           <Translation value="buttons.close" />
         </Button>
       </Modal.Footer>
@@ -77,19 +64,17 @@ const FilteredReceiptsModal = ({
 );
 
 FilteredReceiptsModal.propTypes = {
-  filteredReceipts: PropTypes.array.isRequired,
-  filteredAmountPaid: PropTypes.number.isRequired,
-  showFilteredAmountModal: PropTypes.bool.isRequired,
-  setShowFilteredAmountModal: PropTypes.func.isRequired,
-  filteredPaymentMethod: PropTypes.string,
+  receipts: PropTypes.array.isRequired,
+  amount: PropTypes.number.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  toggleShowModal: PropTypes.func.isRequired,
+  paymentMethod: PropTypes.string,
   fromDate: PropTypes.string.isRequired,
   toDate: PropTypes.string.isRequired,
-  printReceipts: PropTypes.func,
 };
 
 FilteredReceiptsModal.defaultProps = {
-  filteredPaymentMethod: '',
-  printReceipts: () => {},
+  paymentMethod: '',
 };
 
 export default FilteredReceiptsModal;

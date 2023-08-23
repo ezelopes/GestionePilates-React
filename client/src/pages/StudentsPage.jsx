@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Alert, Button, Spinner } from 'react-bootstrap';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 import FilterStudentsForm from '../components/students/FilterStudentsForm';
 
-import { getAllStudents } from '../helpers/apiCalls';
 import { printSelectedStudents } from '../helpers/printPDF';
-import { gridOptionsDefaultStudents } from '../commondata/grid.config';
+import { gridOptionsDefaultStudents as gridOptions } from '../commondata/grid.config';
 
 import Translation from '../components/common/Translation';
 import PrintStudentsForm from '../components/students/PrintStudentsForm/PrintStudentsForm';
+import { withReactQuery } from '../components/common/withReactQuery/withReactQuery';
+
+import endpoints from '../commondata/endpoints.config';
 
 const columnsDefinition = [
   { headerName: 'Seleziona', checkboxSelection: true, headerCheckboxSelection: true },
   {
     headerName: 'Codice Fiscale',
     field: 'TaxCode',
-    // eslint-disable-next-line react/prop-types
-    cellRendererFramework: ({ data, value }) => <Link to={`/students/${data.TaxCode}`}>{value}</Link>,
+    cellRenderer: ({ data, value }) => <Link to={`/students/${data.TaxCode}`}>{value}</Link>,
   },
   { headerName: 'Età', field: 'IsAdult' },
   { headerName: 'Nome', field: 'Name' },
@@ -41,11 +44,6 @@ const columnsDefinition = [
     field: 'DOB',
     cellRenderer: (params) => (params.value !== null ? new Date(params.value).toLocaleDateString() : ''),
   },
-  {
-    headerName: 'Data Green Pass',
-    field: 'GreenPassExpirationDate',
-    cellRenderer: (params) => (params.value !== null ? new Date(params.value).toLocaleDateString() : ''),
-  },
   { headerName: 'Luogo Nascita', field: 'BirthPlace' },
   { headerName: 'Disciplina', field: 'Discipline' },
   { headerName: 'Corso', field: 'Course' },
@@ -56,37 +54,32 @@ const columnsDefinition = [
 ];
 
 const StudentsPage = () => {
-  const [gridOptions] = useState(gridOptionsDefaultStudents);
+  const cachedStudents = JSON.parse(sessionStorage.getItem('studentsList'));
 
-  const [students, setStudents] = useState();
   const [selectedStudents, setSelectedStudents] = useState([]);
 
-  const onGridReady = () => {
-    const fetchData = async () => {
-      const { allStudents } = await getAllStudents();
-      setStudents(allStudents);
-    };
+  const {
+    data,
+    isLoading: isStudentsLoading,
+    isError: isStudentsError,
+  } = useQuery(['students'], async () => (await axios.get(endpoints.student.getMultiple)).data, {
+    enabled: !cachedStudents || cachedStudents.length === 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    onSuccess: (responseData) => {
+      sessionStorage.setItem('studentsList', JSON.stringify(responseData));
+    },
+  });
 
-    if (!sessionStorage.getItem('studentsList') || sessionStorage.getItem('studentsList').length === 0) {
-      fetchData();
-    } else {
-      const studentListCached = JSON.parse(sessionStorage.getItem('studentsList'));
-      setStudents(studentListCached);
-    }
-  };
+  const students = cachedStudents || data;
 
   const onStudentSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
-    if (selectedNodes.length === 0) {
-      return setSelectedStudents([]);
-    }
 
-    const currentSelectedStudents = [];
-    selectedNodes.forEach((node) => {
-      currentSelectedStudents.push(node.data);
-    });
+    const studentsData = selectedNodes.map((node) => node.data);
 
-    return setSelectedStudents(currentSelectedStudents);
+    return setSelectedStudents(studentsData);
   };
 
   const filterColumn = (columnName, value) => {
@@ -109,6 +102,18 @@ const StudentsPage = () => {
     gridOptions.api.onFilterChanged();
   };
 
+  if (isStudentsLoading) {
+    return <Spinner animation="border" role="status" className="spinner" />;
+  }
+
+  if (isStudentsError) {
+    return (
+      <Alert variant="danger">
+        <Translation value="common.requestFailed" />
+      </Alert>
+    );
+  }
+
   return (
     <>
       <div className="container-fluid">
@@ -121,7 +126,6 @@ const StudentsPage = () => {
             columnDefs={columnsDefinition}
             rowData={students}
             onSelectionChanged={onStudentSelectionChanged}
-            onGridReady={onGridReady}
           />
         </div>
 
@@ -139,4 +143,4 @@ const StudentsPage = () => {
   );
 };
 
-export default StudentsPage;
+export default withReactQuery(StudentsPage);

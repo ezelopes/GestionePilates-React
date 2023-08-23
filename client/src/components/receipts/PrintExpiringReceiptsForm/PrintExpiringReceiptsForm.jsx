@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form } from 'react-bootstrap';
-
-import { useReceipt } from '../ReceiptContext';
 
 import Translation from '../../common/Translation';
 import { printExpiringStudents } from '../../../helpers/printPDF';
@@ -9,10 +8,8 @@ import { years } from '../../../commondata';
 
 import './print-expiring-receipts-form.css';
 
-const PrintExpiringReceiptsForm = () => {
+const PrintExpiringReceiptsForm = ({ receipts }) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  const { currentReceipts } = useReceipt();
 
   return (
     <div className="form-wrapper print-receipt-form">
@@ -33,13 +30,20 @@ const PrintExpiringReceiptsForm = () => {
         ))}
       </Form.Control>
 
-      <Button variant="success" onClick={() => printExpiringStudents(currentReceipts, selectedYear)}>
+      <Button variant="success" onClick={() => printExpiringStudents(receipts, selectedYear)}>
         <span role="img" aria-label="print-selected">
           🖨️ <Translation value="buttons.student.printExpiringStudents" />
         </span>
       </Button>
     </div>
   );
+};
+
+PrintExpiringReceiptsForm.propTypes = {
+  /**
+   * List of all receipts.
+   */
+  receipts: PropTypes.array.isRequired,
 };
 
 export default PrintExpiringReceiptsForm;

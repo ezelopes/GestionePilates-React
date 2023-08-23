@@ -1,111 +1,95 @@
-import { Button, Form } from 'react-bootstrap';
-import React, { useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 
+import { FormProvider, useForm } from 'react-hook-form';
 import Translation from '../../common/Translation';
-import { getTranslation } from '../../common/Translation/helpers';
 import FilteredReceiptsModal from '../FilteredReceiptsModal';
 import { validateCourseBetweenTwoDates, isDateBetweenTwoDates, formatDate } from '../../../helpers/dates';
-import orderReceiptsBasedOnReceiptNumber from '../../../helpers/orderReceiptsBasedOnReceiptNumber';
-import { printReceiptsDetails, printMembershipFeeSummaryTemplate } from '../../../helpers/printPDF';
-import toastConfig from '../../../commondata/toast.config';
-import { BLANK_DATE, isSubscriptionFee, paymentMethods } from '../../../commondata';
+import { isSubscriptionFee, paymentMethods } from '../../../commondata';
 import isTemporaryReceipt from '../../../helpers/isTemporaryReceipt';
+import ControlledFormDateField from '../../form/ControlledFormDateField';
+import ControlledFormSelectField from '../../form/ControlledFormSelectField/ControlledFormSelectField';
+import { useToggle } from '../../common/useToggle';
 
-const filterFields = [
-  { field: 'receipt_date', description: 'Data Ricevuta' },
-  { field: 'course_date', description: 'Data Inizio - Scadenza Corso' },
+const FILTER_BY_FIELDS = [
+  { value: 'receipt_date', label: 'Data Ricevuta' },
+  { value: 'course_date', label: 'Data Inizio - Scadenza Corso' },
 ];
 
-const FilterReceiptsForm = ({
-  allReceipts,
-  setCurrentReceipts,
-  receiptsForAmountSummary,
-  setReceiptsForAmountSummary,
-  gridOptions,
-  isMembershipFee,
-}) => {
+const PAYMENT_METHODS_FIELDS = [{ value: 'all', label: '' }, ...paymentMethods];
+
+const FilterReceiptsForm = ({ allReceipts, setCurrentReceipts }) => {
   const today = formatDate(new Date(), true);
 
-  const [filterByField, setFilterByField] = useState(filterFields[0].field);
-  const [filteredPaymentMethod, setFilteredPaymentMethod] = useState(null);
-  const [fromDate, setFromDate] = useState(today);
-  const [toDate, setToDate] = useState(today);
+  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
 
   const [totalAmountPaid, setTotalAmountPaid] = useState(0);
 
-  const [showFilteredAmountModal, setShowFilteredAmountModal] = useState(false);
+  const [showModal, toggleShowModal] = useToggle();
 
-  const selectPaymentMethodRef = useRef();
-  const selectFilterFieldRef = useRef();
-  const fromDateRef = useRef();
-  const toDateRef = useRef();
+  const form = useForm({
+    defaultValues: {
+      filterBy: FILTER_BY_FIELDS[0].value,
+      paymentMethod: PAYMENT_METHODS_FIELDS[0].value,
+      fromDate: today,
+      toDate: today,
+    },
+  });
 
-  const filterReceipts = () => {
+  const { watch, handleSubmit, reset } = form;
+
+  const watchedFields = watch();
+
+  const filterReceipts = ({ filterBy, fromDate, toDate, paymentMethod }) => {
+    // First filter by date.
     const receiptsWithDateFilter = allReceipts.filter(({ ReceiptDate, CourseStartDate, CourseEndDate }) =>
-      filterByField === 'receipt_date'
+      filterBy === 'receipt_date'
         ? isDateBetweenTwoDates(fromDate, toDate, ReceiptDate)
         : validateCourseBetweenTwoDates(fromDate, toDate, CourseStartDate, CourseEndDate)
     );
 
-    if (!filteredPaymentMethod) {
-      return setCurrentReceipts(receiptsWithDateFilter);
+    if (paymentMethod === 'all') {
+      return receiptsWithDateFilter;
     }
 
-    const receiptsWithPaymentAndDateFilters = receiptsWithDateFilter.filter(({ PaymentMethod }) =>
-      PaymentMethod.includes(filteredPaymentMethod)
-    );
-
-    return setCurrentReceipts(receiptsWithPaymentAndDateFilters);
+    // Filter by payment method too.
+    return receiptsWithDateFilter.filter(({ PaymentMethod }) => PaymentMethod === paymentMethod);
   };
 
-  // Only consider subscription receipts.
-  const calculateAmountBetweenDatesAndByPaymentMethod = () => {
-    if (filterByField !== 'receipt_date') {
-      return toast.error(getTranslation('toast.error.noEligibleFilter'), toastConfig);
-    }
+  const handleFilter = (formData) => {
+    const filteredReceiptList = filterReceipts(formData);
 
-    const receipts = allReceipts.filter(({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) => {
+    setCurrentReceipts(filteredReceiptList);
+  };
+
+  const filterReceiptsForPaymentSummary = ({ fromDate, toDate, paymentMethod }) =>
+    allReceipts.filter(({ ReceiptNumber, ReceiptDate, PaymentMethod, ReceiptType }) => {
       const isValid =
         isDateBetweenTwoDates(fromDate, toDate, ReceiptDate) &&
+        // Only consider subscription receipts.
         isSubscriptionFee(ReceiptType) &&
         !isTemporaryReceipt(ReceiptNumber);
 
-      if (filteredPaymentMethod) {
-        return isValid && PaymentMethod.includes(filteredPaymentMethod);
-      }
-
-      return isValid;
+      return paymentMethod === 'all' ? isValid : isValid && PaymentMethod === paymentMethod;
     });
 
-    const filteredAmount = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
+  const calculateAmountBetweenDatesAndByPaymentMethod = (formData) => {
+    if (formData.filterBy !== 'receipt_date') {
+      return;
+    }
 
-    const copy = [...receipts];
-    const orderedReceipts = orderReceiptsBasedOnReceiptNumber(copy);
+    const receipts = filterReceiptsForPaymentSummary(formData);
+    const total = receipts.reduce((accumulator, { AmountPaid }) => accumulator + parseFloat(AmountPaid), 0);
 
-    setReceiptsForAmountSummary(orderedReceipts);
-    setTotalAmountPaid(filteredAmount);
+    setReceiptsForAmountSummary(receipts);
+    setTotalAmountPaid(total);
 
-    return setShowFilteredAmountModal(true);
+    toggleShowModal();
   };
 
   const clearFilters = () => {
-    if (!isMembershipFee) {
-      const PaymentMethodFilterComponent = gridOptions.api.getFilterInstance('PaymentMethod');
-
-      PaymentMethodFilterComponent.setModel(null);
-      gridOptions.api.onFilterChanged();
-
-      selectPaymentMethodRef.current.value = null;
-      selectFilterFieldRef.current.value = filterFields[0].field;
-
-      setFilterByField(filterFields[0].field);
-    }
-
-    // Set default values in other components
-    fromDateRef.current.value = today;
-    toDateRef.current.value = today;
+    reset();
 
     setCurrentReceipts(allReceipts);
     setReceiptsForAmountSummary([]);
@@ -113,125 +97,67 @@ const FilterReceiptsForm = ({
 
   return (
     <>
-      <div className="filter-form">
-        {!isMembershipFee && (
-          <Form.Group>
-            <Form.Label>
-              <Translation value="receiptFilterForm.filterBy" />
-            </Form.Label>
-            <Form.Control ref={selectFilterFieldRef} as="select" onChange={({ target }) => setFilterByField(target.value)}>
-              {filterFields.map(({ field, description }) => (
-                <option key={`select_${field}`} value={field}>
-                  {description}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        )}
+      <FormProvider {...form}>
+        <form id="receipts-form" onSubmit={handleSubmit(handleFilter)}>
+          <div className="filter-form">
+            <ControlledFormSelectField
+              name="filterBy"
+              label={<Translation value="receiptFilterForm.filterBy" />}
+              options={FILTER_BY_FIELDS}
+            />
 
-        {!isMembershipFee && (
-          <Form.Group>
-            <Form.Label>
-              <Translation value="receiptFilterForm.selectPaymentMethod" />
-            </Form.Label>
-            <Form.Control
-              ref={selectPaymentMethodRef}
-              as="select"
-              onChange={({ target }) => setFilteredPaymentMethod(target.value)}
+            <ControlledFormSelectField
+              name="paymentMethod"
+              label={<Translation value="receiptFilterForm.selectPaymentMethod" />}
+              options={PAYMENT_METHODS_FIELDS}
+            />
+
+            <ControlledFormDateField name="fromDate" label={<Translation value="common.from" />} />
+
+            <ControlledFormDateField name="toDate" label={<Translation value="common.to" />} />
+          </div>
+          <div className="buttons-container">
+            <Button
+              variant="success"
+              onClick={handleSubmit(calculateAmountBetweenDatesAndByPaymentMethod)}
+              disabled={watchedFields.filterBy !== 'receipt_date'}
             >
-              <option key={null} value={null}>
-                {null}
-              </option>
-              {paymentMethods.map((currentMethod) => (
-                <option key={`select_${currentMethod.type}`} value={currentMethod.type}>
-                  {currentMethod.type}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        )}
+              <span role="img" aria-label="summary">
+                🧾 <Translation value="buttons.receipt.calculateTotalAmount" />
+              </span>
+            </Button>
 
-        <Form.Group>
-          <Form.Label>
-            <Translation value="common.from" />
-          </Form.Label>
-          <Form.Control ref={fromDateRef} type="date" defaultValue={today} onChange={({ target }) => setFromDate(target.value)} />
-        </Form.Group>
+            <Button type="submit" variant="primary">
+              <span role="img" aria-label="filter">
+                🔎 <Translation value="buttons.filter" />
+              </span>
+            </Button>
 
-        <Form.Group>
-          <Form.Label>
-            <Translation value="common.to" />
-          </Form.Label>
-          <Form.Control ref={toDateRef} type="date" defaultValue={today} onChange={({ target }) => setToDate(target.value)} />
-        </Form.Group>
-      </div>
-      <div className="buttons-container">
-        {!isMembershipFee ? (
-          <Button
-            variant="success"
-            onClick={calculateAmountBetweenDatesAndByPaymentMethod}
-            disabled={filterByField !== 'receipt_date'}
-          >
-            <span role="img" aria-label="summary">
-              🧾 <Translation value="buttons.receipt.calculateTotalAmount" />
-            </span>
-          </Button>
-        ) : (
-          <Button variant="success" onClick={() => printMembershipFeeSummaryTemplate(allReceipts, fromDate, toDate)}>
-            <span role="img" aria-label="summary">
-              🖨️ <Translation value="buttons.receipt.printMembershipFeeSummary" />
-            </span>
-          </Button>
-        )}
+            <Button variant="danger" onClick={clearFilters}>
+              <span role="img" aria-label="remove-filters">
+                🗑️ <Translation value="buttons.removeFilters" />
+              </span>
+            </Button>
+          </div>
 
-        <Button variant="primary" onClick={filterReceipts}>
-          <span role="img" aria-label="filter">
-            🔎 <Translation value="buttons.filter" />
-          </span>
-        </Button>
-
-        <Button variant="danger" onClick={clearFilters}>
-          <span role="img" aria-label="remove-filters">
-            🗑️ <Translation value="buttons.removeFilters" />
-          </span>
-        </Button>
-      </div>
-
-      <FilteredReceiptsModal
-        showFilteredAmountModal={showFilteredAmountModal}
-        setShowFilteredAmountModal={setShowFilteredAmountModal}
-        filteredAmountPaid={totalAmountPaid}
-        filteredReceipts={receiptsForAmountSummary}
-        fromDate={formatDate(new Date(fromDate)) || BLANK_DATE}
-        toDate={formatDate(new Date(toDate)) || BLANK_DATE}
-        filteredPaymentMethod={filteredPaymentMethod}
-        printReceipts={() =>
-          printReceiptsDetails(
-            receiptsForAmountSummary,
-            totalAmountPaid,
-            filteredPaymentMethod,
-            formatDate(new Date(fromDate)),
-            formatDate(new Date(toDate))
-          )
-        }
-      />
+          <FilteredReceiptsModal
+            showModal={showModal}
+            toggleShowModal={toggleShowModal}
+            amount={totalAmountPaid}
+            receipts={receiptsForAmountSummary}
+            fromDate={formatDate(new Date(watchedFields.fromDate))}
+            toDate={formatDate(new Date(watchedFields.toDate))}
+            paymentMethod={watchedFields.paymentMethod}
+          />
+        </form>
+      </FormProvider>
     </>
   );
 };
 
 FilterReceiptsForm.propTypes = {
   allReceipts: PropTypes.array.isRequired,
-  receiptsForAmountSummary: PropTypes.array,
-  setReceiptsForAmountSummary: PropTypes.func,
   setCurrentReceipts: PropTypes.func.isRequired,
-  gridOptions: PropTypes.object.isRequired,
-  isMembershipFee: PropTypes.bool,
-};
-
-FilterReceiptsForm.defaultProps = {
-  receiptsForAmountSummary: [],
-  setReceiptsForAmountSummary: () => {},
-  isMembershipFee: false,
 };
 
 export default FilterReceiptsForm;

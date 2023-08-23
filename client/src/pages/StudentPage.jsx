@@ -1,59 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 
+import axios from 'axios';
+import { useQuery } from 'react-query';
 import NotFoundPage from './NotFoundPage';
+import { withReactQuery } from '../components/common/withReactQuery';
+import Translation from '../components/common/Translation';
 
 import { StudentProvider } from '../components/student/StudentContext';
 import StudentReceiptsList from '../components/student/StudentReceiptsList';
 import StudentCard from '../components/student/StudentCard';
-import UpsertReceiptForm from '../components/receipts/UpsertReceiptForm';
-import Translation from '../components/common/Translation';
-
-import { createReceipt, getStudentWithReceipts } from '../helpers/apiCalls';
+import CreateReceiptForm from '../components/receipts/CreateReceiptForm';
+import endpoints from '../commondata/endpoints.config';
 
 import '../styles/student-page.css';
 
-const StudentPage = ({ match }) => {
-  const [loading, setLoading] = useState(true);
-  const [studentInfo, setStudentInfo] = useState({});
-  const [studentReceipts, setStudentReceipts] = useState([]);
+const StudentPage = () => {
+  const [student, setStudent] = useState({});
 
-  const [newRegistrationDate, setNewRegistrationDate] = useState(null);
+  const [studentReceipts, setStudentReceipts] = useState([]);
 
   const history = useHistory();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { student, receipts } = await getStudentWithReceipts(match.params.TaxCode);
+  const studentTaxCode = useLocation().pathname?.split('/').pop();
 
-      setStudentInfo(student);
-      setNewRegistrationDate(student?.RegistrationDate);
-      setStudentReceipts(receipts);
+  const { isSuccess, isLoading, isError } = useQuery(
+    [studentTaxCode],
+    async () => (await axios.get(`${endpoints.student.getSingleWithReceipts}/${studentTaxCode}`)).data,
+    {
+      onSuccess: (data) => {
+        setStudent(data.student);
 
-      setLoading(false);
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+        setStudentReceipts(data.receipts);
+      },
+    }
+  );
 
-  if (!studentInfo) {
+  const onReceiptCreate = (receiptData, receiptId) => {
+    setStudentReceipts([...studentReceipts, { ...receiptData, ReceiptID: receiptId, FK_StudentID: student.StudentID }]);
+
+    // If receipt date is created with "RegistrationDate" flag set to true, then update registration date of the student.
+    if (receiptData.RegistrationDate) {
+      setStudent((s) => ({ ...s, RegistrationDate: receiptData.ReceiptDate }));
+    }
+  };
+
+  if (isError) {
     return <NotFoundPage />;
-  }
-
-  if (loading) {
-    return <Spinner animation="border" role="status" className="spinner" />;
   }
 
   return (
     <StudentProvider
-      studentInfo={studentInfo}
+      studentInfo={student}
       studentReceipts={studentReceipts}
-      setStudentInfo={setStudentInfo}
+      setStudentInfo={setStudent}
       setStudentReceipts={setStudentReceipts}
-      newRegistrationDate={newRegistrationDate}
-      setNewRegistrationDate={setNewRegistrationDate}
     >
       <Button variant="warning" onClick={history.goBack} className="backButton">
         <span role="img" aria-label="back">
@@ -61,33 +63,21 @@ const StudentPage = ({ match }) => {
         </span>
       </Button>
 
-      <div className="student-page">
-        <StudentCard />
+      {isLoading && <Spinner animation="border" role="status" className="spinner" />}
 
-        <div className="form-wrapper create-receipt-form">
-          <UpsertReceiptForm isForCreating callback={createReceipt} />
-        </div>
-      </div>
+      {isSuccess && (
+        <>
+          <div className="student-page">
+            <StudentCard key={`${studentTaxCode}-actions`} />
 
-      <StudentReceiptsList />
+            <CreateReceiptForm key={`${studentTaxCode}-receipt-form`} student={student} onCreateCallback={onReceiptCreate} />
+          </div>
+
+          <StudentReceiptsList key={`${studentTaxCode}-receipt-list`} />
+        </>
+      )}
     </StudentProvider>
   );
 };
 
-StudentPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      TaxCode: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};
-
-StudentPage.defaultValue = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      TaxCode: '',
-    }),
-  }),
-};
-
-export default StudentPage;
+export default withReactQuery(StudentPage);

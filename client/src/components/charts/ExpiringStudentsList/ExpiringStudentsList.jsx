@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { formatDate } from '../../../helpers/dates';
+import { formatDate, isDateBetweenTwoDates } from '../../../helpers/dates';
 
 import './expiring-students-list.css';
 import Translation from '../../common/Translation';
@@ -10,18 +10,46 @@ import Translation from '../../common/Translation';
 const PAGINATION = 10;
 
 const ExpiringStudentsList = ({ students }) => {
-  const [studentsToShow, setStudentsToShow] = useState([]);
-  const [next, setNext] = useState(0);
+  const today = new Date();
 
-  useEffect(() => {
-    setStudentsToShow(students.slice(0, next + PAGINATION));
-  }, [next, setStudentsToShow, students]);
+  const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1));
+
+  const { expiringStudents } = students.reduce(
+    (accumulator, student) => {
+      if (isDateBetweenTwoDates(today, nextMonth, new Date(student.CertificateExpirationDate))) {
+        accumulator.expiringStudents.push({ ...student, hasExpired: false });
+      }
+
+      if (today > new Date(student.CertificateExpirationDate)) {
+        accumulator.expiringStudents.push({ ...student, hasExpired: true });
+      }
+
+      return accumulator;
+    },
+    {
+      expiringStudents: [],
+    }
+  );
+
+  const sortedExpiringStudents = expiringStudents.sort(
+    (a, b) => new Date(b.CertificateExpirationDate) - new Date(a.CertificateExpirationDate)
+  );
+
+  const [studentsToShow, setStudentsToShow] = useState(sortedExpiringStudents.slice(0, 10));
+
+  const [next, setNext] = useState(10);
+
+  const showMore = () => {
+    setStudentsToShow(sortedExpiringStudents.slice(0, next + PAGINATION));
+
+    setNext(next + PAGINATION);
+  };
 
   return (
     <Container fluid>
       <div className="title">
         <h3>
-          <Translation value="chart.expiringStudentsList.title" replace={{ total: students.length }} />
+          <Translation value="chart.expiringStudentsList.title" replace={{ total: expiringStudents.length }} />
         </h3>
       </div>
       <div>
@@ -59,7 +87,7 @@ const ExpiringStudentsList = ({ students }) => {
         </table>
       </div>
       <div className="load-more-button">
-        <Button variant="primary" onClick={() => setNext(next + PAGINATION)} disabled={studentsToShow.length === students.length}>
+        <Button variant="primary" onClick={showMore} disabled={studentsToShow.length === expiringStudents.length}>
           <Translation value="buttons.loadMore" />
         </Button>
       </div>
@@ -68,6 +96,9 @@ const ExpiringStudentsList = ({ students }) => {
 };
 
 ExpiringStudentsList.propTypes = {
+  /**
+   * List of students.
+   */
   students: PropTypes.array.isRequired,
 };
 

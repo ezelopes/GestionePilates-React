@@ -14,7 +14,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const IncomePerCourseChart = ({ receiptsWithStudentInfo }) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear() - 1);
-  const [selectedDiscipline, setSelectedDiscipline] = useState(disciplines[0].discipline);
+  const [selectedDiscipline, setSelectedDiscipline] = useState(disciplines[0].value);
 
   const { amountPaidPerCourse, fitnessTotal, danceCoursesTotal, unassignedDanceCoursesTotal } = useAmountPaidPerCourse(
     receiptsWithStudentInfo,
@@ -59,8 +59,8 @@ const IncomePerCourseChart = ({ receiptsWithStudentInfo }) => {
             </Form.Label>
             <Form.Control as="select" defaultValue={selectedYear} onChange={({ target }) => setSelectedDiscipline(target.value)}>
               {disciplines.map((discipline) => (
-                <option key={`select_${discipline.id}`} value={discipline.discipline}>
-                  {discipline.discipline}
+                <option key={`select_${discipline.value}`} value={discipline.value}>
+                  {discipline.label}
                 </option>
               ))}
             </Form.Control>

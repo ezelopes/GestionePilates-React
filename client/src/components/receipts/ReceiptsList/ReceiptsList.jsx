@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-import { toast } from 'react-toastify';
-import { useReceipt } from '../ReceiptContext';
 import FilterReceiptsForm from '../FilterReceiptsForm';
 import PrintExpiringReceiptsForm from '../PrintExpiringReceiptsForm';
 
 import Translation from '../../common/Translation';
 import { printSelectedReceipts } from '../../../helpers/printPDF';
-import { gridOptionsDefaultReceipts } from '../../../commondata/grid.config';
-import { deleteReceipts } from '../../../helpers/apiCalls';
-import toastConfig from '../../../commondata/toast.config';
+import { gridOptionsDefaultReceipts as gridOptions } from '../../../commondata/grid.config';
+import DeleteReceiptsButton from './DeleteReceiptsButton';
 
 const columnsDefinition = [
   { headerName: 'N° Ricevuta', field: 'ReceiptNumber', checkboxSelection: true, headerCheckboxSelection: true },
@@ -42,64 +40,33 @@ const columnsDefinition = [
   },
 ];
 
-const ReceiptsList = () => {
-  const { allReceipts, currentReceipts, setCurrentReceipts, setAllReceipts } = useReceipt();
+const ReceiptsList = ({ receipts }) => {
+  const [currentReceipts, setCurrentReceipts] = useState(receipts);
 
-  const [gridOptions] = useState(gridOptionsDefaultReceipts);
-
-  const [receiptsForAmountSummary, setReceiptsForAmountSummary] = useState([]);
   const [selectedReceipts, setSelectedReceipts] = useState([]);
-  const [showDeleteReceiptsModal, setShowDeleteReceiptsModal] = useState(false);
 
   const onReceiptSelectionChanged = () => {
     const selectedNodes = gridOptions.api.getSelectedNodes();
-    if (selectedNodes.length === 0) {
-      return setSelectedReceipts([]);
-    }
 
-    const receipts = [];
-    selectedNodes.forEach((node) => {
-      receipts.push(node.data);
-    });
+    const receiptsData = selectedNodes.map(({ data }) => data);
 
-    return setSelectedReceipts(receipts);
+    return setSelectedReceipts(receiptsData);
   };
 
-  const handleReceiptDelete = async () => {
-    const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
+  const receiptIDs = selectedReceipts.map((receipt) => receipt.ReceiptID);
 
-    const { status, message } = await deleteReceipts(receiptIDs);
+  const onDelete = async () => {
+    const updatedList = currentReceipts.filter((r) => !receiptIDs.includes(r.ReceiptID));
 
-    if (status === 200) {
-      setCurrentReceipts(currentReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
+    setCurrentReceipts(updatedList);
 
-      setAllReceipts(allReceipts.filter(({ ReceiptID }) => !receiptIDs.includes(ReceiptID)));
-
-      setSelectedReceipts([]);
-
-      toast.success(message, toastConfig);
-    } else {
-      toast.error(message, toastConfig);
-    }
-
-    setShowDeleteReceiptsModal(false);
+    gridOptions.api.setRowData(updatedList);
   };
-
-  useEffect(() => {
-    setSelectedReceipts([]);
-    setReceiptsForAmountSummary([]);
-  }, [currentReceipts]);
 
   return (
     <>
       <div className="container-fluid">
-        <FilterReceiptsForm
-          allReceipts={allReceipts}
-          receiptsForAmountSummary={receiptsForAmountSummary}
-          setCurrentReceipts={setCurrentReceipts}
-          setReceiptsForAmountSummary={setReceiptsForAmountSummary}
-          gridOptions={gridOptions}
-        />
+        <FilterReceiptsForm allReceipts={receipts} setCurrentReceipts={setCurrentReceipts} />
         <div className="ag-theme-alpine ag-grid-custom">
           <AgGridReact
             reactNext
@@ -121,47 +88,20 @@ const ReceiptsList = () => {
             </span>
           </Button>
 
-          <Button
-            variant="danger"
-            onClick={() => {
-              setShowDeleteReceiptsModal(true);
-            }}
-            disabled={selectedReceipts.length < 1}
-          >
-            <span role="img" aria-label="delete-selected">
-              🗑️ <Translation value="buttons.receipt.deleteSelectedReceipts" />
-            </span>
-          </Button>
+          <DeleteReceiptsButton receiptIDs={receiptIDs} onDelete={onDelete} />
         </div>
       </div>
 
-      <PrintExpiringReceiptsForm />
-
-      <Modal
-        show={showDeleteReceiptsModal}
-        onHide={() => setShowDeleteReceiptsModal(false)}
-        dialogClassName="update-modal"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Translation value="modalsContent.deleteReceiptsHeader" />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Translation value="modalsContent.deleteReceiptsBody" />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleReceiptDelete}>
-            <Translation value="buttons.receipt.deleteReceipts" />
-          </Button>
-          <Button variant="secondary" onClick={() => setShowDeleteReceiptsModal(false)}>
-            <Translation value="buttons.close" />
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <PrintExpiringReceiptsForm receipts={receipts} />
     </>
   );
+};
+
+ReceiptsList.propTypes = {
+  /**
+   * List of all receipts.
+   */
+  receipts: PropTypes.array.isRequired,
 };
 
 export default ReceiptsList;

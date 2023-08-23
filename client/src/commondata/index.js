@@ -1,53 +1,53 @@
 const ages = [
-  { id: 'adult', age: 'Maggiorenne' },
-  { id: 'underage', age: 'Minorenne' },
+  { value: 'Maggiorenne', label: 'Maggiorenne' },
+  { value: 'Minorenne', label: 'Minorenne' },
 ];
 
 const disciplines = [
-  { id: 'sports_dance', discipline: 'Danza Sportiva' },
-  { id: 'fitness', discipline: 'Fitness' },
+  { value: 'Danza Sportiva', label: 'Danza Sportiva' },
+  { value: 'Fitness', label: 'Fitness' },
 ];
 
 const schools = [
-  { id: 'osio_sotto', school: 'Osio Sotto' },
-  { id: 'stezzano', school: 'Stezzano' },
+  { value: 'Osio Sotto', label: 'Osio Sotto' },
+  { value: 'Stezzano', label: 'Stezzano' },
 ];
 
 const courses = [
-  { id: 'none', course: '' },
-  { id: 'senior_cheerleader', course: 'Cheerleader Senior' },
-  { id: 'peewe_cheerleader', course: 'Cheerleader Peewe' },
-  { id: 'mini_cheerleader', course: 'Cheerleader Mini' },
-  { id: 'ballet_danceI', course: 'I Corso Danza Classica' },
-  { id: 'pre_academic_course', course: 'Corso Pre-Accademico' },
-  { id: 'academic_course', course: 'I Corso Accademico' },
-  { id: 'beginner_modern_dance', course: 'Danza Moderna Principianti' },
-  { id: 'intermediate_modern_dance', course: 'Danza Moderna Intermedio' },
-  { id: 'advance_modern_dance', course: 'Danza Moderna Avanzato' },
-  { id: 'baby_danceI', course: 'Giocodanza I' },
-  { id: 'baby_danceII', course: 'Giocodanza II' },
-  { id: 'baby_hip_hop', course: 'Hip Hop Break Baby' },
-  { id: 'children_hip_hop', course: 'Hip Hop Break Children' },
-  { id: 'beginner_hip_hop', course: 'Hip Hop Principianti' },
-  { id: 'intermediate_hip_hop', course: 'Hip Hop Intermedio' },
-  { id: 'advance_hip_hop', course: 'Hip Hop Avanzato' },
-  { id: 'children_musical', course: 'Musical Children' },
-  { id: 'teen_musical', course: 'Musiscal Teens' },
-  { id: 'preparatory_modern_dance', course: 'Propedeutica Danza Moderna' },
-  { id: 'preparatory_danceI', course: 'Tecnica Propedeutica I' },
-  { id: 'preparatory_danceII', course: 'Tecnica Propedeutica II' },
+  { value: '', label: '' },
+  { value: 'Cheerleader Senior', label: 'Cheerleader Senior' },
+  { value: 'Cheerleader Peewe', label: 'Cheerleader Peewe' },
+  { value: 'Cheerleader Mini', label: 'Cheerleader Mini' },
+  { value: 'I Corso Danza Classica', label: 'I Corso Danza Classica' },
+  { value: 'Corso Pre-Accademico', label: 'Corso Pre-Accademico' },
+  { value: 'I Corso Accademico', label: 'I Corso Accademico' },
+  { value: 'Danza Moderna Principianti', label: 'Danza Moderna Principianti' },
+  { value: 'Danza Moderna Intermedio', label: 'Danza Moderna Intermedio' },
+  { value: 'Danza Moderna Avanzato', label: 'Danza Moderna Avanzato' },
+  { value: 'Giocodanza I', label: 'Giocodanza I' },
+  { value: 'Giocodanza II', label: 'Giocodanza II' },
+  { value: 'Hip Hop Break Baby', label: 'Hip Hop Break Baby' },
+  { value: 'Hip Hop Break Children', label: 'Hip Hop Break Children' },
+  { value: 'Hip Hop Principianti', label: 'Hip Hop Principianti' },
+  { value: 'Hip Hop Intermedio', label: 'Hip Hop Intermedio' },
+  { value: 'Hip Hop Avanzato', label: 'Hip Hop Avanzato' },
+  { value: 'Musical Children', label: 'Musical Children' },
+  { value: 'Musiscal Teens', label: 'Musiscal Teens' },
+  { value: 'Propedeutica Danza Moderna', label: 'Propedeutica Danza Moderna' },
+  { value: 'Tecnica Propedeutica I', label: 'Tecnica Propedeutica I' },
+  { value: 'Tecnica Propedeutica II', label: 'Tecnica Propedeutica II' },
 ];
 
 const receiptTypes = [
-  { id: 'subscription_fee', type: 'Quota' },
-  { id: 'membership_fee', type: 'Quota Associativa' },
-  { id: 'dance_recital_fee', type: 'Quota Saggio' },
+  { value: 'Quota', label: 'Quota' },
+  { value: 'Quota Associativa', label: 'Quota Associativa' },
+  { value: 'Quota Saggio', label: 'Quota Saggio' },
 ];
 
 const paymentMethods = [
-  { id: 'check', type: 'Assegno' },
-  { id: 'bank_transfer', type: 'Bonifico Bancario' },
-  { id: 'cash', type: 'Contanti' },
+  { value: 'Assegno', label: 'Assegno' },
+  { value: 'Bonifico Bancario', label: 'Bonifico Bancario' },
+  { value: 'Contanti', label: 'Contanti' },
 ];
 
 const defaultAmounts = [
@@ -91,17 +91,17 @@ const BLANK_SPACE = '___________________________';
 
 const getMonthFromId = (monthId) => months.find(({ id }) => id === monthId);
 
-const isAdult = (age) => age === ages[0].age;
+const isAdult = (age) => age === ages[0].value;
 
-const isSubscriptionFee = (receiptType) => receiptType === receiptTypes[0].type;
+const isSubscriptionFee = (receiptType) => receiptType === receiptTypes[0].value;
 
-const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].type;
+const isMembershipFee = (receiptType) => receiptType === receiptTypes[1].value;
 
-const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].type;
+const isDanceRecitalFee = (receiptType) => receiptType === receiptTypes[2].value;
 
-const isDanceCourse = (courseType) => courseType === disciplines[0].discipline;
+const isDanceCourse = (courseType) => courseType === disciplines[0].value;
 
-const isFitnessCourse = (courseType) => courseType === disciplines[1].discipline;
+const isFitnessCourse = (courseType) => courseType === disciplines[1].value;
 
 const isTrimester = (timePeriod) => timePeriod === timePeriods[1].period;
 

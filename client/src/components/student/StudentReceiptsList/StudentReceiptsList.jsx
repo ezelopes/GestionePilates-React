@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { useMemo, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
-import { toast } from 'react-toastify';
 
 import Translation from '../../common/Translation';
-import { getTranslation } from '../../common/Translation/helpers';
-import UpsertReceiptForm from '../../receipts/UpsertReceiptForm';
-import { updateReceipt, deleteReceipt } from '../../../helpers/apiCalls';
 import { printStudentReceipt } from '../../../helpers/printPDF';
-import toastConfig from '../../../commondata/toast.config';
 import { gridOptionsDefaultStudentReceipts } from '../../../commondata/grid.config';
 
 import { useStudent } from '../StudentContext';
+import UpdateReceiptButton from './UpdateReceiptButton/UpdateReceiptButton';
+import DeleteReceiptButton from './DeleteReceiptButton/DeleteReceiptButton';
 
 const columnsDefinition = [
   { headerName: 'Numero Ricevuta', field: 'ReceiptNumber', checkboxSelection: true },
@@ -32,7 +29,11 @@ const columnsDefinition = [
     cellRenderer: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
   },
   { headerName: 'Somma Euro', field: 'AmountPaid' },
-  { headerName: 'Tipo Pagamento', field: 'PaymentMethod' },
+  {
+    headerName: 'Tipo Pagamento',
+    field: 'PaymentMethod',
+    cellRenderer: (params) => params.value || '',
+  },
   {
     headerName: 'Include Quota Associativa',
     field: 'IncludeMembershipFee',
@@ -41,44 +42,18 @@ const columnsDefinition = [
 ];
 
 const StudentReceiptsList = () => {
-  const { studentInfo, studentReceipts, setStudentReceipts } = useStudent();
+  const { studentInfo, studentReceipts } = useStudent();
 
   const [gridOptions] = useState(gridOptionsDefaultStudentReceipts);
-  const [rowData, setRowData] = useState(studentReceipts);
 
-  const [selectedReceipt, setSelectedReceipt] = useState();
-  const [showDeleteReceiptModal, setShowDeleteReceiptModal] = useState(false);
-  const [showUpdateReceiptModal, setShowUpdateReceiptModal] = useState(false);
+  const rowData = useMemo(() => studentReceipts, [studentReceipts]);
 
-  useEffect(() => {
-    setRowData(studentReceipts);
-  }, [studentReceipts]);
+  const [selectedReceipt, setSelectedReceipt] = useState(null);
 
   const onReceiptSelectionChanged = () => {
     const selectedNode = gridOptions.api.getSelectedNodes();
-    if (selectedNode.length === 0) {
-      return setSelectedReceipt(null);
-    }
 
-    return setSelectedReceipt(selectedNode[0].data);
-  };
-
-  const handleDeleteReceipt = async () => {
-    const response = await deleteReceipt(selectedReceipt.ReceiptID);
-
-    if (response.status === 200) {
-      const updatedStudentReceipts = [...studentReceipts];
-      const receiptIndex = studentReceipts.findIndex((receipt) => receipt.ReceiptID === selectedReceipt.ReceiptID);
-
-      updatedStudentReceipts.splice(receiptIndex, 1);
-
-      toast.success(response.message, toastConfig);
-      setStudentReceipts(updatedStudentReceipts);
-    } else {
-      toast.error(response.message, toastConfig);
-    }
-
-    setShowDeleteReceiptModal(false);
+    return setSelectedReceipt(selectedNode[0]?.data || null);
   };
 
   return (
@@ -101,84 +76,14 @@ const StudentReceiptsList = () => {
           </span>
         </Button>
 
-        <Button
-          variant="warning"
-          onClick={() => {
-            if (!selectedReceipt) {
-              return toast.error(getTranslation('toast.error.noReceiptSelectedForUpdate'), toastConfig);
-            }
-            return setShowUpdateReceiptModal(true);
-          }}
-        >
-          <span role="img" aria-label="update">
-            🔄 <Translation value="buttons.receipt.updateReceipt" />
-          </span>
-        </Button>
+        <UpdateReceiptButton
+          key={`update-${selectedReceipt?.ReceiptID}`}
+          receipt={selectedReceipt}
+          onUpdateCallback={() => setSelectedReceipt(null)}
+        />
 
-        <Button
-          variant="danger"
-          onClick={() => {
-            if (!selectedReceipt) {
-              return toast.error(getTranslation('toast.error.noReceiptSelectedForDelete'), toastConfig);
-            }
-            return setShowDeleteReceiptModal(true);
-          }}
-        >
-          <span role="img" aria-label="bin">
-            🗑️ <Translation value="buttons.receipt.deleteReceipt" />
-          </span>
-        </Button>
+        <DeleteReceiptButton key={`delete-${selectedReceipt?.ReceiptID}`} receipt={selectedReceipt} />
       </div>
-
-      <Modal
-        show={showUpdateReceiptModal}
-        onHide={() => setShowUpdateReceiptModal(false)}
-        dialogClassName="update-modal"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Translation value="modalsContent.updateReceiptHeader" />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <UpsertReceiptForm receiptInfo={selectedReceipt} callback={updateReceipt} handleModal={setShowUpdateReceiptModal} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setShowUpdateReceiptModal(false);
-            }}
-          >
-            <Translation value="buttons.close" />
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={showDeleteReceiptModal} onHide={() => setShowDeleteReceiptModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Translation value="modalsContent.deleteReceiptHeader" />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Translation value="modalsContent.deleteReceiptBody" />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleDeleteReceipt}>
-            <Translation value="buttons.receipt.deleteReceipt" />
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setShowDeleteReceiptModal(false);
-            }}
-          >
-            <Translation value="buttons.close" />
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 };

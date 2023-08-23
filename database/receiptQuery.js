@@ -28,7 +28,18 @@ const getAllReceipts = async () => {
   try {
     const receipts = await knex(RECEIPT_TABLE)
       .join(STUDENT_TABLE, `${RECEIPT_TABLE}.FK_AllievaID`, '=', `${STUDENT_TABLE}.AllievaID`)
-      .select();
+      .select()
+      // Order Receipts Based On Receipt Number
+      .orderByRaw(
+        `
+        CASE
+          WHEN NumeroRicevuta LIKE 'C%' THEN 1
+          ELSE 2
+        END
+      `
+      )
+      .orderByRaw('CAST(SUBSTRING_INDEX(NumeroRicevuta, "/", -1) AS UNSIGNED)')
+      .orderByRaw('CAST(SUBSTRING_INDEX(NumeroRicevuta, "/", 1) AS UNSIGNED)');
 
     return mappingReceiptsWithStudentInfo(receipts);
   } catch (error) {
@@ -55,10 +66,11 @@ const createReceipt = async (receiptInfo) => {
       IncludeQuotaAssociativa: isSubscriptionFee ? receiptInfo.IncludeMembershipFee : false,
     });
 
+    // Use Receipt Date as Registration Date
     if (receiptInfo.RegistrationDate === true) {
       await knex(STUDENT_TABLE)
         .where({ AllievaID: receiptInfo.StudentID })
-        .update({ DataIscrizione: getFormattedDate(receiptInfo.CourseStartDate) });
+        .update({ DataIscrizione: getFormattedDate(receiptInfo.ReceiptDate) });
     }
 
     return { ReceiptID: newReceiptID[0], message: receiptResponseMessages.ok.create };

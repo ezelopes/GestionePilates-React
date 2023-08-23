@@ -87,6 +87,7 @@ tr:nth-child(even) {
 /* BOOTSTRAP MODAL, CARD AND CONTAINER */
 .modal-body {
   background-color: var(--white);
+  overflow: scroll;
 }
 
 .modal-footer,
@@ -156,7 +157,6 @@ tr:nth-child(even) {
 /* CREATABLE SELECT */
 .css-2b097c-container {
   min-width: 10vw;
-  max-width: 20vw;
 }
 
 /* CUSTOM STYLING FOR AG-GRID */
@@ -221,6 +221,32 @@ canvas {
   margin-top: 1em;
 }
 
+.update-student-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 40px;
+  grid-gap: 40px;
+}
+
+.update-teacher-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 40px;
+  grid-gap: 40px;
+}
+
+.create-student-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0 15px;
+}
+
+.create-teacher-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0 15px;
+}
+
 @media screen and (max-width: 992px) {
   .filter-form {
     grid-template-columns: 50% 50%;
@@ -240,6 +266,14 @@ canvas {
     width: 100%;
     padding-right: 0;
   }
+
+  .create-student-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .create-teacher-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -249,5 +283,21 @@ canvas {
 
   .buttons-container > button {
     width: 100%;
+  }
+
+  .create-student-form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .create-teacher-form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .update-student-form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .update-teacher-form {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
