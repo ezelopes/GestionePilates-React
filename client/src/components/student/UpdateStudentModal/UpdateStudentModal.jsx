@@ -53,6 +53,7 @@ const UpdateStudentModal = ({ defaultValues, isOpen, onClose, onUpdate }) => {
             <UserFormFields idPrefix="update-student-form" defaultValues={defaultValues} isStudent />
           </Modal.Body>
           <Modal.Footer>
+            {/* TODO: Create button component that handles spinner or update bootstrap version */}
             <Button type="submit" variant="success" disabled={isLoading}>
               {isLoading ? (
                 <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
