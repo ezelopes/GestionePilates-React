@@ -33,7 +33,7 @@ const FilteredReceiptsModal = ({ receipts, amount, showModal, toggleShowModal, p
             replace={{
               fromDate,
               toDate,
-              paymentMethod,
+              paymentMethod: paymentMethod === 'all' ? 'Assegno, Bonifico e Contanti' : paymentMethod,
             }}
           />
         </Modal.Title>

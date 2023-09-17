@@ -53,7 +53,7 @@ export const AmountPaidSummaryTemplate = (
           text: 'Metodo Pagamento: ',
         },
         {
-          text: `${filteredPaymentMethod ? filteredPaymentMethod.toUpperCase() : 'Assegno, Bonifico e Contanti'}`,
+          text: `${filteredPaymentMethod === 'all' ? 'Assegno, Bonifico e Contanti' : filteredPaymentMethod.toUpperCase()}`,
           bold: true,
         },
       ],
