@@ -6,14 +6,14 @@ const { studentResponseMessages } = require('./helpers/responses');
 
 const memberToDatabase = (member) => ({
   id: member.id,
-  is_adult: member.isAdult,
+  is_adult: member.isAdult, // TODO: CHANGE THIS FIELD IN THE DB TO BE BOOLEAN.
   tax_code: member.taxCode,
-  name: member.Name,
-  surname: member.Surname,
-  city: member.City,
-  address: member.Address,
-  phone: member.Phone,
-  email: member.Email,
+  name: member.name,
+  surname: member.surname,
+  city: member.city,
+  address: member.address,
+  phone: member.phone,
+  email: member.email,
   place_of_birth: member.placeOfBirth,
   subscription_date: getFormattedDate(member.subscriptionDate),
   certificate_expiry_date: getFormattedDate(member.certificateExpiryDate),
@@ -101,7 +101,7 @@ const updateOne = async (member) => {
   }
 };
 
-const updateRegistrationDate = async (id, subscriptionDate) => {
+const updateSubscriptionDate = async (id, subscriptionDate) => {
   try {
     const response = await knex(MEMBER_TABLE)
       .where({ id })
@@ -138,6 +138,6 @@ module.exports = {
   getOneById,
   createOne,
   updateOne,
-  updateRegistrationDate,
+  updateSubscriptionDate,
   deleteOne,
 };

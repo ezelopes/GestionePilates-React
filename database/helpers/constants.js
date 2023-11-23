@@ -18,7 +18,7 @@ const SUBSCRIPTION_COURSE_TABLE = 'subscription_course';
 
 const SUBSCRIPTION_PAYMENT_TABLE = 'subscription_payment';
 
-export {
+module.exports = {
   MEMBER_TABLE,
   SUBSCRIPTION_TABLE,
   COURSE_TABLE,

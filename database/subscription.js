@@ -174,6 +174,23 @@ const getAllWithPaymentsByPaymentType = async (paymentType) => {
 // ---------------------------------------------------------------------------------------------------------------------------- //
 
 // Create Many Subscription for member by Id (start_date, end_date, courseIds[])
+const createMany = async (memberId, startDate, endDate, courseIds) => {
+  try {
+    const rows = await knex(SUBSCRIPTION_TABLE).insert({ fk_member_id: memberId, start_date: startDate, end_date: endDate });
+
+    // Const subscriptionIds = rows.?
+
+    const subscriptionCourse = courseIds.map((courseId) => ({ fk_subscription_id: rows.id, fk_course_id: courseId }));
+
+    const newRows = await knex(SUBSCRIPTION_COURSE_TABLE).insert(subscriptionCourse);
+
+    return null;
+  } catch (error) {
+    console.log(error);
+
+    return { message: '' };
+  }
+};
 
 // Retire member from subscription -> update `is_member_retired` field
 
@@ -199,4 +216,5 @@ module.exports = {
   getManyWithCoursesByMemberId,
   getManyWithPaymentsByMemberId,
   getAllWithPaymentsByPaymentType,
+  createMany,
 };
