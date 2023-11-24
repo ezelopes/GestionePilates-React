@@ -1,9 +1,9 @@
 const { Router } = require('express');
-const { getManyWithCoursesByMemberId } = require('../database/subscription');
+const { getMemberSubscriptionsWithCoursesDetails } = require('../database/subscription');
 
 const subscriptionRouter = new Router();
 
-const getManyWithCoursesByMemberIdEndpoint = async (req, res) => {
+const getMemberSubscriptionsWithCoursesDetailsEndpoint = async (req, res) => {
   try {
     const { memberId } = req.params;
 
@@ -11,7 +11,7 @@ const getManyWithCoursesByMemberIdEndpoint = async (req, res) => {
       throw Error('Member ID missing');
     }
 
-    const subscriptionWithCourses = await getManyWithCoursesByMemberId(memberId);
+    const subscriptionWithCourses = await getMemberSubscriptionsWithCoursesDetails(memberId);
 
     res.status(200).send(subscriptionWithCourses);
   } catch (e) {
@@ -19,9 +19,9 @@ const getManyWithCoursesByMemberIdEndpoint = async (req, res) => {
   }
 };
 
-// GetManyWithCoursesByMemberIdEndpoint -> Between dates
-// GetManyWithCoursesByMemberIdEndpoint -> In Academic Year
+// GetMemberSubscriptionsWithCoursesDetailsEndpoint -> Between dates
+// GetMemberSubscriptionsWithCoursesDetailsEndpoint -> In Academic Year
 
-subscriptionRouter.get('/getSubscriptionWithCourses/:memberId', getManyWithCoursesByMemberIdEndpoint);
+subscriptionRouter.get('/getSubscriptionWithCourses/:memberId', getMemberSubscriptionsWithCoursesDetailsEndpoint);
 
 module.exports = subscriptionRouter;

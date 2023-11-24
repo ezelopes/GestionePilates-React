@@ -1,12 +1,5 @@
 const { Router } = require('express');
-const {
-  getTeachers,
-  getTeacher,
-  createTeacher,
-  updateTeacher,
-  deleteTeacher,
-  getTeachersWithRegistrationDate,
-} = require('../database/teacherQuery');
+const { getTeachers, getTeacher, createTeacher, updateTeacher, deleteTeacher } = require('../database/teacher');
 
 const teacherRouter = new Router();
 
@@ -26,17 +19,6 @@ const getTeacherEndpoint = async (req, res) => {
     const teacher = await getTeacher(TaxCode);
 
     res.status(200).send(teacher);
-  } catch (e) {
-    res.status(500).send({ message: e.message });
-  }
-};
-
-const getTeachersWithRegistrationDateEndpoint = async (req, res) => {
-  try {
-    const { Year } = req.params;
-    const teachers = await getTeachersWithRegistrationDate(Year);
-
-    res.status(200).send(teachers);
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
@@ -75,7 +57,6 @@ const deleteTeacherEndpoint = async (req, res) => {
 
 teacherRouter.get('/getTeachers', getTeachersEndpoint);
 teacherRouter.get('/getTeacher/:TaxCode', getTeacherEndpoint);
-teacherRouter.get('/getTeachersWithRegistrationDate/:Year', getTeachersWithRegistrationDateEndpoint);
 teacherRouter.put('/createTeacher', createTeacherEndpoint);
 teacherRouter.post('/updateTeacher', updateTeacherEndpoint);
 teacherRouter.delete('/deleteTeacher', deleteTeacherEndpoint);

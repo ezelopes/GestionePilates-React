@@ -66,7 +66,7 @@ const getOneWithCoursesByMemberId = async (subscriptionId, memberId) => {
 };
 
 // Get many subscription with courses by member Id (join discipline and location too) -> exclude archived ones.
-const getManyWithCoursesByMemberId = async (memberId) => {
+const getMemberSubscriptionsWithCoursesDetails = async (memberId) => {
   try {
     const rows = await knex
       .select(
@@ -98,7 +98,7 @@ const getManyWithCoursesByMemberId = async (memberId) => {
 };
 
 // Get many subscription with payment details (if any) by member Id
-const getManyWithPaymentsByMemberId = async (memberId) => {
+const getMemberSubscriptionsWithPaymentDetails = async (memberId) => {
   try {
     const rows = await knex
       .select(
@@ -135,7 +135,7 @@ const getManyWithPaymentsByMemberId = async (memberId) => {
 };
 
 // Get many subscription with payment details (if any) by payment type (if it's "Quota" check the field `include_membership_fee`)
-const getAllWithPaymentsByPaymentType = async (paymentType) => {
+const getAllSubscriptionByPaymentType = async (paymentType) => {
   try {
     const rows = await knex
       .select(
@@ -174,7 +174,7 @@ const getAllWithPaymentsByPaymentType = async (paymentType) => {
 // ---------------------------------------------------------------------------------------------------------------------------- //
 
 // Create Many Subscription for member by Id (start_date, end_date, courseIds[])
-const createMany = async (memberId, startDate, endDate, courseIds) => {
+const subscribeMemberToCourses = async (memberId, startDate, endDate, courseIds) => {
   try {
     const rows = await knex(SUBSCRIPTION_TABLE).insert({ fk_member_id: memberId, start_date: startDate, end_date: endDate });
 
@@ -192,29 +192,25 @@ const createMany = async (memberId, startDate, endDate, courseIds) => {
   }
 };
 
-// Retire member from subscription -> update `is_member_retired` field
+// TODO -> Move `is_member_retired` field to the `subscription_course` table.
+// Retire member from !course! -> update `is_member_retired` field
+const retireMemberFromCourse = async (subscriptionId, courseId) => {};
 
 // Add One Course to subscription
+const addCourseToExistingSubscription = async (subscriptionId, courseId) => {};
 
 // Delete One Course from subscription
+const removeCoursesFromExistingSubscription = async (subscriptionId, courseIds) => {};
 
 // ---------------------------------------------------------------------------------------------------------------------------- //
-
-// Create one payment for subscription
-// (subscriptionId, memberId, paymentNumber, paymentDate, paymentMethod, paymentType, amountPaid, isShadow, paymentDate)
-// ! Check if paymentNumber already exists! -> Make it unique in the DB?
-
-// Update payment by ID
-
-// Delete payment by ID and subscription ID -> `subscription_payment` -> if it's the last one delete the payment from the table.
 
 // ---------------------------------------------------------------------------------------------------------------------------- //
 
 module.exports = {
   getOneById,
   getOneWithCoursesByMemberId,
-  getManyWithCoursesByMemberId,
-  getManyWithPaymentsByMemberId,
-  getAllWithPaymentsByPaymentType,
-  createMany,
+  getMemberSubscriptionsWithCoursesDetails,
+  getMemberSubscriptionsWithPaymentDetails,
+  getAllSubscriptionByPaymentType,
+  subscribeMemberToCourses,
 };
