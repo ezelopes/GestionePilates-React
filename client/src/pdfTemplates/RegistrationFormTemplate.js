@@ -4,7 +4,7 @@ import { BLANK_DATE, BLANK_SPACE } from '../commondata';
 export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
   const docDefinition = {
     info: {
-      title: `${studentInfo.Name}_${studentInfo.Surname}_Modulo_Iscrizione`,
+      title: `${studentInfo.Name}_${studentInfo.Surname}_Modulo_Iscrizione.pdf`.replace('/', '-'),
       author: 'Roxana Carro',
       subject: `Modulo Iscrizione di ${studentInfo.Name} ${studentInfo.Surname}`,
     },

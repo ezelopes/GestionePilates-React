@@ -14,7 +14,7 @@ export const MembershipFeeTemplateAdult = (studentInfo, receiptInfo, labelLogo, 
 
   const docDefinition = {
     info: {
-      title: `${receiptInfo.ReceiptNumber}_${studentInfo.Name}_${studentInfo.Surname}_Ricevuta`,
+      title: `${receiptInfo.ReceiptNumber}_${studentInfo.Name}_${studentInfo.Surname}_Ricevuta.pdf`.replace('/', '-'),
       author: 'Roxana Carro',
       subject: `Ricevuta ${receiptInfo.ReceiptNumber} di ${studentInfo.Name} ${studentInfo.Surname}`,
     },

@@ -29,7 +29,7 @@ const createSubarraysWithMaxLength = (arr, maxLength) => {
 };
 
 export const AssemblyBookTemplate = (studentsList, registrationMonth, registrationYear, labelLogo) => {
-  const docTitle = `ALLIEVI ISCRITTI - ${registrationMonth} ${registrationYear}`;
+  const docTitle = `ALLIEVI ISCRITTI - ${registrationMonth} ${registrationYear}.pdf`;
 
   const tableBody = createSubarraysWithMaxLength(studentsList, 3);
 

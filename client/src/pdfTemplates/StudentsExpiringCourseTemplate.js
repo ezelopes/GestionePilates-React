@@ -75,7 +75,7 @@ export const StudentsExpiringCourseTemplate = (studentsReceiptsListByMonth, labe
 
   const docDefinition = {
     info: {
-      title: `Informazioni Allieve Cui Corso Sta Scadendo`,
+      title: `Informazioni Allieve Cui Corso Sta Scadendo.pdf`,
       author: 'Roxana Carro',
       subject: `Dati Allieve`,
     },
