@@ -91,7 +91,7 @@ export const MembersRegisterTemplate = (studentsWithReceipts, teachersWithRegist
 
   const docDefinition = {
     info: {
-      title: `${docTitle}`,
+      title: `${docTitle}.pdf`,
       author: 'Roxana Carro',
       subject: 'Iscrizione allieve per anno',
     },
