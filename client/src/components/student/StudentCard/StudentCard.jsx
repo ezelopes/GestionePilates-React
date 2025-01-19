@@ -9,14 +9,15 @@ import DeleteStudentModal from '../DeleteStudentModal';
 import Translation from '../../common/Translation';
 import { useToggle } from '../../common/useToggle';
 
-import { printRegistrationForm } from '../../../helpers/printPDF';
-
 import './student-card.css';
+import PrintRegistrationFormModal from '../PrintRegistrationFormModal';
 
 const StudentCard = () => {
   const history = useHistory();
 
   const { studentInfo, setStudentInfo } = useStudent();
+
+  const [showPrintRegistrationFormModal, toggleShowPrintRegistrationFormModal] = useToggle();
 
   const [showUpdateStudentModal, toggleShowUpdateStudentModal] = useToggle();
 
@@ -39,7 +40,7 @@ const StudentCard = () => {
       </div>
 
       <div className="buttons-container student-card-button">
-        <Button onClick={() => printRegistrationForm(studentInfo)}>
+        <Button onClick={toggleShowPrintRegistrationFormModal}>
           <span role="img" aria-label="module">
             🖨️ <Translation value="buttons.student.printRegistrationForm" />
           </span>
@@ -63,6 +64,8 @@ const StudentCard = () => {
           </span>
         </Button>
       </div>
+
+      <PrintRegistrationFormModal isOpen={showPrintRegistrationFormModal} onClose={toggleShowPrintRegistrationFormModal} />
 
       <UpdateStudentModal
         defaultValues={studentInfo}

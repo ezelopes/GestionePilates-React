@@ -23,6 +23,9 @@ import {
   StudentsDataGreenPassTemplate,
   StudentsExpiringCourseTemplate,
   RegistrationFormTemplate,
+  RegistrationFormDanceOsioTemplate,
+  RegistrationFormDanceStezzanoTemplate,
+  RegistrationFormFitnessTemplate,
 } from '../pdfTemplates';
 import { getStudentsWithRegistrationReceipt, getTeachersWithRegistrationReceipt } from './apiCalls';
 import { MembersRegisterTemplate } from '../pdfTemplates/MembersRegisterTemplate';
@@ -257,6 +260,48 @@ const printExpiringStudents = async (studentsReceiptsList, selectedYear) => {
   }
 };
 
+const printDanceRegistrationFormStezzano = async (studentInfo) => {
+  try {
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = RegistrationFormDanceStezzanoTemplate(studentInfo, labelLogo);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
+  } catch (error) {
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
+  }
+};
+
+const printDanceRegistrationFormOsio = async (studentInfo) => {
+  try {
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = RegistrationFormDanceOsioTemplate(studentInfo, labelLogo);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
+  } catch (error) {
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
+  }
+};
+
+const printFitnessRegistrationForm = async (studentInfo) => {
+  try {
+    const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
+
+    const documentDefinition = RegistrationFormFitnessTemplate(studentInfo, labelLogo);
+
+    pdfMake.createPdf(documentDefinition).open();
+
+    return toast.success(getTranslation('toast.success.general'), toastConfig);
+  } catch (error) {
+    return toast.error(getTranslation('toast.error.general'), toastConfig);
+  }
+};
+
 const printRegistrationForm = async (studentInfo) => {
   try {
     const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
@@ -426,6 +471,9 @@ export {
   printReceiptsDetails,
   printExpiringStudents,
   printRegistrationForm,
+  printDanceRegistrationFormStezzano,
+  printDanceRegistrationFormOsio,
+  printFitnessRegistrationForm,
   printSelectedStudents,
   printStudentsBasedOnRegistrationDate,
   printAssemblyBook,

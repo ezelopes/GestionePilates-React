@@ -16,6 +16,12 @@ export { ReceiptTemplateUnderAge } from './ReceiptTemplateUnderAge';
 
 export { RegistrationFormTemplate } from './RegistrationFormTemplate';
 
+export { RegistrationFormDanceOsioTemplate } from './RegistrationFormDanceOsioTemplate';
+
+export { RegistrationFormDanceStezzanoTemplate } from './RegistrationFormDanceStezzanoTemplate';
+
+export { RegistrationFormFitnessTemplate } from './RegistrationFormFitnessTemplate';
+
 export { StudentsDataGreenPassTemplate } from './StudentsDataGreenPassTemplate';
 
 export { StudentsDataTemplate } from './StudentsDataTemplate';

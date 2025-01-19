@@ -1,10 +1,10 @@
-import { formatDate } from '../helpers/dates';
 import { BLANK_DATE, BLANK_SPACE } from '../commondata';
+import { formatDate } from '../helpers/dates';
 
 export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
   const docDefinition = {
     info: {
-      title: `${studentInfo.Name}_${studentInfo.Surname}_Modulo_Iscrizione.pdf`.replace('/', '-'),
+      title: `${studentInfo.Name}_${studentInfo.Surname}_Modulo_Iscrizione`,
       author: 'Roxana Carro',
       subject: `Modulo Iscrizione di ${studentInfo.Name} ${studentInfo.Surname}`,
     },
@@ -22,7 +22,7 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
         margin: [0, 0, 0, 10],
       },
       {
-        text: 'DOMANDA DI ISCRIZIONE A SOCIO / ATLETA',
+        text: 'DOMANDA DI ISCRIZIONE A TESSERATO / ATLETA',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
@@ -36,7 +36,7 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
           ' nato/a a ',
           { text: `${studentInfo.BirthPlace || BLANK_SPACE}`, bold: true },
           ' il ',
-          { text: `${studentInfo.DOB ? formatDate(new Date(studentInfo.DOB)) : BLANK_DATE}`, bold: true },
+          { text: `${studentInfo.DOB ? formatDate({ date: studentInfo.DOB }) : BLANK_DATE}`, bold: true },
           ' C.F. ',
           { text: `${studentInfo.TaxCode || BLANK_SPACE}`, bold: true },
           '. Residente in ',
@@ -54,7 +54,7 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
         margin: [0, 0, 0, 10],
       },
       {
-        text: 'richiede la tessere associativa alla A.S.D PIL ART sito a STEZZANO, Via CESARE BATTISTI n. 9/A',
+        text: 'richiede il tesseramento alla PIL ART SSD sito a STEZZANO, Via CESARE BATTISTI n. 9/A',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
@@ -66,14 +66,14 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
         text: [
           {
             text:
-              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle sue ' +
-              'possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni ' +
+              '1-Dichiaro di conoscere lo Statuto, di accettarlo integralmente, si impegna a fare quanto nelle ' +
+              'sue possibilità per il raggiungimento degli scopi sociali e ad osservare le deliberazioni ' +
               'degli organi sociali, di conoscere le condizioni delle polizze assicurative presenti ' +
               'sul sito www.asinazionale.it. 2-Informativa GDPR UE 679/16: La scrivente Associazione ' +
               'dichiara tutti i dati sensibili personali saranno utilizzati solo per scopi sportivi. ' +
               'La parte che, cartacea sarà archiviata presso la sede sociale di VIA C. BATTISTI 9/A e/o' +
               ' presso lo studio commerciale PROGGETTO IMPRESA SRL, la parte in formato digitale sarà ' +
-              'custodita dal Presidente e/o il Segretario della stessa ASD. I dati per i tesseramenti ' +
+              'custodita dal Presidente e/o il Segretario della stessa SSD. I dati per i tesseramenti ' +
               'saranno inseriti nella piattaforma nazionale di ASI (ente di promozione sportiva).',
             lineHeight: 1.5,
             fontSize: 10,
@@ -104,19 +104,6 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
       },
       {
         text: [
-          'La disciplina sportiva svolta nella ASD PIL ART è ',
-          { text: `${studentInfo.Discipline || BLANK_SPACE}`, bold: true },
-          ' per cui il socio ci consegna un certificato medico di idoneità sportiva con scadenza ',
-          { text: `${BLANK_DATE}`, bold: true },
-          ' del tipo:',
-        ],
-        alignment: 'left',
-        lineHeight: 1.5,
-        fontSize: 10,
-        margin: [0, 0, 0, 10],
-      },
-      {
-        text: [
           {
             text: ['___ ', { text: 'AGONISTICA', bold: true }, '\t\t\t  - certificato di idoneità agonistica sportiva \n'],
           },
@@ -134,14 +121,7 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
         margin: [0, 0, 0, 10],
       },
       {
-        text: 'La copertura assicurativa proposta è (barrare la copertura scelta)',
-        alignment: 'left',
-        lineHeight: 1.5,
-        fontSize: 10,
-        margin: [0, 0, 0, 10],
-      },
-      {
-        text: '___ Base \t\t\t  ___ Integrativa \t\t\t ___ Superintegrativa',
+        text: 'La copertura assicurativa proposta è BASE.',
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,
@@ -174,8 +154,10 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
         margin: [0, 0, 0, 10],
       },
       {
-        text: `Figlio fiscalmente a carico del genitore: ${studentInfo.ParentName || BLANK_SPACE}
-					${studentInfo.ParentSurname || ''}`,
+        // eslint-disable-next-line max-len
+        text: `Figlio fiscalmente a carico del genitore: ${studentInfo.ParentName || BLANK_SPACE} ${
+          studentInfo.ParentSurname || BLANK_SPACE
+        }`,
         alignment: 'left',
         lineHeight: 1.5,
         fontSize: 10,

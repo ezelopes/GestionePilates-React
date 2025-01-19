@@ -68,6 +68,9 @@
       "printSelectedStudents": "Stampa Allieve Selezionate",
       "printExpiringStudents": "Stampa Lista Allieve In Scadenza",
       "printRegistrationForm": "Stampa Modulo Iscrizione",
+      "printFitnessRegistrationForm": "Stampa Modulo Iscrizione (Fitness)",
+      "printDanceRegistrationFormOsio": "Stampa Modulo Iscrizione (Danza Osio)",
+      "printDanceRegistrationFormStezzano": "Stampa Modulo Iscrizione (Danza Stezzano)",
       "printAssemblyBook": "Libro Assemblea",
       "printBasedOnRegistrationDate": "In base alla Data Iscrizione"
     },
@@ -107,6 +110,7 @@
     "deleteStudentHeader": "Elimina Allieva",
     "deleteStudentBody": "Sei sicura di voler eliminare...",
     "updateStudentHeader": "Aggiorna Allieva",
+    "printRegistrationFormHeader": "Seleziona il modulo di iscrizione",
     "updateReceiptHeader": "Aggiorna Ricevuta",
     "deleteReceiptBody": "Sei sicura di voler eliminare la ricevuta selezionata?",
     "deleteReceiptHeader": "Elimina Ricevuta",
