@@ -32,7 +32,10 @@ export const DanceRecitalFeeTemplateAdult = (studentInfo, receiptInfo, labelLogo
         margin: [0, 0, 0, 10],
       },
       {
-        text: 'La società dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
+        text:
+          new Date(receiptInfo.ReceiptDate).getFullYear() >= 2025
+            ? 'La società dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167'
+            : 'L’associazione sportiva dilettantistica PILART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
