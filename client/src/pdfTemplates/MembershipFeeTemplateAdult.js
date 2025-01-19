@@ -32,9 +32,7 @@ export const MembershipFeeTemplateAdult = (studentInfo, receiptInfo, labelLogo, 
         margin: [0, 0, 0, 10],
       },
       {
-        text:
-          'L’associazione sportiva dilettantistica PIL-ART ' +
-          'con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
+        text: 'La società dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,
