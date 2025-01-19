@@ -36,7 +36,7 @@ export const RegistrationFormTemplate = (studentInfo, labelLogo) => {
           ' nato/a a ',
           { text: `${studentInfo.BirthPlace || BLANK_SPACE}`, bold: true },
           ' il ',
-          { text: `${studentInfo.DOB ? formatDate({ date: studentInfo.DOB }) : BLANK_DATE}`, bold: true },
+          { text: `${studentInfo.DOB ? formatDate(new Date(studentInfo.DOB)) : BLANK_DATE}`, bold: true },
           ' C.F. ',
           { text: `${studentInfo.TaxCode || BLANK_SPACE}`, bold: true },
           '. Residente in ',
