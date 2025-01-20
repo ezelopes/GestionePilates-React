@@ -57,7 +57,7 @@ export const StudentsDataGreenPassTemplate = (studentsList, expiryMonth, expiryY
 
   const docDefinition = {
     info: {
-      title: `Informazioni Allieve Green Pass ${expiryMonth} ${expiryYear}`,
+      title: `Informazioni Allieve Green Pass ${expiryMonth} ${expiryYear}.pdf`,
       author: 'Roxana Carro',
       subject: `Dati Allieve`,
     },

@@ -2,7 +2,7 @@ import { formatDate } from '../helpers/dates';
 import { BLANK_DATE } from '../commondata';
 
 export const StudentsDataTemplate = (studentsList, registrationMonth, registrationYear, labelLogo) => {
-  const docTitle = `ALLIEVE ISCRITTE - ${registrationMonth} ${registrationYear}`;
+  const docTitle = `ALLIEVE ISCRITTE - ${registrationMonth} ${registrationYear}.pdf`;
 
   const tableBody = [
     [

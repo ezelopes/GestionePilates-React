@@ -14,7 +14,7 @@ export const DanceRecitalFeeTemplateAdult = (studentInfo, receiptInfo, labelLogo
 
   const docDefinition = {
     info: {
-      title: `${receiptInfo.ReceiptNumber}_${studentInfo.Name}_${studentInfo.Surname}_Ricevuta`,
+      title: `${receiptInfo.ReceiptNumber}_${studentInfo.Name}_${studentInfo.Surname}_Ricevuta.pdf`.replace('/', '-'),
       author: 'Roxana Carro',
       subject: `Ricevuta ${receiptInfo.ReceiptNumber} di ${studentInfo.Name} ${studentInfo.Surname}`,
     },
@@ -33,8 +33,9 @@ export const DanceRecitalFeeTemplateAdult = (studentInfo, receiptInfo, labelLogo
       },
       {
         text:
-          'L’associazione sportiva dilettantistica PIL-ART ' +
-          'con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
+          new Date(receiptInfo.ReceiptDate).getFullYear() >= 2025
+            ? 'La società sportiva dilettantistica PIL-ART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167'
+            : 'L’associazione sportiva dilettantistica PILART con sede legale a Stezzano in Via C. Battisti 9°, C.F. 95229530167',
         alignment: 'center',
         lineHeight: 1.5,
         fontSize: 10,

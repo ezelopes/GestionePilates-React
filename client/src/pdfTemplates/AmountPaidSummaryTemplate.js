@@ -152,7 +152,9 @@ export const AmountPaidSummaryTemplate = (
 
   const docDefinition = {
     info: {
-      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate || BLANK_DATE} al ${toDate || BLANK_DATE}`,
+      title: `Riepilogo Importo pagato tramite ${filteredPaymentMethod} dal ${fromDate || BLANK_DATE} al ${
+        toDate || BLANK_DATE
+      }.pdf`,
       author: 'Roxana Carro',
       subject: `Riepilogo Importo`,
     },

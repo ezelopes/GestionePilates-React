@@ -84,6 +84,12 @@ const years = [
   { id: 2022, year: 2022 },
   { id: 2023, year: 2023 },
   { id: 2024, year: 2024 },
+  { id: 2025, year: 2025 },
+  { id: 2026, year: 2026 },
+  { id: 2027, year: 2027 },
+  { id: 2028, year: 2028 },
+  { id: 2029, year: 2029 },
+  { id: 2030, year: 2030 },
 ];
 
 const BLANK_DATE = '______-______-________';
