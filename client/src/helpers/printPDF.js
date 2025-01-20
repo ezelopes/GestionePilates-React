@@ -47,64 +47,73 @@ const printSelectedReceipts = async (selectedReceipts) => {
 
     const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
     const signature = await getBase64ImageFromURL('Signature.png');
-    const stamp = await getBase64ImageFromURL('Stamp.png');
 
-    selectedReceipts.map((receipt, index) => {
-      let page;
+    const pages = await Promise.all(
+      selectedReceipts.map(async (receipt, index) => {
+        const isSSDReceipt = new Date(receipt.ReceiptDate).getFullYear() >= 2025;
 
-      const studentInfo = {
-        IsAdult: receipt.IsAdult,
-        TaxCode: receipt.TaxCode,
-        Name: receipt.Name,
-        Surname: receipt.Surname,
-        City: receipt.City,
-        Address: receipt.Address,
-        MobilePhone: receipt.MobilePhone,
-        Email: receipt.Email,
-        RegistrationDate: receipt.RegistrationDate,
-        CertificateExpirationDate: receipt.CertificateExpirationDate,
-        DOB: receipt.DOB,
-        BirthPlace: receipt.BirthPlace,
-        Discipline: receipt.Discipline,
-        Course: receipt.Course,
-        School: receipt.School,
-        ParentName: receipt.ParentName,
-        ParentSurname: receipt.ParentSurname,
-        ParentTaxCode: receipt.ParentTaxCode,
-      };
+        const stamp = await getBase64ImageFromURL(isSSDReceipt ? 'Stamp.png' : 'Stamp-asd.png');
 
-      const receiptInfo = {
-        ReceiptNumber: receipt.ReceiptNumber,
-        AmountPaid: receipt.AmountPaid,
-        PaymentMethod: receipt.PaymentMethod,
-        ReceiptType: receipt.ReceiptType,
-        ReceiptDate: receipt.ReceiptDate,
-        CourseStartDate: receipt.CourseStartDate,
-        CourseEndDate: receipt.CourseEndDate,
-      };
+        let page;
 
-      const isStudentAdult = isAdult(studentInfo.IsAdult);
+        const studentInfo = {
+          IsAdult: receipt.IsAdult,
+          TaxCode: receipt.TaxCode,
+          Name: receipt.Name,
+          Surname: receipt.Surname,
+          City: receipt.City,
+          Address: receipt.Address,
+          MobilePhone: receipt.MobilePhone,
+          Email: receipt.Email,
+          RegistrationDate: receipt.RegistrationDate,
+          CertificateExpirationDate: receipt.CertificateExpirationDate,
+          DOB: receipt.DOB,
+          BirthPlace: receipt.BirthPlace,
+          Discipline: receipt.Discipline,
+          Course: receipt.Course,
+          School: receipt.School,
+          ParentName: receipt.ParentName,
+          ParentSurname: receipt.ParentSurname,
+          ParentTaxCode: receipt.ParentTaxCode,
+        };
 
-      if (isStudentAdult && isSubscriptionFee(receiptInfo.ReceiptType)) {
-        page = ReceiptTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
-      } else if (isStudentAdult && isMembershipFee(receiptInfo.ReceiptType)) {
-        page = MembershipFeeTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
-      } else if (isStudentAdult && isDanceRecitalFee(receiptInfo.ReceiptType)) {
-        page = DanceRecitalFeeTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
-      } else if (!isStudentAdult && isSubscriptionFee(receiptInfo.ReceiptType)) {
-        page = ReceiptTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
-      } else if (!isStudentAdult && isMembershipFee(receiptInfo.ReceiptType)) {
-        page = MembershipFeeTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
-      } else if (!isStudentAdult && isDanceRecitalFee(receiptInfo.ReceiptType)) {
-        page = DanceRecitalFeeTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
-      }
+        const receiptInfo = {
+          ReceiptNumber: receipt.ReceiptNumber,
+          AmountPaid: receipt.AmountPaid,
+          PaymentMethod: receipt.PaymentMethod,
+          ReceiptType: receipt.ReceiptType,
+          ReceiptDate: receipt.ReceiptDate,
+          CourseStartDate: receipt.CourseStartDate,
+          CourseEndDate: receipt.CourseEndDate,
+        };
 
-      if (index % 2 === 1) {
-        page.content[page.content.length - 1].pageBreak = 'after';
-        page.content[page.content.length - 1].canvas = [];
-      }
+        const isStudentAdult = isAdult(studentInfo.IsAdult);
 
-      return Array.prototype.push.apply(finalDocumentDefinition.content, page.content);
+        if (isStudentAdult && isSubscriptionFee(receiptInfo.ReceiptType)) {
+          page = ReceiptTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
+        } else if (isStudentAdult && isMembershipFee(receiptInfo.ReceiptType)) {
+          page = MembershipFeeTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
+        } else if (isStudentAdult && isDanceRecitalFee(receiptInfo.ReceiptType)) {
+          page = DanceRecitalFeeTemplateAdult(studentInfo, receiptInfo, labelLogo, signature, stamp);
+        } else if (!isStudentAdult && isSubscriptionFee(receiptInfo.ReceiptType)) {
+          page = ReceiptTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
+        } else if (!isStudentAdult && isMembershipFee(receiptInfo.ReceiptType)) {
+          page = MembershipFeeTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
+        } else if (!isStudentAdult && isDanceRecitalFee(receiptInfo.ReceiptType)) {
+          page = DanceRecitalFeeTemplateUnderAge(studentInfo, receiptInfo, labelLogo, signature, stamp);
+        }
+
+        if (index % 2 === 1) {
+          page.content[page.content.length - 1].pageBreak = 'after';
+          page.content[page.content.length - 1].canvas = [];
+        }
+
+        return page.content;
+      })
+    );
+
+    pages.flat().forEach((content) => {
+      finalDocumentDefinition.content.push(content);
     });
 
     pdfMake.createPdf(finalDocumentDefinition).open();
@@ -122,9 +131,11 @@ const printStudentReceipt = async (selectedReceipt, studentInfo) => {
       return toast.error(getTranslation('toast.error.noReceiptSelected'), toastConfig);
     }
 
+    const isSSDReceipt = new Date(selectedReceipt.ReceiptDate).getFullYear() >= 2025;
+
     const labelLogo = await getBase64ImageFromURL('PILATES_LOGO.png');
     const signature = await getBase64ImageFromURL('Signature.png');
-    const stamp = await getBase64ImageFromURL('Stamp.png');
+    const stamp = await getBase64ImageFromURL(isSSDReceipt ? 'Stamp.png' : 'Stamp-asd.png');
 
     let documentDefinition;
 
